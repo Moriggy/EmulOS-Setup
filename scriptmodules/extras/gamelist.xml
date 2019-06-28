@@ -78,44 +78,44 @@ Puede seleccionar sistemas individuales para eliminar el exceso de archivos mult
 	<game>
 		<path>./splashscreen.rp</path>
 		<name>Splash Screens</name>
-		<desc>Habilite o deshabilite la pantalla secundaria en el inicio de MasOS. Elija una pantalla secundaria, descargue nuevas pantallas emergentes y regrese la pantalla secundaria a la predeterminada.</desc>
+		<desc>Habilite o deshabilite la pantalla secundaria en el inicio de EmulOS. Elija una pantalla secundaria, descargue nuevas pantallas emergentes y regrese la pantalla secundaria a la predeterminada.</desc>
 		<image>./icons/splashscreen.png</image>
 	</game>
 	<game>
-		<path>./MasOS Utilidades/Deshabilitar Overscan.sh</path>
+		<path>./EmulOS Utilidades/Deshabilitar Overscan.sh</path>
 		<name>Deshabilitar Overscan</name>
 		<desc>Quita los marcos negros que aparecen en la pantalla alrededor de la imagen (ajusta la imagen para que se vea en la pantalla entera).</desc>
 	</game>
 	<game>
-		<path>./MasOS Utilidades/Habilitar Overscan.sh</path>
+		<path>./EmulOS Utilidades/Habilitar Overscan.sh</path>
 		<name>Habilitar Overscan</name>
 		<desc>Ajusta la imagen para que se vea en la pantalla entera, en caso de que se vea la imagen más grande que la pantalla.</desc>
 	</game>
 	<game>
-		<path>./MasOS Utilidades/Instalar Boton de encendido.sh</path>
+		<path>./EmulOS Utilidades/Instalar Boton de encendido.sh</path>
 		<name>Instalar Boton de encendido</name>
 		<desc>Habilita la opción de encender la Raspberry mediante un botón conectado al GPIO.</desc>
 	</game>
 	<game>
-		<path>./MasOS Utilidades/Instalar musica de fondo.sh</path>
+		<path>./EmulOS Utilidades/Instalar musica de fondo.sh</path>
 		<name>Instalar música de fondo</name>
-		<desc>Instala la musica de fondo en MasOS para emulationstation.</desc>
+		<desc>Instala la musica de fondo en EmulOS para emulationstation.</desc>
 	</game>
 	<game>
-		<path>./MasOS Utilidades/Instalar Pistola Aimtrak.sh</path>
+		<path>./EmulOS Utilidades/Instalar Pistola Aimtrak.sh</path>
 		<name>Instalar Pistola Aimtrak</name>
 		<desc>Instala todos los drivers necesarios para poder usar la pistola Aimtrak en advance-mame 1.4 con los juegos compatibles con ello. Necesitas dicha pistola y realizar una configuración previa.</desc>
 	</game>
 	<game>
 		<path>./rpsetup.rp</path>
-		<name>MasOS-Setup</name>
-		<desc>Instale MasOS desde binario o fuente, instale paquetes experimentales, controladores adicionales, edite recursos compartidos de samba, scraper personalizado, así como otras configuraciones relacionadas con MasOS.</desc>
+		<name>EmulOS-Setup</name>
+		<desc>Instale EmulOS desde binario o fuente, instale paquetes experimentales, controladores adicionales, edite recursos compartidos de samba, scraper personalizado, así como otras configuraciones relacionadas con EmulOS.</desc>
 		<image>./icons/rpsetup.png</image>
 	</game>
 	<game>
 		<path>./PersonalizarMasOS.sh</path>
-		<name>Personalizar MasOS</name>
-		<desc>Muchas opciones mas para MasOS con solo un clic.
+		<name>Personalizar EmulOS</name>
+		<desc>Muchas opciones mas para EmulOS con solo un clic.
 
 Podras instalar:
 
@@ -136,19 +136,19 @@ O tambien podras hacer overclock.
 	</game>
 	<game>
 		<path>./systeminfo.sh</path>
-		<name>MasOS Info</name>
+		<name>EmulOS Info</name>
 		<desc>Aqui puede ver informacion sobre el sistema importante para usted,como por ejemplo....
 La IP actual de su dispositivo, temperaturas de CPU - GPU ,ademas puede ver informacion sobre sus discos de almacenamiento.</desc>
 		<image>./icons/systeminfo.png</image>
 	</game>
 	<game>
 		<path>./masosextrasall.sh</path>
-		<name>MasOS EXTRAs menu ES</name>
+		<name>EmulOS EXTRAs menu ES</name>
 		<desc>Muchas opciones mas para este menu con solo un clic.
 
 Utilidades ,herramientas ,descargas de arts y mucho mas.
 
-Tambien puede actualizar el MasOS-Script sin introducir nada de codigos.
+Tambien puede actualizar el EmulOS-Script sin introducir nada de codigos.
 
 Con la actualizacion o instalacion del menu termine su aparato se reiniciara automaticamente...</desc>
 		<image>./icons/masosextrasall.png</image>
