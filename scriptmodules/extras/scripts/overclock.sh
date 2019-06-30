@@ -31,8 +31,8 @@ infobox="${infobox}Advertencia !!! El overclock 1550 y 1575 no funciona en todos
 infobox="${infobox}A veces, esta configuracióo alta necesita 2 o 3 arranques para funcionar.\n"
 infobox="${infobox}"
 
-dialog --backtitle "MasOS Overclock RPI 3/3b+ on/off" \
---title "Masos Overclock By MasOS Team" \
+dialog --backtitle "EmulOS Overclock RPI 3/3b+ on/off" \
+--title "EmulOS Overclock By MasOS Team" \
 --msgbox "${infobox}" 35 110
 
 function main_menu() {
@@ -44,12 +44,12 @@ function main_menu() {
             --menu "Qué acción te gustaría realizar?" 25 75 20 \
             1 "Overclock 1300 rpi3" \
             2 "Overclock 1350 rpi3" \
-			3 "Overclock 1400 rpi3" \
-			4 "Overclock 1475 rpi3B+" \
-			5 "Overclock 1500 rpi3B+" \
-			6 "Overclock 1550 rpi3B+" \
-			7 "Overclock 1575 rpi3B+" \
-			8 "Sin overclock" \
+      			3 "Overclock 1400 rpi3" \
+      			4 "Overclock 1475 rpi3B+" \
+      			5 "Overclock 1500 rpi3B+" \
+      			6 "Overclock 1550 rpi3B+" \
+      			7 "Overclock 1575 rpi3B+" \
+      			8 "Sin overclock" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -58,8 +58,8 @@ function main_menu() {
             3) overclock1400  ;;
             4) overclock1475  ;;
             5) overclock1500  ;;
-			6) overclock1550  ;;
-			7) overclock1575  ;;
+      			6) overclock1550  ;;
+      			7) overclock1575  ;;
             8) nooverclock  ;;
             *)  break ;;
         esac

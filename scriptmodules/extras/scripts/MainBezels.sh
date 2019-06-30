@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# Este fichero es parte del Proyecto MasOS
+# Este fichero es parte del Proyecto MasOS Team
 #
 # The MasOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/DOCK-PI3/MasOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="Masos Team"
-rp_module_desc="Personalizar el sistema MasOS"
+rp_module_desc="Personalizar el sistema EmulOS"
 rp_module_section=""
 
 infobox="${infobox}___________________________________________________\n\n"
@@ -50,7 +50,7 @@ function tpb() {
 
 	scriptdir="$(dirname "$0")"
 	sudo $scriptdir/bezelproject.sh
-	
+
 }
 
 # Retroarch bezels	#
@@ -59,7 +59,7 @@ function retroarch() {
 
 	scriptdir="$(dirname "$0")"
 	sudo $scriptdir/bezels.sh
-	
+
 }
 
 # Retroarch bezels	#
@@ -68,7 +68,7 @@ function packs() {
 
 	scriptdir="$(dirname "$0")"
 	sudo $scriptdir/masosbezels.sh
-	
+
 }
 
 main_menu

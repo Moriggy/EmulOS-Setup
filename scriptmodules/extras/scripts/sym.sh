@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 rp_module_id="arranquesilencioso"
-rp_module_desc="Arranque silencioso y Música de fondo"
+rp_module_desc="Arranque silencioso"
 rp_module_section=""
 infobox="${infobox}_______________________________________________________\n\n"
 infobox="${infobox}\n"
@@ -12,12 +12,12 @@ infobox="${infobox}Ambas opciones VIENEN DESACTIVADAS POR DEFECTO.\n\n"
 infobox="${infobox}Cuando arranca el sistema, tan sólo verás la pantalla del arcoiris y el cursor parpadeando.\n\n"
 infobox="${infobox}Al arrancar EmulationStation, comienza la música, en el caso de que hayas instalado la opción.\n"
 infobox="${infobox}\n\n"
-infobox="${infobox}ESTA OPCIÓN DE MÚSICA ES INCOMPATIBLE CON LA QUE ENCONTRARÁS EN MASOS UTILIDADES.\n\n"
+infobox="${infobox}ESTA OPCIÓN DE MÚSICA ES INCOMPATIBLE CON LA QUE ENCONTRARÁS EN EMULOS UTILIDADES.\n\n"
 
-BACKTITLE="MasOS Silence's Script"
+BACKTITLE="EmulOS Silence's Script"
 
 dialog --backtitle "$BACKTITLE" \
---title "MasOS Silence's Script (by Moriggy)" \
+--title "EmulOS Silence's Script (by Moriggy)" \
 --msgbox "${infobox}" 35 100
 
 
@@ -46,11 +46,11 @@ function silencio() {
 	clear
 	cp $fichero $fichero.bkp
 	dato="$(cat /boot/cmdline.txt | grep 'PARTUUID' | cut -d  " "  -f4)"
-	
+
 	if [[ -f "$fichero" ]]; then
 		echo "Activando arranque silencioso."
 		echo "Espera un momento..." ; sleep 3
-		
+
 		sudo cat > $fichero <<_EOF_
 dwc_otg.lpm_enable=0 console=serial0,115200 console=tty3 loglevel=3 $dato rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait plymouth.enable=0 logo.nologo
 _EOF_
@@ -67,7 +67,7 @@ _EOF_
 function no_silencio() {
 	fichero="/boot/cmdline.txt.bkp"
 	clear
-	
+
 	if [[ -f "$fichero" ]]; then
 		echo "Desactivando arranque silencioso."
 		echo "Espera un momento..." ; sleep 3
@@ -79,7 +79,7 @@ function no_silencio() {
 	else
 		dialog --infobox "El fichero necesario no existe, no tienes activo el arranque silencioso." 3 85 ; sleep 5
 	fi
-	
+
 }
 
 

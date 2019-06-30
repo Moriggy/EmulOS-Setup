@@ -6,7 +6,7 @@ BACKTITLE="MasOS Team	Descarga de Bezels"
 
 # Welcome
  dialog --backtitle "MasOS Team" --title "Descarcga packs bezels" \
-    --yesno "\nDescarga MasOS Retroarch Bezels menú.\n\nEsta utilidad proporcionará una manera rápida de descargar bezels para los emuladores de Retroarch.\n\nPuedes usar esta utilidad para descargar o borrar bezels de forma rápida y sencilla.\n\nPuede elegir 1080p, 720p u otro. Dependiendo de la resolución de su TV / monitor, puede que tenga que probar un par de ellos para obtener el correcto.\n\nSi encuentras que ninguna de estas opciones funcione correctamente, deberás ir a RetroArch (hotkey + x) para configurarlo manualmente.\n\nSÓLO SE PUEDE TENER UN PACK DE BEZELS ACTIVO.\n\n\nQuieres proceder?" \
+    --yesno "\nDescarga EmulOS Retroarch Bezels menú.\n\nEsta utilidad proporcionará una manera rápida de descargar bezels para los emuladores de Retroarch.\n\nPuedes usar esta utilidad para descargar o borrar bezels de forma rápida y sencilla.\n\nPuede elegir 1080p, 720p u otro. Dependiendo de la resolución de su TV / monitor, puede que tenga que probar un par de ellos para obtener el correcto.\n\nSi encuentras que ninguna de estas opciones funcione correctamente, deberás ir a RetroArch (hotkey + x) para configurarlo manualmente.\n\nSÓLO SE PUEDE TENER UN PACK DE BEZELS ACTIVO.\n\n\nQuieres proceder?" \
     30 80 2>&1 > /dev/tty \
     || exit
 
@@ -46,7 +46,7 @@ function solo_hd() {
 
 function delete() {
 local choice
-	bezel_dir="/opt/masos/configs/all/retroarch"
+	bezel_dir="/opt/emulos/configs/all/retroarch"
     while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " Borrar bezels " \
             --ok-label Sí --cancel-label No \
@@ -55,11 +55,11 @@ local choice
             2>&1 > /dev/tty)
 
         case "$choice" in
-            1) dialog --infobox "...Borrando..." 3 25 ; sleep 2  
+            1) dialog --infobox "...Borrando..." 3 25 ; sleep 2
 				mv $bezel_dir/config/remaps $bezel_dir
 				mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
 				rm -R $bezel_dir/config/*
-				rm -R $bezel_dir/overlay/* 
+				rm -R $bezel_dir/overlay/*
 				break;;
             *)  break ;;
         esac
@@ -69,4 +69,3 @@ local choice
 # Main
 
 main_menu
-

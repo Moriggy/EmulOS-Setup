@@ -19,23 +19,23 @@ function main_menu() {
             --ok-label Descargar --cancel-label Atras \
             --menu "Al terminar la descarga, este menú se cerrará. Qué pack te gustaría descargar?" 25 75 20 \
             1 "Pack Batocera (con scanlines)" \
-			2 "Pack Moriggy (con scanlines)" \
-			3 "Pack Batocera (sin scanlines)" \
+      			2 "Pack Moriggy (con scanlines)" \
+      			3 "Pack Batocera (sin scanlines)" \
             4 "Pack Moriggy (sin scanlines)" \
 			2>&1 > /dev/tty)
 
         case "$choice" in
             1) batocera_scanlines  ;;
             2) moriggy_retro ;;
-			3) batocera ;;
-			4) moriggy  ;;
-			*)  break ;;
+      			3) batocera ;;
+      			4) moriggy  ;;
+      			*)  break ;;
         esac
     done
 }
 
 function batocera_scanlines() {
-	bezel_dir="/opt/masos/configs/all/retroarch"
+	bezel_dir="/opt/emulos/configs/all/retroarch"
 	mkdir $bezel_dir/tmp
 	dir="$bezel_dir/tmp"
 	dialog --infobox "...Comenzando la descarga..." 3 35 ; sleep 1
@@ -45,7 +45,7 @@ function batocera_scanlines() {
 	rm -R $bezel_dir/config/*
 	rm -R $bezel_dir/overlay/*
 	mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
-	destinationpath_dir="/opt/masos/configs/all/retroarch"
+	destinationpath_dir="/opt/emulos/configs/all/retroarch"
 	cp -R $dir/bezels-Moriggy720-master/retroarch/* $destinationpath_dir
 	# Cogemos el nombre de usuario para modificar los permisos de las carpetas
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
@@ -57,7 +57,7 @@ function batocera_scanlines() {
 }
 
 function moriggy_retro() {
-	bezel_dir="/opt/masos/configs/all/retroarch"
+	bezel_dir="/opt/emulos/configs/all/retroarch"
 	mkdir $bezel_dir/tmp
 	dir="$bezel_dir/tmp"
 	dialog --infobox "...Comenzando la descarga..." 3 35 ; sleep 1
@@ -67,7 +67,7 @@ function moriggy_retro() {
 	rm -R $bezel_dir/config/*
 	rm -R $bezel_dir/overlay/*
 	mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
-	destinationpath_dir="/opt/masos/configs/all/retroarch"
+	destinationpath_dir="/opt/emulos/configs/all/retroarch"
 	cp -R $dir/bezels-retro720-master/retroarch/* $destinationpath_dir
 	# Cogemos el nombre de usuario para modificar los permisos de las carpetas
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
@@ -79,7 +79,7 @@ function moriggy_retro() {
 }
 
 function batocera() {
-	bezel_dir="/opt/masos/configs/all/retroarch"
+	bezel_dir="/opt/emulos/configs/all/retroarch"
 	mkdir $bezel_dir/tmp
 	dir="$bezel_dir/tmp"
 	dialog --infobox "...Comenzando la descarga..." 3 35 ; sleep 1
@@ -89,7 +89,7 @@ function batocera() {
 	rm -R $bezel_dir/config/*
 	rm -R $bezel_dir/overlay/*
 	mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
-	destinationpath_dir="/opt/masos/configs/all/retroarch"
+	destinationpath_dir="/opt/emulos/configs/all/retroarch"
 	cp -R $dir/bezels-batocera720-master/retroarch/* $destinationpath_dir
 	# Cogemos el nombre de usuario para modificar los permisos de las carpetas
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
@@ -101,7 +101,7 @@ function batocera() {
 }
 
 function moriggy() {
-	bezel_dir="/opt/masos/configs/all/retroarch"
+	bezel_dir="/opt/emulos/configs/all/retroarch"
 	mkdir $bezel_dir/tmp
 	dir="$bezel_dir/tmp"
 	dialog --infobox "...Comenzando la descarga..." 3 35 ; sleep 1
@@ -111,7 +111,7 @@ function moriggy() {
 	rm -R $bezel_dir/config/*
 	rm -R $bezel_dir/overlay/*
 	mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
-	destinationpath_dir="/opt/masos/configs/all/retroarch"
+	destinationpath_dir="/opt/emulos/configs/all/retroarch"
 	cp -R $dir/bezels-rmaximus720-master/retroarch/* $destinationpath_dir
 	# Cogemos el nombre de usuario para modificar los permisos de las carpetas
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
@@ -125,4 +125,3 @@ function moriggy() {
 # Main
 
 main_menu
-

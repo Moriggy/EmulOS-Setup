@@ -1,12 +1,12 @@
 #!/bin/bash
 rp_module_id="bezelproject"
-rp_module_desc="BezelPrject en MasOS"
+rp_module_desc="BezelPrject en EmulOS"
 rp_module_section=""
 IFS=';'
 
 # Welcome
- dialog --backtitle "MasOS Utility" --title "MasOS Retroarch Bezel Utility Menu" \
-    --yesno "\nMasOS Retroarch Bezel Utility menu.\n\nEsta utilidad proporcionará una manera rápida de ocultar o mostrar bezels dentro de emuladores Retroarch.\n\nPuedes usar esta utilidad para ocultar o mostrar muchos sistemas al mismo tiempo o individualmente.\n\nPara sistemas de mano, hay tres opciones para bezels. Puede elegir 1080p, 720p u otro. Dependiendo de la resolución de su TV / monitor, puede que tenga que probar un par de ellos para obtener el correcto. \ N \ nSi no encuentra ninguna de estas opciones que funcionen correctamente, deberá ir a RetroArch (select + x) para ajustar manualmente.\n\nHay una opción para instalar bezels conosle. Cuando esté habilitado, mostrará bezels de juegos o géneros para muchos juegos basados ​​en consola. La habilitación de los bezels de la consola también habilitará automáticamente los bezels del sistema para esas consolas.\n\n\nQuieres proceder?" \
+ dialog --backtitle "EmulOS Utility" --title "EmulOS Retroarch Bezel Utility Menu" \
+    --yesno "\nEmulOS Retroarch Bezel Utility menu.\n\nEsta utilidad proporcionará una manera rápida de ocultar o mostrar bezels dentro de emuladores Retroarch.\n\nPuedes usar esta utilidad para ocultar o mostrar muchos sistemas al mismo tiempo o individualmente.\n\nPara sistemas de mano, hay tres opciones para bezels. Puede elegir 1080p, 720p u otro. Dependiendo de la resolución de su TV / monitor, puede que tenga que probar un par de ellos para obtener el correcto. \ N \ nSi no encuentra ninguna de estas opciones que funcionen correctamente, deberá ir a RetroArch (select + x) para ajustar manualmente.\n\nHay una opción para instalar bezels conosle. Cuando esté habilitado, mostrará bezels de juegos o géneros para muchos juegos basados ​​en consola. La habilitación de los bezels de la consola también habilitará automáticamente los bezels del sistema para esas consolas.\n\n\nQuieres proceder?" \
     30 110 2>&1 > /dev/tty \
     || exit
 
@@ -314,34 +314,34 @@ clear
 function hide_bezel() {
 dialog --infobox "...processing..." 3 20 ; sleep 2
 emulator=$1
-file="/opt/masos/configs/${emulator}/retroarch.cfg"
+file="/opt/emulos/configs/${emulator}/retroarch.cfg"
 
 case ${emulator} in
 arcade)
-  cp /opt/masos/configs/${emulator}/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg.bkp
-  cat /opt/masos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-  cp /tmp/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg
-  mv "/opt/masos/configs/all/retroarch/config/FB Alpha" "/opt/masos/configs/all/retroarch/config/disable_FB Alpha"
-  mv "/opt/masos/configs/all/retroarch/config/MAME 2003" "/opt/masos/configs/all/retroarch/config/disable_MAME 2003"
-  mv "/opt/masos/configs/all/retroarch/config/MAME 2010" "/opt/masos/configs/all/retroarch/config/disable_MAME 2010"
+  cp /opt/emulos/configs/${emulator}/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg.bkp
+  cat /opt/emulos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+  cp /tmp/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg
+  mv "/opt/emulos/configs/all/retroarch/config/FB Alpha" "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha"
+  mv "/opt/emulos/configs/all/retroarch/config/MAME 2003" "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003"
+  mv "/opt/emulos/configs/all/retroarch/config/MAME 2010" "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010"
   ;;
 fba)
-  cp /opt/masos/configs/${emulator}/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg.bkp
-  cat /opt/masos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-  cp /tmp/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg
-  mv "/opt/masos/configs/all/retroarch/config/FB Alpha" "/opt/masos/configs/all/retroarch/config/disable_FB Alpha"
+  cp /opt/emulos/configs/${emulator}/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg.bkp
+  cat /opt/emulos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+  cp /tmp/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg
+  mv "/opt/emulos/configs/all/retroarch/config/FB Alpha" "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha"
   ;;
 mame-libretro)
-  cp /opt/masos/configs/${emulator}/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg.bkp
-  cat /opt/masos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-  cp /tmp/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg
-  mv "/opt/masos/configs/all/retroarch/config/MAME 2003" "/opt/masos/configs/all/retroarch/config/disable_MAME 2003"
-  mv "/opt/masos/configs/all/retroarch/config/MAME 2010" "/opt/masos/configs/all/retroarch/config/disable_MAME 2010"
+  cp /opt/emulos/configs/${emulator}/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg.bkp
+  cat /opt/emulos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+  cp /tmp/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg
+  mv "/opt/emulos/configs/all/retroarch/config/MAME 2003" "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003"
+  mv "/opt/emulos/configs/all/retroarch/config/MAME 2010" "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010"
   ;;
 *)
-  cp /opt/masos/configs/${emulator}/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg.bkp
-  cat /opt/masos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-  cp /tmp/retroarch.cfg /opt/masos/configs/${emulator}/retroarch.cfg
+  cp /opt/emulos/configs/${emulator}/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg.bkp
+  cat /opt/emulos/configs/${emulator}/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+  cp /tmp/retroarch.cfg /opt/emulos/configs/${emulator}/retroarch.cfg
   ;;
 esac
 
@@ -350,1459 +350,1459 @@ esac
 function show_bezel() {
 dialog --infobox "...processing..." 3 20 ; sleep 2
 emulator=$1
-file="/opt/masos/configs/${emulator}/retroarch.cfg"
+file="/opt/emulos/configs/${emulator}/retroarch.cfg"
 
 case ${emulator} in
 arcade)
-  ifexist=`cat /opt/masos/configs/arcade/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/arcade/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/arcade/retroarch.cfg /opt/masos/configs/arcade/retroarch.cfg.bkp
-    cat /opt/masos/configs/arcade/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/arcade/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/arcade/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/arcade/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_FB Alpha" "/opt/masos/configs/all/retroarch/config/FB Alpha"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2003" "/opt/masos/configs/all/retroarch/config/MAME 2003"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2010" "/opt/masos/configs/all/retroarch/config/MAME 2010"
+    cp /opt/emulos/configs/arcade/retroarch.cfg /opt/emulos/configs/arcade/retroarch.cfg.bkp
+    cat /opt/emulos/configs/arcade/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/arcade/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/arcade/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/arcade/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha" "/opt/emulos/configs/all/retroarch/config/FB Alpha"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003" "/opt/emulos/configs/all/retroarch/config/MAME 2003"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010" "/opt/emulos/configs/all/retroarch/config/MAME 2010"
   else
-    cp /opt/masos/configs/arcade/retroarch.cfg /opt/masos/configs/arcade/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/arcade/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/arcade/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_FB Alpha" "/opt/masos/configs/all/retroarch/config/FB Alpha"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2003" "/opt/masos/configs/all/retroarch/config/MAME 2003"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2010" "/opt/masos/configs/all/retroarch/config/MAME 2010"
+    cp /opt/emulos/configs/arcade/retroarch.cfg /opt/emulos/configs/arcade/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/arcade/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/arcade/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha" "/opt/emulos/configs/all/retroarch/config/FB Alpha"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003" "/opt/emulos/configs/all/retroarch/config/MAME 2003"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010" "/opt/emulos/configs/all/retroarch/config/MAME 2010"
   fi
   ;;
 fba)
-  ifexist=`cat /opt/masos/configs/fba/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/fba/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/fba/retroarch.cfg /opt/masos/configs/fba/retroarch.cfg.bkp
-    cat /opt/masos/configs/fba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/fba/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/fba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/fba/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_FB Alpha" "/opt/masos/configs/all/retroarch/config/FB Alpha"
+    cp /opt/emulos/configs/fba/retroarch.cfg /opt/emulos/configs/fba/retroarch.cfg.bkp
+    cat /opt/emulos/configs/fba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/fba/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/fba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/fba/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha" "/opt/emulos/configs/all/retroarch/config/FB Alpha"
   else
-    cp /opt/masos/configs/fba/retroarch.cfg /opt/masos/configs/fba/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/fba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/fba/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_FB Alpha" "/opt/masos/configs/all/retroarch/config/FB Alpha"
+    cp /opt/emulos/configs/fba/retroarch.cfg /opt/emulos/configs/fba/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/fba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/fba/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_FB Alpha" "/opt/emulos/configs/all/retroarch/config/FB Alpha"
   fi
   ;;
 mame-libretro)
-  ifexist=`cat /opt/masos/configs/mame-libretro/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/mame-libretro/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/mame-libretro/retroarch.cfg /opt/masos/configs/mame-libretro/retroarch.cfg.bkp
-    cat /opt/masos/configs/mame-libretro/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/mame-libretro/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/mame-libretro/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/mame-libretro/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2003" "/opt/masos/configs/all/retroarch/config/MAME 2003"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2010" "/opt/masos/configs/all/retroarch/config/MAME 2010"
+    cp /opt/emulos/configs/mame-libretro/retroarch.cfg /opt/emulos/configs/mame-libretro/retroarch.cfg.bkp
+    cat /opt/emulos/configs/mame-libretro/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/mame-libretro/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/mame-libretro/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/mame-libretro/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003" "/opt/emulos/configs/all/retroarch/config/MAME 2003"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010" "/opt/emulos/configs/all/retroarch/config/MAME 2010"
   else
-    cp /opt/masos/configs/mame-libretro/retroarch.cfg /opt/masos/configs/mame-libretro/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/mame-libretro/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/mame-libretro/retroarch.cfg
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2003" "/opt/masos/configs/all/retroarch/config/MAME 2003"
-    mv "/opt/masos/configs/all/retroarch/config/disable_MAME 2010" "/opt/masos/configs/all/retroarch/config/MAME 2010"
+    cp /opt/emulos/configs/mame-libretro/retroarch.cfg /opt/emulos/configs/mame-libretro/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/mame-libretro/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/mame-libretro/retroarch.cfg
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2003" "/opt/emulos/configs/all/retroarch/config/MAME 2003"
+    mv "/opt/emulos/configs/all/retroarch/config/disable_MAME 2010" "/opt/emulos/configs/all/retroarch/config/MAME 2010"
   fi
   ;;
 atari2600)
-  ifexist=`cat /opt/masos/configs/atari2600/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atari2600/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atari2600/retroarch.cfg /opt/masos/configs/atari2600/retroarch.cfg.bkp
-    cat /opt/masos/configs/atari2600/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atari2600/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-2600.cfg"' /opt/masos/configs/atari2600/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari2600/retroarch.cfg
+    cp /opt/emulos/configs/atari2600/retroarch.cfg /opt/emulos/configs/atari2600/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atari2600/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atari2600/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-2600.cfg"' /opt/emulos/configs/atari2600/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari2600/retroarch.cfg
   else
-    cp /opt/masos/configs/atari2600/retroarch.cfg /opt/masos/configs/atari2600/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-2600.cfg"' /opt/masos/configs/atari2600/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari2600/retroarch.cfg
+    cp /opt/emulos/configs/atari2600/retroarch.cfg /opt/emulos/configs/atari2600/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-2600.cfg"' /opt/emulos/configs/atari2600/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari2600/retroarch.cfg
   fi
   ;;
 atari5200)
-  ifexist=`cat /opt/masos/configs/atari5200/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atari5200/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atari5200/retroarch.cfg /opt/masos/configs/atari5200/retroarch.cfg.bkp
-    cat /opt/masos/configs/atari5200/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atari5200/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-5200.cfg"' /opt/masos/configs/atari5200/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari5200/retroarch.cfg
+    cp /opt/emulos/configs/atari5200/retroarch.cfg /opt/emulos/configs/atari5200/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atari5200/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atari5200/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-5200.cfg"' /opt/emulos/configs/atari5200/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari5200/retroarch.cfg
   else
-    cp /opt/masos/configs/atari5200/retroarch.cfg /opt/masos/configs/atari5200/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-5200.cfg"' /opt/masos/configs/atari5200/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari5200/retroarch.cfg
+    cp /opt/emulos/configs/atari5200/retroarch.cfg /opt/emulos/configs/atari5200/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-5200.cfg"' /opt/emulos/configs/atari5200/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari5200/retroarch.cfg
   fi
   ;;
 atari7800)
-  ifexist=`cat /opt/masos/configs/atari7800/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atari7800/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atari7800/retroarch.cfg /opt/masos/configs/atari7800/retroarch.cfg.bkp
-    cat /opt/masos/configs/atari7800/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atari7800/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-7800.cfg"' /opt/masos/configs/atari7800/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari7800/retroarch.cfg
+    cp /opt/emulos/configs/atari7800/retroarch.cfg /opt/emulos/configs/atari7800/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atari7800/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atari7800/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-7800.cfg"' /opt/emulos/configs/atari7800/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari7800/retroarch.cfg
   else
-    cp /opt/masos/configs/atari7800/retroarch.cfg /opt/masos/configs/atari7800/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-7800.cfg"' /opt/masos/configs/atari7800/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari7800/retroarch.cfg
+    cp /opt/emulos/configs/atari7800/retroarch.cfg /opt/emulos/configs/atari7800/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-7800.cfg"' /opt/emulos/configs/atari7800/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari7800/retroarch.cfg
   fi
   ;;
 coleco)
-  ifexist=`cat /opt/masos/configs/coleco/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/coleco/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/coleco/retroarch.cfg /opt/masos/configs/coleco/retroarch.cfg.bkp
-    cat /opt/masos/configs/coleco/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/coleco/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Colecovision.cfg"' /opt/masos/configs/coleco/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/coleco/retroarch.cfg
+    cp /opt/emulos/configs/coleco/retroarch.cfg /opt/emulos/configs/coleco/retroarch.cfg.bkp
+    cat /opt/emulos/configs/coleco/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/coleco/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Colecovision.cfg"' /opt/emulos/configs/coleco/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/coleco/retroarch.cfg
   else
-    cp /opt/masos/configs/coleco/retroarch.cfg /opt/masos/configs/coleco/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Colecovision.cfg"' /opt/masos/configs/coleco/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/coleco/retroarch.cfg
+    cp /opt/emulos/configs/coleco/retroarch.cfg /opt/emulos/configs/coleco/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Colecovision.cfg"' /opt/emulos/configs/coleco/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/coleco/retroarch.cfg
   fi
   ;;
 famicom)
-  ifexist=`cat /opt/masos/configs/famicom/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/famicom/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/famicom/retroarch.cfg /opt/masos/configs/famicom/retroarch.cfg.bkp
-    cat /opt/masos/configs/famicom/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/famicom/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Famicom.cfg"' /opt/masos/configs/famicom/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/famicom/retroarch.cfg
+    cp /opt/emulos/configs/famicom/retroarch.cfg /opt/emulos/configs/famicom/retroarch.cfg.bkp
+    cat /opt/emulos/configs/famicom/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/famicom/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Famicom.cfg"' /opt/emulos/configs/famicom/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/famicom/retroarch.cfg
   else
-    cp /opt/masos/configs/famicom/retroarch.cfg /opt/masos/configs/famicom/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Famicom.cfg"' /opt/masos/configs/famicom/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/famicom/retroarch.cfg
+    cp /opt/emulos/configs/famicom/retroarch.cfg /opt/emulos/configs/famicom/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Famicom.cfg"' /opt/emulos/configs/famicom/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/famicom/retroarch.cfg
   fi
   ;;
 fds)
-  ifexist=`cat /opt/masos/configs/fds/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/fds/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/fds/retroarch.cfg /opt/masos/configs/fds/retroarch.cfg.bkp
-    cat /opt/masos/configs/fds/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/fds/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Famicom-Disk-System.cfg"' /opt/masos/configs/fds/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/fds/retroarch.cfg
+    cp /opt/emulos/configs/fds/retroarch.cfg /opt/emulos/configs/fds/retroarch.cfg.bkp
+    cat /opt/emulos/configs/fds/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/fds/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Famicom-Disk-System.cfg"' /opt/emulos/configs/fds/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/fds/retroarch.cfg
   else
-    cp /opt/masos/configs/fds/retroarch.cfg /opt/masos/configs/fds/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Famicom-Disk-System.cfg"' /opt/masos/configs/fds/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/fds/retroarch.cfg
+    cp /opt/emulos/configs/fds/retroarch.cfg /opt/emulos/configs/fds/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Famicom-Disk-System.cfg"' /opt/emulos/configs/fds/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/fds/retroarch.cfg
   fi
   ;;
 mastersystem)
-  ifexist=`cat /opt/masos/configs/mastersystem/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/mastersystem/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/mastersystem/retroarch.cfg /opt/masos/configs/mastersystem/retroarch.cfg.bkp
-    cat /opt/masos/configs/mastersystem/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/mastersystem/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Master-System.cfg"' /opt/masos/configs/mastersystem/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/mastersystem/retroarch.cfg
+    cp /opt/emulos/configs/mastersystem/retroarch.cfg /opt/emulos/configs/mastersystem/retroarch.cfg.bkp
+    cat /opt/emulos/configs/mastersystem/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/mastersystem/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Master-System.cfg"' /opt/emulos/configs/mastersystem/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/mastersystem/retroarch.cfg
   else
-    cp /opt/masos/configs/mastersystem/retroarch.cfg /opt/masos/configs/mastersystem/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Master-System.cfg"' /opt/masos/configs/mastersystem/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/mastersystem/retroarch.cfg
+    cp /opt/emulos/configs/mastersystem/retroarch.cfg /opt/emulos/configs/mastersystem/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Master-System.cfg"' /opt/emulos/configs/mastersystem/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/mastersystem/retroarch.cfg
   fi
   ;;
 megadrive)
-  ifexist=`cat /opt/masos/configs/megadrive/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/megadrive/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/megadrive/retroarch.cfg /opt/masos/configs/megadrive/retroarch.cfg.bkp
-    cat /opt/masos/configs/megadrive/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/megadrive/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Mega-Drive.cfg"' /opt/masos/configs/megadrive/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/megadrive/retroarch.cfg
+    cp /opt/emulos/configs/megadrive/retroarch.cfg /opt/emulos/configs/megadrive/retroarch.cfg.bkp
+    cat /opt/emulos/configs/megadrive/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/megadrive/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Mega-Drive.cfg"' /opt/emulos/configs/megadrive/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/megadrive/retroarch.cfg
   else
-    cp /opt/masos/configs/megadrive/retroarch.cfg /opt/masos/configs/megadrive/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Mega-Drive.cfg"' /opt/masos/configs/megadrive/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/megadrive/retroarch.cfg
+    cp /opt/emulos/configs/megadrive/retroarch.cfg /opt/emulos/configs/megadrive/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Mega-Drive.cfg"' /opt/emulos/configs/megadrive/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/megadrive/retroarch.cfg
   fi
   ;;
 megadrive-japan)
-  ifexist=`cat /opt/masos/configs/megadrive-japan/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/megadrive-japan/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/megadrive-japan/retroarch.cfg /opt/masos/configs/megadrive-japan/retroarch.cfg.bkp
-    cat /opt/masos/configs/megadrive-japan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/megadrive-japan/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Mega-Drive-Japan.cfg"' /opt/masos/configs/megadrive-japan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/megadrive-japan/retroarch.cfg
+    cp /opt/emulos/configs/megadrive-japan/retroarch.cfg /opt/emulos/configs/megadrive-japan/retroarch.cfg.bkp
+    cat /opt/emulos/configs/megadrive-japan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/megadrive-japan/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Mega-Drive-Japan.cfg"' /opt/emulos/configs/megadrive-japan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/megadrive-japan/retroarch.cfg
   else
-    cp /opt/masos/configs/megadrive-japan/retroarch.cfg /opt/masos/configs/megadrive-japan/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Mega-Drive-Japan.cfg"' /opt/masos/configs/megadrive-japan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/megadrive-japan/retroarch.cfg
+    cp /opt/emulos/configs/megadrive-japan/retroarch.cfg /opt/emulos/configs/megadrive-japan/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Mega-Drive-Japan.cfg"' /opt/emulos/configs/megadrive-japan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/megadrive-japan/retroarch.cfg
   fi
   ;;
 n64)
-  ifexist=`cat /opt/masos/configs/n64/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/n64/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/n6n64/retroarch.cfg /opt/masos/configs/n64/retroarch.cfg.bkp
-    cat /opt/masos/configs/n6/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/n64/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-64.cfg"' /opt/masos/configs/n64/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/n64/retroarch.cfg
+    cp /opt/emulos/configs/n6n64/retroarch.cfg /opt/emulos/configs/n64/retroarch.cfg.bkp
+    cat /opt/emulos/configs/n6/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/n64/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-64.cfg"' /opt/emulos/configs/n64/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/n64/retroarch.cfg
   else
-    cp /opt/masos/configs/n64/retroarch.cfg /opt/masos/configs/n64/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-64.cfg"' /opt/masos/configs/n64/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/n64/retroarch.cfg
+    cp /opt/emulos/configs/n64/retroarch.cfg /opt/emulos/configs/n64/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-64.cfg"' /opt/emulos/configs/n64/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/n64/retroarch.cfg
   fi
   ;;
 neogeo)
-  ifexist=`cat /opt/masos/configs/neogeo/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/neogeo/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/neogeo/retroarch.cfg /opt/masos/configs/neogeo/retroarch.cfg.bkp
-    cat /opt/masos/configs/neogeo/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/neogeo/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/neogeo/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/neogeo/retroarch.cfg
+    cp /opt/emulos/configs/neogeo/retroarch.cfg /opt/emulos/configs/neogeo/retroarch.cfg.bkp
+    cat /opt/emulos/configs/neogeo/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/neogeo/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/neogeo/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/neogeo/retroarch.cfg
   else
-    cp /opt/masos/configs/neogeo/retroarch.cfg /opt/masos/configs/neogeo/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/masos/configs/neogeo/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/neogeo/retroarch.cfg
+    cp /opt/emulos/configs/neogeo/retroarch.cfg /opt/emulos/configs/neogeo/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/MAME-Horizontal.cfg"' /opt/emulos/configs/neogeo/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/neogeo/retroarch.cfg
   fi
   ;;
 nes)
-  ifexist=`cat /opt/masos/configs/nes/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/nes/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/nes/retroarch.cfg /opt/masos/configs/nes/retroarch.cfg.bkp
-    cat /opt/masos/configs/nes/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/nes/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Entertainment-System.cfg"' /opt/masos/configs/nes/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/nes/retroarch.cfg
+    cp /opt/emulos/configs/nes/retroarch.cfg /opt/emulos/configs/nes/retroarch.cfg.bkp
+    cat /opt/emulos/configs/nes/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/nes/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Entertainment-System.cfg"' /opt/emulos/configs/nes/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/nes/retroarch.cfg
   else
-    cp /opt/masos/configs/nes/retroarch.cfg /opt/masos/configs/nes/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Entertainment-System.cfg"' /opt/masos/configs/nes/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/nes/retroarch.cfg
+    cp /opt/emulos/configs/nes/retroarch.cfg /opt/emulos/configs/nes/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Entertainment-System.cfg"' /opt/emulos/configs/nes/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/nes/retroarch.cfg
   fi
   ;;
 pce-cd)
-  ifexist=`cat /opt/masos/configs/pce-cd/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/pce-cd/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/pce-cd/retroarch.cfg /opt/masos/configs/pce-cd/retroarch.cfg.bkp
-    cat /opt/masos/configs/pce-cd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/pce-cd/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-PC-Engine-CD.cfg"' /opt/masos/configs/pce-cd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pce-cd/retroarch.cfg
+    cp /opt/emulos/configs/pce-cd/retroarch.cfg /opt/emulos/configs/pce-cd/retroarch.cfg.bkp
+    cat /opt/emulos/configs/pce-cd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/pce-cd/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-PC-Engine-CD.cfg"' /opt/emulos/configs/pce-cd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pce-cd/retroarch.cfg
   else
-    cp /opt/masos/configs/pce-cd/retroarch.cfg /opt/masos/configs/pce-cd/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-PC-Engine-CD.cfg"' /opt/masos/configs/pce-cd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pce-cd/retroarch.cfg
+    cp /opt/emulos/configs/pce-cd/retroarch.cfg /opt/emulos/configs/pce-cd/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-PC-Engine-CD.cfg"' /opt/emulos/configs/pce-cd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pce-cd/retroarch.cfg
   fi
   ;;
 pcengine)
-  ifexist=`cat /opt/masos/configs/pcengine/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/pcengine/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/pcengine/retroarch.cfg /opt/masos/configs/pcengine/retroarch.cfg.bkp
-    cat /opt/masos/configs/pcengine/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/pcengine/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-PC-Engine.cfg"' /opt/masos/configs/pcengine/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pcengine/retroarch.cfg
+    cp /opt/emulos/configs/pcengine/retroarch.cfg /opt/emulos/configs/pcengine/retroarch.cfg.bkp
+    cat /opt/emulos/configs/pcengine/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/pcengine/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-PC-Engine.cfg"' /opt/emulos/configs/pcengine/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pcengine/retroarch.cfg
   else
-    cp /opt/masos/configs/pcengine/retroarch.cfg /opt/masos/configs/pcengine/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-PC-Engine.cfg"' /opt/masos/configs/pcengine/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pcengine/retroarch.cfg
+    cp /opt/emulos/configs/pcengine/retroarch.cfg /opt/emulos/configs/pcengine/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-PC-Engine.cfg"' /opt/emulos/configs/pcengine/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pcengine/retroarch.cfg
   fi
   ;;
 psx)
-  ifexist=`cat /opt/masos/configs/psx/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/psx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/psx/retroarch.cfg /opt/masos/configs/psx/retroarch.cfg.bkp
-    cat /opt/masos/configs/psx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/psx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PlayStation.cfg"' /opt/masos/configs/psx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psx/retroarch.cfg
+    cp /opt/emulos/configs/psx/retroarch.cfg /opt/emulos/configs/psx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/psx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/psx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PlayStation.cfg"' /opt/emulos/configs/psx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psx/retroarch.cfg
   else
-    cp /opt/masos/configs/psx/retroarch.cfg /opt/masos/configs/psx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PlayStation.cfg"' /opt/masos/configs/psx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psx/retroarch.cfg
+    cp /opt/emulos/configs/psx/retroarch.cfg /opt/emulos/configs/psx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PlayStation.cfg"' /opt/emulos/configs/psx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psx/retroarch.cfg
   fi
   ;;
 sega32x)
-  ifexist=`cat /opt/masos/configs/sega32x/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/sega32x/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/sega32x/retroarch.cfg /opt/masos/configs/sega32x/retroarch.cfg.bkp
-    cat /opt/masos/configs/sega32x/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/sega32x/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-32X.cfg"' /opt/masos/configs/sega32x/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sega32x/retroarch.cfg
+    cp /opt/emulos/configs/sega32x/retroarch.cfg /opt/emulos/configs/sega32x/retroarch.cfg.bkp
+    cat /opt/emulos/configs/sega32x/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/sega32x/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-32X.cfg"' /opt/emulos/configs/sega32x/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sega32x/retroarch.cfg
   else
-    cp /opt/masos/configs/sega32x/retroarch.cfg /opt/masos/configs/sega32x/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-32X.cfg"' /opt/masos/configs/sega32x/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sega32x/retroarch.cfg
+    cp /opt/emulos/configs/sega32x/retroarch.cfg /opt/emulos/configs/sega32x/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-32X.cfg"' /opt/emulos/configs/sega32x/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sega32x/retroarch.cfg
   fi
   ;;
 segacd)
-  ifexist=`cat /opt/masos/configs/segacd/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/segacd/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/segacd/retroarch.cfg /opt/masos/configs/segacd/retroarch.cfg.bkp
-    cat /opt/masos/configs/segacd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/segacd/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-CD.cfg"' /opt/masos/configs/segacd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/segacd/retroarch.cfg
+    cp /opt/emulos/configs/segacd/retroarch.cfg /opt/emulos/configs/segacd/retroarch.cfg.bkp
+    cat /opt/emulos/configs/segacd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/segacd/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-CD.cfg"' /opt/emulos/configs/segacd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/segacd/retroarch.cfg
   else
-    cp /opt/masos/configs/segacd/retroarch.cfg /opt/masos/configs/segacd/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-CD.cfg"' /opt/masos/configs/segacd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/segacd/retroarch.cfg
+    cp /opt/emulos/configs/segacd/retroarch.cfg /opt/emulos/configs/segacd/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-CD.cfg"' /opt/emulos/configs/segacd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/segacd/retroarch.cfg
   fi
   ;;
 sfc)
-  ifexist=`cat /opt/masos/configs/sfc/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/sfc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/sfc/retroarch.cfg /opt/masos/configs/sfc/retroarch.cfg.bkp
-    cat /opt/masos/configs/sfc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/sfc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Super-Famicom.cfg"' /opt/masos/configs/sfc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sfc/retroarch.cfg
+    cp /opt/emulos/configs/sfc/retroarch.cfg /opt/emulos/configs/sfc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/sfc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/sfc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Super-Famicom.cfg"' /opt/emulos/configs/sfc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sfc/retroarch.cfg
   else
-    cp /opt/masos/configs/sfc/retroarch.cfg /opt/masos/configs/sfc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Super-Famicom.cfg"' /opt/masos/configs/sfc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sfc/retroarch.cfg
+    cp /opt/emulos/configs/sfc/retroarch.cfg /opt/emulos/configs/sfc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Super-Famicom.cfg"' /opt/emulos/configs/sfc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sfc/retroarch.cfg
   fi
   ;;
 sg-1000)
-  ifexist=`cat /opt/masos/configs/sg-1000/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/sg-1000/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/sg-1000/retroarch.cfg /opt/masos/configs/sg-1000/retroarch.cfg.bkp
-    cat /opt/masos/configs/sg-1000/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/sg-1000/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-SG-1000.cfg"' /opt/masos/configs/sg-1000/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sg-1000/retroarch.cfg
+    cp /opt/emulos/configs/sg-1000/retroarch.cfg /opt/emulos/configs/sg-1000/retroarch.cfg.bkp
+    cat /opt/emulos/configs/sg-1000/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/sg-1000/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-SG-1000.cfg"' /opt/emulos/configs/sg-1000/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sg-1000/retroarch.cfg
   else
-    cp /opt/masos/configs/sg-1000/retroarch.cfg /opt/masos/configs/sg-1000/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-SG-1000.cfg"' /opt/masos/configs/sg-1000/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/sg-1000/retroarch.cfg
+    cp /opt/emulos/configs/sg-1000/retroarch.cfg /opt/emulos/configs/sg-1000/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-SG-1000.cfg"' /opt/emulos/configs/sg-1000/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/sg-1000/retroarch.cfg
   fi
   ;;
 snes)
-  ifexist=`cat /opt/masos/configs/snes/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/snes/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/snes/retroarch.cfg /opt/masos/configs/snes/retroarch.cfg.bkp
-    cat /opt/masos/configs/snes/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/snes/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Super-Nintendo-Entertainment-System.cfg"' /opt/masos/configs/snes/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/snes/retroarch.cfg
+    cp /opt/emulos/configs/snes/retroarch.cfg /opt/emulos/configs/snes/retroarch.cfg.bkp
+    cat /opt/emulos/configs/snes/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/snes/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Super-Nintendo-Entertainment-System.cfg"' /opt/emulos/configs/snes/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/snes/retroarch.cfg
   else
-    cp /opt/masos/configs/snes/retroarch.cfg /opt/masos/configs/snes/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Super-Nintendo-Entertainment-System.cfg"' /opt/masos/configs/snes/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/snes/retroarch.cfg
+    cp /opt/emulos/configs/snes/retroarch.cfg /opt/emulos/configs/snes/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Super-Nintendo-Entertainment-System.cfg"' /opt/emulos/configs/snes/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/snes/retroarch.cfg
   fi
   ;;
 supergrafx)
-  ifexist=`cat /opt/masos/configs/supergrafx/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/supergrafx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/supergrafx/retroarch.cfg /opt/masos/configs/supergrafx/retroarch.cfg.bkp
-    cat /opt/masos/configs/supergrafx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/supergrafx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-SuperGrafx.cfg"' /opt/masos/configs/supergrafx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/supergrafx/retroarch.cfg
+    cp /opt/emulos/configs/supergrafx/retroarch.cfg /opt/emulos/configs/supergrafx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/supergrafx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/supergrafx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-SuperGrafx.cfg"' /opt/emulos/configs/supergrafx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/supergrafx/retroarch.cfg
   else
-    cp /opt/masos/configs/supergrafx/retroarch.cfg /opt/masos/configs/supergrafx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-SuperGrafx.cfg"' /opt/masos/configs/supergrafx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/supergrafx/retroarch.cfg
+    cp /opt/emulos/configs/supergrafx/retroarch.cfg /opt/emulos/configs/supergrafx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-SuperGrafx.cfg"' /opt/emulos/configs/supergrafx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/supergrafx/retroarch.cfg
   fi
   ;;
 tg16)
-  ifexist=`cat /opt/masos/configs/tg16/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/tg16/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/tg16/retroarch.cfg /opt/masos/configs/tg16/retroarch.cfg.bkp
-    cat /opt/masos/configs/tg16/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/tg16/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-TurboGrafx-16.cfg"' /opt/masos/configs/tg16/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/tg16/retroarch.cfg
+    cp /opt/emulos/configs/tg16/retroarch.cfg /opt/emulos/configs/tg16/retroarch.cfg.bkp
+    cat /opt/emulos/configs/tg16/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/tg16/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-TurboGrafx-16.cfg"' /opt/emulos/configs/tg16/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/tg16/retroarch.cfg
   else
-    cp /opt/masos/configs/tg16/retroarch.cfg /opt/masos/configs/tg16/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-TurboGrafx-16.cfg"' /opt/masos/configs/tg16/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/tg16/retroarch.cfg
+    cp /opt/emulos/configs/tg16/retroarch.cfg /opt/emulos/configs/tg16/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-TurboGrafx-16.cfg"' /opt/emulos/configs/tg16/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/tg16/retroarch.cfg
   fi
   ;;
 tg-cd)
-  ifexist=`cat /opt/masos/configs/tg-cd/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/tg-cd/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/tg-cd/retroarch.cfg /opt/masos/configs/tg-cd/retroarch.cfg.bkp
-    cat /opt/masos/configs/tg-cd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/tg-cd/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-TurboGrafx-CD.cfg"' /opt/masos/configs/tg-cd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/tg-cd/retroarch.cfg
+    cp /opt/emulos/configs/tg-cd/retroarch.cfg /opt/emulos/configs/tg-cd/retroarch.cfg.bkp
+    cat /opt/emulos/configs/tg-cd/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/tg-cd/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-TurboGrafx-CD.cfg"' /opt/emulos/configs/tg-cd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/tg-cd/retroarch.cfg
   else
-    cp /opt/masos/configs/tg-cd/retroarch.cfg /opt/masos/configs/tg-cd/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/NEC-TurboGrafx-CD.cfg"' /opt/masos/configs/tg-cd/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/tg-cd/retroarch.cfg
+    cp /opt/emulos/configs/tg-cd/retroarch.cfg /opt/emulos/configs/tg-cd/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/NEC-TurboGrafx-CD.cfg"' /opt/emulos/configs/tg-cd/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/tg-cd/retroarch.cfg
   fi
   ;;
 vectrex)
-  ifexist=`cat /opt/masos/configs/vectrex/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/vectrex/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/vectrex/retroarch.cfg /opt/masos/configs/vectrex/retroarch.cfg.bkp
-    cat /opt/masos/configs/vectrex/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/vectrex/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/GCE-Vectrex.cfg"' /opt/masos/configs/vectrex/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/vectrex/retroarch.cfg
+    cp /opt/emulos/configs/vectrex/retroarch.cfg /opt/emulos/configs/vectrex/retroarch.cfg.bkp
+    cat /opt/emulos/configs/vectrex/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/vectrex/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/GCE-Vectrex.cfg"' /opt/emulos/configs/vectrex/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/vectrex/retroarch.cfg
   else
-    cp /opt/masos/configs/vectrex/retroarch.cfg /opt/masos/configs/vectrex/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/GCE-Vectrex.cfg"' /opt/masos/configs/vectrex/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/vectrex/retroarch.cfg
+    cp /opt/emulos/configs/vectrex/retroarch.cfg /opt/emulos/configs/vectrex/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/GCE-Vectrex.cfg"' /opt/emulos/configs/vectrex/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/vectrex/retroarch.cfg
   fi
   ;;
 atarilynx_1080)
-  ifexist=`cat /opt/masos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    cat /opt/masos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1010"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "640"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/atarilynx/retroarch.cfg
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1010"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "640"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/atarilynx/retroarch.cfg
   else
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1010"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "640"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/atarilynx/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1010"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "640"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/atarilynx/retroarch.cfg
+  fi
+  ;;
 atarilynx_720)
-  ifexist=`cat /opt/masos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    cat /opt/masos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "670"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "425"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "305"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "150"' /opt/masos/configs/atarilynx/retroarch.cfg
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "670"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "425"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "305"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "150"' /opt/emulos/configs/atarilynx/retroarch.cfg
   else
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "670"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "425"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "305"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "150"' /opt/masos/configs/atarilynx/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "670"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "425"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "305"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "150"' /opt/emulos/configs/atarilynx/retroarch.cfg
+  fi
   ;;
 atarilynx_other)
-  ifexist=`cat /opt/masos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    cat /opt/masos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "715"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "460"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "160"' /opt/masos/configs/atarilynx/retroarch.cfg
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atarilynx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "715"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "460"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "160"' /opt/emulos/configs/atarilynx/retroarch.cfg
   else
-    cp /opt/masos/configs/atarilynx/retroarch.cfg /opt/masos/configs/atarilynx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '5i custom_viewport_width = "715"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '6i custom_viewport_height = "460"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/atarilynx/retroarch.cfg
-    sed -i '8i custom_viewport_y = "160"' /opt/masos/configs/atarilynx/retroarch.cfg
+    cp /opt/emulos/configs/atarilynx/retroarch.cfg /opt/emulos/configs/atarilynx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-Lynx-Horizontal.cfg"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '5i custom_viewport_width = "715"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '6i custom_viewport_height = "460"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/atarilynx/retroarch.cfg
+    sed -i '8i custom_viewport_y = "160"' /opt/emulos/configs/atarilynx/retroarch.cfg
   fi
   ;;
 gamegear_1080)
-  ifexist=`cat /opt/masos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    cat /opt/masos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1160"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "850"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "380"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "120"' /opt/masos/configs/gamegear/retroarch.cfg
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1160"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "850"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "380"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "120"' /opt/emulos/configs/gamegear/retroarch.cfg
   else
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1160"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "850"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "380"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "120"' /opt/masos/configs/gamegear/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1160"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "850"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "380"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "120"' /opt/emulos/configs/gamegear/retroarch.cfg
+  fi
+  ;;
 gamegear_720)
-  ifexist=`cat /opt/masos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    cat /opt/masos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "780"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "580"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "245"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "70"' /opt/masos/configs/gamegear/retroarch.cfg
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "780"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "580"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "245"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "70"' /opt/emulos/configs/gamegear/retroarch.cfg
   else
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "780"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "580"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "245"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "70"' /opt/masos/configs/gamegear/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "780"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "580"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "245"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "70"' /opt/emulos/configs/gamegear/retroarch.cfg
+  fi
   ;;
 gamegear_other)
-  ifexist=`cat /opt/masos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gamegear/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    cat /opt/masos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "835"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "625"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "270"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "75"' /opt/masos/configs/gamegear/retroarch.cfg
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gamegear/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "835"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "625"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "270"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "75"' /opt/emulos/configs/gamegear/retroarch.cfg
   else
-    cp /opt/masos/configs/gamegear/retroarch.cfg /opt/masos/configs/gamegear/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '5i custom_viewport_width = "835"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '6i custom_viewport_height = "625"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '7i custom_viewport_x = "270"' /opt/masos/configs/gamegear/retroarch.cfg
-    sed -i '8i custom_viewport_y = "75"' /opt/masos/configs/gamegear/retroarch.cfg
+    cp /opt/emulos/configs/gamegear/retroarch.cfg /opt/emulos/configs/gamegear/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sega-Game-Gear.cfg"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '5i custom_viewport_width = "835"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '6i custom_viewport_height = "625"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '7i custom_viewport_x = "270"' /opt/emulos/configs/gamegear/retroarch.cfg
+    sed -i '8i custom_viewport_y = "75"' /opt/emulos/configs/gamegear/retroarch.cfg
   fi
   ;;
 gb_1080)
-  ifexist=`cat /opt/masos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    cat /opt/masos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "625"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "565"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "645"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "235"' /opt/masos/configs/gb/retroarch.cfg
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "625"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "565"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "645"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "235"' /opt/emulos/configs/gb/retroarch.cfg
   else
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "625"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "565"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "645"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "235"' /opt/masos/configs/gb/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "625"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "565"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "645"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "235"' /opt/emulos/configs/gb/retroarch.cfg
+  fi
+  ;;
 gb_720)
-  ifexist=`cat /opt/masos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    cat /opt/masos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "429"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "380"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "420"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gb/retroarch.cfg
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "429"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "380"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "420"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gb/retroarch.cfg
   else
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "429"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "380"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "420"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gb/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "429"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "380"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "420"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gb/retroarch.cfg
+  fi
   ;;
 gb_other)
-  ifexist=`cat /opt/masos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gb/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    cat /opt/masos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "455"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "415"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "162"' /opt/masos/configs/gb/retroarch.cfg
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gb/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "455"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "415"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "162"' /opt/emulos/configs/gb/retroarch.cfg
   else
-    cp /opt/masos/configs/gb/retroarch.cfg /opt/masos/configs/gb/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '5i custom_viewport_width = "455"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '6i custom_viewport_height = "415"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gb/retroarch.cfg
-    sed -i '8i custom_viewport_y = "162"' /opt/masos/configs/gb/retroarch.cfg
+    cp /opt/emulos/configs/gb/retroarch.cfg /opt/emulos/configs/gb/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy.cfg"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '5i custom_viewport_width = "455"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '6i custom_viewport_height = "415"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gb/retroarch.cfg
+    sed -i '8i custom_viewport_y = "162"' /opt/emulos/configs/gb/retroarch.cfg
   fi
   ;;
 gba_1080)
-  ifexist=`cat /opt/masos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    cat /opt/masos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1005"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "645"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/gba/retroarch.cfg
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1005"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "645"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/gba/retroarch.cfg
   else
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1005"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "645"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/gba/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1005"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "645"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/gba/retroarch.cfg
+  fi
+  ;;
 gba_720)
-  ifexist=`cat /opt/masos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    cat /opt/masos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "467"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "316"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "405"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "190"' /opt/masos/configs/gba/retroarch.cfg
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "467"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "316"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "405"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "190"' /opt/emulos/configs/gba/retroarch.cfg
   else
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "467"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "316"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "405"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "190"' /opt/masos/configs/gba/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "467"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "316"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "405"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "190"' /opt/emulos/configs/gba/retroarch.cfg
+  fi
   ;;
 gba_other)
-  ifexist=`cat /opt/masos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gba/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    cat /opt/masos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "720"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "320"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gba/retroarch.cfg
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gba/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "720"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "320"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gba/retroarch.cfg
   else
-    cp /opt/masos/configs/gba/retroarch.cfg /opt/masos/configs/gba/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '5i custom_viewport_width = "720"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '7i custom_viewport_x = "320"' /opt/masos/configs/gba/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gba/retroarch.cfg
+    cp /opt/emulos/configs/gba/retroarch.cfg /opt/emulos/configs/gba/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Advance.cfg"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '5i custom_viewport_width = "720"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '7i custom_viewport_x = "320"' /opt/emulos/configs/gba/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gba/retroarch.cfg
   fi
   ;;
 gbc_1080)
-  ifexist=`cat /opt/masos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    cat /opt/masos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "625"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "565"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "645"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "235"' /opt/masos/configs/gbc/retroarch.cfg
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "625"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "565"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "645"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "235"' /opt/emulos/configs/gbc/retroarch.cfg
   else
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "625"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "565"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "645"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "235"' /opt/masos/configs/gbc/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "625"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "565"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "645"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "235"' /opt/emulos/configs/gbc/retroarch.cfg
+  fi
+  ;;
 gbc_720)
-  ifexist=`cat /opt/masos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    cat /opt/masos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "430"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "380"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "425"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gbc/retroarch.cfg
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "430"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "380"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "425"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gbc/retroarch.cfg
   else
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "430"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "380"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "425"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/gbc/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "430"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "380"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "425"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/gbc/retroarch.cfg
+  fi
   ;;
 gbc_other)
-  ifexist=`cat /opt/masos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/gbc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    cat /opt/masos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "455"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "405"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "165"' /opt/masos/configs/gbc/retroarch.cfg
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/gbc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "455"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "405"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "165"' /opt/emulos/configs/gbc/retroarch.cfg
   else
-    cp /opt/masos/configs/gbc/retroarch.cfg /opt/masos/configs/gbc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "455"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "405"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "455"' /opt/masos/configs/gbc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "165"' /opt/masos/configs/gbc/retroarch.cfg
+    cp /opt/emulos/configs/gbc/retroarch.cfg /opt/emulos/configs/gbc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Game-Boy-Color.cfg"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "455"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "405"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "455"' /opt/emulos/configs/gbc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "165"' /opt/emulos/configs/gbc/retroarch.cfg
   fi
   ;;
 ngp_1080)
-  ifexist=`cat /opt/masos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "700"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "635"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "610"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "220"' /opt/masos/configs/ngp/retroarch.cfg
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "700"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "635"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "610"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "220"' /opt/emulos/configs/ngp/retroarch.cfg
   else
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "700"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "635"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "610"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "220"' /opt/masos/configs/ngp/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "700"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "635"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "610"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "220"' /opt/emulos/configs/ngp/retroarch.cfg
+  fi
+  ;;
 ngp_720)
-  ifexist=`cat /opt/masos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "461"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "428"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "407"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "145"' /opt/masos/configs/ngp/retroarch.cfg
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "461"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "428"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "407"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "145"' /opt/emulos/configs/ngp/retroarch.cfg
   else
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "461"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "428"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "407"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "145"' /opt/masos/configs/ngp/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "461"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "428"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "407"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "145"' /opt/emulos/configs/ngp/retroarch.cfg
+  fi
   ;;
 ngp_other)
-  ifexist=`cat /opt/masos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/ngp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "490"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "435"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/ngp/retroarch.cfg
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "490"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "435"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/ngp/retroarch.cfg
   else
-    cp /opt/masos/configs/ngp/retroarch.cfg /opt/masos/configs/ngp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "490"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "435"' /opt/masos/configs/ngp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/ngp/retroarch.cfg
+    cp /opt/emulos/configs/ngp/retroarch.cfg /opt/emulos/configs/ngp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket.cfg"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "490"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "435"' /opt/emulos/configs/ngp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/ngp/retroarch.cfg
   fi
   ;;
 ngpc_1080)
-  ifexist=`cat /opt/masos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "700"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "640"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "610"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/ngpc/retroarch.cfg
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "700"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "640"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "610"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/ngpc/retroarch.cfg
   else
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "700"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "640"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "610"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/ngpc/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "700"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "640"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "610"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/ngpc/retroarch.cfg
+  fi
+  ;;
 ngpc_720)
-  ifexist=`cat /opt/masos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "460"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "428"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "407"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "145"' /opt/masos/configs/ngpc/retroarch.cfg
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "460"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "428"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "407"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "145"' /opt/emulos/configs/ngpc/retroarch.cfg
   else
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "460"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "428"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "407"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "145"' /opt/masos/configs/ngpc/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "460"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "428"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "407"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "145"' /opt/emulos/configs/ngpc/retroarch.cfg
+  fi
   ;;
 ngpc_other)
-  ifexist=`cat /opt/masos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/ngpc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    cat /opt/masos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "490"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "435"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/ngpc/retroarch.cfg
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/ngpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "490"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "435"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/ngpc/retroarch.cfg
   else
-    cp /opt/masos/configs/ngpc/retroarch.cfg /opt/masos/configs/ngpc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '5i custom_viewport_width = "490"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '6i custom_viewport_height = "455"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '7i custom_viewport_x = "435"' /opt/masos/configs/ngpc/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/ngpc/retroarch.cfg
+    cp /opt/emulos/configs/ngpc/retroarch.cfg /opt/emulos/configs/ngpc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/SNK-Neo-Geo-Pocket-Color.cfg"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '5i custom_viewport_width = "490"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '6i custom_viewport_height = "455"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '7i custom_viewport_x = "435"' /opt/emulos/configs/ngpc/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/ngpc/retroarch.cfg
   fi
   ;;
 psp_1080)
-  ifexist=`cat /opt/masos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    cat /opt/masos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1430"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "820"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "250"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "135"' /opt/masos/configs/psp/retroarch.cfg
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1430"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "820"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "250"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "135"' /opt/emulos/configs/psp/retroarch.cfg
   else
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1430"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "820"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "250"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "135"' /opt/masos/configs/psp/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1430"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "820"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "250"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "135"' /opt/emulos/configs/psp/retroarch.cfg
+  fi
+  ;;
 psp_720)
-  ifexist=`cat /opt/masos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    cat /opt/masos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "540"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "165"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "90"' /opt/masos/configs/psp/retroarch.cfg
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "540"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "165"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "90"' /opt/emulos/configs/psp/retroarch.cfg
   else
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "540"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "165"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "90"' /opt/masos/configs/psp/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "540"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "165"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "90"' /opt/emulos/configs/psp/retroarch.cfg
+  fi
   ;;
 psp_other)
-  ifexist=`cat /opt/masos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/psp/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    cat /opt/masos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1015"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "575"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "175"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "95"' /opt/masos/configs/psp/retroarch.cfg
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    cat /opt/emulos/configs/psp/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1015"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "575"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "175"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "95"' /opt/emulos/configs/psp/retroarch.cfg
   else
-    cp /opt/masos/configs/psp/retroarch.cfg /opt/masos/configs/psp/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1015"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '6i custom_viewport_height = "575"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '7i custom_viewport_x = "175"' /opt/masos/configs/psp/retroarch.cfg
-    sed -i '8i custom_viewport_y = "95"' /opt/masos/configs/psp/retroarch.cfg
+    cp /opt/emulos/configs/psp/retroarch.cfg /opt/emulos/configs/psp/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1015"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '6i custom_viewport_height = "575"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '7i custom_viewport_x = "175"' /opt/emulos/configs/psp/retroarch.cfg
+    sed -i '8i custom_viewport_y = "95"' /opt/emulos/configs/psp/retroarch.cfg
   fi
   ;;
 pspminis_1080)
-  ifexist=`cat /opt/masos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    cat /opt/masos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1430"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "820"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "250"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "135"' /opt/masos/configs/pspminis/retroarch.cfg
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    cat /opt/emulos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1430"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "820"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "250"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "135"' /opt/emulos/configs/pspminis/retroarch.cfg
   else
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1430"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "820"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "250"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "135"' /opt/masos/configs/pspminis/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1430"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "820"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "250"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "135"' /opt/emulos/configs/pspminis/retroarch.cfg
+  fi
+  ;;
 pspminis_720)
-  ifexist=`cat /opt/masos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    cat /opt/masos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "540"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "165"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "90"' /opt/masos/configs/pspminis/retroarch.cfg
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    cat /opt/emulos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "540"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "165"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "90"' /opt/emulos/configs/pspminis/retroarch.cfg
   else
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "540"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "165"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "90"' /opt/masos/configs/pspminis/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "540"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "165"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "90"' /opt/emulos/configs/pspminis/retroarch.cfg
+  fi
   ;;
 pspminis_other)
-  ifexist=`cat /opt/masos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/pspminis/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    cat /opt/masos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1015"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "575"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "175"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "95"' /opt/masos/configs/pspminis/retroarch.cfg
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    cat /opt/emulos/configs/pspminis/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1015"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "575"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "175"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "95"' /opt/emulos/configs/pspminis/retroarch.cfg
   else
-    cp /opt/masos/configs/pspminis/retroarch.cfg /opt/masos/configs/pspminis/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1015"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '6i custom_viewport_height = "575"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '7i custom_viewport_x = "175"' /opt/masos/configs/pspminis/retroarch.cfg
-    sed -i '8i custom_viewport_y = "95"' /opt/masos/configs/pspminis/retroarch.cfg
+    cp /opt/emulos/configs/pspminis/retroarch.cfg /opt/emulos/configs/pspminis/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sony-PSP.cfg"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1015"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '6i custom_viewport_height = "575"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '7i custom_viewport_x = "175"' /opt/emulos/configs/pspminis/retroarch.cfg
+    sed -i '8i custom_viewport_y = "95"' /opt/emulos/configs/pspminis/retroarch.cfg
   fi
   ;;
 virtualboy_1080)
-  ifexist=`cat /opt/masos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    cat /opt/masos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1115"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "695"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "405"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/virtualboy/retroarch.cfg
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1115"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "695"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "405"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/virtualboy/retroarch.cfg
   else
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "1115"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "695"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "405"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "215"' /opt/masos/configs/virtualboy/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "1115"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "695"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "405"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "215"' /opt/emulos/configs/virtualboy/retroarch.cfg
+  fi
+  ;;
 virtualboy_720)
-  ifexist=`cat /opt/masos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    cat /opt/masos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "740"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "470"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "270"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "140"' /opt/masos/configs/virtualboy/retroarch.cfg
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "740"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "470"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "270"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "140"' /opt/emulos/configs/virtualboy/retroarch.cfg
   else
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "740"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "470"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "270"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "140"' /opt/masos/configs/virtualboy/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "740"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "470"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "270"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "140"' /opt/emulos/configs/virtualboy/retroarch.cfg
+  fi
   ;;
 virtualboy_other)
-  ifexist=`cat /opt/masos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    cat /opt/masos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "787"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "494"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "290"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "153"' /opt/masos/configs/virtualboy/retroarch.cfg
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    cat /opt/emulos/configs/virtualboy/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "787"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "494"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "290"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "153"' /opt/emulos/configs/virtualboy/retroarch.cfg
   else
-    cp /opt/masos/configs/virtualboy/retroarch.cfg /opt/masos/configs/virtualboy/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '5i custom_viewport_width = "787"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '6i custom_viewport_height = "494"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '7i custom_viewport_x = "290"' /opt/masos/configs/virtualboy/retroarch.cfg
-    sed -i '8i custom_viewport_y = "153"' /opt/masos/configs/virtualboy/retroarch.cfg
+    cp /opt/emulos/configs/virtualboy/retroarch.cfg /opt/emulos/configs/virtualboy/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Nintendo-Virtual-Boy.cfg"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '5i custom_viewport_width = "787"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '6i custom_viewport_height = "494"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '7i custom_viewport_x = "290"' /opt/emulos/configs/virtualboy/retroarch.cfg
+    sed -i '8i custom_viewport_y = "153"' /opt/emulos/configs/virtualboy/retroarch.cfg
   fi
   ;;
 wonderswan_1080)
-  ifexist=`cat /opt/masos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "605"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "495"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/wonderswan/retroarch.cfg
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "605"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "495"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/wonderswan/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "605"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "495"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/wonderswan/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "605"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "495"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/wonderswan/retroarch.cfg
+  fi
+  ;;
 wonderswan_720)
-  ifexist=`cat /opt/masos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "645"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "407"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "148"' /opt/masos/configs/wonderswan/retroarch.cfg
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "645"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "407"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "148"' /opt/emulos/configs/wonderswan/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "645"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "407"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "148"' /opt/masos/configs/wonderswan/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "645"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "407"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "148"' /opt/emulos/configs/wonderswan/retroarch.cfg
+  fi
   ;;
 wonderswan_other)
-  ifexist=`cat /opt/masos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "690"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "435"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "345"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/wonderswan/retroarch.cfg
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswan/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "690"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "435"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "345"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/wonderswan/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswan/retroarch.cfg /opt/masos/configs/wonderswan/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '5i custom_viewport_width = "690"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '6i custom_viewport_height = "435"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '7i custom_viewport_x = "345"' /opt/masos/configs/wonderswan/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/wonderswan/retroarch.cfg
+    cp /opt/emulos/configs/wonderswan/retroarch.cfg /opt/emulos/configs/wonderswan/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Horizontal.cfg"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '5i custom_viewport_width = "690"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '6i custom_viewport_height = "435"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '7i custom_viewport_x = "345"' /opt/emulos/configs/wonderswan/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/wonderswan/retroarch.cfg
   fi
   ;;
 wonderswancolor_1080)
-  ifexist=`cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "605"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "490"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/wonderswancolor/retroarch.cfg
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "605"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "490"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "950"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "605"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "490"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "225"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-  fi  
-  ;;  
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "950"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "605"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "490"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "225"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+  fi
+  ;;
 wonderswancolor_720)
-  ifexist=`cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "643"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "405"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "150"' /opt/masos/configs/wonderswancolor/retroarch.cfg
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "643"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "405"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "150"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "643"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "405"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "325"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "150"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-  fi  
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "643"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "405"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "325"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "150"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+  fi
   ;;
 wonderswancolor_other)
-  ifexist=`cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l` 
+  ifexist=`cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    cat /opt/masos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "690"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "435"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "345"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/wonderswancolor/retroarch.cfg
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    cat /opt/emulos/configs/wonderswancolor/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "690"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "435"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "345"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
   else
-    cp /opt/masos/configs/wonderswancolor/retroarch.cfg /opt/masos/configs/wonderswancolor/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '4i aspect_ratio_index = "22"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '5i custom_viewport_width = "690"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '6i custom_viewport_height = "435"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '7i custom_viewport_x = "345"' /opt/masos/configs/wonderswancolor/retroarch.cfg
-    sed -i '8i custom_viewport_y = "155"' /opt/masos/configs/wonderswancolor/retroarch.cfg
+    cp /opt/emulos/configs/wonderswancolor/retroarch.cfg /opt/emulos/configs/wonderswancolor/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Bandai-WonderSwan-Color-Horizontal.cfg"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '4i aspect_ratio_index = "22"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '5i custom_viewport_width = "690"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '6i custom_viewport_height = "435"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '7i custom_viewport_x = "345"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
+    sed -i '8i custom_viewport_y = "155"' /opt/emulos/configs/wonderswancolor/retroarch.cfg
   fi
   ;;
 amstradcpc)
-  ifexist=`cat /opt/masos/configs/amstradcpc/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/amstradcpc/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/amstradcpc/retroarch.cfg /opt/masos/configs/amstradcpc/retroarch.cfg.bkp
-    cat /opt/masos/configs/amstradcpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/amstradcpc/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Amstrad-CPC.cfg"' /opt/masos/configs/amstradcpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/amstradcpc/retroarch.cfg
+    cp /opt/emulos/configs/amstradcpc/retroarch.cfg /opt/emulos/configs/amstradcpc/retroarch.cfg.bkp
+    cat /opt/emulos/configs/amstradcpc/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/amstradcpc/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Amstrad-CPC.cfg"' /opt/emulos/configs/amstradcpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/amstradcpc/retroarch.cfg
   else
-    cp /opt/masos/configs/amstradcpc/retroarch.cfg /opt/masos/configs/amstradcpc/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Amstrad-CPC.cfg"' /opt/masos/configs/amstradcpc/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/amstradcpc/retroarch.cfg
+    cp /opt/emulos/configs/amstradcpc/retroarch.cfg /opt/emulos/configs/amstradcpc/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Amstrad-CPC.cfg"' /opt/emulos/configs/amstradcpc/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/amstradcpc/retroarch.cfg
   fi
   ;;
 atari800)
-  ifexist=`cat /opt/masos/configs/atari800/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atari800/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atari800/retroarch.cfg /opt/masos/configs/atari800/retroarch.cfg.bkp
-    cat /opt/masos/configs/atari800/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atari800/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-800.cfg"' /opt/masos/configs/atari800/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari800/retroarch.cfg
+    cp /opt/emulos/configs/atari800/retroarch.cfg /opt/emulos/configs/atari800/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atari800/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atari800/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-800.cfg"' /opt/emulos/configs/atari800/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari800/retroarch.cfg
   else
-    cp /opt/masos/configs/atari800/retroarch.cfg /opt/masos/configs/atari800/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-800.cfg"' /opt/masos/configs/atari800/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atari800/retroarch.cfg
+    cp /opt/emulos/configs/atari800/retroarch.cfg /opt/emulos/configs/atari800/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-800.cfg"' /opt/emulos/configs/atari800/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atari800/retroarch.cfg
   fi
   ;;
 atarist)
-  ifexist=`cat /opt/masos/configs/atarist/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/atarist/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/atarist/retroarch.cfg /opt/masos/configs/atarist/retroarch.cfg.bkp
-    cat /opt/masos/configs/atarist/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/atarist/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-ST.cfg"' /opt/masos/configs/atarist/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarist/retroarch.cfg
+    cp /opt/emulos/configs/atarist/retroarch.cfg /opt/emulos/configs/atarist/retroarch.cfg.bkp
+    cat /opt/emulos/configs/atarist/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/atarist/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-ST.cfg"' /opt/emulos/configs/atarist/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarist/retroarch.cfg
   else
-    cp /opt/masos/configs/atarist/retroarch.cfg /opt/masos/configs/atarist/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Atari-ST.cfg"' /opt/masos/configs/atarist/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/atarist/retroarch.cfg
+    cp /opt/emulos/configs/atarist/retroarch.cfg /opt/emulos/configs/atarist/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Atari-ST.cfg"' /opt/emulos/configs/atarist/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/atarist/retroarch.cfg
   fi
   ;;
 c64)
-  ifexist=`cat /opt/masos/configs/c64/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/c64/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/c64/retroarch.cfg /opt/masos/configs/c64/retroarch.cfg.bkp
-    cat /opt/masos/configs/c64/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/c64/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Commodore-64.cfg"' /opt/masos/configs/c64/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/c64/retroarch.cfg
+    cp /opt/emulos/configs/c64/retroarch.cfg /opt/emulos/configs/c64/retroarch.cfg.bkp
+    cat /opt/emulos/configs/c64/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/c64/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Commodore-64.cfg"' /opt/emulos/configs/c64/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/c64/retroarch.cfg
   else
-    cp /opt/masos/configs/c64/retroarch.cfg /opt/masos/configs/c64/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Commodore-64.cfg"' /opt/masos/configs/c64/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/c64/retroarch.cfg
+    cp /opt/emulos/configs/c64/retroarch.cfg /opt/emulos/configs/c64/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Commodore-64.cfg"' /opt/emulos/configs/c64/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/c64/retroarch.cfg
   fi
   ;;
 msx)
-  ifexist=`cat /opt/masos/configs/msx/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/msx/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/msx/retroarch.cfg /opt/masos/configs/msx/retroarch.cfg.bkp
-    cat /opt/masos/configs/msx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/msx/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Microsoft-MSX.cfg"' /opt/masos/configs/msx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/msx/retroarch.cfg
+    cp /opt/emulos/configs/msx/retroarch.cfg /opt/emulos/configs/msx/retroarch.cfg.bkp
+    cat /opt/emulos/configs/msx/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/msx/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Microsoft-MSX.cfg"' /opt/emulos/configs/msx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/msx/retroarch.cfg
   else
-    cp /opt/masos/configs/msx/retroarch.cfg /opt/masos/configs/msx/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Microsoft-MSX.cfg"' /opt/masos/configs/msx/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/msx/retroarch.cfg
+    cp /opt/emulos/configs/msx/retroarch.cfg /opt/emulos/configs/msx/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Microsoft-MSX.cfg"' /opt/emulos/configs/msx/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/msx/retroarch.cfg
   fi
   ;;
 msx2)
-  ifexist=`cat /opt/masos/configs/msx2/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/msx2/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/msx2/retroarch.cfg /opt/masos/configs/msx2/retroarch.cfg.bkp
-    cat /opt/masos/configs/msx2/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/msx2/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Microsoft-MSX2.cfg"' /opt/masos/configs/msx2/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/msx2/retroarch.cfg
+    cp /opt/emulos/configs/msx2/retroarch.cfg /opt/emulos/configs/msx2/retroarch.cfg.bkp
+    cat /opt/emulos/configs/msx2/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/msx2/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Microsoft-MSX2.cfg"' /opt/emulos/configs/msx2/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/msx2/retroarch.cfg
   else
-    cp /opt/masos/configs/msx2/retroarch.cfg /opt/masos/configs/msx2/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Microsoft-MSX2.cfg"' /opt/masos/configs/msx2/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/msx2/retroarch.cfg
+    cp /opt/emulos/configs/msx2/retroarch.cfg /opt/emulos/configs/msx2/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Microsoft-MSX2.cfg"' /opt/emulos/configs/msx2/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/msx2/retroarch.cfg
   fi
   ;;
 videopac)
-  ifexist=`cat /opt/masos/configs/videopac/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/videopac/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/videopac/retroarch.cfg /opt/masos/configs/videopac/retroarch.cfg.bkp
-    cat /opt/masos/configs/videopac/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/videopac/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Magnavox-Odyssey-2.cfg"' /opt/masos/configs/videopac/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/videopac/retroarch.cfg
+    cp /opt/emulos/configs/videopac/retroarch.cfg /opt/emulos/configs/videopac/retroarch.cfg.bkp
+    cat /opt/emulos/configs/videopac/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/videopac/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Magnavox-Odyssey-2.cfg"' /opt/emulos/configs/videopac/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/videopac/retroarch.cfg
   else
-    cp /opt/masos/configs/videopac/retroarch.cfg /opt/masos/configs/videopac/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Magnavox-Odyssey-2.cfg"' /opt/masos/configs/videopac/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/videopac/retroarch.cfg
+    cp /opt/emulos/configs/videopac/retroarch.cfg /opt/emulos/configs/videopac/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Magnavox-Odyssey-2.cfg"' /opt/emulos/configs/videopac/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/videopac/retroarch.cfg
   fi
   ;;
 x68000)
-  ifexist=`cat /opt/masos/configs/x68000/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/x68000/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/x68000/retroarch.cfg /opt/masos/configs/x68000/retroarch.cfg.bkp
-    cat /opt/masos/configs/x68000/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/x68000/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sharp-X68000.cfg"' /opt/masos/configs/x68000/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/x68000/retroarch.cfg
+    cp /opt/emulos/configs/x68000/retroarch.cfg /opt/emulos/configs/x68000/retroarch.cfg.bkp
+    cat /opt/emulos/configs/x68000/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/x68000/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sharp-X68000.cfg"' /opt/emulos/configs/x68000/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/x68000/retroarch.cfg
   else
-    cp /opt/masos/configs/x68000/retroarch.cfg /opt/masos/configs/x68000/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sharp-X68000.cfg"' /opt/masos/configs/x68000/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/x68000/retroarch.cfg
+    cp /opt/emulos/configs/x68000/retroarch.cfg /opt/emulos/configs/x68000/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sharp-X68000.cfg"' /opt/emulos/configs/x68000/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/x68000/retroarch.cfg
   fi
   ;;
 zxspectrum)
-  ifexist=`cat /opt/masos/configs/zxspectrum/retroarch.cfg |grep "input_overlay" |wc -l`
+  ifexist=`cat /opt/emulos/configs/zxspectrum/retroarch.cfg |grep "input_overlay" |wc -l`
   if [[ ${ifexist} > 0 ]]
   then
-    cp /opt/masos/configs/zxspectrum/retroarch.cfg /opt/masos/configs/zxspectrum/retroarch.cfg.bkp
-    cat /opt/masos/configs/zxspectrum/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
-    cp /tmp/retroarch.cfg /opt/masos/configs/zxspectrum/retroarch.cfg
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sinclair-ZX-Spectrum.cfg"' /opt/masos/configs/zxspectrum/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/zxspectrum/retroarch.cfg
+    cp /opt/emulos/configs/zxspectrum/retroarch.cfg /opt/emulos/configs/zxspectrum/retroarch.cfg.bkp
+    cat /opt/emulos/configs/zxspectrum/retroarch.cfg |grep -v input_overlay |grep -v aspect_ratio |grep -v custom_viewport > /tmp/retroarch.cfg
+    cp /tmp/retroarch.cfg /opt/emulos/configs/zxspectrum/retroarch.cfg
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sinclair-ZX-Spectrum.cfg"' /opt/emulos/configs/zxspectrum/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/zxspectrum/retroarch.cfg
   else
-    cp /opt/masos/configs/zxspectrum/retroarch.cfg /opt/masos/configs/zxspectrum/retroarch.cfg.bkp
-    sed -i '2i input_overlay = "/opt/masos/configs/all/retroarch/overlay/Sinclair-ZX-Spectrum.cfg"' /opt/masos/configs/zxspectrum/retroarch.cfg
-    sed -i '3i input_overlay_opacity = "1.000000"' /opt/masos/configs/zxspectrum/retroarch.cfg
+    cp /opt/emulos/configs/zxspectrum/retroarch.cfg /opt/emulos/configs/zxspectrum/retroarch.cfg.bkp
+    sed -i '2i input_overlay = "/opt/emulos/configs/all/retroarch/overlay/Sinclair-ZX-Spectrum.cfg"' /opt/emulos/configs/zxspectrum/retroarch.cfg
+    sed -i '3i input_overlay_opacity = "1.000000"' /opt/emulos/configs/zxspectrum/retroarch.cfg
   fi
   ;;
 esac
@@ -1810,22 +1810,22 @@ esac
 
 function bezel_pack1() {
   dialog --infobox "...processing..." 3 20 ; sleep 2
-  sourcepath_dir="/home/pi/MasOS/RetroarchBezels/bezelpack1"
-  destinationpath_dir="/opt/masos/configs/all/retroarch/overlay"
+  sourcepath_dir="/home/pi/emulos/RetroarchBezels/bezelpack1"
+  destinationpath_dir="/opt/emulos/configs/all/retroarch/overlay"
   cp ${sourcepath_dir}/* ${destinationpath_dir}
 }
 
 function bezel_pack2() {
   dialog --infobox "...processing..." 3 20 ; sleep 2
-  sourcepath_dir="/home/pi/MasOS/RetroarchBezels/bezelpack2"
-  destinationpath_dir="/opt/masos/configs/all/retroarch/overlay"
+  sourcepath_dir="/home/pi/emulos/RetroarchBezels/bezelpack2"
+  destinationpath_dir="/opt/emulos/configs/all/retroarch/overlay"
   cp ${sourcepath_dir}/* ${destinationpath_dir}
 }
 
 function bezel_pack3() {
   dialog --infobox "...processing..." 3 20 ; sleep 2
-  sourcepath_dir="/home/pi/MasOS/RetroarchBezels/bezelpack3"
-  destinationpath_dir="/opt/masos/configs/all/retroarch/overlay"
+  sourcepath_dir="/home/pi/emulos/RetroarchBezels/bezelpack3"
+  destinationpath_dir="/opt/emulos/configs/all/retroarch/overlay"
   cp ${sourcepath_dir}/* ${destinationpath_dir}
 }
 
@@ -1871,20 +1871,20 @@ hide_bezel snes
 hide_bezel supergrafx
 hide_bezel tg16
 hide_bezel tg-cd
-  mv "/opt/masos/configs/all/retroarch/config/Atari800" "/opt/masos/configs/all/retroarch/config/disable_Atari800"
-  mv "/opt/masos/configs/all/retroarch/config/BlueMSX" "/opt/masos/configs/all/retroarch/config/disable_BlueMSX"
-  mv "/opt/masos/configs/all/retroarch/config/FCEUmm" "/opt/masos/configs/all/retroarch/config/disable_FCEUmm"
-  mv "/opt/masos/configs/all/retroarch/config/Genesis Plus GX" "/opt/masos/configs/all/retroarch/config/disable_Genesis Plus GX"
-  mv "/opt/masos/configs/all/retroarch/config/Mednafen PCE Fast" "/opt/masos/configs/all/retroarch/config/disable_Mednafen PCE Fast"
-  mv "/opt/masos/configs/all/retroarch/config/Mednafen SuperGrafx" "/opt/masos/configs/all/retroarch/config/disable_Mednafen SuperGrafx"
-  mv "/opt/masos/configs/all/retroarch/config/Mupen64Plus GLES2" "/opt/masos/configs/all/retroarch/config/disable_Mupen64Plus GLES2"
-  mv "/opt/masos/configs/all/retroarch/config/Nestopia" "/opt/masos/configs/all/retroarch/config/disable_Nestopia"
-  mv "/opt/masos/configs/all/retroarch/config/PCSX-ReARMed" "/opt/masos/configs/all/retroarch/config/disable_PCSX-ReARMed"
-  mv "/opt/masos/configs/all/retroarch/config/PicoDrive" "/opt/masos/configs/all/retroarch/config/disable_PicoDrive"
-  mv "/opt/masos/configs/all/retroarch/config/ProSystem" "/opt/masos/configs/all/retroarch/config/disable_ProSystem"
-  mv "/opt/masos/configs/all/retroarch/config/Snes9x" "/opt/masos/configs/all/retroarch/config/disable_Snes9x"
-  mv "/opt/masos/configs/all/retroarch/config/Snes9x 2010" "/opt/masos/configs/all/retroarch/config/disable_Snes9x 2010"
-  mv "/opt/masos/configs/all/retroarch/config/Stella" "/opt/masos/configs/all/retroarch/config/disable_Stella"
+  mv "/opt/emulos/configs/all/retroarch/config/Atari800" "/opt/emulos/configs/all/retroarch/config/disable_Atari800"
+  mv "/opt/emulos/configs/all/retroarch/config/BlueMSX" "/opt/emulos/configs/all/retroarch/config/disable_BlueMSX"
+  mv "/opt/emulos/configs/all/retroarch/config/FCEUmm" "/opt/emulos/configs/all/retroarch/config/disable_FCEUmm"
+  mv "/opt/emulos/configs/all/retroarch/config/Genesis Plus GX" "/opt/emulos/configs/all/retroarch/config/disable_Genesis Plus GX"
+  mv "/opt/emulos/configs/all/retroarch/config/Mednafen PCE Fast" "/opt/emulos/configs/all/retroarch/config/disable_Mednafen PCE Fast"
+  mv "/opt/emulos/configs/all/retroarch/config/Mednafen SuperGrafx" "/opt/emulos/configs/all/retroarch/config/disable_Mednafen SuperGrafx"
+  mv "/opt/emulos/configs/all/retroarch/config/Mupen64Plus GLES2" "/opt/emulos/configs/all/retroarch/config/disable_Mupen64Plus GLES2"
+  mv "/opt/emulos/configs/all/retroarch/config/Nestopia" "/opt/emulos/configs/all/retroarch/config/disable_Nestopia"
+  mv "/opt/emulos/configs/all/retroarch/config/PCSX-ReARMed" "/opt/emulos/configs/all/retroarch/config/disable_PCSX-ReARMed"
+  mv "/opt/emulos/configs/all/retroarch/config/PicoDrive" "/opt/emulos/configs/all/retroarch/config/disable_PicoDrive"
+  mv "/opt/emulos/configs/all/retroarch/config/ProSystem" "/opt/emulos/configs/all/retroarch/config/disable_ProSystem"
+  mv "/opt/emulos/configs/all/retroarch/config/Snes9x" "/opt/emulos/configs/all/retroarch/config/disable_Snes9x"
+  mv "/opt/emulos/configs/all/retroarch/config/Snes9x 2010" "/opt/emulos/configs/all/retroarch/config/disable_Snes9x 2010"
+  mv "/opt/emulos/configs/all/retroarch/config/Stella" "/opt/emulos/configs/all/retroarch/config/disable_Stella"
 }
 
 function show_console_bezels() {
@@ -1911,23 +1911,22 @@ show_bezel snes
 show_bezel supergrafx
 show_bezel tg16
 show_bezel tg-cd
-  mv "/opt/masos/configs/all/retroarch/config/disable_Atari800" "/opt/masos/configs/all/retroarch/config/Atari800"
-  mv "/opt/masos/configs/all/retroarch/config/disable_BlueMSX" "/opt/masos/configs/all/retroarch/config/BlueMSX"
-  mv "/opt/masos/configs/all/retroarch/config/disable_FCEUmm" "/opt/masos/configs/all/retroarch/config/FCEUmm"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Genesis Plus GX" "/opt/masos/configs/all/retroarch/config/Genesis Plus GX"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Mednafen PCE Fast" "/opt/masos/configs/all/retroarch/config/Mednafen PCE Fast"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Mednafen SuperGrafx" "/opt/masos/configs/all/retroarch/config/Mednafen SuperGrafx"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Mupen64Plus GLES2" "/opt/masos/configs/all/retroarch/config/Mupen64Plus GLES2"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Nestopia" "/opt/masos/configs/all/retroarch/config/Nestopia"
-  mv "/opt/masos/configs/all/retroarch/config/disable_PCSX-ReARMed" "/opt/masos/configs/all/retroarch/config/PCSX-ReARMed"
-  mv "/opt/masos/configs/all/retroarch/config/disable_PicoDrive" "/opt/masos/configs/all/retroarch/config/PicoDrive"
-  mv "/opt/masos/configs/all/retroarch/config/disable_ProSystem" "/opt/masos/configs/all/retroarch/config/ProSystem"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Snes9x" "/opt/masos/configs/all/retroarch/config/Snes9x"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Snes9x 2010" "/opt/masos/configs/all/retroarch/config/Snes9x 2010"
-  mv "/opt/masos/configs/all/retroarch/config/disable_Stella" "/opt/masos/configs/all/retroarch/config/Stella"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Atari800" "/opt/emulos/configs/all/retroarch/config/Atari800"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_BlueMSX" "/opt/emulos/configs/all/retroarch/config/BlueMSX"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_FCEUmm" "/opt/emulos/configs/all/retroarch/config/FCEUmm"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Genesis Plus GX" "/opt/emulos/configs/all/retroarch/config/Genesis Plus GX"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Mednafen PCE Fast" "/opt/emulos/configs/all/retroarch/config/Mednafen PCE Fast"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Mednafen SuperGrafx" "/opt/emulos/configs/all/retroarch/config/Mednafen SuperGrafx"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Mupen64Plus GLES2" "/opt/emulos/configs/all/retroarch/config/Mupen64Plus GLES2"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Nestopia" "/opt/emulos/configs/all/retroarch/config/Nestopia"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_PCSX-ReARMed" "/opt/emulos/configs/all/retroarch/config/PCSX-ReARMed"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_PicoDrive" "/opt/emulos/configs/all/retroarch/config/PicoDrive"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_ProSystem" "/opt/emulos/configs/all/retroarch/config/ProSystem"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Snes9x" "/opt/emulos/configs/all/retroarch/config/Snes9x"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Snes9x 2010" "/opt/emulos/configs/all/retroarch/config/Snes9x 2010"
+  mv "/opt/emulos/configs/all/retroarch/config/disable_Stella" "/opt/emulos/configs/all/retroarch/config/Stella"
 }
 
 # Main
 
 main_menu
-

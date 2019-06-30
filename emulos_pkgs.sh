@@ -8,7 +8,7 @@
 #EmulOS El sistema operativo retro en español con emulationstation, retroarch y varios scripts independientes mas configuraciones y themes nuevos.!
 #fork de retropie
 
-__version="1.0.0"
+__version="1.1.0"
 
 [[ "$__debug" -eq 1 ]] && set -x
 

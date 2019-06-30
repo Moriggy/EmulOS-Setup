@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 rp_module_id="bashvideoloading"
-rp_module_desc="Video mientras carga la rom en MasOS"
+rp_module_desc="Video mientras carga la rom en EmulOS"
 rp_module_section=""
 infobox="${infobox}_______________________________________________________\n\n"
 infobox="${infobox}\n"
-infobox="${infobox}MasOS Video Loading Screen Script\n\n"
+infobox="${infobox}EmulOS Video Loading Screen Script\n\n"
 infobox="${infobox}\n"
-infobox="${infobox}Video loading screen se puede activar en MasOS.\n\n"
+infobox="${infobox}Video loading screen se puede activar en EmulOS.\n\n"
 infobox="${infobox}Esta opción VIENE DESACTIVADA POR DEFECTO.\n\n"
 infobox="${infobox}Cuando inicias un juego, se reproduce un video como pantalla de carga del sistema elegido.\n\n"
 infobox="${infobox}Al salir del juego, se reproducirá otro video\n"
@@ -15,10 +15,10 @@ infobox="${infobox}**Activar**\nCuando ejecuta la opción de activar, se crea la
 infobox="${infobox}\n"
 infobox="${infobox}**Desactivar**\nCuando ejecuta la opción de deshabilitar, la carpeta videoloadingscreens se renombra a videoloadingscreens_disable y renombran a .bkp los archivos de configuración que hacen que se reproduzcan los videos. \n"
 infobox="${infobox}\n"
-BACKTITLE="MasOS Video Loading Screen Script"
+BACKTITLE="EmulOS Video Loading Screen Script"
 
-dialog --backtitle "MasOS Video Loading Screen Script" \
---title "MasOS Video Loading Screen Script (by MasOS Team)" \
+dialog --backtitle "EmulOS Video Loading Screen Script" \
+--title "EmulOS Video Loading Screen Script (by MasOS Team)" \
 --msgbox "${infobox}" 35 100
 
 
@@ -47,23 +47,23 @@ function main_menu() {
 function disable_videoloadingscreens() {
 	dialog --infobox "...Desactivando..." 3 22 ; sleep 2
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
-	disable_dir="/home/$user/MasOS/videoloadingscreens_disable"
-	enable_dir="/home/$user/MasOS/videoloadingscreens"
+	disable_dir="/home/$user/EmulOS/videoloadingscreens_disable"
+	enable_dir="/home/$user/EmulOS/videoloadingscreens"
 
 	if [[ -d "$enable_dir" ]]; then
 		mv $enable_dir $disable_dir
-		mv /opt/masos/configs/all/runcommand-onstart.sh /opt/masos/configs/all/runcommand-onstart.sh.bkp
-		mv /opt/masos/configs/all/runcommand-onend.sh /opt/masos/configs/all/runcommand-onend.sh.bkp
+		mv /opt/emulos/configs/all/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh.bkp
+		mv /opt/emulos/configs/all/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh.bkp
 	fi
 
 }
 
 function enable_videoloadingscreens() {
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
-	disable_dir="/home/$user/MasOS/videoloadingscreens_disable"
-	enable_dir="/home/$user/MasOS/videoloadingscreens"
-	fichero="/opt/masos/configs/all/runcommand-onstart.sh.bkp"
-	
+	disable_dir="/home/$user/EmulOS/videoloadingscreens_disable"
+	enable_dir="/home/$user/EmulOS/videoloadingscreens"
+	fichero="/opt/emulos/configs/all/runcommand-onstart.sh.bkp"
+
 	while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " MENÚ PRINCIPAL " \
             --ok-label OK --cancel-label Salir \
@@ -76,35 +76,35 @@ function enable_videoloadingscreens() {
             1) dialog --infobox "...Activando..." 3 19 ; sleep 2
 				if [[ -d "$disable_dir" ]]; then
 					mv $disable_dir $enable_dir
-					mv /opt/masos/configs/all/runcommand-onstart.sh.bkp /opt/masos/configs/all/runcommand-onstart.sh
-					mv /opt/masos/configs/all/runcommand-onend.sh.bkp /opt/masos/configs/all/runcommand-onend.sh
+					mv /opt/emulos/configs/all/runcommand-onstart.sh.bkp /opt/emulos/configs/all/runcommand-onstart.sh
+					mv /opt/emulos/configs/all/runcommand-onend.sh.bkp /opt/emulos/configs/all/runcommand-onend.sh
 				else
 					mkdir $enable_dir
 					chown -R $user:$user $enable_dir
-					cp /home/$user/RetroPie/scripts/pi3/runcommand-onstart.sh /opt/masos/configs/all/runcommand-onstart.sh
-					cp /home/$user/RetroPie/scripts/pi3/runcommand-onend.sh /opt/masos/configs/all/runcommand-onend.sh
-					chown -R $user:$user /opt/masos/configs/all/runcommand-onstart.sh
-					chown -R $user:$user /opt/masos/configs/all/runcommand-onend.sh
+					cp /home/$user/RetroPie/scripts/pi3/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh
+					cp /home/$user/RetroPie/scripts/pi3/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh
+					chown -R $user:$user /opt/emulos/configs/all/runcommand-onstart.sh
+					chown -R $user:$user /opt/emulos/configs/all/runcommand-onend.sh
 				fi
 			break ;;
-			
+
             2) dialog --infobox "...Activando..." 3 19 ; sleep 2
 				if [[ -d "$disable_dir" ]]; then
 					mv $disable_dir $enable_dir
-					mv /opt/masos/configs/all/runcommand-onstart.sh.bkp /opt/masos/configs/all/runcommand-onstart.sh
-					mv /opt/masos/configs/all/runcommand-onend.sh.bkp /opt/masos/configs/all/runcommand-onend.sh
+					mv /opt/emulos/configs/all/runcommand-onstart.sh.bkp /opt/emulos/configs/all/runcommand-onstart.sh
+					mv /opt/emulos/configs/all/runcommand-onend.sh.bkp /opt/emulos/configs/all/runcommand-onend.sh
 				else
 					mkdir $enable_dir
 					chown -R $user:$user $enable_dir
 					# Creacion de los ficheros necesarios para el funcionamiento de los videos
-					sudo cat > /opt/masos/configs/all/runcommand-onstart.sh <<_EOF_
-[[ -f /home/$user/MasOS/videoloadingscreens/\$1.mp4 ]] && vlc -f --no-video-title-show --play-and-exit --no-qt-name-in-title --qt-minimal-view --no-qt-bgcone "/home/$user/MasOS/videoloadingscreens/\$1.mp4"
+					sudo cat > /opt/emulos/configs/all/runcommand-onstart.sh <<_EOF_
+[[ -f /home/$user/emulos/videoloadingscreens/\$1.mp4 ]] && vlc -f --no-video-title-show --play-and-exit --no-qt-name-in-title --qt-minimal-view --no-qt-bgcone "/home/$user/EmulOS/videoloadingscreens/\$1.mp4"
 _EOF_
-					chown -R $user:$user /opt/masos/configs/all/runcommand-onstart.sh
-					sudo cat > /opt/masos/configs/all/runcommand-onend.sh <<_EOF_
-[[ -f /home/$user/MasOS/videoloadingscreens/salir.mp4 ]] && vlc -f --no-video-title-show --play-and-exit --no-qt-name-in-title --qt-minimal-view --no-qt-bgcone "/home/$user/MasOS/videoloadingscreens/salir.mp4"
+					chown -R $user:$user /opt/emulos/configs/all/runcommand-onstart.sh
+					sudo cat > /opt/emulos/configs/all/runcommand-onend.sh <<_EOF_
+[[ -f /home/$user/emulos/videoloadingscreens/salir.mp4 ]] && vlc -f --no-video-title-show --play-and-exit --no-qt-name-in-title --qt-minimal-view --no-qt-bgcone "/home/$user/EmulOS/videoloadingscreens/salir.mp4"
 _EOF_
-					chown -R $user:$user /opt/masos/configs/all/runcommand-onend.sh
+					chown -R $user:$user /opt/emulos/configs/all/runcommand-onend.sh
 				fi
 				break ;;
             *)  break ;;
@@ -116,12 +116,12 @@ _EOF_
 function download_video() {
 	local choice
 	user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
-	enable_dir="/home/$user/MasOS/videoloadingscreens"
+	enable_dir="/home/$user/EmulOS/videoloadingscreens"
     while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " DESCARGA DE PACKS " \
             --ok-label Descargar --cancel-label Atrás \
             --menu "Que pack te gustaría descargar?" 25 75 20 \
-            1 "Pack Moriggy MasOS" \
+            1 "Pack Moriggy EmulOS" \
             2 "Pack Supreme" \
 			3 "Pack Mabedeep Dock-pi3" \
 			4 "Pack Moriggy Bloques 3D" \
@@ -130,8 +130,8 @@ function download_video() {
         case "$choice" in
             1) clear
 				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ] 
-						then 
+					if [ "$(ls $enable_dir)" ]
+						then
 							echo "Borrando el pack de videos anterior"; sleep 2
 							rm -R $enable_dir/*
 						else
@@ -149,13 +149,13 @@ function download_video() {
 					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
 				else
 					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi 
+			fi
 			break ;;
-			
+
             2) clear
 				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ] 
-						then 
+					if [ "$(ls $enable_dir)" ]
+						then
 							echo "Borrando el pack de videos anterior"; sleep 2
 							rm -R $enable_dir/*
 						else
@@ -173,13 +173,13 @@ function download_video() {
 					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
 				else
 					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi 
+			fi
 			break ;;
-			
+
 			3) clear
 				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ] 
-						then 
+					if [ "$(ls $enable_dir)" ]
+						then
 							echo "Borrando el pack de videos anterior"; sleep 2
 							rm -R $enable_dir/*
 						else
@@ -197,13 +197,13 @@ function download_video() {
 					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
 				else
 					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi 
+			fi
 			break ;;
-			
+
 			4) clear
 				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ] 
-						then 
+					if [ "$(ls $enable_dir)" ]
+						then
 							echo "Borrando el pack de videos anterior"; sleep 2
 							rm -R $enable_dir/*
 						else
@@ -221,7 +221,7 @@ function download_video() {
 					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
 				else
 					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi 
+			fi
 			break ;;
             *)  break ;;
         esac
