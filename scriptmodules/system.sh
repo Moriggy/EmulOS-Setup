@@ -24,7 +24,7 @@ function setup_env() {
 
     get_platform
     get_os_version
-    get_retropie_depends
+    get_emulos_depends
 
     __gcc_version=$(gcc -dumpversion)
 
@@ -185,7 +185,7 @@ function get_os_version() {
     isPlatform "rpi" && get_rpi_video
 }
 
-function get_retropie_depends() {
+function get_emulos_depends() {
     local depends=(git dialog wget gcc g++ build-essential unzip xmlstarlet python-pyudev ca-certificates)
 
     if ! getDepends "${depends[@]}"; then

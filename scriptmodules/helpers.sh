@@ -10,7 +10,7 @@
 #
 
 ## @file helpers.sh
-## @brief RetroPie helpers library
+## @brief EmulOS helpers library
 ## @copyright GPLv3
 
 ## @fn printMsgs()
@@ -202,7 +202,7 @@ function getDepends() {
     # default to off for x11 targets due to issues with dependencies with recent
     # Ubuntu (19.04). eg libavdevice58 requiring exactly 2.0.9 sdl2.
     isPlatform "x11" && own_sdl2=0
-    iniConfig " = " '"' "$configdir/all/retropie.cfg"
+    iniConfig " = " '"' "$configdir/all/emulos.cfg"
     iniGet "own_sdl2"
     [[ "$ini_value" == 1 ]] && own_sdl2=1
     [[ "$ini_value" == 0 ]] && own_sdl2=0
@@ -222,7 +222,7 @@ function getDepends() {
         # map libpng12-dev to libpng-dev for Stretch+
         if [[ "$required" == "libpng12-dev" ]] && compareVersions "$__os_debian_ver" ge 9;  then
             required="libpng-dev"
-            printMsgs "console" "RetroPie module references libpng12-dev and should be changed to libpng-dev"
+            printMsgs "console" "EmulOS module references libpng12-dev and should be changed to libpng-dev"
         fi
 
         # map libpng-dev to libpng12-dev for Jessie
@@ -384,7 +384,7 @@ function gitPullOrClone() {
 }
 
 # @fn setupDirectories()
-# @brief Makes sure some required retropie directories and files are created.
+# @brief Makes sure some required emulos directories and files are created.
 function setupDirectories() {
     mkdir -p "$rootdir"
     mkUserDir "$datadir"
@@ -828,7 +828,7 @@ function setESSystem() {
 ## @fn ensureSystemretroconfig()
 ## @param system system to create retroarch.cfg for
 ## @param shader set a default shader to use (deprecated)
-## @brief Creates a default retroarch.cfg for specified system in `/opt/retropie/configs/$system/retroarch.cfg`.
+## @brief Creates a default retroarch.cfg for specified system in `/opt/emulos/configs/$system/retroarch.cfg`.
 function ensureSystemretroconfig() {
     local system="$1"
     local shader="$2"
@@ -1011,7 +1011,7 @@ function ensureFBMode() {
     sed -i --follow-symlinks "/$res mode/,/endmode/d" /etc/fb.modes
 
     cat >> /etc/fb.modes <<_EOF_
-# added by RetroPie-Setup - $res mode for emulators
+# added by EmulOS-Setup - $res mode for emulators
 mode "$res"
     geometry $res_x $res_y $res_x $res_y 16
     timings 0 0 0 0 0 0 0
@@ -1081,8 +1081,8 @@ function getPlatformConfig() {
         iniGet "$key"
         [[ -n "$ini_value" ]] && break
     done
-    # workaround for RetroPie platform
-    [[ "$key" == "retropie_fullname" ]] && ini_value="RetroPie"
+    # workaround for EmulOS platform
+    [[ "$key" == "emulos_fullname" ]] && ini_value="EmulOS"
     echo "$ini_value"
 }
 
@@ -1334,7 +1334,7 @@ function patchVendorGraphics() {
 ## @param mode dkms operation type
 ## @module_name name of dkms module
 ## @module_ver version of dkms module
-## Helper function to manage DKMS modules installed by RetroPie
+## Helper function to manage DKMS modules installed by EmulOS
 function dkmsManager() {
     local mode="$1"
     local module_name="$2"

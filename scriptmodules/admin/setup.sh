@@ -113,20 +113,20 @@ function updatescript_setup()
     printMsgs "dialog" "Ya tienes descargada la última versión del script de EmulOS-Setup."
 
     # Añadido para copiar los archivos del menu opciones
-    if [[ -f "/home/pi/RetroPie/retropiemenu/raspiconfig.rp" ]]; then
+    if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
       cd
-      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/retropie/
-      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/retropiemenu/* /home/pi/RetroPie/retropiemenu/
-      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/RetroPie/
-      sudo chmod -R +x /home/pi/RetroPie
+      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
+      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
+      sudo chmod -R +x /home/pi/EmulOS
       sudo chmod -R +x /opt/
     fi
       if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
         cd
-        sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/retropie/
-        sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/retropiemenu/* ~/RetroPie/retropiemenu/
-        sudo cp -R ~/EmulOS-Setup-beta/scriptmodules/extras/scripts ~/RetroPie/
-        sudo chmod -R +x ~/RetroPie
+        sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+        sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
+        sudo cp -R ~/EmulOS-Setup-beta/scriptmodules/extras/scripts ~/EmulOS/
+        sudo chmod -R +x ~/EmulOS
         sudo chmod -R +x /opt/
         sudo chown -R $user:$user ~/EmulOS
       fi
@@ -592,21 +592,21 @@ function gui_setup() {
                     basic_install_setup
                     silencio
                     #### gancho nuevo copia de scripts nuestros
-              			if [[ -f "/home/pi/RetroPie/retropiemenu/raspiconfig.rp" ]]; then
+              			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
                 			cd
-                			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/retropie/
-                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/retropiemenu/* /home/pi/RetroPie/retropiemenu/
-                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/RetroPie/
-               			  sudo chmod -R +x /home/pi/RetroPie
+                			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
+                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
+               			  sudo chmod -R +x /home/pi/EmulOS
                 			sudo chmod -R +x /opt/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
                   else
                       if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
                     		cd
-                    		sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/retropie/
-                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/retropiemenu/* ~/RetroPie/retropiemenu/
-                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/extras/scripts ~/RetroPie/
-                    		sudo chmod -R +x ~/RetroPie
+                    		sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
+                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/extras/scripts ~/EmulOS/
+                    		sudo chmod -R +x ~/EmulOS
                     		sudo chmod -R +x /opt/
                     		sudo chown -R $user:$user ~/EmulOS
                     	fi

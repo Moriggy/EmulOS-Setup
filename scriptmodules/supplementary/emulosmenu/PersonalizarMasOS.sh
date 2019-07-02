@@ -48,7 +48,7 @@ function main_menu() {
 
 function bezels() {
 
-	sudo ~/RetroPie/scripts/MainBezels.sh
+	sudo ~/EmulOS/scripts/MainBezels.sh
 
 }
 
@@ -56,7 +56,7 @@ function bezels() {
 
 function launching_videos() {
 
-	sudo ~/RetroPie/scripts/videoloading.sh
+	sudo ~/EmulOS/scripts/videoloading.sh
 
 }
 
@@ -64,7 +64,7 @@ function launching_videos() {
 
 function overclock() {
 
-	sudo ~/RetroPie/scripts/overclock.sh
+	sudo ~/EmulOS/scripts/overclock.sh
 
 }
 
@@ -72,7 +72,7 @@ function overclock() {
 
 function silencio() {
 
-	sudo ~/RetroPie/scripts/sym.sh
+	sudo ~/EmulOS/scripts/sym.sh
 
 }
 

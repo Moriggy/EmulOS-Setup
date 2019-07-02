@@ -9,32 +9,32 @@
 # at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 # Menu de retropie usado en EmulOS....
 
-rp_module_id="retropiemenu"
+rp_module_id="emulosmenu"
 rp_module_desc="EmulOS configuration menu for EmulationStation"
 rp_module_section="core"
 
-function _update_hook_retropiemenu() {
-    # to show as installed when upgrading to retropie-setup 4.x
-    if ! rp_isInstalled "$md_idx" && [[ -f "$home/.emulationstation/gamelists/retropie/gamelist.xml" ]]; then
+function _update_hook_emulosmenu() {
+    # to show as installed when upgrading to emulos-setup 4.x
+    if ! rp_isInstalled "$md_idx" && [[ -f "$home/.emulationstation/gamelists/emulos/gamelist.xml" ]]; then
         mkdir -p "$md_inst"
-        # to stop older scripts removing when launching from retropie menu in ES due to not using exec or exiting after running retropie-setup from this module
-        touch "$md_inst/.retropie"
+        # to stop older scripts removing when launching from emulos menu in ES due to not using exec or exiting after running emulos-setup from this module
+        touch "$md_inst/.emulos"
     fi
 }
 
-function depends_retropiemenu() {
+function depends_emulosmenu() {
     getDepends mc
 }
 
-function install_bin_retropiemenu() {
+function install_bin_emulosmenu() {
     return
 }
 
-function configure_retropiemenu()
+function configure_emulosmenu()
 {
     [[ "$md_mode" == "remove" ]] && return
 
-    local rpdir="$home/RetroPie/retropiemenu"
+    local rpdir="$home/EmulOS/emulosmenu"
     mkdir -p "$rpdir"
     cp -Rv "$md_data/icons" "$rpdir/"
     chown -R $user:$user "$rpdir"
@@ -87,7 +87,7 @@ function configure_retropiemenu()
         'Conéctese o desconecte de una red wifi y configure wifi.'
     )
 
-    setESSystem "RetroPie" "retropie" "$rpdir" ".rp .sh" "sudo $scriptdir/emulos_pkgs.sh retropiemenu launch %ROM% </dev/tty >/dev/tty" "" "retropie"
+    setESSystem "EmulOS" "emulos" "$rpdir" ".rp .sh" "sudo $scriptdir/emulos_pkgs.sh emulosmenu launch %ROM% </dev/tty >/dev/tty" "" "emulos"
 
     local file
     local name
@@ -106,24 +106,24 @@ function configure_retropiemenu()
         file="${files[i]}"
         name="${names[i]}"
         desc="${descs[i]}"
-        image="$home/RetroPie/retropiemenu/icons/${files[i]}.png"
+        image="$home/EmulOS/emulosmenu/icons/${files[i]}.png"
 
         touch "$rpdir/$file.rp"
 
         local function
         for function in $(compgen -A function _add_rom_); do
-            "$function" "retropie" "RetroPie" "$file.rp" "$name" "$desc" "$image"
+            "$function" "emulos" "EmulOS" "$file.rp" "$name" "$desc" "$image"
         done
     done
 }
 
-function remove_retropiemenu() {
-    rm -rf "$home/RetroPie/retropiemenu"
-    rm -rf "$home/.emulationstation/gamelists/retropie"
-    delSystem retropie
+function remove_emulosmenu() {
+    rm -rf "$home/EmulOS/emulosmenu"
+    rm -rf "$home/.emulationstation/gamelists/emulos"
+    delSystem emulos
 }
 
-function launch_retropiemenu() {
+function launch_emulosmenu() {
     clear
     local command="$1"
     local basename="${command##*/}"
@@ -160,7 +160,7 @@ function launch_retropiemenu() {
             fi
             ;;
         *.sh)
-            cd "$home/RetroPie/retropiemenu"
+            cd "$home/EmulOS/emulosmenu"
             sudo -u "$user" bash "$command"
             ;;
     esac

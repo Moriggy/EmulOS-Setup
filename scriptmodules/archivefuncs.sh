@@ -13,7 +13,7 @@
 ## @brief RetroPie archivefuncs library
 ## @copyright GPLv3
 
-readonly arch_dir="/tmp/retropie-archive"
+readonly arch_dir="/tmp/emulos-archive"
 
 ## @fn archiveExtract()
 ## @param src_file Full path to archive file to extract

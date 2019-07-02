@@ -10,7 +10,7 @@
 #
 
 ## @file inifuncs.sh
-## @brief RetroPie inifuncs library
+## @brief EmulOS inifuncs library
 ## @copyright GPLv3
 
 # @fn fatalError()
