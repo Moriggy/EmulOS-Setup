@@ -4,37 +4,37 @@
 		<path>./audiosettings.rp</path>
 		<name>Audio</name>
 		<desc>Configuraciones de audio .Elija predeterminado auto, jack de 3.5mm o HDMI. Controles del mezclador, y aplicar configuraciones predeterminadas.</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/audiosettings.png</image>
+		<image>./icons/audiosettings.png</image>
 	</game>
 	<game>
 		<path>./bluetooth.rp</path>
 		<name>Bluetooth</name>
 		<desc>Regístrese y conéctese a dispositivos bluetooth. Anule el registro y elimine los dispositivos , visualice los dispositivos registrados y conectados.</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/bluetooth.png</image>
+		<image>./icons/bluetooth.png</image>
 	</game>
 	<game>
 		<path>./configedit.rp</path>
 		<name>RetroArch Config Editor</name>
 		<desc>Cambie las opciones comunes de RetroArch y edite manualmente las configuraciones de RetroArch, las configuraciones globales y las configuraciones que no son de RetroArch.</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/configedit.png</image>
+		<image>./icons/configedit.png</image>
 	</game>
 	<game>
 		<path>./filemanager.rp</path>
 		<name>Administrador de archivos</name>
 		<desc>Administrador de archivos básico de ASCII para Linux que le permite navegar, copiar, eliminar y mover archivos. Nota: Hace falta enchufar un teclado.!</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/filemanager.png</image>
+		<image>./icons/filemanager.png</image>
 	</game>
 	<game>
 		<path>./retronetplay.rp</path>
 		<name>RetroArch Net Play</name>
 		<desc>Configure las opciones de RetroArch Net play, elija host o cliente, puerto, IP de host, marcos de demora y su apodo.</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/retronetplay.png</image>
+		<image>./icons/retronetplay.png</image>
 	</game>
 	<game>
 		<path>./runcommand.rp</path>
 		<name>Run Command Configuration</name>
 		<desc>Cambie lo que aparece en la pantalla del comando de ejecución. Habilite o deshabilite el menú, habilite o deshabilite el diseño en cuadro y cambie la configuración de la CPU.</desc>
-		<image>/home/pi/RetroPie/retropiemenu/icons/runcommand.png</image>
+		<image>./icons/runcommand.png</image>
 	</game>
 	<game>
 		<path>./removemedia.sh</path>
@@ -85,11 +85,13 @@ Puede seleccionar sistemas individuales para eliminar el exceso de archivos mult
 		<path>./EmulOS Utilidades/Deshabilitar Overscan.sh</path>
 		<name>Deshabilitar Overscan</name>
 		<desc>Quita los marcos negros que aparecen en la pantalla alrededor de la imagen (ajusta la imagen para que se vea en la pantalla entera).</desc>
+		<image>./icons/Overscan Disable.png</image>
 	</game>
 	<game>
 		<path>./EmulOS Utilidades/Habilitar Overscan.sh</path>
 		<name>Habilitar Overscan</name>
 		<desc>Ajusta la imagen para que se vea en la pantalla entera, en caso de que se vea la imagen más grande que la pantalla.</desc>
+		<image>./icons/Overscan Enable.png</image>
 	</game>
 	<game>
 		<path>./EmulOS Utilidades/Instalar Boton de encendido.sh</path>
@@ -100,6 +102,7 @@ Puede seleccionar sistemas individuales para eliminar el exceso de archivos mult
 		<path>./EmulOS Utilidades/Instalar musica de fondo.sh</path>
 		<name>Instalar música de fondo</name>
 		<desc>Instala la musica de fondo en EmulOS para emulationstation.</desc>
+		<image>./icons/backgroundmusic.png</image>
 	</game>
 	<game>
 		<path>./EmulOS Utilidades/Instalar Pistola Aimtrak.sh</path>

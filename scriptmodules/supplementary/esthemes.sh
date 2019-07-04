@@ -28,7 +28,7 @@ function install_theme_esthemes() {
         repo="Moriggy"
     fi
     if [[ -z "$theme" ]]; then
-        theme="MasOS"
+        theme="EmulOS"
         repo="Moriggy"
     fi
     mkdir -p "/etc/emulationstation/themes"

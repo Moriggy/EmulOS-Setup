@@ -81,8 +81,8 @@ function enable_videoloadingscreens() {
 				else
 					mkdir $enable_dir
 					chown -R $user:$user $enable_dir
-					cp /home/$user/RetroPie/scripts/pi3/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh
-					cp /home/$user/RetroPie/scripts/pi3/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh
+					cp /home/$user/EmulOS/scripts/pi3/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh
+					cp /home/$user/EmulOS/scripts/pi3/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh
 					chown -R $user:$user /opt/emulos/configs/all/runcommand-onstart.sh
 					chown -R $user:$user /opt/emulos/configs/all/runcommand-onend.sh
 				fi
@@ -123,8 +123,8 @@ function download_video() {
             --menu "Que pack te gustaría descargar?" 25 75 20 \
             1 "Pack Moriggy EmulOS" \
             2 "Pack Supreme" \
-			3 "Pack Mabedeep Dock-pi3" \
-			4 "Pack Moriggy Bloques 3D" \
+            3 "Pack Mabedeep Dock-pi3" \
+            4 "Pack Moriggy Bloques 3D" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -152,7 +152,7 @@ function download_video() {
 			fi
 			break ;;
 
-            2) clear
+      2) clear
 				if [[ -d "$enable_dir" ]]; then
 					if [ "$(ls $enable_dir)" ]
 						then

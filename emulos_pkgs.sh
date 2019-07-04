@@ -6,9 +6,9 @@
 # sistema trabajan unos pocos desarroladores independientes de diversas partes del planeta.
 #
 #EmulOS El sistema operativo retro en español con emulationstation, retroarch y varios scripts independientes mas configuraciones y themes nuevos.!
-#fork de retropie
+#Evolución de MasOS (fork de retropie)
 
-__version="1.1.0"
+__version="2.0.0"
 
 [[ "$__debug" -eq 1 ]] && set -x
 
