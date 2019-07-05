@@ -285,7 +285,7 @@ function configure_emulationstation() {
         iniSet "gpu_mem_256" 128
         iniSet "gpu_mem_512" 256
         iniSet "gpu_mem_1024" 256
-        iniSet "overscan_scale" 0
+        iniSet "overscan_scale" 1
     fi
 
     mkdir -p "/etc/emulationstation"
