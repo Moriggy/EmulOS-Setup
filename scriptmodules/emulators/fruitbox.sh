@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# This file is part of The MasOS Project
-# Creado por DOCK-PI3 para MasOS
+# This file is part of The EmulOS Project
+# Creado por DOCK-PI3 para EmulOS
 #
 # Copy your music MP3 files (either to the SD card or USB memory stick)
 # Point fruitbox to your MP3 files (edit skins/WallJuke/fruitbox.cfg (or any other skin you fancy) and change the MusicPath parameter)
@@ -8,10 +8,10 @@
 #
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/DOCK-PI3/MasOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/DOCK-PI3/EmulOS-Setup/master/LICENSE.md
 rp_module_id="fruitbox"
 rp_module_desc="Fruitbox - Un jukebox MP3 rétro personnalisable. Lea la Ayuda del paquete para más información."
-rp_module_help="Copiar sus ficheros .mp3 en '$romdir/jukebox' a continuación, inicie Fruitbox desde EmulationStation.\n\nPara configurar un gamepad, inicie 'Configuración de Jukebox' en Configuración, luego 'Habilitar configuración de gamepad'.\n\nPara recibir ayuda de MasOS Team busque en youtube o telegran..salu2"
+rp_module_help="Copiar sus ficheros .mp3 en '$romdir/jukebox' a continuación, inicie Fruitbox desde EmulationStation.\n\nPara configurar un gamepad, inicie 'Configuración de Jukebox' en Configuración, luego 'Habilitar configuración de gamepad'.\n\nPara recibir ayuda de EmulOS Team busque en youtube o telegran..salu2"
 rp_module_section="opt"
 
 function depends_fruitbox() {
@@ -23,7 +23,7 @@ function sources_fruitbox() {
     # gitPullOrClone "$md_build/fruitbox" "https://github.com/DOCK-PI3/rpi-fruitbox.git"
 	# git clone --depth=1 https://github.com/DOCK-PI3/rpi-fruitbox.git
     # downloadAndExtract "https://ftp.osuosl.org/pub/blfs/conglomeration/mpg123/mpg123-1.24.0.tar.bz2" "$md_build"
-	cd && wget https://github.com/DOCK-PI3/rpi-fruitbox/raw/master/install.sh
+	cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
 }
 
 function build_fruitbox() {
@@ -31,29 +31,29 @@ function build_fruitbox() {
 }
 
 function install_fruitbox() {
-md_id="/opt/masos/emulators/fruitbox"
-	sudo chown -R pi:pi /opt/masos/
-	cd && cp -R rpi-fruitbox-master/* /opt/masos/emulators/fruitbox
+md_id="/opt/emulos/emulators/fruitbox"
+	sudo chown -R pi:pi /opt/emulos/
+	cd && cp -R rpi-fruitbox-master/* /opt/emulos/emulators/fruitbox
 	sudo rm -R rpi-fruitbox-master/
     mkRomDir "jukebox"
     cat > "$romdir/jukebox/+Start Fruitbox.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
 # if [[ -f /home/pi/fruitbox.btn ]]; then
-sudo /opt/masos/emulators/fruitbox/fruitbox --cfg /opt/masos/emulators/fruitbox/skins/\$skin/fruitbox.cfg --button-map /home/pi/fruitbox.btn
+sudo /opt/emulos/emulators/fruitbox/fruitbox --cfg /opt/emulos/emulators/fruitbox/skins/\$skin/fruitbox.cfg --button-map /home/pi/fruitbox.btn
 # else
-# sudo /opt/masos/emulators/fruitbox/fruitbox --config-buttons
+# sudo /opt/emulos/emulators/fruitbox/fruitbox --config-buttons
 #fi
 _EOF_
     cat > "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
-sudo /opt/masos/emulators/fruitbox/fruitbox --config-buttons
+sudo /opt/emulos/emulators/fruitbox/fruitbox --config-buttons
 _EOF_
     cat > "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
-sudo /opt/masos/emulators/fruitbox/fruitbox --cfg /opt/masos/emulators/fruitbox/skins/\$skin/fruitbox.cfg
+sudo /opt/emulos/emulators/fruitbox/fruitbox --cfg /opt/emulos/emulators/fruitbox/skins/\$skin/fruitbox.cfg
 _EOF_
     chmod a+x "$romdir/jukebox/+Start Fruitbox.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox.sh"
@@ -67,30 +67,30 @@ _EOF_
 }
 
 function install_bin_fruitbox() {
-md_id="/opt/masos/emulators/fruitbox"
-	cd && wget https://github.com/DOCK-PI3/rpi-fruitbox/raw/master/install.sh
+md_id="/opt/emulos/emulators/fruitbox"
+	cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
 	chmod +x ./install.sh && source ./install.sh
-	sudo chown -R pi:pi /opt/masos/
-	cd && cp -R rpi-fruitbox-master/* /opt/masos/emulators/fruitbox
+	sudo chown -R pi:pi /opt/emulos/
+	cd && cp -R rpi-fruitbox-master/* /opt/emulos/emulators/fruitbox
 	sudo rm -R rpi-fruitbox-master/
     mkRomDir "jukebox"
     cat > "$romdir/jukebox/+Start Fruitbox.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
 # if [[ -f /home/pi/fruitbox.btn ]]; then
-sudo /opt/masos/emulators/fruitbox/fruitbox --cfg /opt/masos/emulators/fruitbox/skins/\$skin/fruitbox.cfg --button-map /home/pi/fruitbox.btn
+sudo /opt/emulos/emulators/fruitbox/fruitbox --cfg /opt/emulos/emulators/fruitbox/skins/\$skin/fruitbox.cfg --button-map /home/pi/fruitbox.btn
 # else
 # fi
 _EOF_
     cat > "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
-sudo /opt/masos/emulators/fruitbox/fruitbox --config-buttons
+sudo /opt/emulos/emulators/fruitbox/fruitbox --config-buttons
 _EOF_
     cat > "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh" << _EOF_
 #!/bin/bash
 skin=WallJuke
-sudo /opt/masos/emulators/fruitbox/fruitbox --cfg /opt/masos/emulators/fruitbox/skins/\$skin/fruitbox.cfg
+sudo /opt/emulos/emulators/fruitbox/fruitbox --cfg /opt/emulos/emulators/fruitbox/skins/\$skin/fruitbox.cfg
 _EOF_
     chmod a+x "$romdir/jukebox/+Start Fruitbox.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox.sh"
@@ -101,14 +101,14 @@ _EOF_
     addEmulator 1 "$md_id" "jukebox" "fruitbox %ROM%"
     addSystem "jukebox"
     touch "$home/.config/fruitbox"
-	sudo chown -R pi:pi /opt/masos/emulators/fruitbox
+	sudo chown -R pi:pi /opt/emulos/emulators/fruitbox
 }
 
 function remove_fruitbox() {
     delSystem jukebox
     rm -rf "$home/.config/fruitbox"
     rm -rf "$romdir/jukebox"
-	sudo rm -rf "/opt/masos/emulators/fruitbox"
+	sudo rm -rf "/opt/emulos/emulators/fruitbox"
 	sudo rm -rf "$home/fruitbox.btn"
 }
 # duplicar comandos sed para +Start Fruitbox_solo_teclado.sh
@@ -171,8 +171,8 @@ function gamepad_fruitbox() {
 }
 
 function dbscan_fruitbox() {
-    if [[ -e "$home/MasOS/roms/jukebox/fruitbox.db" ]]; then
-        rm -rf "$home/MasOS/roms/jukebox/fruitbox.db"
+    if [[ -e "$home/EmulOS/roms/jukebox/fruitbox.db" ]]; then
+        rm -rf "$home/EmulOS/roms/jukebox/fruitbox.db"
     fi
     printMsgs "dialog" "Exploración de base de datos habilitada\n\nCopia tus ficheros .mp3 a '$romdir/jukebox' a continuación, inicie Fruitbox desde EmulationStation.\n\nPresione OK para Salir."
     exit 0

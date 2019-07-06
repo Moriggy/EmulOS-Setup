@@ -68,7 +68,7 @@ _EOF_
 echo -e "\n\n\n   El directorio por defecto donde introducir los .mp3 es /home/pi/EmulOS/roms/music \n\n\n.Meta sus mp3 y reinicie el sistema para empezar a escuchar su musica.\n\n\nReiniciando en 7s"
 sleep 7
 sudo chown -R pi:pi /home/pi/EmulOS/roms/music
-sudo rm -R /home/pi/RetroPie/roms
+sudo rm -R /home/pi/RetroPie
 sudo reboot
 }
 
