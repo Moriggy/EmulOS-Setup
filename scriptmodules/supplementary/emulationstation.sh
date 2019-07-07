@@ -317,7 +317,7 @@ function gui_emulationstation() {
             options+=(2 "Configuracion automatica (Actualmente: Deshabilitada)")
         fi
 
-        if [[ "$es_swap" -eq 0 ]]; then
+        if [[ "$es_swap" -eq 1 ]]; then
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Predeterminado)")
         else
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
@@ -342,8 +342,8 @@ function gui_emulationstation() {
             3)
                 es_swap="$((es_swap ^ 1))"
                 setAutoConf "es_swap_a_b" "$es_swap"
-                local ra_swap="true"
-                getAutoConf "es_swap_a_b" && ra_swap="false"
+                local ra_swap="false"
+                getAutoConf "es_swap_a_b" && ra_swap="true"
                 iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch.cfg"
                 printMsgs "dialog" "Tendra que configurar su controlador en EmulationStation para que los cambios surtan efecto."
                 ;;
