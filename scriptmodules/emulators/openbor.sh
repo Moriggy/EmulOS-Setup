@@ -13,7 +13,7 @@ rp_module_id="openbor"
 rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6512"
 rp_module_help="Coloca tus archivos .pak en $romdir/openbor y luego ejecuta $romdir/OpenBOR.sh desde la sección de ports o el propio juego."
 rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
-rp_module_section="exp"
+rp_module_section="opt"
 rp_module_flags="!mali !x11 !kms"
 
 function depends_openbor() {
@@ -30,7 +30,7 @@ function build_openbor() {
     make clean-all BUILD_PANDORA=1
     patch -p0 -i ./patch/latest_build.diff
     make "${params[@]}"
-    md_ret_require="$md_build/OpenBOR"
+    md_conf_root="$md_build/OpenBOR"
     wget -q --show-progress "http://raw.githubusercontent.com/crcerror/OpenBOR-63xx-RetroPie-openbeta/master/libGL-binary/libGL.so.1.gz"
     gunzip -f libGL.so.1.gz
 }
@@ -43,9 +43,11 @@ function install_openbor() {
 }
 
 function configure_openbor() {
-    addEmulator 1 "$md_id" "openbor" "OpenBOR\ -\ Beats\ of\ Rage\ Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
+    addEmulator 1 "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "$md_inst/OpenBOR %ROM%"
     addSystem "openbor"
     mkRomDir "openbor"
+
+    mkUserDir "$md_conf_root/openbor"
 
     cat >"$romdir/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
 #!/bin/bash
