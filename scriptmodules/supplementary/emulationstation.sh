@@ -293,13 +293,13 @@ function configure_emulationstation() {
     # ensure we have a default theme
     rp_callModule esthemes install_theme
 
-    addAutoConf "es_swap_a_b" 1
+    addAutoConf "es_swap_a_b" 0
     addAutoConf "disable" 0
 }
 
 function gui_emulationstation() {
-    local es_swap=1
-    getAutoConf "es_swap_a_b" && es_swap=0
+    local es_swap=0
+    getAutoConf "es_swap_a_b" && es_swap=1
 
     local disable=0
     getAutoConf "disable" && disable=1
@@ -340,7 +340,7 @@ function gui_emulationstation() {
                 setAutoConf "disable" "$disable"
                 ;;
             3)
-                es_swap="$((es_swap ^ 0))"
+                es_swap="$((es_swap ^ 1))"
                 setAutoConf "es_swap_a_b" "$es_swap"
                 local ra_swap="false"
                 getAutoConf "es_swap_a_b" && ra_swap="true"
