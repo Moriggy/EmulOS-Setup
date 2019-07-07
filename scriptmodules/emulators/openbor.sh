@@ -48,12 +48,12 @@ function configure_openbor() {
 
     cat >"$romdir/ports/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
 #!/bin/bash
-readonly JOY2KEY_SCRIPT="\$HOME/MasOS-Setup/scriptmodules/helpers.sh"
+readonly JOY2KEY_SCRIPT="\$HOME/EmulOS-Setup/scriptmodules/helpers.sh"
 readonly OPENBOR_ROMDIR="$romdir/ports/$md_id"
 [[ -e \$JOY2KEY_SCRIPT ]] || (cd $md_inst; ./OpenBOR; kill \$\$)
 sleep 0.5; sudo pkill -f joy2key
 source "\$JOY2KEY_SCRIPT"
-scriptdir="\$HOME/MasOS-Setup"
+scriptdir="\$HOME/EmulOS-Setup"
 for file in "\$OPENBOR_ROMDIR/"*.[Pp][Aa][Kk]; do
   [[ -e \$file ]] || continue
   filename="\${file##*/}"; filename="\${filename%.*}"
@@ -66,7 +66,7 @@ if [[ \${#darray[@]} -gt 0 ]]; then
     joy2keyStop; sleep 0.2
     [[ \$choices ]] || exit
 fi
-"/opt/masos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
+"/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
 _EOF_
 
 
