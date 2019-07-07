@@ -43,20 +43,17 @@ function install_openbor() {
 }
 
 function configure_openbor() {
-    addEmulator 1 "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "$md_inst/OpenBOR %ROM%"
-    addSystem "openbor"
-    mkRomDir "openbor"
+    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
+    mkRomDir "ports/$md_id"
 
-    mkUserDir "$md_conf_root/openbor"
-
-    cat >"$romdir/openbor/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
+    cat >"$romdir/ports/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
 #!/bin/bash
-readonly JOY2KEY_SCRIPT="\$HOME/EmulOS-Setup/scriptmodules/helpers.sh"
-readonly OPENBOR_ROMDIR="$romdir/$md_id"
+readonly JOY2KEY_SCRIPT="\$HOME/MasOS-Setup/scriptmodules/helpers.sh"
+readonly OPENBOR_ROMDIR="$romdir/ports/$md_id"
 [[ -e \$JOY2KEY_SCRIPT ]] || (cd $md_inst; ./OpenBOR; kill \$\$)
 sleep 0.5; sudo pkill -f joy2key
 source "\$JOY2KEY_SCRIPT"
-scriptdir="\$HOME/EmulOS-Setup"
+scriptdir="\$HOME/MasOS-Setup"
 for file in "\$OPENBOR_ROMDIR/"*.[Pp][Aa][Kk]; do
   [[ -e \$file ]] || continue
   filename="\${file##*/}"; filename="\${filename%.*}"
@@ -64,21 +61,21 @@ for file in "\$OPENBOR_ROMDIR/"*.[Pp][Aa][Kk]; do
 done
 if [[ \${#darray[@]} -gt 0 ]]; then
     joy2keyStart; sleep 0.2
-    cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Por favor, selecciona un módulo del listado para ejecutar:" 16 75 16)
+    cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Please select a module from list to get launched:" 16 75 16)
     choices=\$("\${cmd[@]}" "\${darray[@]}")
     joy2keyStop; sleep 0.2
     [[ \$choices ]] || exit
 fi
-"/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _SYS_ "openbor" "\$choices"
+"/opt/masos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
 _EOF_
 
 
     local dir
     for dir in ScreenShots Saves; do
-        mkUserDir "$md_conf_root/openbor/$dir"
-        ln -snf "$md_conf_root/openbor/$dir" "$md_inst/$dir"
+        mkUserDir "$md_conf_root/$md_id/$dir"
+        ln -snf "$md_conf_root/$md_id/$dir" "$md_inst/$dir"
     done
 
-    ln -snf "$romdir" "$md_inst/Paks"
+    ln -snf "$romdir/ports/$md_id" "$md_inst/Paks"
     ln -snf "/dev/shm" "$md_inst/Logs"
 }
