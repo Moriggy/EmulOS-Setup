@@ -106,22 +106,22 @@ sudo shutdown -r now
 function config_attract() {
 # Configurar Attract-Mode switchs ,menus ,emulators....
 dialog --infobox "... Descargando ,descomprimiendo y copiando ficheros de configuracion para Attract y MasOS, SCRIPTS ,EMULATORS ,VIDEOS SISTEMAS ,THEMES ,ECT..." 370 370 ; sleep 5
-cd /home/pi/ && wget https://github.com/DOCK-PI3/attract-config-rpi/archive/master.zip && unzip -o master.zip
+cd /home/pi/ && wget https://github.com/DOCK-PI3/emulos-attract-config-rpi/archive/master.zip && unzip -o master.zip
  sudo rm /home/pi/master.zip
-    sudo cp -R /home/pi/attract-config-rpi-master/MasOS/roms/setup /home/pi/EmulOS/roms/
+    sudo cp -R /home/pi/emulos-attract-config-rpi-master/EmulOS/roms/setup /home/pi/EmulOS/roms/
 	 sudo chmod -R +x /home/pi/EmulOS/roms/setup/
 	 sudo chown -R pi:pi /home/pi/EmulOS/roms/setup/
-    sudo cp -R /home/pi/attract-config-rpi-master/RetroPie/retropiemenu/* /home/pi/EmulOS/emulosmenu/
+    sudo cp -R /home/pi/emulos-attract-config-rpi-master/EmulOS/emulosmenu/* /home/pi/EmulOS/emulosmenu/
   sudo chmod -R +x /home/pi/EmulOS/emulosmenu/
- sudo cp -R /home/pi/attract-config-rpi-master/opt/masos/configs/all/* /opt/emulos/configs/all/
+ sudo cp -R /home/pi/emulos-attract-config-rpi-master/opt/emulos/configs/all/* /opt/emulos/configs/all/
   sudo chmod -R +x /opt/emulos/configs/all/AM-Start.sh && sudo chmod -R +x /opt/emulos/configs/all/ES-Start.sh
- sudo cp -R /home/pi/attract-config-rpi-master/etc/samba/smb.conf /etc/samba/
-  sudo cp -R /home/pi/attract-config-rpi-master/attract/* /home/pi/.attract/
+ sudo cp -R /home/pi/emulos-attract-config-rpi-master/etc/samba/smb.conf /etc/samba/
+  sudo cp -R /home/pi/emulos-attract-config-rpi-master/attract/* /home/pi/.attract/
   sudo chown -R pi:pi /home/pi/.attract/
   sudo chown -R pi:pi /opt/emulos/configs/all/
 dialog --infobox " Attract Mode se configuro correctamente!...\n\n Recuerde generar las listas de roms desde attract cuando meta juegos \n\n y para el menu setup si no le aparece! ," 370 370 ; sleep 10
-# Borrar directorios de compilacion y de configuracion.....
-sudo rm -r -f /home/pi/attract-config-rpi-master
+# Borrar directorios de compilacion.....
+sudo rm -r -f /home/pi/emulos-attract-config-rpi-master
 # sudo reboot
 # ---------------------------- #
 }
