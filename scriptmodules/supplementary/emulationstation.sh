@@ -342,8 +342,8 @@ function gui_emulationstation() {
             3)
                 es_swap="$((es_swap ^ 1))"
                 setAutoConf "es_swap_a_b" "$es_swap"
-                local ra_swap="false"
-                getAutoConf "es_swap_a_b" && ra_swap="true"
+                local ra_swap="true"
+                getAutoConf "es_swap_a_b" && ra_swap="false"
                 iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch.cfg"
                 printMsgs "dialog" "Tendra que configurar su controlador en EmulationStation para que los cambios surtan efecto."
                 ;;

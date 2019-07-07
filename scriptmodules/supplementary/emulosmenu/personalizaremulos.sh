@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Este fichero es parte del Proyecto MasOS Team
 #
@@ -9,9 +9,9 @@
 # at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
-rp_module_id="Masos Team"
+rp_module_id="personalizaremulos"
 rp_module_desc="Personalizar el sistema EmulOS"
-rp_module_section=""
+rp_module_section="config"
 infobox="${infobox}___________________________________________________\n\n"
 infobox="${infobox}\nHerramienta para personalizar EmulOS\n"
 infobox="${infobox}\nMasOS Team no se hace responsable de un mal uso de estos scripts\n\n"

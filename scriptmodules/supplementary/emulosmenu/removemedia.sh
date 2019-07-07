@@ -1,10 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Este fichero es parte del Proyecto MasOS Team
+#
+# The EmulOS Project is the legal property of its developers, whose names are
+# too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
+#
+# See the LICENSE.md file at the top-level directory of this distribution and
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
+#
+
+rp_module_id="removemedia"
+rp_module_desc="Eliminar toda la media del sistema EmulOS"
+rp_module_section="config"
 
 IFS=';'
 
 # Welcome
  dialog --backtitle "EmulOS" --title "EmulOS Media Removal Utility" \
-    --yesno "\nEmulOS media removal utility.\n\nThis utility will remove extra media files (boxart, cartart, snap, and wheel) for a chosen system where there is not a matching game for it.\n\nIf you keep your media for MAME or Final Burn Alpha in the /roms/arcade folder, there is a special choice just for that.\n\nThis script expects you to be using the following media folders.\n\nboxart\ncartart\nsnap\nwheel\n\nWARNING: Always make a backup copy of your SD card and your roms and media files before making changes to your system.\n\n\nDo you want to proceed?" \
+    --yesno "\nEmulOS media removal utility.\n\nEsta utilidad eliminará los archivos multimedia adicionales (imagenes, marquee, videos y wheel) para un sistema elegido donde no haya un juego que coincida.\n\nSi conservas tu contenido multimedia para MAME o Final Burn Alpha en /roms/carpeta de arcade, hay una opción especial solo para eso.\n\nEste script está progamado para las siguientes carpetas de medios.\n\nimages\nmarquee\nvideos\nwheel\n\nADVERTENCIA: Siempre haz una copia de seguridad de tu tarjeta SD y tus roms y archivos multimedia antes de realizar cambios en tu sistema.\n\n\nDeseas continuar?" \
     25 80 2>&1 > /dev/tty \
     || exit
 
@@ -169,14 +182,14 @@ function main_menu() {
 }
 
 function remove_media() {
-dialog --infobox "...processing..." 3 20 ; sleep 2
+dialog --infobox "...borrando..." 3 20 ; sleep 2
 choice=$1
 directory="/home/pi/EmulOS/roms/${choice}"
 
-ls "${directory}/boxart" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/boxart.txt
-ls "${directory}/cartart" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/cartart.txt
-ls "${directory}/snap" | sed -e 's/\.mp4$//' > /tmp/snap.txt
-ls "${directory}/wheel" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/wheel.txt
+ls "${directory}/media/images" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/images.txt
+ls "${directory}/meida/marquee" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/marquee.txt
+ls "${directory}/media/videos" | sed -e 's/\.mp4$//' > /tmp/videos.txt
+ls "${directory}/media/wheel" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/wheel.txt
 
 rm /tmp/remove_media.sh 2> /dev/null
 
@@ -185,37 +198,37 @@ do
 ifexist=`ls "${directory}" |grep "${bname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${directory}/boxart/${bname}.png\"" >> /tmp/remove_media.sh
-echo "rm \"${directory}/boxart/${bname}.jpg\"" >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/images/${bname}.png\"" >> /tmp/remove_media.sh
+echo "rm \"${directory}/meida/images/${bname}.jpg\"" >> /tmp/remove_media.sh
 fi
-done < /tmp/boxart.txt
+done < /tmp/images.txt
 
 while read cname
 do
 ifexist=`ls "${directory}" |grep "${cname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${directory}/cartart/${cname}.png\"" >> /tmp/remove_media.sh
-echo "rm \"${directory}/cartart/${cname}.jpg\"" >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/marquee/${cname}.png\"" >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/marquee/${cname}.jpg\"" >> /tmp/remove_media.sh
 fi
-done < /tmp/cartart.txt
+done < /tmp/marquee.txt
 
 while read sname
 do
 ifexist=`ls "${directory}" |grep "${sname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${directory}/snap/${sname}.mp4\"" >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/videos/${sname}.mp4\"" >> /tmp/remove_media.sh
 fi
-done < /tmp/snap.txt
+done < /tmp/videos.txt
 
 while read wname
 do
 ifexist=`ls "${directory}" |grep "${wname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${directory}/wheel/${wname}.png\""  >> /tmp/remove_media.sh
-echo "rm \"${directory}/wheel/${wname}.jpg\""  >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/wheel/${wname}.png\""  >> /tmp/remove_media.sh
+echo "rm \"${directory}/media/wheel/${wname}.jpg\""  >> /tmp/remove_media.sh
 fi
 done < /tmp/wheel.txt
 
@@ -226,15 +239,15 @@ rm /tmp/remove_media.sh
 }
 
 function remove_media_arcade() {
-dialog --infobox "...processing..." 3 20 ; sleep 2
+dialog --infobox "...borrando..." 3 20 ; sleep 2
 choice=$1
 arcade="/home/pi/EmulOS/roms/arcade"
 directory="/home/pi/EmulOS/roms/${choice}"
 
-ls "${arcade}/boxart" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/boxart.txt
-ls "${arcade}/cartart" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/cartart.txt
-ls "${arcade}/snap" | sed -e 's/\.mp4$//' > /tmp/snap.txt
-ls "${arcade}/wheel" | sed -e 's/\.jpg$//' | sed -e 's/\.png$//' > /tmp/wheel.txt
+ls "${arcade}/media/images" | sed -e 's/\.png$//' | sed -e 's/\.png$//' > /tmp/images.txt
+ls "${arcade}/media/marquee" | sed -e 's/\.png$//' | sed -e 's/\.png$//' > /tmp/marquee.txt
+ls "${arcade}/media/videos" | sed -e 's/\.mp4$//' > /tmp/videos.txt
+ls "${arcade}/media/wheel" | sed -e 's/\.png$//' | sed -e 's/\.png$//' > /tmp/wheel.txt
 
 rm /tmp/remove_media.sh 2> /dev/null
 
@@ -243,8 +256,8 @@ do
 ifexist=`ls "${directory}" |grep "${bname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${arcade}/boxart/${bname}.png\"" >> /tmp/remove_media.sh
-echo "rm \"${arcade}/boxart/${bname}.jpg\"" >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/images/${bname}.png\"" >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/images/${bname}.jpg\"" >> /tmp/remove_media.sh
 fi
 done < /tmp/boxart.txt
 
@@ -253,8 +266,8 @@ do
 ifexist=`ls "${directory}" |grep "${cname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${arcade}/cartart/${cname}.png\"" >> /tmp/remove_media.sh
-echo "rm \"${arcade}/cartart/${cname}.jpg\"" >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/marquee/${cname}.png\"" >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/marquee/${cname}.jpg\"" >> /tmp/remove_media.sh
 fi
 done < /tmp/cartart.txt
 
@@ -263,7 +276,7 @@ do
 ifexist=`ls "${directory}" |grep "${sname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${arcade}/snap/${sname}.mp4\"" >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/videos/${sname}.mp4\"" >> /tmp/remove_media.sh
 fi
 done < /tmp/snap.txt
 
@@ -272,8 +285,8 @@ do
 ifexist=`ls "${directory}" |grep "${wname}"`
 if [[ -z $ifexist ]]
 then
-echo "rm \"${arcade}/wheel/${wname}.png\""  >> /tmp/remove_media.sh
-echo "rm \"${arcade}/wheel/${wname}.jpg\""  >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/wheel/${wname}.png\""  >> /tmp/remove_media.sh
+echo "rm \"${arcade}/media/wheel/${wname}.jpg\""  >> /tmp/remove_media.sh
 fi
 done < /tmp/wheel.txt
 

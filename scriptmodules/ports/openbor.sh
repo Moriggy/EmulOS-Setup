@@ -11,7 +11,7 @@
 
 rp_module_id="openbor"
 rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6512"
-rp_module_help="Coloca tus archivos .pak en $romdir/ports/openbor y luego ejecuta $romdir/ports/OpenBOR.sh desde la sección de ports."
+rp_module_help="Coloca tus archivos .pak en $romdir/openbor y luego ejecuta $romdir/OpenBOR.sh desde la sección de ports o el propio juego."
 rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags="!mali !x11 !kms"
@@ -43,8 +43,9 @@ function install_openbor() {
 }
 
 function configure_openbor() {
-    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
-    mkRomDir "$md_id"
+    addEmulator 1 "$md_id" "openbor" "OpenBOR\ -\ Beats\ of\ Rage\ Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
+    addSystem "openbor"
+    mkRomDir "openbor"
 
     cat >"$romdir/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
 #!/bin/bash
@@ -66,16 +67,16 @@ if [[ \${#darray[@]} -gt 0 ]]; then
     joy2keyStop; sleep 0.2
     [[ \$choices ]] || exit
 fi
-"/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
+"/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _SYS_ "openbor" "\$choices"
 _EOF_
 
 
     local dir
     for dir in ScreenShots Saves; do
-        mkUserDir "$md_conf_root/$md_id/$dir"
-        ln -snf "$md_conf_root/$md_id/$dir" "$md_inst/$dir"
+        mkUserDir "$md_conf_root/$dir"
+        ln -snf "$md_conf_root/$dir" "$md_inst/$dir"
     done
 
-    ln -snf "$romdir/$md_id" "$md_inst/Paks"
+    ln -snf "$romdir" "$md_inst/Paks"
     ln -snf "/dev/shm" "$md_inst/Logs"
 }
