@@ -30,7 +30,7 @@ function build_openbor() {
     make clean-all BUILD_PANDORA=1
     patch -p0 -i ./patch/latest_build.diff
     make "${params[@]}"
-    md_conf_root="$md_build/OpenBOR"
+    md_ret_require="$md_build/OpenBOR"
     wget -q --show-progress "http://raw.githubusercontent.com/crcerror/OpenBOR-63xx-RetroPie-openbeta/master/libGL-binary/libGL.so.1.gz"
     gunzip -f libGL.so.1.gz
 }
@@ -49,7 +49,7 @@ function configure_openbor() {
 
     mkUserDir "$md_conf_root/openbor"
 
-    cat >"$romdir/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
+    cat >"$romdir/openbor/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
 #!/bin/bash
 readonly JOY2KEY_SCRIPT="\$HOME/EmulOS-Setup/scriptmodules/helpers.sh"
 readonly OPENBOR_ROMDIR="$romdir/$md_id"
@@ -75,8 +75,8 @@ _EOF_
 
     local dir
     for dir in ScreenShots Saves; do
-        mkUserDir "$md_conf_root/$dir"
-        ln -snf "$md_conf_root/$dir" "$md_inst/$dir"
+        mkUserDir "$md_conf_root/openbor/$dir"
+        ln -snf "$md_conf_root/openbor/$dir" "$md_inst/$dir"
     done
 
     ln -snf "$romdir" "$md_inst/Paks"
