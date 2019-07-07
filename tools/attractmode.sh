@@ -4,7 +4,7 @@
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
 # at https://raw.githubusercontent.com/DOCK-PI3/MasOS-Setup/master/LICENSE.md
-#
+# Actualizado el 7-7-2019 para EmulOS.
 
 rp_module_id="attractmode"
 rp_module_desc="Attract Mode emulator frontend para raspberry pi 3b y b+ con compilacion de mmal incluida"
@@ -18,11 +18,11 @@ function main_menu() {
             --ok-label OK --cancel-label Exit \
             --menu "Quieres instalar Attract y no sabes? ...Hoy es tu dia de suerte!" 25 75 20 \
             1 "Instalar/Actualizar Attract Mode con mmal" \
-			2 "Configuracion para Attract Mode en MasOS" \
+			2 "Configuracion para Attract Mode en EmulOS" \
 			2>&1 > /dev/tty)
 
         case "$choice" in
-            1) masos_attractinstall  ;;
+            1) emulos_attractinstall  ;;
 			2) config_attract  ;;
 			*)  break ;;
         esac
@@ -32,13 +32,13 @@ function main_menu() {
 
 #########################################################################
 # Funcion Reparar permisos en MasOS PC ;-) #
-function masos_attractinstall() {
+function emulos_attractinstall() {
 
 # Cierra ES para una mejor y mas rapida compilacion de attract y ffmpeg......
 sudo killall emulationstation
 sudo killall emulationstation-dev
 
-# ACTUALIZAR LISTA DE PAQUETES Y PAQUETES DEL SISTEMA
+# ACTUALIZAR LISTA DE PAQUETES
 sudo apt-get update
 
 # Crear entorno para compilar
@@ -73,51 +73,33 @@ sudo make -j4 install USE_GLES=1
 sudo rm -r -f /home/pi/develop
 
 # CONFIG INI PARA Attract-Mode
-sudo chown -R pi:pi /home/pi/RetroPie/retropiemenu/
-sudo cp /opt/masos/configs/all/autostart.sh /opt/masos/configs/all/autostart_backup.sh
+sudo chown -R pi:pi /home/pi/EmulOS/emulosmenu/
+sudo cp /opt/emulos/configs/all/autostart.sh /opt/emulos/configs/all/autostart_backup.sh
 cd
-   cat > /home/pi/RetroPie/retropiemenu/Switch\ To\ Attract\ Mode.sh <<_EOF_
+   cat > /home/pi/EmulOS/emulosmenu/Switch\ To\ Attract\ Mode.sh <<_EOF_
 #!/usr/bin/env bash
 echo ""
 echo "Cambiando el arranque a Attract Mode y reiniciando..."
 echo ""
 sleep 5
-cp /opt/masos/configs/all/AM-Start.sh /opt/masos/configs/all/autostart.sh
+cp /opt/emulos/configs/all/AM-Start.sh /opt/emulos/configs/all/autostart.sh
 sudo reboot
 _EOF_
 cd
-   sudo cat > /opt/masos/configs/all/AM-Start.sh <<_EOF_
+   sudo cat > /opt/emulos/configs/all/AM-Start.sh <<_EOF_
 #!/usr/bin/env bash
 attract
 _EOF_
-sudo chmod -R +x /home/pi/RetroPie/retropiemenu/Switch\ To\ Attract\ Mode.sh
-sudo chmod -R +x /opt/masos/configs/all/AM-Start.sh
-sudo chown -R pi:pi /opt/masos/configs/all/AM-Start.sh
-sudo chown -R root:root /home/pi/RetroPie/retropiemenu/
+sudo chmod -R +x /home/pi/EmulOS/emulosmenu/Switch\ To\ Attract\ Mode.sh
+sudo chmod -R +x /opt/emulos/configs/all/AM-Start.sh
+sudo chown -R pi:pi /opt/emulos/configs/all/AM-Start.sh
+sudo chown -R root:root /home/pi/EmulOS/emulosmenu/
 cd && mkdir .attract
 dialog --infobox " Se ha creado un script en el menu de ES para cambiar a attract mode, una vez que inicie attract seleccione su idioma,\nya puede usar atrractmode. " 350 350 ; sleep 10
 dialog --infobox " Attract se instaló de forma correcta y con mmal. Ahora si quiere, despues de seguir las indicaciones anteriores, puedes ejecutar de nuevo el script e instalar la configuracion para attrac mode. \n\nNOTA IMPORTANTE: Antes de instalar la configuracion para attract tiene que iniciar attractmode una vez como minimo ,luego cierre attract ejecute emulationstation e inicie masos extras all para terminar de instalar la configuracion..., reiniciando en 20s" 350 350 ; sleep 20
 sudo shutdown -r now
 # ---------------------------- #
 }
-
-
-#########################################################################
-# Funcion eliminar attract en MasOS ;-) #
-# function eliminar_attract() {
-# dialog --infobox " ... Eliminando Attract mode de su rpi .......\n\n" 30 55 ; sleep 5
-# sudo rm -R /home/pi/MasOS/roms/setup
-# # sudo rm -R /usr/local/share/attract && sudo rm -R /etc/samba/smb.conf
-# # sudo systemctl restart smbd.service
-# sudo rm -R /usr/local/bin/attract
-# sudo cp /opt/masos/configs/all/ES-Start.sh /opt/masos/configs/all/autostart.sh
-# sudo rm -R /opt/masos/configs/all/AM-Start.sh && sudo rm -R /opt/masos/configs/all/ES-Start.sh
-# sudo rm -R /home/pi/RetroPie/retropiemenu/Switch\ To\ Attract\ Mode.sh
-# dialog --infobox " Attract mode se elimino de su sistema" 30 55 ; sleep 5
-# sudo shutdown -r now
-# ---------------------------- #
-
-
 
 #########################################################################
 # Funcion configurar attract en MasOS ;-) #
@@ -126,17 +108,17 @@ function config_attract() {
 dialog --infobox "... Descargando ,descomprimiendo y copiando ficheros de configuracion para Attract y MasOS, SCRIPTS ,EMULATORS ,VIDEOS SISTEMAS ,THEMES ,ECT..." 370 370 ; sleep 5
 cd /home/pi/ && wget https://github.com/DOCK-PI3/attract-config-rpi/archive/master.zip && unzip -o master.zip
  sudo rm /home/pi/master.zip
-    sudo cp -R /home/pi/attract-config-rpi-master/MasOS/roms/setup /home/pi/MasOS/roms/
-	 sudo chmod -R +x /home/pi/MasOS/roms/setup/
-	 sudo chown -R pi:pi /home/pi/MasOS/roms/setup/
-    sudo cp -R /home/pi/attract-config-rpi-master/RetroPie/retropiemenu/* /home/pi/RetroPie/retropiemenu/
-  sudo chmod -R +x /home/pi/RetroPie/retropiemenu/
- sudo cp -R /home/pi/attract-config-rpi-master/opt/masos/configs/all/* /opt/masos/configs/all/
-  sudo chmod -R +x /opt/masos/configs/all/AM-Start.sh && sudo chmod -R +x /opt/masos/configs/all/ES-Start.sh
+    sudo cp -R /home/pi/attract-config-rpi-master/MasOS/roms/setup /home/pi/EmulOS/roms/
+	 sudo chmod -R +x /home/pi/EmulOS/roms/setup/
+	 sudo chown -R pi:pi /home/pi/EmulOS/roms/setup/
+    sudo cp -R /home/pi/attract-config-rpi-master/RetroPie/retropiemenu/* /home/pi/EmulOS/emulosmenu/
+  sudo chmod -R +x /home/pi/EmulOS/emulosmenu/
+ sudo cp -R /home/pi/attract-config-rpi-master/opt/masos/configs/all/* /opt/emulos/configs/all/
+  sudo chmod -R +x /opt/emulos/configs/all/AM-Start.sh && sudo chmod -R +x /opt/emulos/configs/all/ES-Start.sh
  sudo cp -R /home/pi/attract-config-rpi-master/etc/samba/smb.conf /etc/samba/
   sudo cp -R /home/pi/attract-config-rpi-master/attract/* /home/pi/.attract/
   sudo chown -R pi:pi /home/pi/.attract/
-  sudo chown -R pi:pi /opt/masos/configs/all/
+  sudo chown -R pi:pi /opt/emulos/configs/all/
 dialog --infobox " Attract Mode se configuro correctamente!...\n\n Recuerde generar las listas de roms desde attract cuando meta juegos \n\n y para el menu setup si no le aparece! ," 370 370 ; sleep 10
 # Borrar directorios de compilacion y de configuracion.....
 sudo rm -r -f /home/pi/attract-config-rpi-master
