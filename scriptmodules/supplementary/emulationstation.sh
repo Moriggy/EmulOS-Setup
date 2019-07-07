@@ -340,7 +340,7 @@ function gui_emulationstation() {
                 setAutoConf "disable" "$disable"
                 ;;
             3)
-                es_swap="$((es_swap ^ 1))"
+                es_swap="$((es_swap ^ 0))"
                 setAutoConf "es_swap_a_b" "$es_swap"
                 local ra_swap="false"
                 getAutoConf "es_swap_a_b" && ra_swap="true"
