@@ -21,7 +21,7 @@ dialog --backtitle "http://masos.dx.am		MasOS Team" \
 --title "Personalizacion de EmulOS (by Moriggy)" \
 --msgbox "${infobox}" 15 55
 
-function gui_menu() {
+function main_menu() {
 
 	local choice
     while true; do

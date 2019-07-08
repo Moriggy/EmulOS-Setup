@@ -43,10 +43,10 @@
 
 Esta utilidad solo funcionará si está utilizando la siguiente estructura de carpetas.
 
-boxart - imágenes de boxart
-cartart - cartart image
-snap    - video snaps
-wheel   - marquesina o imágenes de la rueda
+images - imágenes de los juegos
+marquee - marquesinas
+videos    - video snaps
+wheel   - logos de los juegos
 
 Puede seleccionar sistemas individuales para eliminar el exceso de archivos multimedia.</desc>
 		<image>./icons/removemedia.png</image>
@@ -116,7 +116,7 @@ Puede seleccionar sistemas individuales para eliminar el exceso de archivos mult
 		<image>./icons/rpsetup.png</image>
 	</game>
 	<game>
-		<path>./PersonalizarMasOS.sh</path>
+		<path>./personalizaremulos.sh</path>
 		<name>Personalizar EmulOS</name>
 		<desc>Muchas opciones mas para EmulOS con solo un clic.
 
@@ -129,7 +129,7 @@ Video Loading Screens
 O tambien podras hacer overclock.
 
 </desc>
-		<image>./icons/pmasos.png</image>
+		<image>./icons/personalizaremulos.png</image>
 	</game>
 	<game>
 		<path>./Switch To Attract Mode.sh</path>
@@ -145,7 +145,7 @@ La IP actual de su dispositivo, temperaturas de CPU - GPU ,ademas puede ver info
 		<image>./icons/systeminfo.png</image>
 	</game>
 	<game>
-		<path>./masosextrasall.sh</path>
+		<path>./emulosextrasall.sh</path>
 		<name>EmulOS EXTRAs menu ES</name>
 		<desc>Muchas opciones mas para este menu con solo un clic.
 
@@ -154,6 +154,6 @@ Utilidades ,herramientas ,descargas de arts y mucho mas.
 Tambien puede actualizar el EmulOS-Script sin introducir nada de codigos.
 
 Con la actualizacion o instalacion del menu termine su aparato se reiniciara automaticamente...</desc>
-		<image>./icons/masosextrasall.png</image>
+		<image>./icons/emulosextrasall.png</image>
 	</game>
 </gameList>
