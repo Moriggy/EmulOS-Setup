@@ -16,10 +16,10 @@ else
 fi
 
 # applies overclocked settings
-sudo cp /home/pi/RetroPie/scripts/config_overclock1300rpi3.txt /boot/config.txt
+sudo cp /home/pi/EmulOS/scripts/config_overclock1300rpi3.txt /boot/config.txt
 echo "Configuración de overclock añadida, reiniciando..."
 echo
-echo "Para volver a la configuración por defecto, ejecuta no overclock.sh"
+echo "Para quitar el Overclock, ejecuta sin overclock"
 echo
 
 # rebooting

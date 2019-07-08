@@ -66,6 +66,7 @@ _EOF_
 
 function no_silencio() {
 	fichero="/boot/cmdline.txt.bkp"
+  dato="$(cat /boot/cmdline.txt | grep 'PARTUUID' | cut -d  " "  -f4)"
 	clear
 
 	if [[ -f "$fichero" ]]; then
@@ -77,7 +78,13 @@ function no_silencio() {
 		dialog --infobox "El arranque silencioso se ha desactivado.\nEl sistema se reiniciará en 5 seg para hacer efectivo el cambio." 5 80 ; sleep 5
 		sudo reboot
 	else
-		dialog --infobox "El fichero necesario no existe, no tienes activo el arranque silencioso." 3 85 ; sleep 5
+    sudo cat > "/boot/cmdline.txt" <<_EOF_
+dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 $dato rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait plymouth.enable=0
+_EOF_
+		sudo chmod -R +x $fichero
+		sudo chown -R root:root $fichero
+		dialog --infobox "El arranque silencioso se ha activado.\nEl sistema se reiniciará en 5 seg para hacer efectivo el cambio." 5 75 ; sleep 5
+		sudo reboot
 	fi
 
 }

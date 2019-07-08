@@ -19,11 +19,7 @@ function depends_fruitbox() {
 }
 
 function sources_fruitbox() {
-    # gitPullOrClone "$md_build/allegro5" "https://github.com/dos1/allegro5.git"
-    # gitPullOrClone "$md_build/fruitbox" "https://github.com/DOCK-PI3/rpi-fruitbox.git"
-	# git clone --depth=1 https://github.com/DOCK-PI3/rpi-fruitbox.git
-    # downloadAndExtract "https://ftp.osuosl.org/pub/blfs/conglomeration/mpg123/mpg123-1.24.0.tar.bz2" "$md_build"
-	cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
+  cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
 }
 
 function build_fruitbox() {
@@ -59,7 +55,7 @@ _EOF_
     chown pi:pi "$romdir/jukebox/+Start Fruitbox.sh"
     chmod a+x "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh"
-	chmod a+x "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
+    chmod a+x "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
     addEmulator 1 "$md_id" "jukebox" "fruitbox %ROM%"
     addSystem "jukebox"
@@ -68,11 +64,11 @@ _EOF_
 
 function install_bin_fruitbox() {
 md_id="/opt/emulos/emulators/fruitbox"
-	cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
-	chmod +x ./install.sh && source ./install.sh
-	sudo chown -R pi:pi /opt/emulos/
-	cd && cp -R rpi-fruitbox-master/* /opt/emulos/emulators/fruitbox
-	sudo rm -R rpi-fruitbox-master/
+  	cd && wget https://github.com/Moriggy/rpi-fruitbox/raw/master/install.sh
+  	chmod +x ./install.sh && source ./install.sh
+  	sudo chown -R pi:pi /opt/emulos/
+  	cd && cp -R rpi-fruitbox-master/* /opt/emulos/emulators/fruitbox
+  	sudo rm -R rpi-fruitbox-master/
     mkRomDir "jukebox"
     cat > "$romdir/jukebox/+Start Fruitbox.sh" << _EOF_
 #!/bin/bash
@@ -96,20 +92,20 @@ _EOF_
     chown pi:pi "$romdir/jukebox/+Start Fruitbox.sh"
     chmod a+x "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox_mapear_gamepad.sh"
-	chmod a+x "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
+    chmod a+x "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
     chown pi:pi "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
     addEmulator 1 "$md_id" "jukebox" "fruitbox %ROM%"
     addSystem "jukebox"
     touch "$home/.config/fruitbox"
-	sudo chown -R pi:pi /opt/emulos/emulators/fruitbox
+    sudo chown -R pi:pi /opt/emulos/emulators/fruitbox
 }
 
 function remove_fruitbox() {
     delSystem jukebox
     rm -rf "$home/.config/fruitbox"
     rm -rf "$romdir/jukebox"
-	sudo rm -rf "/opt/emulos/emulators/fruitbox"
-	sudo rm -rf "$home/fruitbox.btn"
+  	sudo rm -rf "/opt/emulos/emulators/fruitbox"
+  	sudo rm -rf "$home/fruitbox.btn"
 }
 # duplicar comandos sed para +Start Fruitbox_solo_teclado.sh
 function skin_fruitbox() {
@@ -125,35 +121,35 @@ function skin_fruitbox() {
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         case "$choice" in
-            1) 
+            1)
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "2i skin=Modern" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 sed -i "2i skin=Modern" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 printMsgs "dialog" "Modern skin Habilitado"
                 ;;
-            2) 
+            2)
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "2i skin=NumberOne" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 sed -i "2i skin=NumberOne" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 printMsgs "dialog" "NumberOne skin Habilitado"
                 ;;
-            3) 
+            3)
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "2i skin=WallJuke" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 sed -i "2i skin=WallJuke" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 printMsgs "dialog" "WallJuke skin Habilitado"
                 ;;
-            4) 
+            4)
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "2i skin=WallSmall" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 sed -i "2i skin=WallSmall" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
                 printMsgs "dialog" "WallSmall skin Habilitado"
                 ;;
-            5) 
+            5)
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "2i skin=Wurly" "$romdir/jukebox/+Start Fruitbox.sh"
                 sed -i "/skin=/d" "$romdir/jukebox/+Start Fruitbox_solo_teclado.sh"
@@ -178,7 +174,7 @@ function dbscan_fruitbox() {
     exit 0
 }
 
-function gui_fruitbox() {  
+function gui_fruitbox() {
     while true; do
         local options=(
             1 "Seleccione Skin para Fruitbox"

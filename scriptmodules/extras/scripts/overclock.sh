@@ -39,16 +39,16 @@ function main_menu() {
     local choice
 
     while true; do
-        choice=$(dialog --backtitle "$BACKTITLE" --title " MAIN MENU " \
+        choice=$(dialog --backtitle "OVERCLOCK RPI" --title " MENU PRINCIPAL " \
             --ok-label OK --cancel-label Exit \
             --menu "Qué acción te gustaría realizar?" 25 75 20 \
-            1 "Overclock 1300 rpi3" \
-            2 "Overclock 1350 rpi3" \
-      			3 "Overclock 1400 rpi3" \
-      			4 "Overclock 1475 rpi3B+" \
-      			5 "Overclock 1500 rpi3B+" \
-      			6 "Overclock 1550 rpi3B+" \
-      			7 "Overclock 1575 rpi3B+" \
+            1 "RPI 3B -> Overclock 1300" \
+            2 "RPI 3B -> Overclock 1350" \
+      			3 "RPI 3B -> Overclock 1400" \
+      			4 "RPI 3B+ -> Overclock 1475" \
+      			5 "RPI 3B+ -> Overclock 1500" \
+      			6 "RPI 3B+ -> Overclock 1550" \
+      			7 "RPI 3B+ -> Overclock 1575" \
       			8 "Sin overclock" \
             2>&1 > /dev/tty)
 
@@ -69,42 +69,42 @@ function main_menu() {
 
 function overclock1300() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1300rpi3.sh
+	sudo /home/pi/EmulOS/scripts/overclock1300rpi3.sh
 }
 
 function overclock1350() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1350rpi3.sh
+	sudo /home/pi/EmulOS/scripts/overclock1350rpi3.sh
 }
 
 function overclock1400() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1400rpi3.sh
+	sudo /home/pi/EmulOS/scripts/overclock1400rpi3.sh
 }
 
 function overclock1475() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1475rpi3plus.sh
+	sudo /home/pi/EmulOS/scripts/overclock1475rpi3plus.sh
 }
 
 function overclock1500() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1500rpi3plus.sh
+	sudo /home/pi/EmulOS/scripts/overclock1500rpi3plus.sh
 }
 
 function overclock1550() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1550rpi3plus.sh
+	sudo /home/pi/EmulOS/scripts/overclock1550rpi3plus.sh
 }
 
 function overclock1575() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/overclock1575rpi3plus.sh
+	sudo /home/pi/EmulOS/scripts/overclock1575rpi3plus.sh
 }
 
 function nooverclock() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/RetroPie/scripts/nooverclock.sh
+	sudo /home/pi/EmulOS/scripts/nooverclock.sh
 }
 
 main_menu

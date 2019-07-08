@@ -19,7 +19,7 @@ infobox="${infobox}\n-The Project Bezels\n-Retroarch Bezels\n-Pack MasOS Team Be
 infobox="${infobox}\n"
 BACKTITLE="Menu de opciones de Bezels (by Moriggy)"
 
-dialog --backtitle "http://web.masos.ga		MasOS Team" \
+dialog --backtitle "http://masos.dx.am		MasOS Team" \
 --title "Menu de opciones de Bezels (by Moriggy)" \
 --msgbox "${infobox}" 15 55
 
@@ -31,14 +31,12 @@ function main_menu() {
             --ok-label OK --cancel-label Atras \
             --menu "Elige una opcion (arriba/abajo) y pulsa A para aceptar:" 25 75 20 \
 			1 "The Project Bezels" \
-			2 "Herramienta Retroarch Bezels" \
-			3 "Packs bezels MasOS Team" \
+			2 "Packs bezels MasOS Team" \
 			2>&1 > /dev/tty)
 
         case "$choice" in
 			1) tpb  ;;
-			2) retroarch ;;
-			3) packs ;;
+			2) packs ;;
 			*) break ;;
         esac
     done
@@ -50,15 +48,6 @@ function tpb() {
 
 	scriptdir="$(dirname "$0")"
 	sudo $scriptdir/bezelproject.sh
-
-}
-
-# Retroarch bezels	#
-
-function retroarch() {
-
-	scriptdir="$(dirname "$0")"
-	sudo $scriptdir/bezels.sh
 
 }
 

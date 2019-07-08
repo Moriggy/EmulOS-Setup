@@ -6,7 +6,7 @@ BACKTITLE="MasOS Team	Descarga de Bezels HD (1280x720)"
 
 # Welcome
  dialog --backtitle "MasOS Team" --title "Descarcga packs bezels" \
-    --yesno "\nDescarga Bezels de consolas para tu MasOS.\n\nEsta utilidad proporciona un pack de bezels para los emuladores de Retroarch.\n\nPuedes usar esta utilidad para descargar bezels de forma rápida y sencilla.\n\nTodos los packs son de 720p (1280x7200).\n\nSi encuentras que ninguna de estas opciones funcione correctamente, por favor notificalo a MasOS Team.\n\nSÓLO SE PUEDE TENER UN PACK DE BEZELS ACTIVO.\n\n\nQuieres continuar?" \
+    --yesno "\nDescarga Bezels de consolas para tu EmulOS.\n\nEsta utilidad proporciona un pack de bezels para los emuladores de Retroarch.\n\nPuedes usar esta utilidad para descargar bezels de forma rápida y sencilla.\n\nTodos los packs son de 720p (1280x7200).\n\nSi encuentras que ninguna de estas opciones funcione correctamente, por favor notificalo a MasOS Team.\n\nSÓLO SE PUEDE TENER UN PACK DE BEZELS ACTIVO.\n\n\nQuieres continuar?" \
     30 80 2>&1 > /dev/tty \
     || exit
 

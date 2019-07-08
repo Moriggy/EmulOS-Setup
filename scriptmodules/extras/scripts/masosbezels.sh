@@ -19,15 +19,15 @@ function main_menu() {
             --ok-label OK --cancel-label Atras \
             --menu "SÓLO se puede tener 1 pack a la vez. Qué acción te gustaría realizar?" 25 75 20 \
             1 "Pack bezels 1920x1080" \
-			2 "Pack bezels 1280x720" \
-			3 "Eliminar bezels de los sistemas" \
-			2>&1 > /dev/tty)
+            2 "Pack bezels 1280x720" \
+            3 "Eliminar bezels de los sistemas" \
+            2>&1 > /dev/tty)
 
         case "$choice" in
             1) full_hd  ;;
             2) solo_hd ;;
-			3) delete  ;;
-			*)  break ;;
+            3) delete  ;;
+            *)  break ;;
         esac
     done
 }
@@ -56,11 +56,11 @@ local choice
 
         case "$choice" in
             1) dialog --infobox "...Borrando..." 3 25 ; sleep 2
-				mv $bezel_dir/config/remaps $bezel_dir
-				mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
-				rm -R $bezel_dir/config/*
-				rm -R $bezel_dir/overlay/*
-				break;;
+    				mv $bezel_dir/config/remaps $bezel_dir
+    				mv $bezel_dir/remaps $bezel_dir/config/ && chmod 755 $bezel_dir/config/remaps
+    				rm -R $bezel_dir/config/*
+    				rm -R $bezel_dir/overlay/*
+    				break;;
             *)  break ;;
         esac
     done

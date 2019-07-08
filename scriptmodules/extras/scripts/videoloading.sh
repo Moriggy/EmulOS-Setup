@@ -121,7 +121,7 @@ function download_video() {
         choice=$(dialog --backtitle "$BACKTITLE" --title " DESCARGA DE PACKS " \
             --ok-label Descargar --cancel-label Atrás \
             --menu "Que pack te gustaría descargar?" 25 75 20 \
-            1 "Pack Moriggy EmulOS" \
+            1 "Pack Moriggy MasOS" \
             2 "Pack Supreme" \
             3 "Pack Mabedeep Dock-pi3" \
             4 "Pack Moriggy Bloques 3D" \
@@ -129,103 +129,103 @@ function download_video() {
 
         case "$choice" in
             1) clear
-				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ]
-						then
-							echo "Borrando el pack de videos anterior"; sleep 2
-							rm -R $enable_dir/*
-						else
-							echo "No hay videos en $enable_dir"; sleep 2
-						fi
-					echo "Empezando la descarga del pack de videos elegido"
-					echo ""; sleep 2
-					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-masos/archive/master.zip && unzip master.zip
-					rm $enable_dir/master.zip
-					clear
-					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
-					mv $enable_dir/videoloadingscreens-masos-master/*.mp4 $enable_dir
-					rm -R $enable_dir/videoloadingscreens-masos-master/
-					chown -R $user:$user $enable_dir
-					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
-				else
-					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi
-			break ;;
+      				if [[ -d "$enable_dir" ]]; then
+      					if [ "$(ls $enable_dir)" ]
+      						then
+      							echo "Borrando el pack de videos anterior"; sleep 2
+      							rm -R $enable_dir/*
+      						else
+      							echo "No hay videos en $enable_dir"; sleep 2
+      						fi
+      					echo "Empezando la descarga del pack de videos elegido"
+      					echo ""; sleep 2
+      					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-masos/archive/master.zip && unzip master.zip
+      					rm $enable_dir/master.zip
+      					clear
+      					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
+      					mv $enable_dir/videoloadingscreens-masos-master/*.mp4 $enable_dir
+      					rm -R $enable_dir/videoloadingscreens-masos-master/
+      					chown -R $user:$user $enable_dir
+      					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
+      				else
+      					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
+      			fi
+      			break ;;
 
-      2) clear
-				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ]
-						then
-							echo "Borrando el pack de videos anterior"; sleep 2
-							rm -R $enable_dir/*
-						else
-							echo "No hay videos en $enable_dir"; sleep 2
-						fi
-					echo "Empezando la descarga del pack de videos elegido"
-					echo ""; sleep 2
-					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-Supreme/archive/master.zip && unzip master.zip
-					rm $enable_dir/master.zip
-					clear
-					echo "Moviendo videos a la carpeta de destino, un momento por favor..."
-					mv $enable_dir/videoloadingscreens-Supreme-master/*.mp4 $enable_dir
-					rm -R $enable_dir/videoloadingscreens-Supreme-master/
-					chown -R $user:$user $enable_dir
-					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
-				else
-					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi
-			break ;;
+            2) clear
+      				if [[ -d "$enable_dir" ]]; then
+      					if [ "$(ls $enable_dir)" ]
+      						then
+      							echo "Borrando el pack de videos anterior"; sleep 2
+      							rm -R $enable_dir/*
+      						else
+      							echo "No hay videos en $enable_dir"; sleep 2
+      						fi
+      					echo "Empezando la descarga del pack de videos elegido"
+      					echo ""; sleep 2
+      					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-Supreme/archive/master.zip && unzip master.zip
+      					rm $enable_dir/master.zip
+      					clear
+      					echo "Moviendo videos a la carpeta de destino, un momento por favor..."
+      					mv $enable_dir/videoloadingscreens-Supreme-master/*.mp4 $enable_dir
+      					rm -R $enable_dir/videoloadingscreens-Supreme-master/
+      					chown -R $user:$user $enable_dir
+      					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
+      				else
+      					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
+      			fi
+      			break ;;
 
-			3) clear
-				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ]
-						then
-							echo "Borrando el pack de videos anterior"; sleep 2
-							rm -R $enable_dir/*
-						else
-							echo "No hay videos en $enable_dir"; sleep 2
-						fi
-					echo "Empezando la descarga del pack de videos elegido"
-					echo ""; sleep 2
-					cd $enable_dir && wget https://github.com/DOCK-PI3/sistemas_intros_pack1/archive/master.zip && unzip master.zip
-					rm $enable_dir/master.zip
-					clear
-					echo "Moviendo videos a la carpeta de destino, un momento por favor..."
-					mv $enable_dir/sistemas_intros_pack1-master/*.mp4 $enable_dir
-					rm -R $enable_dir/sistemas_intros_pack1-master/
-					chown -R $user:$user $enable_dir
-					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
-				else
-					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi
-			break ;;
+      			3) clear
+      				if [[ -d "$enable_dir" ]]; then
+      					if [ "$(ls $enable_dir)" ]
+      						then
+      							echo "Borrando el pack de videos anterior"; sleep 2
+      							rm -R $enable_dir/*
+      						else
+      							echo "No hay videos en $enable_dir"; sleep 2
+      						fi
+      					echo "Empezando la descarga del pack de videos elegido"
+      					echo ""; sleep 2
+      					cd $enable_dir && wget https://github.com/DOCK-PI3/sistemas_intros_pack1/archive/master.zip && unzip master.zip
+      					rm $enable_dir/master.zip
+      					clear
+      					echo "Moviendo videos a la carpeta de destino, un momento por favor..."
+      					mv $enable_dir/sistemas_intros_pack1-master/*.mp4 $enable_dir
+      					rm -R $enable_dir/sistemas_intros_pack1-master/
+      					chown -R $user:$user $enable_dir
+      					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
+      				else
+      					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
+      			fi
+      			break ;;
 
-			4) clear
-				if [[ -d "$enable_dir" ]]; then
-					if [ "$(ls $enable_dir)" ]
-						then
-							echo "Borrando el pack de videos anterior"; sleep 2
-							rm -R $enable_dir/*
-						else
-							echo "No hay videos en $enable_dir"; sleep 2
-						fi
-					echo "Empezando la descarga del pack de videos elegido"
-					echo ""; sleep 2
-					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-Bloques-3D/archive/master.zip && unzip master.zip
-					rm $enable_dir/master.zip
-					clear
-					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
-					mv $enable_dir/videoloadingscreens-Bloques-3D-master/*.mp4 $enable_dir
-					rm -R $enable_dir/videoloadingscreens-Bloques-3D-master/
-					chown -R $user:$user $enable_dir
-					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
-				else
-					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
-			fi
-			break ;;
-            *)  break ;;
-        esac
-    done
+      			4) clear
+      				if [[ -d "$enable_dir" ]]; then
+      					if [ "$(ls $enable_dir)" ]
+      						then
+      							echo "Borrando el pack de videos anterior"; sleep 2
+      							rm -R $enable_dir/*
+      						else
+      							echo "No hay videos en $enable_dir"; sleep 2
+      						fi
+      					echo "Empezando la descarga del pack de videos elegido"
+      					echo ""; sleep 2
+      					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-Bloques-3D/archive/master.zip && unzip master.zip
+      					rm $enable_dir/master.zip
+      					clear
+      					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
+      					mv $enable_dir/videoloadingscreens-Bloques-3D-master/*.mp4 $enable_dir
+      					rm -R $enable_dir/videoloadingscreens-Bloques-3D-master/
+      					chown -R $user:$user $enable_dir
+      					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
+      				else
+      					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
+      			fi
+      			break ;;
+                  *)  break ;;
+              esac
+          done
 
 }
 
