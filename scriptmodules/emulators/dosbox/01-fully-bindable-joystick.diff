@@ -6,12 +6,12 @@
  #define MAXBUTTON_CAP 16
 +#define MAXAXIS 8
 +#define MAXHAT 2
- 
+
  class CEvent;
  class CHandlerEvent;
 @@ -634,8 +636,8 @@
  		if (_dummy) return;
- 
+
  		// initialize binding lists and position data
 -		pos_axis_lists=new CBindList[4];
 -		neg_axis_lists=new CBindList[4];
@@ -31,7 +31,7 @@
  		}
 @@ -662,8 +664,16 @@
  		}
- 
+
  		axes=SDL_JoystickNumAxes(sdl_joystick);
 -		buttons=SDL_JoystickNumButtons(sdl_joystick);
 +		if (axes > MAXAXIS) axes = MAXAXIS;
@@ -71,7 +71,7 @@
 @@ -799,7 +806,7 @@
  			}
  		}
- 
+
 -		for (i=0; i<axes_cap; i++) {
 +		for (i=0; i<axes; i++) {
  			Sint16 caxis_pos=SDL_JoystickGetAxis(sdl_joystick,i);
@@ -80,14 +80,14 @@
 @@ -831,7 +838,7 @@
  			}
  		}
- 
+
 -		for (i=0; i<hats_cap; i++) {
 +		for (i=0; i<hats; i++) {
  			Uint8 chat_state=SDL_JoystickGetHat(sdl_joystick,i);
- 
+
  			/* activate binding if hat state has changed */
 @@ -857,7 +864,7 @@
- 
+
  private:
  	CBind * CreateAxisBind(Bitu axis,bool positive) {
 -		if (axis<emulated_axes) {
