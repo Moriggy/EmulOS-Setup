@@ -412,7 +412,7 @@ msgid "black"
 msgstr "NEGRO"
 
 msgid "random video"
-msgstr "VÍDEO AL AZAR"
+msgstr "VIDEO AL AZAR"
 
 msgid "slideshow"
 msgstr "DIAPOSITIVAS"
@@ -607,7 +607,7 @@ msgid "SCRAPING IN PROGRESS"
 msgstr "SCRAPEO EN PROGRESO"
 
 msgid "subtitle text"
-msgstr "texto del subtítulo"
+msgstr "texto del subtitulo"
 
 msgid "STOP"
 msgstr "DETENER"
@@ -632,7 +632,7 @@ msgstr[0] "{1} JUEGO OMITIDO."
 msgstr[1] "{1} JUEGOS OMITIDOS."
 
 msgid "MAIN MENU"
-msgstr "EMULOS MeNu"
+msgstr "EMULOS MENU"
 
 msgid "SCRAPER"
 msgstr "SCRAPEAR"
@@ -812,7 +812,7 @@ msgid "QUIT EMULATIONSTATION"
 msgstr "CERRAR EMULATIONSTATION"
 
 msgid "RESTART SYSTEM"
-msgstr "REINICIAR EL SISTEMA"
+msgstr "REINICIAR EMULOS"
 
 msgid "REALLY SHUTDOWN?"
 msgstr "QUIERE APAGAR EL SISTEMA?"
