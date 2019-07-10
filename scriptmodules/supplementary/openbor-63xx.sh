@@ -50,15 +50,16 @@ function install_openbor-6xxx() {
 }
 
 function configure_openbor-6xxx() {
-    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
-
     md_id="$(strip $md_id -5)"
-    mkRomDir "ports/$md_id"
 
-    cat >"$romdir/ports/OpenBOR - Module Selection Script.sh" <<_EOF_
+    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
+    addSystem "$md_id"
+    mkRomDir "$md_id"
+
+    cat >"$romdir/$md_id/OpenBOR - Module Selection Script.sh" <<_EOF_
 #!/bin/bash
 readonly JOY2KEY_SCRIPT="\$HOME/EmulOS-Setup/scriptmodules/helpers.sh"
-readonly OPENBOR_ROMDIR="$romdir/ports/$md_id"
+readonly OPENBOR_ROMDIR="$romdir/$md_id"
 [[ -e \$JOY2KEY_SCRIPT ]] || (cd $md_inst; ./OpenBOR; kill \$\$)
 sleep 0.5; sudo pkill -f joy2key
 source "\$JOY2KEY_SCRIPT"
@@ -73,14 +74,14 @@ if [[ \${#darray[@]} -gt 0 ]]; then
     cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Please select a module from list to get launched:" 16 75 16)
     choices=\$("\${cmd[@]}" "\${darray[@]}")
     joy2keyStop; sleep 0.2
-    [[ \$choices ]] || exit  
+    [[ \$choices ]] || exit
 fi
 "/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
 _EOF_
 
 #Correcting file owner and attributes
-chown $(logname):$(logname) "$romdir/ports/OpenBOR - Module Selection Script.sh"
-chmod +x "$romdir/ports/OpenBOR - Module Selection Script.sh"
+chown $(logname):$(logname) "$romdir/$md_id/OpenBOR - Module Selection Script.sh"
+chmod +x "$romdir/$md_id/OpenBOR - Module Selection Script.sh"
 
     local dir
     for dir in ScreenShots Saves; do
@@ -88,6 +89,6 @@ chmod +x "$romdir/ports/OpenBOR - Module Selection Script.sh"
         ln -snf "$md_conf_root/$md_id/$dir" "$md_inst/$dir"
     done
 
-    ln -snf "$romdir/ports/$md_id" "$md_inst/Paks"
+    ln -snf "$romdir/$md_id" "$md_inst/Paks"
     ln -snf "/dev/shm" "$md_inst/Logs"
 }
