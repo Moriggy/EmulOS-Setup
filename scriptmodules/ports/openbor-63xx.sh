@@ -10,8 +10,8 @@
 #
 
 rp_module_id="openbor-6xxx"
-rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6510-dev (official!)"
-rp_module_help="Place your pak files in $romdir/ports/openbor and then run $romdir/ports/OpenBOR.sh from ports section."
+rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6510-dev (OFICIAL!!)"
+rp_module_help="Coloque sus archivos pak en $romdir/openbor y luego ejecutalos desde el sistema Openbor, los juegos comenzarán automáticamente."
 rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags="!mali !x11 !kms"
@@ -71,7 +71,7 @@ for file in "\$OPENBOR_ROMDIR/"*.[Pp][Aa][Kk]; do
 done
 if [[ \${#darray[@]} -gt 0 ]]; then
     joy2keyStart; sleep 0.2
-    cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Please select a module from list to get launched:" 16 75 16)
+    cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Por favor seleccione un juego de la lista para ser lanzado:" 16 75 16)
     choices=\$("\${cmd[@]}" "\${darray[@]}")
     joy2keyStop; sleep 0.2
     [[ \$choices ]] || exit
@@ -82,6 +82,7 @@ _EOF_
 #Correcting file owner and attributes
 chown $(logname):$(logname) "$romdir/$md_id/OpenBOR - Module Selection Script.sh"
 chmod +x "$romdir/$md_id/OpenBOR - Module Selection Script.sh"
+mv "$romdir/ports/OpenBOR - Beats of Rage Engine.sh" "$romdir/$md_id"
 
     local dir
     for dir in ScreenShots Saves; do

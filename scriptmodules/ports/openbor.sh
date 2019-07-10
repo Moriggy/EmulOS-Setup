@@ -10,72 +10,70 @@
 #
 
 rp_module_id="openbor"
-rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6512"
-rp_module_help="Coloca tus archivos .pak en $romdir/openbor y luego ejecuta $romdir/OpenBOR.sh desde la sección de ports o el propio juego."
-rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
+rp_module_desc="OpenBOR - Beat 'em Up Game Engine"
+rp_module_help="Los juegos de OpenBOR se deben extraer para funcionar correctamente. Coloque sus archivos pak en $romdir/ports/openbor y luego ejecute $rootdir/ports/openbor/extract.sh. Cuando el script haya finalizado, los archivos pak originales se encontrarán en $romdir/ports/openbor/originals y se pueden eliminar."
+rp_module_licence="BSD https://raw.githubusercontent.com/rofl0r/openbor/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags="!mali !x11 !kms"
 
 function depends_openbor() {
-    getDepends libsdl2-gfx-dev libvorbisidec-dev libvpx-dev libogg-dev libsdl2-gfx-1.0-0 libvorbisidec1
+    getDepends libsdl1.2-dev libsdl-gfx1.2-dev libogg-dev libvorbisidec-dev libvorbis-dev libpng-dev zlib1g-dev
 }
 
 function sources_openbor() {
-    gitPullOrClone "$md_build" https://github.com/crcerror/OpenBOR-Raspberry.git
+    gitPullOrClone "$md_build" https://github.com/rofl0r/openbor.git
 }
 
 function build_openbor() {
     local params=()
-    ! isPlatform "x11" && params+=(BUILD_PANDORA=1)
-    make clean-all BUILD_PANDORA=1
-    patch -p0 -i ./patch/latest_build.diff
+    ! isPlatform "x11" && params+=(NO_GL=1)
+    make clean
     make "${params[@]}"
+    cd "$md_build/tools/borpak/"
+    ./build-linux.sh
     md_ret_require="$md_build/OpenBOR"
-    wget -q --show-progress "http://raw.githubusercontent.com/crcerror/OpenBOR-63xx-RetroPie-openbeta/master/libGL-binary/libGL.so.1.gz"
-    gunzip -f libGL.so.1.gz
 }
 
 function install_openbor() {
     md_ret_files=(
        'OpenBOR'
-       'libGL.so.1'
+       'tools/borpak/borpak'
+       'tools/unpack.sh'
     )
 }
 
 function configure_openbor() {
-    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
+    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR; popd"
+
     mkRomDir "ports/$md_id"
 
-    cat >"$romdir/ports/OpenBOR - Beats of Rage Engine.sh" <<_EOF_
+    cat >"$md_inst/extract.sh" <<_EOF_
 #!/bin/bash
-readonly JOY2KEY_SCRIPT="\$HOME/EmulOS-Setup/scriptmodules/helpers.sh"
-readonly OPENBOR_ROMDIR="$romdir/ports/$md_id"
-[[ -e \$JOY2KEY_SCRIPT ]] || (cd $md_inst; ./OpenBOR; kill \$\$)
-sleep 0.5; sudo pkill -f joy2key
-source "\$JOY2KEY_SCRIPT"
-scriptdir="\$HOME/EmulOS-Setup"
-for file in "\$OPENBOR_ROMDIR/"*.[Pp][Aa][Kk]; do
-  [[ -e \$file ]] || continue
-  filename="\${file##*/}"; filename="\${filename%.*}"
-  darray+=("\$file" "\$filename")
+PORTDIR="$md_inst"
+BORROMDIR="$romdir/ports/$md_id"
+mkdir \$BORROMDIR/original/
+mkdir \$BORROMDIR/original/borpak/
+mv \$BORROMDIR/*.pak \$BORROMDIR/original/
+cp \$PORTDIR/unpack.sh \$BORROMDIR/original/
+cp \$PORTDIR/borpak \$BORROMDIR/original/borpak/
+cd \$BORROMDIR/original/
+for i in *.pak
+do
+  CURRENTFILE=\`basename "\$i" .pak\`
+  ./unpack.sh "\$i"
+  mkdir "\$CURRENTFILE"
+  mv data/ "\$CURRENTFILE"/
+  mv "\$CURRENTFILE"/ ../
 done
-if [[ \${#darray[@]} -gt 0 ]]; then
-    joy2keyStart; sleep 0.2
-    cmd=(dialog --backtitle " OpenBOR - The ultimate 2D gaming engine " --title " Module selection list " --no-tags --stdout --menu "Please select a module from list to get launched:" 16 75 16)
-    choices=\$("\${cmd[@]}" "\${darray[@]}")
-    joy2keyStop; sleep 0.2
-    [[ \$choices ]] || exit
-fi
-"/opt/emulos/supplementary/runcommand/runcommand.sh" 0 _PORT_ "openbor" "\$choices"
+echo "Tus juegos están extraídos y listos para jugarlos. Los originales se guardan de forma segura en $BORROMDIR/original/ pero ya no serán necesarios. Todo lo que esté dentro de dicha carpeta puede ser eliminado."
 _EOF_
-
+    chmod +x "$md_inst/extract.sh"
 
     local dir
-    for dir in ScreenShots Saves; do
+    for dir in ScreenShots Logs Saves; do
         mkUserDir "$md_conf_root/$md_id/$dir"
         ln -snf "$md_conf_root/$md_id/$dir" "$md_inst/$dir"
     done
 
     ln -snf "$romdir/ports/$md_id" "$md_inst/Paks"
-    ln -snf "/dev/shm" "$md_inst/Logs"
 }
