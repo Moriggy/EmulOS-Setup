@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-echo "Checking to see if advance-mame 1.4 is installed if it is not I will install it. This will take a little while to run......."
+echo "Comprobando si tienes instalado advance-mame 1.4, si no lo está se instalará. Esto llevará un poco de tiempo de ejecución"
 sleep 5
 
 if [ ! -d "/home/pi/EmulOS/roms/mame-advmame" ]; then
-        echo "Advance-Mame not found. Installing version 1.4. This will take around 30min."
+        echo "No se encontró Advance-Mame. Instalando la version 1.4. Esto llevará unos 30min."
         sleep 10
         sudo /home/pi/EmulOS-Setup/emulos_pkgs.sh 101
 fi
@@ -66,6 +66,6 @@ if [[ ! -f "/home/pi/EmulOS/roms/mame-advmame/duckhunt.zip" ]]; then
 fi
 echo ""
 echo ""
-echo "Todo listo. Disfruten y recuerden .... Un disparo una muerte! Tu Pi ahora se reiniciará"
-sleep 10
+echo "Todo listo. Disfruten y recuerden .... Un disparo una muerte! Tu Rpi se reiniciará ahora."
+sleep 5
 sudo reboot
