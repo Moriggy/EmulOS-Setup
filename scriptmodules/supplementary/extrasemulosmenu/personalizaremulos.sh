@@ -18,9 +18,9 @@ rp_module_section=""
 #infobox="${infobox}\nMasOS Team no se hace responsable de un mal uso de estos scripts\n\n"
 #infobox="${infobox}\n"
 
-dialog --backtitle "http://masos.dx.am		MasOS Team" \
---title "Personalizacion de EmulOS (by Moriggy)" \
---msgbox "${infobox}" 15 55
+#dialog --backtitle "http://masos.dx.am		MasOS Team" \
+#--title "Personalizacion de EmulOS (by Moriggy)" \
+#--msgbox "${infobox}" 15 55
 
 function main_menu() {
 
