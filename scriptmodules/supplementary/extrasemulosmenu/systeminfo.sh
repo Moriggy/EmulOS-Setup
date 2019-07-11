@@ -32,7 +32,7 @@ if [[ -f "/opt/vc/bin/vcgencmd" ]]; then
 fi
 
 
-infobox= ""
+infobox=""
 infobox="${infobox}\nFecha: $(date)\n"
 infobox="${infobox}_______________________________________________________\n"
 infobox="${infobox}\nVersion del Kernel: $(uname -a)\n"
