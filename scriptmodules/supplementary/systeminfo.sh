@@ -13,6 +13,6 @@ rp_module_id="systeminfo"
 rp_module_desc="Información útil del sistema"
 rp_module_section="config"
 
-function gui_personalizaremulos (){
-  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/systeminfo.sh
+function gui_systeminfo (){
+  source $scriptdir/scriptmodules/supplementary/extrasemulosmenu/systeminfo.sh
 }

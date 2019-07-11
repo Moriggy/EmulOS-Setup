@@ -13,6 +13,6 @@ rp_module_id="emulosextrasall"
 rp_module_desc="EmulOS Herramientas y utils"
 rp_module_section="config"
 
-function gui_personalizaremulos (){
-  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/emulosextrasall.sh
+function gui_emulosextrasall (){
+  source $scriptdir/scriptmodules/supplementary/extrasemulosmenu/emulosextrasall.sh
 }

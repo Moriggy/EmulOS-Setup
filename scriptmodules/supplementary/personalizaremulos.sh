@@ -14,5 +14,5 @@ rp_module_desc="Podrás añadir bezels, videoloading screen a tus sistemas y hac
 rp_module_section="config"
 
 function gui_personalizaremulos (){
-  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/personalizaremulos.sh
+  source $scriptdir/scriptmodules/supplementary/extrasemulosmenu/personalizaremulos.sh
 }

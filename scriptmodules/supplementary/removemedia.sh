@@ -13,6 +13,6 @@ rp_module_id="removemedia"
 rp_module_desc="Eliminar toda la media del sistema EmulOS"
 rp_module_section="config"
 
-function gui_personalizaremulos (){
-  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/removemedia.sh
+function gui_removemedia (){
+  source $scriptdir/scriptmodules/supplementary/extrasemulemenu/removemedia.sh
 }
