@@ -136,7 +136,7 @@ function depends_emulationstation() {
 function sources_emulationstation() {
     local repo="$1"
     local branch="$2"
-    [[ -z "$repo" ]] && repo="https://github.com/DOCK-PI3/EmulationStation"
+    [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
     [[ -z "$branch" ]] && branch="stable"
     gitPullOrClone "$md_build" "$repo" "$branch"
 }
@@ -156,6 +156,8 @@ function install_emulationstation() {
         'emulationstation'
         'emulationstation.sh'
         'GAMELISTS.md'
+        'locale'
+        'resources'
         'README.md'
         'THEMES.md'
     )
