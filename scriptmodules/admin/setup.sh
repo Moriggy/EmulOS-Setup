@@ -594,8 +594,8 @@ function gui_setup() {
                     #### gancho nuevo copia de scripts nuestros
               			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
                 			cd
-                			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
+                			#sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+                			#sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
                			  sudo chmod -R +x /home/pi/EmulOS
                 			sudo chmod -R +x /opt/
