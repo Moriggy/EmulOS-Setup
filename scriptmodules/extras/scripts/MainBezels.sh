@@ -29,7 +29,7 @@ function main_menu() {
     while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " MENU BEZELS " \
             --ok-label OK --cancel-label Atras \
-            --menu "Elige una opcion (arriba/abajo) y pulsa A para aceptar:" 25 75 20 \
+            --menu "Elige una opcion:" 25 75 20 \
 			1 "The Project Bezels" \
 			2 "Packs bezels MasOS Team" \
 			2>&1 > /dev/tty)
@@ -46,8 +46,7 @@ function main_menu() {
 
 function tpb() {
 
-	scriptdir="$(dirname "$0")"
-	sudo $scriptdir/bezelproject.sh
+  source $scriptdir/scriptmodules/extras/scripts/bezelproject.sh
 
 }
 
@@ -55,8 +54,7 @@ function tpb() {
 
 function packs() {
 
-	scriptdir="$(dirname "$0")"
-	sudo $scriptdir/masosbezels.sh
+  source $scriptdir/scriptmodules/extras/scripts/emulosbezels.sh
 
 }
 

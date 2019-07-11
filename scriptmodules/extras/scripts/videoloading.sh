@@ -74,19 +74,19 @@ function enable_videoloadingscreens() {
 
         case "$choice" in
             1) dialog --infobox "...Activando..." 3 19 ; sleep 2
-				if [[ -d "$disable_dir" ]]; then
-					mv $disable_dir $enable_dir
-					mv /opt/emulos/configs/all/runcommand-onstart.sh.bkp /opt/emulos/configs/all/runcommand-onstart.sh
-					mv /opt/emulos/configs/all/runcommand-onend.sh.bkp /opt/emulos/configs/all/runcommand-onend.sh
-				else
-					mkdir $enable_dir
-					chown -R $user:$user $enable_dir
-					cp /home/$user/EmulOS/scripts/pi3/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh
-					cp /home/$user/EmulOS/scripts/pi3/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh
-					chown -R $user:$user /opt/emulos/configs/all/runcommand-onstart.sh
-					chown -R $user:$user /opt/emulos/configs/all/runcommand-onend.sh
-				fi
-			break ;;
+      				if [[ -d "$disable_dir" ]]; then
+      					mv $disable_dir $enable_dir
+      					mv /opt/emulos/configs/all/runcommand-onstart.sh.bkp /opt/emulos/configs/all/runcommand-onstart.sh
+      					mv /opt/emulos/configs/all/runcommand-onend.sh.bkp /opt/emulos/configs/all/runcommand-onend.sh
+      				else
+      					mkdir $enable_dir
+      					chown -R $user:$user $enable_dir
+      					cp /home/$user/EmulOS-Setup/scriptmodules/extras/scripts/pi3/runcommand-onstart.sh /opt/emulos/configs/all/runcommand-onstart.sh
+      					cp /home/$user/EmulOS-Setup/scriptmodules/extras/scripts/pi3/runcommand-onend.sh /opt/emulos/configs/all/runcommand-onend.sh
+      					chown -R $user:$user /opt/emulos/configs/all/runcommand-onstart.sh
+      					chown -R $user:$user /opt/emulos/configs/all/runcommand-onend.sh
+      				fi
+      			break ;;
 
             2) dialog --infobox "...Activando..." 3 19 ; sleep 2
 				if [[ -d "$disable_dir" ]]; then

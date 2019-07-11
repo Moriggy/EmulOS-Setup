@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rp_module_id="masosbezels"
+rp_module_id="emulosbezels"
 rp_module_desc="Packs bezel MasOS Team"
 rp_module_section=""
 BACKTITLE="MasOS Team	Descarga de Bezels FULL HD (1920x1080)"

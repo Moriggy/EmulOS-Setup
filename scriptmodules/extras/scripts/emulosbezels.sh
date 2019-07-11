@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rp_module_id="masosbezels"
+rp_module_id="emulosbezels"
 rp_module_desc="Packs bezel MasOS Team"
 rp_module_section=""
 BACKTITLE="MasOS Team	Descarga de Bezels"
@@ -33,15 +33,14 @@ function main_menu() {
 }
 
 function full_hd() {
-	scriptdir="$(dirname "$0")"
-	scriptdir="$(cd "$scriptdir" && pwd)"
-	sudo $scriptdir/full_hd.sh
+
+  source $scriptdir/scriptmodules/extras/scripts/full_hd.sh
+
 }
 
 function solo_hd() {
-	scriptdir="$(dirname "$0")"
-	scriptdir="$(cd "$scriptdir" && pwd)"
-	sudo $scriptdir/solo_hd.sh
+
+  source $scriptdir/scriptmodules/extras/scripts/solo_hd.sh
 }
 
 function delete() {

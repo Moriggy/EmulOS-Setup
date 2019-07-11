@@ -69,42 +69,42 @@ function main_menu() {
 
 function overclock1300() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1300rpi3.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1300rpi3.sh
 }
 
 function overclock1350() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1350rpi3.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1350rpi3.sh
 }
 
 function overclock1400() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1400rpi3.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1400rpi3.sh
 }
 
 function overclock1475() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1475rpi3plus.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1475rpi3plus.sh
 }
 
 function overclock1500() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1500rpi3plus.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1500rpi3plus.sh
 }
 
 function overclock1550() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1550rpi3plus.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1550rpi3plus.sh
 }
 
 function overclock1575() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/overclock1575rpi3plus.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/overclock1575rpi3plus.sh
 }
 
 function nooverclock() {
 	dialog --infobox "...Aplicando..." 3 20 ; sleep 2
-	sudo /home/pi/EmulOS/scripts/nooverclock.sh
+	sudo /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/nooverclock.sh
 }
 
 main_menu

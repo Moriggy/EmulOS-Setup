@@ -48,7 +48,7 @@ function main_menu() {
 
 function bezels() {
 
-	source ~/EmulOS-Setup/extras/scripts/MainBezels.sh
+	source $scriptdir/scriptmodules/extras/scripts/MainBezels.sh
 
 }
 
@@ -56,7 +56,7 @@ function bezels() {
 
 function launching_videos() {
 
-	source ~/EmulOS-Setup/extras/scripts/videoloading.sh
+	source $scriptdir/scriptmodules/extras/scripts/videoloading.sh
 
 }
 
@@ -64,7 +64,7 @@ function launching_videos() {
 
 function overclock() {
 
-	source ~/EmulOS-Setup/extras/scripts/overclock.sh
+	source $scriptdir/scriptmodules/extras/scripts/overclock.sh
 
 }
 
@@ -72,7 +72,7 @@ function overclock() {
 
 function silencio() {
 
-	source ~/EmulOS-Setup/extras/scripts/sym.sh
+	source $scriptdir/scriptmodules/extras/scripts/sym.sh
 
 }
 
