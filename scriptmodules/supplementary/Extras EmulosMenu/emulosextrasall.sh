@@ -14,7 +14,7 @@ infobox="${infobox}Se recomienda instalacion de EXTRAS para el menu solo en rasp
 infobox="${infobox}\nEn PC puede instalar los extras si usa de nombre de usuario pi"
 
 dialog --backtitle "EmulOS extras y herramientas base" \
---title "EmulOS EXTRAS ,herramientas y raparador de permisos en PC(The MasOS TEAM)" \
+--title "EmulOS EXTRAS, herramientas y raparador de permisos en PC(The MasOS TEAM)" \
 --msgbox "${infobox}" 35 110
 
 
@@ -27,35 +27,27 @@ function main_menu() {
             --ok-label OK --cancel-label Exit \
             --menu "Que accion te gustaria realizar?" 25 75 20 \
             100 "-------------- Para RPI ----------------" \
-            1 "RPI EXTRAS para el menu de EmulationStation" \
-            2 "RPI EmulationStation instalar idioma español" \
-            99 "RPI AttractMode Instalador/Configurador" \
+            1 "RPI AttractMode Instalador/Configurador" \
             200 "-------------- Para PC ----------------" \
-            3 "PC EmulOS EXTRAS para el menu de EmulationStation" \
-            4 "PC Reparar permisos en EmulOS" \
-            5 "PC EmulationStation-dev idioma español para Ubuntu 16.04.5" \
+            2 "PC Reparar permisos en EmulOS" \
+            3 "PC EmulationStation-dev idioma español para Ubuntu 16.04.5" \
             300  "------------- DEV BETAS Raspberry RPI y PC -----------------" \
-            6 "IDIOMA español para emulationstation-dev instalaciones desde 0" \
-            7 "BETA Instalar iconos Originales de EmulationStation" \
-            8 "BETA EXTRAS PARA PC o RPI EmulationStation" \
+            4 "IDIOMA español para emulationstation-dev instalaciones desde 0" \
+            5 "BETA Instalar iconos Originales de EmulationStation" \
             2>&1 > /dev/tty)
 
         case "$choice" in
-			100) separador_menu  ;;
-			1) emulosmenu_extras  ;;
-            2) pi_spanish ;;
-			99) pi_attractmode_ic ;;
-			200) separador_menu  ;;
-			3) emulosmenu_extrasPC ;;
-			4) permisos_pc  ;;
-			5) pc_spanish  ;;
-			300) separador_menu  ;;
-			6) idioma_spanish_all ;;
-			7) esicons_origi ;;
-			8) extras_all_auto ;;
-			*)  break ;;
-        esac
-    done
+			       100) separador_menu  ;;
+             1) pi_attractmode_ic ;;
+             200) separador_menu  ;;
+             2) permisos_pc  ;;
+             3) pc_spanish  ;;
+             300) separador_menu  ;;
+             4) idioma_spanish_all ;;
+             5) esicons_origi ;;
+             *)  break ;;
+           esac
+         done
 }
 
 
@@ -68,40 +60,6 @@ dialog --infobox "... Script instalador y configurador para attract mode ..." 30
 cd && sudo EmulOS-Setup/tools/attractmode.sh
 }
 
-#########################################################################
-# Funcion EXTRAs Menu ES para EmulOS ;-) #
-function emulosmenu_extras() {                                          #
-dialog --infobox " EmulOS opciones Extras en rpi para el menu de ES..." 30 55 ; sleep 5
-cd
-sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-# sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/icons /home/pi/EmulOS/emulosmenu
-sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
-sudo chmod -R +x /home/pi/EmulOS
-sudo chmod -R +x /opt/
-sudo mkdir /home/pi/EmulOS/roms/music
-sudo chown -R pi:pi /home/pi/EmulOS
-dialog --infobox " Las opciones Extras estan instaladas,reiniciando el sistema en 5seg ..." 30 55 ; sleep 5
-sudo reboot
-# ---------------------------- #
-}
-
-#########################################################################
-# Funcion PC EXTRAs Menu ES para EmulOS ;-) #
-function emulosmenu_extrasPC() {                                          #
-dialog --infobox " PC EmulOS opciones Extras para el menu de ES..." 30 55 ; sleep 5
-cd
-sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
-sudo cp -R ~/EmulOS-Setup/scriptmodules/extras/scripts ~/EmulOS/
-sudo chmod -R +x ~/EmulOS
-sudo chmod -R +x /opt/
-sudo mkdir ~/EmulOS/roms/music
-sudo chown -R $user:$user ~/EmulOS
-dialog --infobox " Las opciones Extras estan instaladas,reiniciando el sistema en 5seg ..." 30 55 ; sleep 5
-sudo reboot
-# ---------------------------- #
-}
 
 #########################################################################
 # Funcion Reparar permisos en EmulOS PC ;-) #
@@ -111,20 +69,6 @@ cd
 sudo chown -R $user:$user /etc/emulationstation/themes/
 sudo chown -R $user:$user /opt/emulos/configs/
 dialog --infobox " Los permisos fueron reparados ..." 30 55 ; sleep 5
-# ---------------------------- #
-}
-
-#########################################################################
-# Raspberry pi instalar idioma español en ES #
-function pi_spanish() {                                          #
-dialog --infobox " Raspberry pi - instalar idioma español en ES..." 30 55 ; sleep 5
-cd
-sudo killall emulationstation
-sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/locale/ /opt/emulos/supplementary/emulationstation/
-sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/resources/ /opt/emulos/supplementary/emulationstation/
-sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
-dialog --infobox " El idioma se instalo correctamente ,reiniciando el sistema en 5seg ..." 30 55 ; sleep 5
-sudo reboot
 # ---------------------------- #
 }
 
@@ -171,34 +115,6 @@ sudo chown -R $user:$user /opt/emulos/supplementary/emulationstation/
 sudo chown -R $user:$user /opt/emulos/supplementary/emulationstation-dev/
 sudo rm -R ~/temporal
 dialog --infobox "... Iconos originales instalados ,reinicie ES para ver los nuevos iconos..." 30 55 ; sleep 5
-# ---------------------------- #
-}
-
-#########################################################################
-# Instalador de extras segun el sistema ,para PC y RPI #
-function extras_all_auto() {
-
-        if [[ -f /home/pi/EmulOS/emulosmenu/raspiconfig.rp ]]; then
-			cd
-			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
-			sudo chmod -R +x /home/pi/EmulOS
-			sudo chmod -R +x /opt/
-			sudo mkdir /home/pi/EmulOS/roms/music
-			sudo chown -R pi:pi /home/pi/EmulOS
-    else
-        if [[ -f $home/.config/autostart/emulos.desktop ]]; then
-		cd
-		sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-		sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
-		sudo cp -R ~/EmulOS-Setup/scriptmodules/extras/scripts ~/EmulOS/
-		sudo chmod -R +x ~/EmulOS
-		sudo chmod -R +x /opt/
-		sudo mkdir ~/EmulOS/roms/music
-		sudo chown -R $user:$user ~/EmulOS
-	fi
-		fi
 # ---------------------------- #
 }
 

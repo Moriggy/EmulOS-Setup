@@ -31,7 +31,7 @@ function main_menu() {
 			1 "Instalar Bezels" \
 			2 "Vídeos de Carga de Roms" \
 			3 "Overclock (SÓLO) Raspberry pi" \
-			4 "Arranque silencioso" \
+			# 4 "Arranque silencioso" \
 			2>&1 > /dev/tty)
 
         case "$choice" in

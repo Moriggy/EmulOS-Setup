@@ -9,10 +9,10 @@
 # at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
-rp_module_id="personalizaremulos"
-rp_module_desc="Podrás añadir bezels, videoloading screen a tus sistemas y hacer Overclock a tu RPI"
+rp_module_id="emulosextrasall"
+rp_module_desc="EmulOS Herramientas y utils"
 rp_module_section="config"
 
 function gui_personalizaremulos (){
-  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/personalizaremulos.sh
+  source $scriptdir/scriptmodules/supplementary/Extras EmulosMenu/emulosextrasall.sh
 }

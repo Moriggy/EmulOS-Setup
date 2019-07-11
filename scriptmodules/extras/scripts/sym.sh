@@ -20,8 +20,6 @@ dialog --backtitle "$BACKTITLE" \
 --title "EmulOS Silence's Script (by Moriggy)" \
 --msgbox "${infobox}" 35 100
 
-
-
 function main_menu() {
     local choice
 
