@@ -11,7 +11,7 @@
 
 rp_module_id="systeminfo"
 rp_module_desc="Informacion util del sistema"
-rp_module_section="config"
+rp_module_section=""
 
 # calculate rough CPU and GPU temperatures:
 cpuTempC=""

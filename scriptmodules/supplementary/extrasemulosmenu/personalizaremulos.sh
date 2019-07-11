@@ -11,7 +11,9 @@
 
 rp_module_id="personalizaremulos"
 rp_module_desc="Personalizar el sistema EmulOS"
-rp_module_section="config"
+rp_module_section=""
+
+infobox=""
 infobox="${infobox}___________________________________________________\n\n"
 infobox="${infobox}\nHerramienta para personalizar EmulOS\n"
 infobox="${infobox}\nMasOS Team no se hace responsable de un mal uso de estos scripts\n\n"
