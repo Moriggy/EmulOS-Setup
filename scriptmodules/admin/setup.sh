@@ -599,7 +599,7 @@ function gui_setup() {
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
                			  sudo chmod -R +x /home/pi/EmulOS
                 			sudo chmod -R +x /opt/
-                			#sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
+                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
                   else
                       if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
                     		cd

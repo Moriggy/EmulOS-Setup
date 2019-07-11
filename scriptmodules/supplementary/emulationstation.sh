@@ -156,8 +156,6 @@ function install_emulationstation() {
         'emulationstation'
         'emulationstation.sh'
         'GAMELISTS.md'
-        'locale'
-        'resources'
         'README.md'
         'THEMES.md'
     )
