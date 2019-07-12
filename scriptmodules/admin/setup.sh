@@ -33,27 +33,27 @@ function rps_logInit() {
 }
 
 function rps_logStart() {
-    echo -e "Inició sesión el: $(date -d @$time_start)\n"
-    echo "EmulOS-Setup versión: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
+    echo -e "Inicio sesion el: $(date -d @$time_start)\n"
+    echo "EmulOS-Setup version: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
     echo "System: $(uname -a)"
 }
 
 function rps_logEnd() {
     time_end=$(date +"%s")
     echo
-    echo "El registro terminó en: $(date -d @$time_end)"
+    echo "El registro termino en: $(date -d @$time_end)"
     date_total=$((time_end-time_start))
     local hours=$((date_total / 60 / 60 % 24))
     local mins=$((date_total / 60 % 60))
     local secs=$((date_total % 60))
-    echo "Tiempo de ejecución: $hours horas, $mins minutos, $secs segundos"
+    echo "Tiempo de ejecucion: $hours horas, $mins minutos, $secs segundos"
 }
 
 function rps_printInfo() {
     reset
     if [[ ${#__ERRMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__ERRMSGS[@]}"
-        printMsgs "dialog" "Consulte $1 para obtener más información detallada sobre los errores."
+        printMsgs "dialog" "Consulte $1 para obtener más informacion detallada sobre los errores."
     fi
     if [[ ${#__INFMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__INFMSGS[@]}"
