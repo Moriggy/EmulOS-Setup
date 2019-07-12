@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of MasOS Team Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# EmulOS is a fork of The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
@@ -33,27 +33,27 @@ function rps_logInit() {
 }
 
 function rps_logStart() {
-    echo -e "Iniciar sesion el: $(date -d @$time_start)\n"
-    echo "EmulOS-Setup version: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
+    echo -e "Inició sesión el: $(date -d @$time_start)\n"
+    echo "EmulOS-Setup versión: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
     echo "System: $(uname -a)"
 }
 
 function rps_logEnd() {
     time_end=$(date +"%s")
     echo
-    echo "El registro termino en: $(date -d @$time_end)"
+    echo "El registro terminó en: $(date -d @$time_end)"
     date_total=$((time_end-time_start))
     local hours=$((date_total / 60 / 60 % 24))
     local mins=$((date_total / 60 % 60))
     local secs=$((date_total % 60))
-    echo "Tiempo de ejecucion: $hours horas, $mins minutos, $secs segundos"
+    echo "Tiempo de ejecución: $hours horas, $mins minutos, $secs segundos"
 }
 
 function rps_printInfo() {
     reset
     if [[ ${#__ERRMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__ERRMSGS[@]}"
-        printMsgs "dialog" "Consulte $1 para obtener más informacion detallada sobre los errores."
+        printMsgs "dialog" "Consulte $1 para obtener más información detallada sobre los errores."
     fi
     if [[ ${#__INFMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__INFMSGS[@]}"
@@ -115,21 +115,9 @@ function updatescript_setup()
     # Añadido para copiar los archivos del menu opciones
     if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
       cd
-      #sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
       sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-      #sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
-      #sudo chmod -R +x /home/pi/EmulOS
-      #sudo chmod -R +x /opt/
     fi
-      if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
-        cd
-        sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-        sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
-        sudo cp -R ~/EmulOS-Setup-beta/scriptmodules/extras/scripts ~/EmulOS/
-        sudo chmod -R +x ~/EmulOS
-        sudo chmod -R +x /opt/
-        sudo chown -R $user:$user ~/EmulOS
-      fi
     # FIN DEL AÑADIDO
 
     return 0
@@ -449,8 +437,11 @@ function update_packages_gui_setup() {
 
     rps_printInfo "$logfilename"
     printMsgs "dialog" "Los paquetes instalados se han actualizado. Se reiniciará el sistema para efectuar todos los cambios"
-    sudo killall emulationstation
-    sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
+    if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
+      cd
+      sudo killall emulationstation
+      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
+    fi
     reboot_setup
 }
 
@@ -516,7 +507,7 @@ function reboot_setup()
     reboot
 }
 
-# arranque silencioso de instalación based
+# arranque silencioso de instalación base
 function silencio() {
 	fichero_nec="/boot/cmdline.txt"
 	clear
@@ -594,22 +585,10 @@ function gui_setup() {
                     #### gancho nuevo copia de scripts nuestros
               			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
                 			cd
-                			#sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+                			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-                			#sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/scripts /home/pi/EmulOS/
-               			  #sudo chmod -R +x /home/pi/EmulOS
-                			#sudo chmod -R +x /opt/
+                      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown/* /home/pi/EmulOS/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
-                  else
-                      if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
-                    		cd
-                    		sudo cp ~/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* ~/EmulOS/emulosmenu/
-                    		sudo cp -R ~/EmulOS-Setup/scriptmodules/extras/scripts ~/EmulOS/
-                    		sudo chmod -R +x ~/EmulOS
-                    		sudo chmod -R +x /opt/
-                    		sudo chown -R $user:$user ~/EmulOS
-                    	fi
       		          fi
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")

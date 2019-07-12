@@ -23,7 +23,7 @@ function main_menu() {
     local choice
 
     while true; do
-        choice=$(dialog --backtitle "$BACKTITLE" --title " MAIN MENU " \
+        choice=$(dialog --backtitle "EmulOS Extras" --title " MAIN MENU " \
             --ok-label OK --cancel-label Exit \
             --menu "Que accion te gustaria realizar?" 25 75 20 \
             100 "-------------- Para RPI ----------------" \
