@@ -587,7 +587,7 @@ function gui_setup() {
                 			cd
                 			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-                      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown/* /home/pi/EmulOS/
+                      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown /home/pi/EmulOS/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
       		          fi
                     rps_logEnd
