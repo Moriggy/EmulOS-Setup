@@ -54,7 +54,7 @@ function enable_autostart() {
 
     if isPlatform "x11"; then
         mkUserDir "$home/.config/autostart"
-        ln -sf "/usr/local/share/applications/masos.desktop" "$home/.config/autostart/"
+        ln -sf "/usr/local/share/applications/emulos.desktop" "$home/.config/autostart/"
     else
         if [[ "$__os_id" == "Raspbian" ]]; then
             if [[ "$__chroot" -eq 1 ]]; then
@@ -83,7 +83,7 @@ function disable_autostart() {
     local login_type="$1"
     [[ -z "$login_type" ]] && login_type="B2"
     if isPlatform "x11"; then
-        rm "$home/.config/autostart/masos.desktop"
+        rm "$home/.config/autostart/emulos.desktop"
     else
         if [[ "$__os_id" == "Raspbian" ]]; then
             if [[ "$__chroot" -eq 1 ]]; then
@@ -111,7 +111,7 @@ function gui_autostart() {
     while true; do
         if isPlatform "x11"; then
             local x11_autostart
-            if [[ -f "$home/.config/autostart/masos.desktop" ]]; then
+            if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
                 options=(1 "Autostart EmulationStation despues del inicio de sesion (Habilitado)")
                 x11_autostart=1
             else
