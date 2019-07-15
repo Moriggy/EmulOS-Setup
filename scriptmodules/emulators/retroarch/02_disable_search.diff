@@ -1,4 +1,4 @@
-diff --git a/menu/widgets/menu_entry.c b/menu/widgets/menu_entry.c
+diff --git a/menu/menu_entry.c b/menu/menu_entry.c
 index 0d42ff79d7..b8ec6e14c6 100644
 --- a/menu/menu_entries.c
 +++ b/menu/menu_entries.c
