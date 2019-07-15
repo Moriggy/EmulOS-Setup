@@ -10,7 +10,7 @@
 #
 
 rp_module_id="wifi"
-rp_module_desc="Configure Wifi"
+rp_module_desc="Configurar Wifi"
 rp_module_section="config"
 rp_module_flags="!x11"
 
@@ -29,7 +29,7 @@ function _set_interface_wifi() {
 }
 
 function remove_wifi() {
-    sed -i '/MASOS CONFIG START/,/MASOS CONFIG END/d' "/etc/wpa_supplicant/wpa_supplicant.conf"
+    sed -i '/EMULOS CONFIG START/,/MASOS CONFIG END/d' "/etc/wpa_supplicant/wpa_supplicant.conf"
     _set_interface_wifi down 2>/dev/null
 }
 
@@ -68,16 +68,16 @@ function connect_wifi() {
     done < <(list_wifi)
     options+=("H" "Hidden ESSID")
 
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Elija la red a la que desea conectarse" 22 76 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige la red a la que deseas conectarte" 22 76 16)
     choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
 
     local hidden=0
     if [[ "$choice" == "H" ]]; then
-        cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor ingresa el ESSID" 10 60)
+        cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor introduce el ESSID" 10 60)
         essid=$("${cmd[@]}" 2>&1 >/dev/tty)
         [[ -z "$essid" ]] && return
-        cmd=(dialog --backtitle "$__backtitle" --nocancel --menu "Por favor, elija el tipo de WiFi" 12 40 6)
+        cmd=(dialog --backtitle "$__backtitle" --nocancel --menu "Por favor, elige el tipo de WiFi" 12 40 6)
         options=(
             wpa "WPA/WPA2"
             wep "WEP"
@@ -92,7 +92,7 @@ function connect_wifi() {
 
     if [[ "$type" == "wpa" || "$type" == "wep" ]]; then
         local key=""
-        cmd=(dialog --backtitle "$__backtitle" --insecure --passwordbox "Por favor, introduzca la clave/contraseña WiFi para $essid" 10 63)
+        cmd=(dialog --backtitle "$__backtitle" --insecure --passwordbox "Por favor, introduce la clave/contraseña WiFi para $essid" 10 63)
         local key_ok=0
         while [[ $key_ok -eq 0 ]]; do
             key=$("${cmd[@]}" 2>&1 >/dev/tty) || return
@@ -102,7 +102,7 @@ function connect_wifi() {
                 key_ok=0
             fi
             if [[ -z "$key" && $type == "wep" ]]; then
-                printMsgs "dialog" "La contraseña no puede estar vacia"
+                printMsgs "dialog" "La contraseña no puede estar vacía"
                 key_ok=0
             fi
         done

@@ -429,51 +429,51 @@ function main_menu() {
             local emu_sys="$(default_emulator get emu_sys)"
             local emu_rom="$(default_emulator get emu_rom)"
             options+=(
-                1 "Select default emulator for $SYSTEM ($emu_sys)"
-                2 "Select emulator for ROM ($emu_rom)"
+                1 "Selecciona el emulador predeterminado para $SYSTEM ($emu_sys)"
+                2 "Selecciona emulador para la ROM ($emu_rom)"
             )
-            [[ -n "$emu_rom" ]] && options+=(3 "Remove emulator choice for ROM")
+            [[ -n "$emu_rom" ]] && options+=(3 "Eliminar la opción del emulador para la ROM")
         fi
 
         if [[ "$HAS_TVS" -eq 1 ]]; then
             local vid_emu="$(default_mode get vid_emu)"
             local vid_rom="$(default_mode get vid_rom)"
             options+=(
-                4 "Select default video mode for $EMULATOR ($vid_emu)"
-                5 "Select video mode for $EMULATOR + rom ($vid_rom)"
+                4 "Selecciona el modo de video predeterminado para $EMULATOR ($vid_emu)"
+                5 "Selecciona el modo de video para $EMULATOR + rom ($vid_rom)"
             )
-            [[ -n "$vid_emu" ]] && options+=(6 "Remove video mode choice for $EMULATOR")
-            [[ -n "$vid_rom" ]] && options+=(7 "Remove video mode choice for $EMULATOR + ROM")
+            [[ -n "$vid_emu" ]] && options+=(6 "Eliminar la opción de modo de video para $EMULATOR")
+            [[ -n "$vid_rom" ]] && options+=(7 "Eliminar la opción de modo de video para $EMULATOR + ROM")
         fi
 
         if [[ "$EMULATOR" == lr-* ]]; then
             options+=(
-                8 "Select RetroArch render res for $EMULATOR ($RENDER_RES)"
-                9 "Edit custom RetroArch config for this ROM"
+                8 "Selecciona RetroArch render res para $EMULATOR ($RENDER_RES)"
+                9 "Editar la configuración de RetroArch personalizada para esta ROM"
             )
         elif [[ -z "$DISPLAY" ]]; then
             local fb_emu="$(default_mode get fb_emu)"
             local fb_rom="$(default_mode get fb_rom)"
             options+=(
-                10 "Select framebuffer res for $EMULATOR ($fb_emu)"
-                11 "Select framebuffer res for $EMULATOR + ROM ($fb_rom)"
+                10 "Selecciona framebuffer res para $EMULATOR ($fb_emu)"
+                11 "Selecciona framebuffer res para $EMULATOR + ROM ($fb_rom)"
             )
-            [[ -n "$fb_emu" ]] && options+=(12 "Remove framebuffer res choice for $EMULATOR")
-            [[ -n "$fb_rom" ]] && options+=(13 "Remove framebuffer res choice for $EMULATOR + ROM")
+            [[ -n "$fb_emu" ]] && options+=(12 "Eliminar elección de framebuffer res para $EMULATOR")
+            [[ -n "$fb_rom" ]] && options+=(13 "Eliminar elección de framebuffer res para $EMULATOR + ROM")
         fi
 
         options+=(X "Launch")
 
         if [[ "$EMULATOR" == lr-* ]]; then
-            options+=(L "Launch with verbose logging")
-            options+=(Z "Launch with netplay enabled")
+            options+=(L "Iniciar con el registro detallado")
+            options+=(Z "Lanzar con netplay habilitado")
         fi
 
         if [[ "$user_menu" -eq 1 ]]; then
-            options+=(U "User Menu")
+            options+=(U "Menú del Usuario")
         fi
 
-        options+=(Q "Exit (without launching)")
+        options+=(Q "Salir (sin lanzar)")
 
         local temp_mode
         if [[ "$HAS_TVS" -eq 1 ]]; then
@@ -481,7 +481,7 @@ function main_menu() {
         else
             temp_mode="n/a"
         fi
-        cmd=(dialog --nocancel --menu "System: $SYSTEM\nEmulator: $EMULATOR\nVideo Mode: $temp_mode\nROM: $ROM_BN"  22 76 16 )
+        cmd=(dialog --nocancel --menu "Sistema: $SYSTEM\nEmulador: $EMULATOR\nVideo Mode: $temp_mode\nROM: $ROM_BN"  22 76 16 )
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         case "$choice" in
             1)
@@ -568,7 +568,7 @@ function choose_mode() {
     for key in "${MODE_ID[@]}"; do
         options+=("$key" "${MODE[$key]}")
     done
-    local cmd=(dialog --default-item "$default" --menu "Choose video output mode"  22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Elige el modo de salida de video"  22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
 
@@ -599,11 +599,11 @@ function choose_emulator() {
         ((i++))
     done < <(sort "$EMU_SYS_CONF")
     if [[ -z "${options[*]}" ]]; then
-        dialog --msgbox "No emulator options found for $SYSTEM - Do you have a valid $EMU_SYS_CONF ?" 20 60 >/dev/tty
+        dialog --msgbox "No se han encontrado opciones de emulador para $SYSTEM - Tienes un valido $EMU_SYS_CONF ?" 20 60 >/dev/tty
         stop_joy2key
         exit 1
     fi
-    local cmd=(dialog $cancel --default-item "$default_id" --menu "Choose default emulator"  22 76 16 )
+    local cmd=(dialog $cancel --default-item "$default_id" --menu "Elige el emulador por defecto"  22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
 
@@ -651,12 +651,12 @@ function choose_render_res() {
         ((i++))
     done
     options+=(
-        O "Use video output resolution"
-        C "Use config file resolution"
+        O "Usa resolución de salida de video"
+        C "Usa la resolución del archivo de configuración"
     )
     [[ "$default" == "output" ]] && default="O"
     [[ "$default" == "config" ]] && default="C"
-    local cmd=(dialog --default-item "$default" --menu "Choose RetroArch render resolution" 22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Elige la resolución de render RetroArch" 22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
     case "$choice" in
@@ -687,7 +687,7 @@ function choose_fb_res() {
         options+=($i "$item")
         ((i++))
     done
-    local cmd=(dialog --default-item "$default" --menu "Choose framebuffer resolution (Useful for X and console apps)" 22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Elija la resolución de framebuffer (útil para X y aplicaciones de consola)" 22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
     choice="${res[$choice-1]}"
@@ -712,7 +712,7 @@ function user_menu() {
     local choice
     local ret
     while true; do
-        cmd=(dialog --default-item "$default" --cancel-label "Back" --menu "Choose option"  22 76 16)
+        cmd=(dialog --default-item "$default" --cancel-label "Back" --menu "Elegir opción"  22 76 16)
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && return 0
         default="$choice"
@@ -851,7 +851,7 @@ function restore_governor() {
 
 function get_sys_command() {
     if [[ ! -f "$EMU_SYS_CONF" ]]; then
-        echo "No config found for system $SYSTEM"
+        echo "No se encontraron configuraciones para el sistema $SYSTEM"
         stop_joy2key
         exit 1
     fi
@@ -859,7 +859,7 @@ function get_sys_command() {
     # get system & rom specific emulator if set
     local emulator="$(default_emulator get emu_sys)"
     if [[ -z "$emulator" ]]; then
-        echo "No default emulator found for system $SYSTEM"
+        echo "No se ha encontrado un emulador predeterminado para el sistema $SYSTEM"
         start_joy2key
         choose_emulator "emu_sys" "" "--nocancel"
         stop_joy2key
@@ -957,7 +957,7 @@ function show_launch() {
         else
             launch_name="$EMULATOR"
         fi
-        DIALOGRC="$CONFIGDIR/all/runcommand-launch-dialog.cfg" dialog --infobox "\nLaunching $launch_name ...\n\nPress a button to configure\n\nErrors are logged to $LOG" 9 60
+        DIALOGRC="$CONFIGDIR/all/runcommand-launch-dialog.cfg" dialog --infobox "\nLanzando $launch_name ...\n\nPresiona el botón A para configurar\n\nLos errores se registran en $LOG" 9 60
     fi
 }
 

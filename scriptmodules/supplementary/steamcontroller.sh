@@ -43,7 +43,7 @@ function enable_steamcontroller() {
 
     disable_steamcontroller
     sed -i "s|^exit 0$|${config}\\nexit 0|" /etc/rc.local
-    printMsgs "dialog" "$md_id enabled in /etc/rc.local with the following config\n\n$config\n\nIt will be started on next boot."
+    printMsgs "dialog" "$md_id habilitado en /etc/rc.local con la siguiente configuración\n\n $config\n\nSe iniciará en el próximo arranque."
 }
 
 function disable_steamcontroller() {
@@ -66,11 +66,11 @@ _EOF_
 }
 
 function gui_steamcontroller() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
     local options=(
-        1 "Enable steamcontroller (xbox 360 mode)"
-        2 "Enable steamcontroller (desktop mouse/keyboard mode)"
-        3 "Disable steamcontroller"
+        1 "Habilitar steamcontroller (modo xbox 360)"
+        2 "Activar steamcontroller (modo de mouse/teclado de escritorio)"
+        3 "Desactivar el controlador steamcontroller"
     )
     while true; do
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -84,7 +84,7 @@ function gui_steamcontroller() {
                     ;;
                 3)
                     disable_steamcontroller
-                    printMsgs "dialog" "steamcontroller removed from /etc/rc.local"
+                    printMsgs "dialog" "steamcontroller eliminado de /etc/rc.local"
                     ;;
             esac
         else

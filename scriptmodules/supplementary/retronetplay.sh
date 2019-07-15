@@ -23,7 +23,7 @@ __netplayhostip_cfile="$__netplayhostip_cfile"
 __netplaynickname="'$__netplaynickname'"
 _EOF_
     chown $user:$user "$conf"
-    printMsgs "dialog" "Configuration has been saved to $conf"
+    printMsgs "dialog" "La configuración se ha guardado en $conf"
 }
 
 function rps_retronet_loadconfig() {
@@ -35,14 +35,14 @@ function rps_retronet_loadconfig() {
         __netplayport="55435"
         __netplayhostip="192.168.0.1"
         __netplayhostip_cfile=""
-        __netplaynickname="MasOS_user"
+        __netplaynickname="EmulOS_user"
     fi
 }
 
 function rps_retronet_mode() {
-    cmd=(dialog --backtitle "$__backtitle" --menu "Please set the netplay mode." 22 76 16)
-    options=(1 "Set as HOST"
-             2 "Set as CLIENT" )
+    cmd=(dialog --backtitle "$__backtitle" --menu "Por favor, establece el modo netplay." 22 76 16)
+    options=(1 "Establecer como HOST"
+             2 "Establecer como CLIENTE" )
     choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         case "$choice" in
@@ -57,7 +57,7 @@ function rps_retronet_mode() {
 }
 
 function rps_retronet_port() {
-    cmd=(dialog --backtitle "$__backtitle" --inputbox "Please enter the port to be used for netplay (default: 55435)." 22 76 $__netplayport)
+    cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor introduce el puerto que se utilizará para netplay (por defecto: 55435)." 22 76 $__netplayport)
     choice=$("${cmd[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         __netplayport="$choice"
@@ -65,7 +65,7 @@ function rps_retronet_port() {
 }
 
 function rps_retronet_hostip() {
-    cmd=(dialog --backtitle "$__backtitle" --inputbox "Please enter the IP address of the host." 22 76 $__netplayhostip)
+    cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor, introduce la dirección IP del host." 22 76 $__netplayhostip)
     choice=$("${cmd[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         __netplayhostip="$choice"
@@ -78,7 +78,7 @@ function rps_retronet_hostip() {
 }
 
 function rps_retronet_nickname() {
-    cmd=(dialog --backtitle "$__backtitle" --inputbox "Please enter the nickname you wish to use (default: RetroPie)" 22 76 $__netplaynickname)
+    cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor ingrese el apodo que desea usar (por defecto: EmulOS_user)" 22 76 $__netplaynickname)
     choice=$("${cmd[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         __netplaynickname="$choice"
@@ -92,13 +92,13 @@ function gui_retronetplay() {
     local ip_ext=$(wget -O- -q http://ipecho.net/plain)
 
     while true; do
-        cmd=(dialog --backtitle "$__backtitle" --menu "Configure RetroArch Netplay.\nInternal IP: $ip_int External IP: $ip_ext" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --menu "Configura RetroArch Netplay.\nIP interna: $ip_int IP externa: $ip_ext" 22 76 16)
         options=(
-            1 "Set mode, (H)ost or (C)lient. Currently: $__netplaymode"
-            2 "Set port. Currently: $__netplayport"
-            3 "Set host IP address (for client mode). Currently: $__netplayhostip"
-            4 "Set netplay nickname. Currently: $__netplaynickname"
-            5 "Save configuration"
+            1 "Ajuste el modo, (H)ost o (C)liente. Actualmente: $__netplaymode"
+            2 "Establecer puerto. Actualmente: $__netplayport"
+            3 "Establecer la dirección IP del host (para el modo cliente). Actualmente: $__netplayhostip"
+            4 "Establecer el apodo de netplay. Actualmente: $__netplaynickname"
+            5 "Guardar configuración"
         )
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then

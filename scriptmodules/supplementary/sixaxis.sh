@@ -10,7 +10,7 @@
 #
 
 rp_module_id="sixaxis"
-rp_module_desc="Helper service to install & configure the latest drivers for official and third-party DualShock controllers (ps3controller replacement)\n\nNote: For Shanwan/GASIA third-party controllers, enable third-party support in the configuration options.\n\nTo pair controllers, use the RetroPie Bluetooth menu, choose 'Register and Connect...', then follow the on-screen instructions."
+rp_module_desc="Servicio auxiliar para instalar y configurar los controladores más recientes para los controladores DualShock oficiales y de terceros (reemplazo del controlador ps3)\n\nNota: Para los controladores de terceros de Shanwan/GASIA, habilite el soporte de terceros en las opciones de configuración.\n\nPara emparejar mandos, use el menú EmulOS Bluetooth, seleccione 'Registrar y conectar ...', luego siga las instrucciones en pantalla."
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/sixaxis/master/COPYING"
 rp_module_section="driver"
 
@@ -33,19 +33,19 @@ function build_sixaxis() {
 
 function gui_sixaxis() {
     local sixaxis_config="$md_conf_root/all/sixaxis_timeout.cfg"
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
     local options=(
-        1 "Enable support for third-party controllers"
-        2 "Disable support for third-party controllers"
-        3 "Configure controller timeout"
+        1 "Habilitar soporte para controladores de terceros"
+        2 "Deshabilitar el soporte para controladores de terceros"
+        3 "Configurar el tiempo de espera del controlador"
     )
     local timeout_options=(
-        0 "No timeout"
-        300 "5 minutes"
-        600 "10 minutes"
-        900 "15 minutes"
-        1200 "20 minutes"
-        1800 "30 minutes"
+        0 "Sin tiempo de espera"
+        300 "5 minutos"
+        600 "10 minutos"
+        900 "15 minutos"
+        1200 "20 minutos"
+        1800 "30 minutos"
     )
     while true; do
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -86,7 +86,7 @@ function configure_sixaxis() {
 
     local sixaxis_config="$(mktemp)"
 
-    echo "# Set your preferred controller timeout in seconds (0 to disable)" >"$sixaxis_config"
+    echo "# Establezca el tiempo de espera de su mando preferido en segundos (0 para deshabilitar)" >"$sixaxis_config"
     iniConfig "=" "" "$sixaxis_config"
     iniSet "SIXAXIS_TIMEOUT" "600"
     copyDefaultConfig "$sixaxis_config" "$md_conf_root/all/sixaxis_timeout.cfg"

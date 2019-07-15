@@ -48,23 +48,23 @@ function remove_xarcade2jstick() {
 function gui_xarcade2jstick() {
     local status
     local options=(
-        1 "Enable Xarcade2Jstick service."
-        2 "Disable Xarcade2Jstick service."
+        1 "Habilitar el servicio Xarcade2Jstick."
+        2 "Desactivar el servicio de Xarcade2Jstick."
     )
     while true; do
         status="Disabled"
         [[ -f /lib/systemd/system/xarcade2jstick.service ]] && status="Enabled"
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Service is currently: $status" 22 86 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "El servicio es actualmente: $status" 22 86 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         case "$choice" in
             1)
                 enable_xarcade2jstick
-                printMsgs "dialog" "Enabled Xarcade2Jstick."
+                printMsgs "dialog" "Xarcade2Jstick habilitado."
                 ;;
             2)
                 disable_xarcade2jstick
-                printMsgs "dialog" "Disabled Xarcade2Jstick service."
+                printMsgs "dialog" "Desactivado el servicio de Xarcade2Jstick."
                 ;;
         esac
     done

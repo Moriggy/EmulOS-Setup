@@ -124,7 +124,7 @@ function gui_runcommand() {
                 iniSet "disable_joystick" "$((disable_joystick ^ 1))"
                 ;;
             4)
-                cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor ingresa el retraso en segundos" 10 60 "$image_delay")
+                cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor introduce el retraso en segundos" 10 60 "$image_delay")
                 choice=$("${cmd[@]}" 2>&1 >/dev/tty)
                 iniSet "image_delay" "$choice"
                 ;;

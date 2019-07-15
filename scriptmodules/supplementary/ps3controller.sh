@@ -10,7 +10,7 @@
 #
 
 rp_module_id="ps3controller"
-rp_module_desc="PS3 controller driver and pair via sixad"
+rp_module_desc="PS3 controller drivery emparejamiento via sixad"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/sixad/master/COPYING"
 rp_module_section="driver"
 
@@ -73,7 +73,7 @@ function pair_ps3controller() {
         return
     fi
 
-    printMsgs "dialog" "Please connect your PS3 controller now or anytime to its USB connection, to setup Bluetooth connection. \n\nAfterwards disconnect your PS3 controller from its USB connection, and press the PS button to connect via Bluetooth."
+    printMsgs "dialog" "Conecte su mando PS3 ahora o en cualquier momento a su conexión USB, para configurar la conexión Bluetooth.\n\nDespués desconecte su mando PS3 de su conexión USB y presiona el botón PS para conectarse a través de Bluetooth."
     # enable old behaviour. run "sixad-helper sixpair" "now" for users who do not read info text
     sixad-helper sixpair
 }
@@ -85,8 +85,8 @@ function gui_ps3controller() {
     drivers["gasia-only"]="gasia only"
     drivers["shanwan"]="clone support shanwan"
 
-    printMsgs "dialog" "WARNING: The ps3controller driver partially disables the standard Bluetooth stack so that Dual Shock controllers can pair correctly. Although the Bluetooth stack is temporarily re-enabled inside Retropie's Bluetooth menu to allow compatibility with standard Bluetooth peripherals, any other software that relies on the full Bluetooth stack will not work correctly while the ps3controller driver is active."
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
+    printMsgs "dialog" "ADVERTENCIA: el controlador del mando ps3 desactiva parcialmente la pila estándar de Bluetooth para que los controladores Dual Shock se puedan emparejar correctamente. Aunque la pila de Bluetooth se reactiva temporalmente dentro del menú Bluetooth de EmulOS para permitir la compatibilidad con periféricos Bluetooth estándar, cualquier otro software que se base en la pila de Bluetooth completa no funcionará correctamente mientras el controlador del mando ps3 esté activo."
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción:" 22 76 16)
     while true; do
         local i=1
         local options=()
@@ -95,14 +95,14 @@ function gui_ps3controller() {
         for id in ps3 gasia gasia-only shanwan; do
             installed=""
             if [[ -f "$md_inst/type.txt" && "$(<"$md_inst/type.txt")" == "$id" ]]; then
-                options+=("$i" "Pair PS3 controller (${drivers[$id]})")
+                options+=("$i" "Emparejar mando PS3 (${drivers[$id]})")
             else
-                options+=("$i" "Install PS3 driver (${drivers[$id]})")
+                options+=("$i" "Instalar driver PS3 (${drivers[$id]})")
             fi
             ((i++))
         done
         options+=(
-            5 "Remove PS3 controller configurations"
+            5 "Eliminar configuración mando PS3"
         )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
