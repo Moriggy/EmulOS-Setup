@@ -54,6 +54,8 @@ function configure_lr-fbneo() {
         mkRomDir "$dir"
         ensureSystemretroconfig "$dir"
     done
+    mkRomDir "neogeocd"
+    ensureSystemretroconfig "neogeocd"
 
     # Create samples directory
     mkUserDir "$biosdir/fbneo"
@@ -72,7 +74,7 @@ function configure_lr-fbneo() {
     addEmulator 0 "$md_id-neocd" "arcade" "$md_inst/fbneo_libretro.so --subsystem neocd"
     addEmulator $def "$md_id" "neogeo" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "neogeo" "$md_inst/fbneo_libretro.so --subsystem neocd"
-    addEmulator 1 "$md_id" "neogeocd" "$md_inst/fbneo_libretro.so"
+    addEmulator $def "$md_id" "neogeocd" "$md_inst/fbneo_libretro.so"
     addEmulator $def "$md_id" "fba" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "fba" "$md_inst/fbneo_libretro.so --subsystem neocd"
 
