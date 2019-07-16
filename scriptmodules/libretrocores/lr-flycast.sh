@@ -47,11 +47,11 @@ function install_lr-flycast() {
 
 function configure_lr-flycast() {
     mkRomDir "dreamcast"
-	mkRomDir "naomi"
-	mkRomDir "atomiswave"
+    mkRomDir "naomi"
+    mkRomDir "atomiswave"
     ensureSystemretroconfig "dreamcast"
-	ensureSystemretroconfig "naomi"
-	ensureSystemretroconfig "atomiswave"
+    ensureSystemretroconfig "naomi"
+    ensureSystemretroconfig "atomiswave"
 
     mkUserDir "$biosdir/dc"
 
@@ -62,8 +62,8 @@ function configure_lr-flycast() {
     # segfaults on the rpi without redirecting stdin from </dev/null
     addEmulator 1 "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "dreamcast"
-	addEmulator 1 "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
-	addSystem "naomi"
-	addEmulator 1 "$md_id" "atomiswave" "$md_inst/flycast_libretro.so </dev/null"
-	addSystem "atomiswave"
+    addEmulator 1 "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
+    addSystem "naomi"
+    addEmulator 1 "$md_id" "atomiswave" "$md_inst/flycast_libretro.so </dev/null"
+    addSystem "atomiswave"
 }
