@@ -88,6 +88,7 @@ function configure_lr-fbneo() {
 
     addSystem "arcade"
     addSystem "neogeo"
+    addSystem "neogeocd"
     addSystem "fba"
     
     addSystem "pcengine"
