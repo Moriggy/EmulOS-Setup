@@ -10,7 +10,7 @@
 #
 
 rp_module_id="audiosettings"
-rp_module_desc="Configure audio settings"
+rp_module_desc="Configuración opciones de audio"
 rp_module_section="config"
 rp_module_flags="!x86 !mali"
 
@@ -21,7 +21,7 @@ function depends_audiosettings() {
 }
 
 function gui_audiosettings() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Set audio output." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Establecer salida de audio." 22 86 16)
     local options=(
         1 "Auto"
         2 "Auriculares - 3.5mm jack"

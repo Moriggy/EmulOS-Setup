@@ -10,7 +10,7 @@
 #
 
 rp_module_id="skyscraper"
-rp_module_desc="Scraper for EmulationStation by Lars Muldjord, ADAPTADO PARA MASOS X MASOS TEAM"
+rp_module_desc="Scraper for EmulationStation by Lars Muldjord, ADAPTADO PARA EMULOS POR MASOS TEAM"
 rp_module_licence="GPLv3.0 https://raw.githubusercontent.com/muldjord/skyscraper/master/LICENSE"
 rp_module_section="exp"
 
@@ -512,7 +512,7 @@ function gui_skyscraper() {
         # Show different options, depending on the previous check action
         if [[ -n "$latest_ver" ]] && compareVersions "$latest_ver" gt "$ver" ; then
             options+=(U "Update to $latest_ver")
-        else 
+        else
             options+=(U "Check for Updates")
         fi
 
@@ -609,7 +609,7 @@ function gui_skyscraper() {
                     # Update to lastest release or check for update
                     if [[ -n "$latest_ver" ]] && compareVersions "$latest_ver" gt "$ver" ; then
                         rp_callModule "$md_id"
-                    else 
+                    else
                         latest_ver=$(_latest_ver_skyscraper)
                         printMsgs "dialog" "Skyscraper latest released version is $latest_ver"
                     fi

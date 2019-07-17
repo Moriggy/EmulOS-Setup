@@ -308,13 +308,13 @@ function gui_emulationstation() {
     local options
     while true; do
         local options=(
-            1 "Borrar/restablecer la configuracion de mandos de EmulationStation"
+            1 "Borrar/restablecer la configuración de mandos de EmulationStation"
         )
 
         if [[ "$disable" -eq 0 ]]; then
-            options+=(2 "Configuracion automatica (Actualmente: Habilitada)")
+            options+=(2 "Configuración automática (Actualmente: Habilitada)")
         else
-            options+=(2 "Configuracion automatica (Actualmente: Deshabilitada)")
+            options+=(2 "Configuración automática (Actualmente: Deshabilitada)")
         fi
 
         if [[ "$es_swap" -eq 1 ]]; then
@@ -323,7 +323,7 @@ function gui_emulationstation() {
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
         fi
 
-        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Escoge una opcion" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Escoge una opción:" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         default="$choice"
@@ -332,6 +332,7 @@ function gui_emulationstation() {
             1)
                 if dialog --defaultno --yesno "¿Seguro que quieres restablecer la configuración de mandos de EmulationStation? Esto borrara todas las configuraciones de mandos para ES y le pedira que lo configure en el siguiente inicio" 22 76 2>&1 >/dev/tty; then
                     clear_input_emulationstation
+                    sudo rm -R /opt/emulos/configs/all/retroarch/autoconfig/*
                     printMsgs "dialog" "$(_get_input_cfg_emulationstation) ha sido restablecido a los valores predeterminados."
                 fi
                 ;;

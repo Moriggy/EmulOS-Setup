@@ -10,7 +10,7 @@
 #
 
 rp_module_id="ps3controller"
-rp_module_desc="PS3 controller drivery emparejamiento via sixad"
+rp_module_desc="Driver mando PS3y emparejamiento via sixad"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/sixad/master/COPYING"
 rp_module_section="driver"
 

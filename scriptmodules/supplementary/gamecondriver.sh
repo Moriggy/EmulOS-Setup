@@ -154,7 +154,7 @@ function gui_gamecondriver() {
         3 "Leer la documentacion del driver Db9 GPIO"
     )
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Choose an option." 22 86 16)
+        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Elige una opción." 22 86 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         default="$choice"
         if [[ -n "$choice" ]]; then

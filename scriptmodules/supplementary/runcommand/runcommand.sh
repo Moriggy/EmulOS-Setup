@@ -462,7 +462,7 @@ function main_menu() {
             [[ -n "$fb_rom" ]] && options+=(13 "Eliminar elección de framebuffer res para $EMULATOR + ROM")
         fi
 
-        options+=(X "Launch")
+        options+=(X "Lanzar")
 
         if [[ "$EMULATOR" == lr-* ]]; then
             options+=(L "Iniciar con el registro detallado")

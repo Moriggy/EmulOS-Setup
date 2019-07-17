@@ -57,13 +57,13 @@ function enable_modules_raspbiantools() {
 
 function gui_raspbiantools() {
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 76 16)
         local options=(
-            1 "Upgrade Raspbian packages"
-            2 "Install Pixel desktop environment"
-            3 "Remove some unneeded packages (pulseaudio / cups / wolfram)"
-            4 "Disable screen blanker"
-            5 "Enable needed kernel module uinput"
+            1 "Actualizar paquetes de Raspbian"
+            2 "Instalar escritorio Pixel"
+            3 "Eliminar algunos paquetes innecesarios (pulseaudio / cups / wolfram)"
+            4 "Desactivar pantalla blanca"
+            5 "Habilitar el módulo de kernel necesario uinput"
         )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
@@ -72,9 +72,9 @@ function gui_raspbiantools() {
                     rp_callModule "$md_id" apt_upgrade
                     ;;
                 2)
-                    dialog --defaultno --yesno "Are you sure you want to install the Pixel desktop?" 22 76 2>&1 >/dev/tty || continue
+                    dialog --defaultno --yesno "Estás seguro de que quieres instalar el escritorio Pixel?" 22 76 2>&1 >/dev/tty || continue
                     rp_callModule "$md_id" lxde
-                    printMsgs "dialog" "Pixel desktop/LXDE is installed."
+                    printMsgs "dialog" "Instalado escritorio Pixel/LXDE."
                     ;;
                 3)
                     rp_callModule "$md_id" package_cleanup

@@ -107,15 +107,15 @@ function remove_autostart() {
 }
 
 function gui_autostart() {
-    cmd=(dialog --backtitle "$__backtitle" --menu "Elije el tipo de arranque deseado." 22 76 16)
+    cmd=(dialog --backtitle "$__backtitle" --menu "Elige el tipo de arranque deseado." 22 76 16)
     while true; do
         if isPlatform "x11"; then
             local x11_autostart
             if [[ -f "$home/.config/autostart/emulos.desktop" ]]; then
-                options=(1 "Autostart EmulationStation despues del inicio de sesion (Habilitado)")
+                options=(1 "Autostart EmulationStation después del inicio de sesión (Habilitado)")
                 x11_autostart=1
             else
-                options=(1 "Autostart EmulationStation despues del inicio de sesion (Deshabilitado)")
+                options=(1 "Autostart EmulationStation después del inicio de sesión (Deshabilitado)")
                 x11_autostart=0
             fi
         else
@@ -127,7 +127,7 @@ function gui_autostart() {
             if [[ "$__os_id" == "Raspbian" ]]; then
                 options+=(
                     CL "Iniciar en la consola de texto (requiere inicio de sesión)"
-                    CA "Iniciar en la consola de texto (inicio de sesion automatico como $user)"
+                    CA "Iniciar en la consola de texto (inicio de sesion automático como $user)"
                 )
             fi
             options+=(DL "Iniciar en el escritorio (requiere inicio de sesión)")
@@ -142,20 +142,20 @@ function gui_autostart() {
                     if isPlatform "x11"; then
                         if [[ "$x11_autostart" -eq 0 ]]; then
                             enable_autostart
-                            printMsgs "dialog" "EmulationStation esta configurado para iniciarse automaticamente despues de iniciar sesion."
+                            printMsgs "dialog" "EmulationStation está configurado para iniciarse automáticamente después de iniciar sesión."
                         else
                             disable_autostart
-                            printMsgs "dialog" "El inicio automatico de EmulationStation esta desactivado."
+                            printMsgs "dialog" "El inicio automático de EmulationStation está desactivado."
                         fi
                         x11_autostart=$((x11_autostart ^ 1))
                     else
                         enable_autostart
-                        printMsgs "dialog" "EmulationStation esta configurado para iniciarse en el arranque."
+                        printMsgs "dialog" "EmulationStation está configurado para iniciarse en el arranque."
                     fi
                     ;;
                 2)
                     enable_autostart kodi
-                    printMsgs "dialog" "Kodi esta listo para iniciarse en el arranque."
+                    printMsgs "dialog" "Kodi está listo para iniciarse en el arranque."
                     ;;
                 E)
                     editFile "$configdir/all/autostart.sh"
@@ -166,7 +166,7 @@ function gui_autostart() {
                     ;;
                 CA)
                     disable_autostart B2
-                    printMsgs "dialog" "Arrancando a la consola de texto (inicio de sesion automatico como $user)."
+                    printMsgs "dialog" "Arrancando a la consola de texto (inicio de sesión automático como $user)."
                     ;;
                 DL)
                     disable_autostart B3
@@ -174,7 +174,7 @@ function gui_autostart() {
                     ;;
                 DA)
                     disable_autostart B4
-                    printMsgs "dialog" "Arrancando al escritorio (inicio de sesion automatico como $user)."
+                    printMsgs "dialog" "Arrancando al escritorio (inicio de sesion automático como $user)."
                     ;;
             esac
         else

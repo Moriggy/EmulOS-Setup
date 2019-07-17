@@ -10,8 +10,8 @@
 #
 
 rp_module_id="amiberry"
-rp_module_desc="Amiga emulator with JIT support (forked from uae4arm)"
-rp_module_help="ROM Extension: .adf\n\nCopy your Amiga games to $romdir/amiga\n\nCopy the required BIOS files\nkick13.rom\nkick20.rom\nkick31.rom\nto $biosdir"
+rp_module_desc="Emulador de Amiga con soporte JIT (forked de uae4arm)"
+rp_module_help="ROM Extension: .adf\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS requeredias: files\nkick13.rom\nkick20.rom\nkick31.rom\nen $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/midwan/amiberry/master/COPYING"
 rp_module_section="opt"
 rp_module_flags="!x86"

@@ -29,7 +29,7 @@ function _set_interface_wifi() {
 }
 
 function remove_wifi() {
-    sed -i '/EMULOS CONFIG START/,/MASOS CONFIG END/d' "/etc/wpa_supplicant/wpa_supplicant.conf"
+    sed -i '/EMULOS CONFIG START/,/EMULOS CONFIG END/d' "/etc/wpa_supplicant/wpa_supplicant.conf"
     _set_interface_wifi down 2>/dev/null
 }
 
@@ -49,7 +49,7 @@ function list_wifi() {
 
 function connect_wifi() {
     if [[ ! -d "/sys/class/net/wlan0/" ]]; then
-        printMsgs "dialog" "No wlan0 interface detected"
+        printMsgs "dialog" "No se ha detectado interface wlan0"
         return 1
     fi
     local essids=()
@@ -66,7 +66,7 @@ function connect_wifi() {
         options+=("$i" "$essid")
         ((i++))
     done < <(list_wifi)
-    options+=("H" "Hidden ESSID")
+    options+=("H" "ESSID Oculta")
 
     local cmd=(dialog --backtitle "$__backtitle" --menu "Elige la red a la que deseas conectarte" 22 76 16)
     choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)

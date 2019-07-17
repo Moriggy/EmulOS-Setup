@@ -13,7 +13,7 @@ rp_module_id="powerblock"
 rp_module_desc="PowerBlock Driver"
 rp_module_section="driver"
 rp_module_flags="noinstclean"
-rp_module_help="Please note that you need to manually enable or disable the PowerBlock Service in the Configuration section. IMPORTANT: If the service is enabled and the power switch functionality is enabled (which is the default setting) in the config file, you need to have a switch connected to the PowerBlock."
+rp_module_help="Ten en cuenta que necesita habilitar o deshabilitar manualmente el servicio PowerBlock en la sección Configuración. IMPORTANTE: si el servicio está habilitado y la función del interruptor de encendido está habilitada (que es la configuración predeterminada) en el archivo de configuración, debe tener un interruptor conectado al PowerBlock."
 
 function depends_powerblock() {
     local depends=(cmake doxygen)
@@ -43,10 +43,10 @@ function install_powerblock() {
 }
 
 function gui_powerblock() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
     local options=(
-        1 "Enable PowerBlock driver"
-        2 "Disable PowerBlock driver"
+        1 "Activar el driver PowerBlock"
+        2 "Desactivar el driver PowerBlock"
 
     )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -54,11 +54,11 @@ function gui_powerblock() {
         case "$choice" in
             1)
                 make -C "$md_inst/build" installservice
-                printMsgs "dialog" "Enabled PowerBlock driver."
+                printMsgs "dialog" "Activado el driver PowerBlock ."
                 ;;
             2)
                 make -C "$md_inst/build" uninstallservice
-                printMsgs "dialog" "Disabled PowerBlock driver."
+                printMsgs "dialog" "Desactivado el driver PowerBlock."
                 ;;
         esac
     fi

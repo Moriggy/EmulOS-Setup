@@ -10,7 +10,7 @@
 #
 
 rp_module_id="configedit"
-rp_module_desc="Editar configuraciones MasOS / RetroArch"
+rp_module_desc="Editar configuraciones EmulOS / RetroArch"
 rp_module_section="config"
 
 function _video_fullscreen_configedit() {
@@ -51,13 +51,13 @@ function _video_fullscreen_configedit() {
                 ((i++))
             done
             options+=(
-                O "Resolucion de salida de video"
+                O "Resolución de salida de video"
                 C "Personalizado"
             )
-            [[ "$value" == "Resolucion de salida de video" ]] && default="O"
+            [[ "$value" == "Resolución de salida de video" ]] && default="O"
             [[ "$value" == "unset" ]] && default="U"
             [[ -z "$default" ]] && default="C"
-            local cmd=(dialog --default-item "$default" --menu "Elija la resolucion de render de RetroArch" 22 76 16 )
+            local cmd=(dialog --default-item "$default" --menu "Elige la resolución de render de RetroArch" 22 76 16 )
             local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
             [[ -z "$choice" ]] && return
             local res
@@ -69,7 +69,7 @@ function _video_fullscreen_configedit() {
                 iniSet "video_fullscreen_y" "0"
             else
                 if [[ "$choice" == "C" ]]; then
-                    cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor ingresa la resolucion de render como WIDTHxHEIGHT" 10 60)
+                    cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor introduce la resolución de render como WIDTHxHEIGHT" 10 60)
                     res=$("${cmd[@]}" 2>&1 >/dev/tty)
                     [[ -z "$res" || ! "$res" =~ ^[0-9]+x[0-9]+$ ]] && return
                 else
@@ -328,7 +328,7 @@ function choose_config_configedit() {
     local path="$1"
     local include="$2"
     local exclude="$3"
-    local cmd=(dialog --backtitle "$__backtitle" --menu "¿Que configuracion te gustaria editar?" 22 76 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "¿Qué configuración te gustaría editar?" 22 76 16)
     local configs=()
     local options=()
     local config
@@ -377,7 +377,7 @@ function basic_menu_configedit() {
 
 function advanced_menu_configedit() {
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Elija una opcion" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción" 22 76 16)
         local options=(
             1 "Configurar opciones de Libretro"
             2 "Editar manualmente las configuraciones de RetroArch."
@@ -420,10 +420,10 @@ function advanced_menu_configedit() {
 
 function gui_configedit() {
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Elija una opcion" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opcion" 22 76 16)
         local options=(
             1 "Configurar las opciones basicas del emulador libretro"
-            2 "Configuracion Avanzada"
+            2 "Configuración Avanzada"
         )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         local file="-"

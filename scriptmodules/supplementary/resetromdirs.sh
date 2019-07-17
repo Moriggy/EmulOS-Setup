@@ -10,11 +10,11 @@
 #
 
 rp_module_id="resetromdirs"
-rp_module_desc="Reset ownership/permissions of $romdir"
+rp_module_desc="Restablecer la propiedad/permisos de $romdir"
 rp_module_section="config"
 
 function gui_resetromdirs() {
-    printHeading "Resetting $romdir ownershop/permissions"
+    printHeading "Reestableciendo propiedad/permisos de $romdir"
     mkUserDir "$romdir"
     mkUserDir "$biosdir"
     chown -R $user:$user "$romdir"

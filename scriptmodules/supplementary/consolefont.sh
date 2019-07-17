@@ -10,7 +10,7 @@
 #
 
 rp_module_id="consolefont"
-rp_module_desc="Configurar el tamaño/tipo de fuente de la consola por defecto"
+rp_module_desc="Configurar el tamaño/tipo de la fuente de la consola por defecto"
 rp_module_section="config"
 rp_module_flags="!x11"
 
@@ -40,7 +40,7 @@ function gui_consolefont() {
     local options
     local choice
 
-    cmd=(dialog --backtitle "$__backtitle" --menu "Elija la configuración de fuente de consola deseada:\n(Configuracion actual: $(check_consolefont))" 22 86 16)
+    cmd=(dialog --backtitle "$__backtitle" --menu "Elige la configuración de fuente de consola deseada:\n(Configuración actual: $(check_consolefont))" 22 86 16)
     options=(
         1 "Grande (VGA 16x32)"
         2 "Grande (TerminusBold 16x32)"
@@ -76,9 +76,9 @@ function gui_consolefont() {
                 ;;
         esac
         if [[ "$choice" == "D" ]]; then
-            printMsgs "dialog" "Se usara la fuente predeterminada (provista por el Kernel).\n\nDeberas reiniciar para ver el cambio."
+            printMsgs "dialog" "Se usará la fuente predeterminada (provista por el Kernel).\n\nDeberás reiniciar para ver el cambio."
         else
-            printMsgs "dialog" "Nueva configuracion de fuente aplicada: $(check_consolefont)"
+            printMsgs "dialog" "Nueva configuración de fuente aplicada: $(check_consolefont)"
         fi
     fi
 }

@@ -11,7 +11,7 @@
 
 rp_module_id="ags"
 rp_module_desc="Adventure Game Studio - Adventure game engine"
-rp_module_help="ROM Extension: .exe\n\nCopy your Adventure Game Studio roms to $romdir/ags"
+rp_module_help="ROM Extension: .exe\n\nCopia tus roms deAdventure Game Studio en $romdir/ags"
 rp_module_licence="OTHER https://raw.githubusercontent.com/adventuregamestudio/ags/master/License.txt"
 rp_module_section="opt"
 rp_module_flags="!mali !kms"
