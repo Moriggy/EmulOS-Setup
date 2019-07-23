@@ -10,7 +10,7 @@
 #
 
 rp_module_id="lr-mess"
-rp_module_desc="MESS emulator - MESS Port for libretro"
+rp_module_desc="Emulador de MESS - MESS Port para libretro"
 rp_module_help="see wiki for detailed explanation"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/mame/master/LICENSE.md"
 rp_module_section="exp"

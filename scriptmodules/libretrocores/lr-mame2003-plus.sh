@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-mame2003-plus"
-rp_module_desc="Arcade emu - updated MAME 0.78 port for libretro with added game support"
-rp_module_help="ROM Extension: .zip\n\nCopy your MAME roms to either $romdir/mame-libretro or\n$romdir/arcade"
+rp_module_desc="Emulador Arcade - actualización MAME 0.78 (2003) port para libretro con soporte adicional para el juego"
+rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME 0.78 (2003) en $romdir/mame-libretro o\n$romdir/arcade"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/mame2003-plus-libretro/master/LICENSE.md"
 rp_module_section="main"
 

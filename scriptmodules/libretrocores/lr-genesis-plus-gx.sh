@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-genesis-plus-gx"
-rp_module_desc="Sega 8/16 bit emu - Genesis Plus (enhanced) port for libretro"
-rp_module_help="ROM Extensions: .bin .cue .gen .gg .iso .md .sg .smd .sms .zip\nCopy your Game Gear roms to $romdir/gamegear\nMasterSystem roms to $romdir/mastersystem\nMegadrive / Genesis roms to $romdir/megadrive\nSG-1000 roms to $romdir/sg-1000\nSegaCD roms to $romdir/segacd\nThe Sega CD requires the BIOS files bios_CD_U.bin and bios_CD_E.bin and bios_CD_J.bin copied to $biosdir"
+rp_module_desc="Emulador de Sega 8/16 bits - Genesis Plus (mejorado) port para libretro"
+rp_module_help="ROM Extensions: .bin .cue .gen .gg .iso .md .sg .smd .sms .zip\nCopia tus roms de Game Gear en $romdir/gamegear\nLas roms de MasterSystem en $romdir/mastersystem\nLas roms de Megadrive / Genesis en $romdir/megadrive\nLas roms de SG-1000 en $romdir/sg-1000\nLas roms de SegaCD en $romdir/segacd\nSega CD necesita las BIOS bios_CD_U.bin, bios_CD_E.bin y bios_CD_J.bin en $biosdir"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/Genesis-Plus-GX/master/LICENSE.txt"
 rp_module_section="main"
 

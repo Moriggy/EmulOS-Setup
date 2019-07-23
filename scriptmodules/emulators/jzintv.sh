@@ -10,8 +10,8 @@
 #
 
 rp_module_id="jzintv"
-rp_module_desc="Intellivision emulator"
-rp_module_help="ROM Extensions: .int .bin\n\nCopy your Intellivision roms to $romdir/intellivision\n\nCopy the required BIOS files exec.bin and grom.bin to $biosdir"
+rp_module_desc="Emulador de Intellivision"
+rp_module_help="ROM Extensions: .int .bin\n\nCopia tus roms de Intellivision en $romdir/intellivision\n\nCopia la BIOS exec.bin y grom.bin en $biosdir"
 rp_module_licence="GPL2 http://spatula-city.org/%7Eim14u2c/intv/"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali !kms"

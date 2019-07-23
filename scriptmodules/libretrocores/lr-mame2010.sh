@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-mame2010"
-rp_module_desc="Arcade emu - MAME 0.139 port for libretro"
-rp_module_help="ROM Extension: .zip\n\nCopy your MAME roms to either $romdir/mame-libretro or\n$romdir/arcade"
+rp_module_desc="Emulador Arcade - MAME 0.139 (2010) port para libretro"
+rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME 0.139 (2010) en $romdir/mame-libretro o\n$romdir/arcade"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/mame2010-libretro/master/docs/license.txt"
 rp_module_section="main"
 

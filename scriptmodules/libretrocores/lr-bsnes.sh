@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-bsnes"
-rp_module_desc="Super Nintendo emu - bsnes port for libretro"
-rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopy your SNES roms to $romdir/snes"
+rp_module_desc="Emulador de Super Nintendo - bsnes port para libretro"
+rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/bsnes-libretro/libretro/COPYING"
 rp_module_section="opt"
 rp_module_flags="!arm"

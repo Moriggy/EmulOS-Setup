@@ -11,7 +11,7 @@
 
 rp_module_id="scummvm"
 rp_module_desc="ScummVM"
-rp_module_help="Copy your ScummVM games to $romdir/scummvm"
+rp_module_help="Copia tus juegos de ScummVM en $romdir/scummvm"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/scummvm/scummvm/master/COPYING"
 rp_module_section="opt"
 rp_module_flags=""

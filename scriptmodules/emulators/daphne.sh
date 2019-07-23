@@ -10,8 +10,8 @@
 #
 
 rp_module_id="daphne"
-rp_module_desc="Daphne - Laserdisc Emulator"
-rp_module_help="ROM Extension: .daphne\n\nCopy your Daphne roms to $romdir/daphne"
+rp_module_desc="Emulador Daphne - Laserdisc"
+rp_module_help="ROM Extension: .daphne\n\nCopia tus roms de Daphne en $romdir/daphne"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/daphne-emu/master/COPYING"
 rp_module_section="opt"
 rp_module_flags="!x86 !mali !kms"

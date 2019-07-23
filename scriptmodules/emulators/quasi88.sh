@@ -10,8 +10,8 @@
 #
 
 rp_module_id="quasi88"
-rp_module_desc="NEC PC-8801 emulator"
-rp_module_help="ROM Extensions: .d88 .88d .cmt .t88\n\nCopy your pc88 games to to $romdir/pc88\n\nCopy bios files FONT.ROM, N88.ROM, N88KNJ1.ROM, N88KNJ2.ROM, and N88SUB.ROM to $biosdir/pc88"
+rp_module_desc="Emulador de NEC PC-8801"
+rp_module_help="ROM Extensions: .d88 .88d .cmt .t88\n\nCopia tus juegos de pc88 en $romdir/pc88\n\nCopia las BIOS FONT.ROM, N88.ROM, N88KNJ1.ROM, N88KNJ2.ROM, y N88SUB.ROM en $biosdir/pc88"
 rp_module_section="exp"
 rp_module_flags="dispmanx !mali !kms"
 

@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-yabause"
-rp_module_desc="Sega Saturn emu - Yabause (optimised) port for libretro"
-rp_module_help="ROM Extensions: .iso .bin .zip\n\nCopy your Sega Saturn roms to $romdir/saturn\n\nCopy the required BIOS file saturn_bios.bin to $biosdir"
+rp_module_desc="Emulador de Sega Saturn - Yabause (optimizado) port para libretro"
+rp_module_help="ROM Extensions: .iso .bin .zip\n\nCopia tus roms de Sega Saturn en $romdir/saturn\n\nCopia la BIOS saturn_bios.bin en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/yabause/master/yabause/COPYING"
 rp_module_section="exp"
 rp_module_flags="!armv6"

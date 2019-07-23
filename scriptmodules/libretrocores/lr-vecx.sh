@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-vecx"
-rp_module_desc="Vectrex emulator - vecx port for libretro"
-rp_module_help="ROM Extensions: .vec .gam .bin .zip\n\nCopy your Vectrex roms to $romdir/vectrex"
+rp_module_desc="Emulador de Vectrex - vecx port para libretro"
+rp_module_help="ROM Extensions: .vec .gam .bin .zip\n\nCopia tus roms de Vectrex en $romdir/vectrex"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/libretro-vecx/master/LICENSE.md"
 rp_module_section="main"
 

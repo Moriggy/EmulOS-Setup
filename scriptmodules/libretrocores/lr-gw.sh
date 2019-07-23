@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-gw"
-rp_module_desc="Game and Watch simulator"
-rp_module_help="ROM Extension: .mgw\n\nCopy your Game and Watch games to $romdir/gameandwatch"
+rp_module_desc="Simulador de Game and Watch"
+rp_module_help="ROM Extension: .mgw\n\nCopia tus juegos de Game and Watch en $romdir/gameandwatch"
 rp_module_licence="ZLIB https://raw.githubusercontent.com/libretro/gw-libretro/master/LICENSE"
 rp_module_section="opt"
 

@@ -10,8 +10,8 @@
 #
 
 rp_module_id="sdltrs"
-rp_module_desc="Radio Shack TRS-80 Model I/III/4/4P emulator"
-rp_module_help="ROM Extension: .dsk\n\nCopy your TRS-80 games to $romdir/trs-80\n\nCopy the required BIOS file level2.rom, level3.rom, level4.rom or level4p.rom to $biosdir"
+rp_module_desc="Emulador de Radio Shack TRS-80 Model I/III/4/4P"
+rp_module_help="ROM Extension: .dsk\n\nCopia tus juegos de TRS-80 en $romdir/trs-80\n\nCopia las BIOS level2.rom, level3.rom, level4.rom o level4p.rom en $biosdir"
 rp_module_section="exp"
 rp_module_flags="dispmanx !mali !kms"
 

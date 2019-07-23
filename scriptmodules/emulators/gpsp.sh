@@ -10,8 +10,8 @@
 #
 
 rp_module_id="gpsp"
-rp_module_desc="GameBoy Advance emulator"
-rp_module_help="ROM Extensions: .gba .zip\n\nCopy your Game Boy Advance roms to $romdir/gba\n\nCopy the required BIOS file gba_bios.bin to $biosdir"
+rp_module_desc="Emulador de GameBoy Advance"
+rp_module_help="ROM Extensions: .gba .zip\n\nCopia tus roms de Game Boy Advance en $romdir/gba\n\nCopia la BIOS gba_bios.bin requerida en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/gizmo98/gpsp/master/COPYING.DOC"
 rp_module_section="opt"
 rp_module_flags="noinstclean !x86 !mali !kms"
@@ -48,7 +48,7 @@ function configure_gpsp() {
 
     mkUserDir "$md_conf_root/gba"
 
-    # symlink the rom so so it can be installed with the other bios files
+    # symlink the rom so it can be installed with the other bios files
     ln -sf "$biosdir/gba_bios.bin" "$md_inst/gba_bios.bin"
 
     # move old config

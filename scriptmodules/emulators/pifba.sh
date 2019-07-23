@@ -10,8 +10,8 @@
 #
 
 rp_module_id="pifba"
-rp_module_desc="FBA emulator PiFBA"
-rp_module_help="ROM Extension: .zip\n\nCopy your FBA roms to\n$romdir/fba or\n$romdir/neogeo or\n$romdir/arcade\n\nFor NeoGeo games the neogeo.zip BIOS is required and must be placed in the same directory as your FBA roms."
+rp_module_desc="Emulador de FBA - PiFBA"
+rp_module_help="ROM Extension: .zip\n\nCopia tus roms de FBA en\n$romdir/fba o\n$romdir/neogeo o\n$romdir/arcade\n\nPara los juegos de NeoGeo la BIOS neogeo.zip es requerida y debe estar en el mismo directorio que tus roms de FBA."
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/pifba/master/FBAcapex_src/COPYING"
 rp_module_section="main"
 rp_module_flags="!x11 !mali !kms"

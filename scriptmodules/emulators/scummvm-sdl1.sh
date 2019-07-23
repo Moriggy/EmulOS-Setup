@@ -10,8 +10,8 @@
 #
 
 rp_module_id="scummvm-sdl1"
-rp_module_desc="ScummVM - built with legacy SDL1 support."
-rp_module_help="Copy your ScummVM games to $romdir/scummvm"
+rp_module_desc="ScummVM - construido con compatibilidad con SDL1 heredado."
+rp_module_help="Copia tus juegos de ScummVM en $romdir/scummvm"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/scummvm/scummvm/master/COPYING"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali !x11 !kms"

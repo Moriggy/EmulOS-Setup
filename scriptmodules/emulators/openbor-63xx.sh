@@ -11,7 +11,7 @@
 
 rp_module_id="openbor-6xxx"
 rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6510-dev (OFICIAL!!)"
-rp_module_help="Coloque sus archivos pak en $romdir/openbor y luego ejecutalos desde el sistema Openbor, los juegos comenzarán automáticamente."
+rp_module_help="Coloca tus juegos .pak en $romdir/openbor y luego ejecutalos desde el sistema Openbor, los juegos comenzarán automáticamente."
 rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags="!mali !x11 !kms"

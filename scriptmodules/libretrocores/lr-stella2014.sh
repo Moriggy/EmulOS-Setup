@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-stella2014"
-rp_module_desc="Atari 2600 emulator - Stella port for libretro"
-rp_module_help="ROM Extensions: .a26 .bin .rom .zip .gz\n\nCopy your Atari 2600 roms to $romdir/atari2600"
+rp_module_desc="Emulador de Atari 2600 - Stella port para libretro"
+rp_module_help="ROM Extensions: .a26 .bin .rom .zip .gz\n\nCopia tus roms de Atari 2600 en $romdir/atari2600"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/stella2014-libretro/master/stella/license.txt"
 rp_module_section="main"
 

@@ -10,8 +10,8 @@
 #
 
 rp_module_id="pcsx2"
-rp_module_desc="PS2 emulator PCSX2"
-rp_module_help="ROM Extensions: .bin .iso .img .mdf .z .z2 .bz2 .cso .ima .gz\n\nCopy your PS2 roms to $romdir/ps2"
+rp_module_desc="Emulador de PS2"
+rp_module_help="ROM Extensions: .bin .iso .img .mdf .z .z2 .bz2 .cso .ima .gz\n\nCopia tus roms de PS2 en $romdir/ps2"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/PCSX2/pcsx2/master/COPYING.GPLv3"
 rp_module_section="exp"
 rp_module_flags="!arm"
@@ -21,7 +21,7 @@ function depends_pcsx2() {
         iniConfig " = " '"' "$configdir/all/retropie.cfg"
         iniGet "own_sdl2"
         if [[ "$ini_value" != "0" ]]; then
-            if dialog --yesno "PCSX2 cannot be installed on a 64bit system with the RetroPie custom version of SDL2 installed due to version conflicts with the multiarch i386 version of SDL2.\n\nDo you want to downgrade to your OS version of SDL2 and continue to install PCSX2?" 22 76 2>&1 >/dev/tty; then
+            if dialog --yesno "PCSX2 no se puede instalar en un sistema de 64 bits con la versión EmulOS personalizada de SDL2 instalada debido a conflictos de versión con la versión multiarch i386 de SDL2.\n\n¿Desea cambiar a la versión de sistema operativo de SDL2 y continuar instalando PCSX2?" 22 76 2>&1 >/dev/tty; then
                 chown $user:$user "$configdir/all/retropie.cfg"
                 if rp_callModule sdl2 revert; then
                     iniSet "own_sdl2" "0"

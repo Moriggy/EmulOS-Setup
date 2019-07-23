@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-o2em"
-rp_module_desc="Odyssey 2 / Videopac emu - O2EM port for libretro"
-rp_module_help="ROM Extensions: .bin .zip\n\nCopy your Odyssey 2 / Videopac roms to $romdir/videopac\n\nCopy the required BIOS file o2rom.bin to $biosdir"
+rp_module_desc="Emulador de Odyssey 2 / Videopac - O2EM port para libretro"
+rp_module_help="ROM Extensions: .bin .zip\n\nCopia tus roms de Odyssey 2 / Videopac en $romdir/videopac\n\nCopia la BIOS o2rom.bin en $biosdir"
 rp_module_licence="OTHER"
 rp_module_section="opt"
 

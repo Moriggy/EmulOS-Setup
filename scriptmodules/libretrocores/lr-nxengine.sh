@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-nxengine"
-rp_module_desc="Cave Story engine clone - NxEngine port for libretro"
-rp_module_help="Copy the original Cave Story game files to $romdir/ports/CaveStory so you have the file $romdir/ports/CaveStory/Doukutsu.exe present."
+rp_module_desc="Clon de Cave Story engine - NxEngine port para libretro"
+rp_module_help="Copia el juego original Cave Story en $romdir/ports/CaveStory así que tienes el archivo $romdir/ports/CaveStory/Doukutsu.exe presente."
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/nxengine-libretro/master/nxengine/LICENSE"
 rp_module_section="opt"
 

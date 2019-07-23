@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-desmume"
-rp_module_desc="NDS emu - DESMUME"
-rp_module_help="ROM Extensions: .nds .zip\n\nCopy your Nintendo DS roms to $romdir/nds"
+rp_module_desc="Emulador Nintendo DS - DESMUME"
+rp_module_help="ROM Extensions: .nds .zip\n\nCopia tus roms de Nintendo DS en $romdir/nds"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/desmume/master/desmume/COPYING"
 rp_module_section="exp"
 

@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-redream"
-rp_module_desc="Dreamcast emulator - redream port for libretro"
-rp_module_help="ROM Extensions: .cdi .gdi\n\nCopy your Dreamcast roms to $romdir/dreamcast\n\nCopy the required BIOS files dc_boot.bin and dc_flash.bin to $biosdir"
+rp_module_desc="Emualdor de Dreamcast - redream port para libretro"
+rp_module_help="ROM Extensions: .cdi .gdi\n\nCopia tus roms de Dreamcast en $romdir/dreamcast\n\nCopia las BIOS dc_boot.bin y dc_flash.bin en $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/redream/master/LICENSE.txt"
 rp_module_section="exp"
 rp_module_flags="!arm !aarch64"

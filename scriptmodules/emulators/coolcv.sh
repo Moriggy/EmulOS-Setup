@@ -10,8 +10,8 @@
 #
 
 rp_module_id="coolcv"
-rp_module_desc="CoolCV Colecovision Emulator"
-rp_module_help="ROM Extensions: .bin .col .rom .zip\n\nCopy your Colecovision roms to $romdir/coleco"
+rp_module_desc="Emulador CoolCV Colecovision"
+rp_module_help="ROM Extensions: .bin .col .rom .zip\n\nCopia tus roms de Colecovision en $romdir/coleco"
 rp_module_licence="PROP"
 rp_module_section="opt"
 rp_module_flags="!x86 !x11 !mali !kms"

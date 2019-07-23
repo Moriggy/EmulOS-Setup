@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-81"
-rp_module_desc="Sinclair ZX81 emulator - EightyOne port for libretro"
-rp_module_help="ROM Extensions: .p .tzx .t81\n\nCopy your ZX81 roms to $romdir/zx81"
+rp_module_desc="Emulador de Sinclair ZX81 - EightyOne port for libretro"
+rp_module_help="ROM Extensions: .p .tzx .t81\n\nCopia tus roms de ZX81 en $romdir/zx81"
 rp_module_licence="GPL3 https://github.com/libretro/81-libretro/blob/master/LICENSE"
 rp_module_section="exp"
 

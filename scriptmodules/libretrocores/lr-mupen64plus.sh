@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-mupen64plus"
-rp_module_desc="N64 emu - Mupen64Plus + GLideN64 for libretro"
-rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopy your N64 roms to $romdir/n64"
+rp_module_desc="Emulador de Nintendo 64 - Mupen64Plus + GLideN64 para libretro"
+rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopia tus roms de Nintendo 64 en $romdir/n64"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/mupen64plus-libretro/master/LICENSE"
 rp_module_section="main"
 rp_module_flags="!aarch64"

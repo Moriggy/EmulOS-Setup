@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-dinothawr"
-rp_module_desc="Dinothawr - standalone libretro puzzle game"
-rp_module_help="Dinothawr game assets are automatically installed to $romdir/ports/dinothawr/"
+rp_module_desc="Dinothawr - juego independiente de libretro"
+rp_module_help="Los recursos del juego se instalan automáticamente en $romdir/ports/dinothawr/"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/Dinothawr/master/LICENSE"
 rp_module_section="exp"
 

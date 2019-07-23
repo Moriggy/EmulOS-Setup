@@ -10,8 +10,8 @@
 #
 
 rp_module_id="rpix86"
-rp_module_desc="DOS Emulator rpix86"
-rp_module_help="ROM Extensions: .bat .com .exe .sh\n\nCopy your DOS games to $romdir/pc"
+rp_module_desc="Emulador de MS-DOS rpix86"
+rp_module_help="ROM Extensions: .bat .com .exe .sh\n\nCopia tus juegos de MS-DOS en $romdir/pc"
 rp_module_licence="FREEWARE http://rpix86.patrickaalto.com/rdown.html"
 rp_module_section="opt"
 rp_module_flags="!x86 !mali !kms"

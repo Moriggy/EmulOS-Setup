@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-snes9x2002"
-rp_module_desc="Super Nintendo emu - ARM optimised Snes9x 1.39 port for libretro"
-rp_module_help="Previously called lr-pocketsnes\n\nROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopy your SNES roms to $romdir/snes"
+rp_module_desc="Emulador de Super Nintendo - Optimizado para ARM Snes9x 1.39 port para libretro"
+rp_module_help="Anteriormente llamado lr-pocketsnes\n\nROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/snes9x2002/master/src/copyright.h"
 rp_module_section="main"
 rp_module_flags="!x86 !aarch64"

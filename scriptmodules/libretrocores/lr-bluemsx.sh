@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-bluemsx"
-rp_module_desc="MSX/MSX2/Colecovision emu - blueMSX port for libretro"
-rp_module_help="ROM Extensions: .rom .mx1 .mx2 .col .dsk .zip\n\nCopy your MSX/MSX2 games to $romdir/msx\nCopy your Colecovision games to $romdir/coleco\n\nlr-bluemsx requires the BIOS files from the full standalone package of BlueMSX to be copied to '$biosdir/Machines' folder.\nColecovision BIOS needs to be copied to '$biosdir/Machines/COL - ColecoVision\coleco.rom'"
+rp_module_desc="Emulador de MSX/MSX2/Colecovision - blueMSX port para libretro"
+rp_module_help="ROM Extensions: .rom .mx1 .mx2 .col .dsk .zip\n\nCopia tus juegos de MSX / MSX2 en $romdir/msx\nCopia tus juegos de Colecovision en $romdir/coleco\n\nlr-bluemsx requiere BIOS del paquete completo independiente de BlueMSX, copiar en la carpeta '$biosdir/Machines'.\nLa BIOS de Colecovision debe copiarse en '$biosdir/Machines/COL - ColecoVision\coleco.rom'"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/blueMSX-libretro/master/license.txt"
 rp_module_section="opt"
 

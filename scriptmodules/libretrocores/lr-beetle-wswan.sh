@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-beetle-wswan"
-rp_module_desc="Wonderswan emu - Mednafen WonderSwan core port for libretro"
-rp_module_help="ROM Extensions: .ws .wsc .zip\n\nCopy your Wonderswan roms to $romdir/wonderswan\n\nCopy your Wonderswan Color roms to $romdir/wonderswancolor"
+rp_module_desc="Emulador de Wonderswan - Mednafen WonderSwan core port para libretro"
+rp_module_help="ROM Extensions: .ws .wsc .zip\n\nCopia tus roms de Wonderswan en $romdir/wonderswan\n\nCopia tus roms de Wonderswan Color en $romdir/wonderswancolor"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/beetle-wswan-libretro/master/COPYING"
 rp_module_section="opt"
 

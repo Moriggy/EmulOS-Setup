@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-kronos"
-rp_module_desc="Saturn & ST-V emulator - Kronos port for libretro"
-rp_module_help="ROM Extensions: .iso .cue .zip .ccd .mds\n\nCopy your Sega Saturn & ST-V roms to $romdir/saturn\n\nCopy the required BIOS file saturn_bios.bin / stvbios.zip to $biosdir/kronos"
+rp_module_desc="Emulador de Sega Saturn & ST-V emulator - Kronos port para libretro"
+rp_module_help="ROM Extensions: .iso .cue .zip .ccd .mds\n\nCopia tus roms de Sega Saturn & ST-V en $romdir/saturn\n\nCopia las BIOS saturn_bios.bin / stvbios.zip en $biosdir/kronos"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/yabause/kronos/yabause/COPYING"
 rp_module_section="exp"
 rp_module_flags="!arm !aarch64"

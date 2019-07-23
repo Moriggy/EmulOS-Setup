@@ -10,8 +10,8 @@
 #
 
 rp_module_id="dosbox"
-rp_module_desc="DOS emulator"
-rp_module_help="ROM Extensions: .bat .com .exe .sh .conf\n\nCopy your DOS games to $romdir/pc"
+rp_module_desc="Emulador MS-DOS"
+rp_module_help="ROM Extensions: .bat .com .exe .sh .conf\n\nCopia tus juegos de MS-DOS en $romdir/pc"
 rp_module_licence="GPL2 https://sourceforge.net/p/dosbox/code-0/HEAD/tree/dosbox/trunk/COPYING"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali"

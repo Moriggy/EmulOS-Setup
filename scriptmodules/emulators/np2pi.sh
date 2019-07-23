@@ -10,8 +10,8 @@
 #
 
 rp_module_id="np2pi"
-rp_module_desc="NEC PC-9801 emulator"
-rp_module_help="ROM Extensions: .d88 .d98 .88d .98d .fdi .xdf .hdm .dup .2hd .tfd .hdi .thd .nhd .hdd\n\nCopy your pc98 games to to $romdir/pc88\n\nCopy bios files 2608_bd.wav, 2608_hh.wav, 2608_rim.wav, 2608_sd.wav, 2608_tom.wav 2608_top.wav, bios.rom, FONT.ROM and sound.rom to $biosdir/pc98"
+rp_module_desc="Emulador de NEC PC-9801"
+rp_module_help="ROM Extensions: .d88 .d98 .88d .98d .fdi .xdf .hdm .dup .2hd .tfd .hdi .thd .nhd .hdd\n\nCopia tus juegos de NEC PC-98 en $romdir/pc88\n\nCopia las BIOS 2608_bd.wav, 2608_hh.wav, 2608_rim.wav, 2608_sd.wav, 2608_tom.wav 2608_top.wav, bios.rom, FONT.ROM y sound.rom en $biosdir/pc98"
 rp_module_section="exp"
 rp_module_flags="dispmanx !x86 !mali !kms"
 

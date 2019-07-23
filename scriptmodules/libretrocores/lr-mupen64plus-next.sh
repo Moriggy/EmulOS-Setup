@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-mupen64plus-next"
-rp_module_desc="N64 emulator - Mupen64Plus + GLideN64 for libretro (next version)"
-rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopy your N64 roms to $romdir/n64"
+rp_module_desc="Emulador de Nintendo 64 - Mupen64Plus + GLideN64 para libretro (next version)"
+rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopia tus roms de Nintendo 64 en $romdir/n64"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/mupen64plus-libretro-nx/master/LICENSE"
 rp_module_section="exp"
 rp_module_flags="!armv6"

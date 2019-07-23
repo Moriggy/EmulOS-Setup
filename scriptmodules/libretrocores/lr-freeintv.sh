@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-freeintv"
-rp_module_desc="Intellivision emulator for libretro"
-rp_module_help="ROM Extensions: .int .bin\n\nCopy your Intellivision roms to $romdir/intellivision\n\nCopy the required BIOS files exec.bin and grom.bin to $biosdir"
+rp_module_desc="Emulador de Intellivision para libretro"
+rp_module_help="ROM Extensions: .int .bin\n\nCopia tus roms de Intellivision en $romdir/intellivision\n\nCopia las BIOS exec.bin y grom.bin en $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/FreeIntv/master/LICENSE"
 rp_module_section="opt"
 

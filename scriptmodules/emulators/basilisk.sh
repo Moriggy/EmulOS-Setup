@@ -10,8 +10,8 @@
 #
 
 rp_module_id="basilisk"
-rp_module_desc="Macintosh emulator"
-rp_module_help="ROM Extensions: .img .rom\n\nCopy your Macintosh roms mac.rom and disk.img to $romdir/macintosh"
+rp_module_desc="Emulador de Macintosh"
+rp_module_help="ROM Extensions: .img .rom\n\nCopia tus roms de Macintosh mac.rom y disk.img en $romdir/macintosh"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/cebix/macemu/master/BasiliskII/COPYING"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali !kms"

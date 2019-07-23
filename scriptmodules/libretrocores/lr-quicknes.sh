@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-quicknes"
-rp_module_desc="NES emulator - QuickNES Port for libretro"
-rp_module_help="ROM Extensions: .nes .zip\n\nCopy your NES roms to $romdir/nes"
+rp_module_desc="Emulador de NES - QuickNES Port para libretro"
+rp_module_help="ROM Extensions: .nes .zip\n\nCopia tus roms de NES en $romdir/nes"
 rp_module_licence="GPL2"
 rp_module_section="main"
 

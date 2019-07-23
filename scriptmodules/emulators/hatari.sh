@@ -10,8 +10,8 @@
 #
 
 rp_module_id="hatari"
-rp_module_desc="Atari emulator Hatari"
-rp_module_help="ROM Extensions: .st .stx .img .rom .raw .ipf .ctr\n\nCopy your Atari ST games to $romdir/atarist"
+rp_module_desc="Emulador de Atari"
+rp_module_help="ROM Extensions: .st .stx .img .rom .raw .ipf .ctr\n\nCopia tus juegos de Atari ST en $romdir/atarist"
 rp_module_licence="GPL2 https://hg.tuxfamily.org/mercurialroot/hatari/hatari/file/9ee1235233e9/gpl.txt"
 rp_module_section="opt"
 rp_module_flags=""

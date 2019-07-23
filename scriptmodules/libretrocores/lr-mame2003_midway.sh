@@ -10,8 +10,8 @@
 #
 
 rp_module_id="lr-mame2003_midway"
-rp_module_desc="Arcade emu - MAME 0.78 port for libretro - Optimized for Midway games"
-rp_module_help="ROM Extension: .zip\n\nCopy your MAME roms to either $romdir/mame-libretro or\n$romdir/arcade"
+rp_module_desc="Emulador Arcade - MAME 0.78 (2003) port para libretro - Optimizado para juegos de Midway"
+rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME en $romdir/mame-libretro o\n$romdir/arcade"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/mame2003_midway/master/docs/mame.txt"
 rp_module_section="exp"
 
