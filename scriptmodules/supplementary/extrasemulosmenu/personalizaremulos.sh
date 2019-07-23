@@ -32,7 +32,7 @@ function main_menu() {
 						1 "Instalar Bezels" \
 						2 "Vídeos de Carga de Roms" \
 						3 "Overclock (SÓLO) Raspberry pi" \
-						4 "Crear Colecciones de juegos"
+						4 "Crear Colecciones de juegos" \
 						2>&1 > /dev/tty)
 
         case "$choice" in
@@ -74,5 +74,7 @@ function overclock() {
 function colecciones() {
 
 	source $scriptdir/scriptmodules/extras/scripts/escollections.sh
+
 }
+
 main_menu
