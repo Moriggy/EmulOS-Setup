@@ -119,6 +119,61 @@ cd /home/pi/ && wget https://github.com/DOCK-PI3/emulos-attract-config-rpi/archi
   sudo cp -R /home/pi/emulos-attract-config-rpi-master/attract/* /home/pi/.attract/
   sudo chown -R pi:pi /home/pi/.attract/
   sudo chown -R pi:pi /opt/emulos/configs/all/
+  # Añadir como sistema a ES y generar lista de roms,betatest
+      local attract_dir="$(_get_configdir_attractmode)"
+    [[ ! -d "$attract_dir" || ! -f /usr/bin/attract ]] && return 0
+
+    local fullname="$1"
+    local name="$2"
+    local path="$3"
+    local extensions="$4"
+    local command="$5"
+    local platform="$6"
+    local theme="$7"
+
+    # replace any / characters in fullname
+    fullname="${fullname//\/ }"
+
+    local config="$attract_dir/emulators/$fullname.cfg"
+    iniConfig " " "" "$config"
+    # replace %ROM% with "[romfilename]" and convert to array
+    command=(${command//%ROM%/\"[romfilename]\"})
+    iniSet "executable" "${command[0]}"
+    iniSet "args" "${command[*]:1}"
+
+    iniSet "rompath" "$path"
+    iniSet "system" "$fullname"
+
+    # extensions separated by semicolon
+    extensions="${extensions// /;}"
+    iniSet "romext" "$extensions"
+
+    # snap path
+    local snap="snap"
+    [[ "$name" == "emulos" ]] && snap="icons"
+    iniSet "artwork flyer" "$path/flyer"
+    iniSet "artwork marquee" "$path/marquee"
+    iniSet "artwork snap" "$path/$snap"
+    iniSet "artwork wheel" "$path/wheel"
+
+    chown $user:$user "$config"
+
+    # if no gameslist, generate one
+    if [[ ! -f "$attract_dir/romlists/$fullname.txt" ]]; then
+        sudo -u $user attract --build-romlist "$fullname" -o "$fullname"
+    fi
+
+    local config="$attract_dir/attract.cfg"
+    local tab=$'\t'
+    if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
+        cp "$config" "$config.bak"
+        cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               Basic
+${tab}romlist              $fullname
+_EOF_
+        chown $user:$user "$config"
+    fi
 dialog --infobox " Attract Mode se configuro correctamente!...\n\n Recuerde generar las listas de roms desde attract cuando meta juegos \n\n y para el menu setup si no le aparece! ," 370 370 ; sleep 10
 # Borrar directorios de compilacion.....
 sudo rm -r -f /home/pi/emulos-attract-config-rpi-master
