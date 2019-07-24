@@ -10,7 +10,7 @@
 # Menu de retropie usado en EmulOS....
 
 rp_module_id="emulosmenu"
-rp_module_desc="EmulOS configuration menu for EmulationStation"
+rp_module_desc="Configuración del menú EmulOS para EmulationStation"
 rp_module_section="core"
 
 function _update_hook_emulosmenu() {
