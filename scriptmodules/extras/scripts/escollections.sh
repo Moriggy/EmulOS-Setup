@@ -1,16 +1,8 @@
 #!/usr/bin/env bash
 
-# Este fichero es parte del Proyecto MasOS Team
-#
-# The EmulOS Project is the legal property of its developers, whose names are
-# too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
-#
-
 IFS=';'
 
+# Welcome
  dialog --backtitle "EmulationStation" --title "Generador de Colecciones para EmulationStation" \
     --yesno "\nEsto agregará o actualizará la lista de juegos de colección personalizada que se usará para mostrar los juegos en los elementos del menú de colecciones personalizadas.\n\nPeriódicamente, a medida que agregues o elimines roms, vuelve a ejecutar este script para mantener las listas de juegos actualizadas.\n\nEsta secuencia de comandos SÓLO se puede usar si los nombres de los archivos roms se nombran de acuerdo con el estándar de denominación No Intro/Hyperspin/EmuMovies.\n\nDespués de agregar una nueva lista de colecciones, reinicia EmulationStation.\n\nA continuación, presiona INICIO> CONFIGURACIÓN DE LA COLECCIÓN DE JUEGOS> COLECCIONES DE JUEGO PERSONALIZADAS.\n\nA continuación, active las nuevas colecciones personalizadas que desea ver en el menú.\n\nAlgunos temas admiten colecciones en el menú principal, de lo contrario, los encontrará en el elemento de menú Colección personalizada.\n\n\n** NOTA ** \nEste script SÓLO funciona con archivos rom que utilizan la nomenclarura de No-Intro (como Emumovies/Hyperspin).\n\n\n¿Desea continuar?" \
     35 80 2>&1 > /dev/tty \
@@ -291,8 +283,6 @@ cat /tmp/tempfile.cfg |sort -u > /tmp/custom-${choice}.cfg
 cp /tmp/custom-${choice}.cfg /opt/emulos/configs/all/emulationstation/collections
 rm /tmp/tempfile.cfg
 rm /tmp/custom-${choice}.cfg
-chmod +x /opt/emulos/configs/all/emulationstation/collections/custom-${choice}.cfg
-chown $user:$user /opt/emulos/configs/all/emulationstation/collections/custom-${choice}.cfg
 }
 
 

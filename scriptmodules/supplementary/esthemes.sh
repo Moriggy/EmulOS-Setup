@@ -53,7 +53,6 @@ function gui_esthemes() {
 		'DOCK-PI3 Perinquen'
 		'DOCK-PI3 PlataFina'
 		'DOCK-PI3 XegasPi'
-    'Moriggy EmulOS'
 		'Moriggy Resident_Evil'
 		'Moriggy Blackhole'
 		'Moriggy Neon'
@@ -136,7 +135,7 @@ function gui_esthemes() {
             G)
                 if [[ "${status[0]}" == "i" ]]; then
                     options=(1 "Ver Theme Gallery" 2 "Actualizar Theme Gallery" 3 "Eliminar Theme Gallery")
-                    cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para la gallery" 12 40 06)
+                    cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option for gallery" 12 40 06)
                     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
                     case "$choice" in
                         1)
@@ -171,8 +170,8 @@ function gui_esthemes() {
                 repo="${theme[0]}"
                 theme="${theme[1]}"
                 if [[ "${status[choice]}" == "i" ]]; then
-                    options=(1 "Actualizar $repo/$theme" 2 "Desinstalar $repo/$theme")
-                    cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para el theme:" 12 40 06)
+                    options=(1 "Update $repo/$theme" 2 "Uninstall $repo/$theme")
+                    cmd=(dialog --backtitle "$__backtitle" --menu "Elija una opcion para el theme" 12 40 06)
                     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
                     case "$choice" in
                         1)

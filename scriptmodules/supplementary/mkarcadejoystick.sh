@@ -11,7 +11,7 @@
 
 rp_module_id="mkarcadejoystick"
 rp_module_desc="Raspberry Pi GPIO Joystick Driver"
-rp_module_help="Instala el driver GPIO desde https://github.com/recalbox/mk_arcade_joystick_rpi"
+rp_module_help="Instala el driver GPIOdesde https://github.com/recalbox/mk_arcade_joystick_rpi"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/recalbox/mk_arcade_joystick_rpi/master/LICENSE"
 rp_module_section="driver"
 rp_module_flags="noinstclean !x86 !mali"
