@@ -275,7 +275,7 @@ _EOF_
     chmod +x "/usr/bin/attract"
     wget https://github.com/DOCK-PI3/attract-config-rpi/archive/master.zip && unzip master.zip
     rm master.zip
-    cd /attract-config-rpi-master/attract/
+    cd attract-config-rpi-master/attract/
     mv layouts/ /opt/emulos/configs/all/attractmode
     mv menu-art/ /opt/emulos/configs/all/attractmode
     rm -R attract-config-rpi-master/
