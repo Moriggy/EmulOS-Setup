@@ -295,7 +295,5 @@ chmod +x /opt/emulos/configs/all/emulationstation/collections/custom-${choice}.c
 chown $user:$user /opt/emulos/configs/all/emulationstation/collections/custom-${choice}.cfg
 }
 
-
 # Main
-
 main_menu

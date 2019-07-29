@@ -72,7 +72,7 @@ function configure_emulosmenu()
         'Retroarch'
         'RetroArch Net Play'
         'EmulOS Setup'
-        'Run Command Configuration'
+        'Run Command Configuracion'
         'Configurar Splash Screens'
         'Informacion del sistema'
         'WiFi agregar o editar config'
