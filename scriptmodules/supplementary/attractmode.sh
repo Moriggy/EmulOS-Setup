@@ -58,7 +58,7 @@ function _add_system_attractmode() {
       iniSet "artwork marquee" "$path/marquee"
       iniSet "artwork snap" "$path/$snap"
       iniSet "artwork wheel" "$path/wheel"
-
+    fi
     chown $user:$user "$config"
 
     # if no gameslist, generate one
