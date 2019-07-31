@@ -49,7 +49,7 @@ function _add_system_attractmode() {
     iniSet "romext" "$extensions"
 
     # snap path
-    local snap="snap"
+    local snap="videos"
     if [[ "$name" == "emulos" ]]; then
       user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
       mkdir /home/$user/EmulOS/roms/emulos
@@ -141,12 +141,12 @@ _EOF_
       sed -i '/<\<gameList\>>/a \                <name>Attract-Mode</name>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <path>./Attract-Mode.sh</path>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \        <game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-    fi
+
     else
-      iniSet "artwork flyer" "$path/flyer"
-      iniSet "artwork marquee" "$path/marquee"
-      iniSet "artwork snap" "$path/$snap"
-      iniSet "artwork wheel" "$path/wheel"
+      iniSet "artwork flyer" "$path//media/images"
+      iniSet "artwork marquee" "$path/media/marquee"
+      iniSet "artwork snap" "$path/media/$snap"
+      iniSet "artwork wheel" "$path/media/wheel"
 
     chown $user:$user "$config"
 
