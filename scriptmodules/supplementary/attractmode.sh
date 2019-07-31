@@ -140,12 +140,13 @@ _EOF_
       sed -i '/<\<gameList\>>/a \                <name>Attract-Mode</name>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <path>./Attract-Mode.sh</path>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \        <game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
+      
     else
       iniSet "artwork flyer" "$path/flyer"
       iniSet "artwork marquee" "$path/marquee"
       iniSet "artwork snap" "$path/$snap"
       iniSet "artwork wheel" "$path/wheel"
-    fi
+
     chown $user:$user "$config"
 
     # if no gameslist, generate one
