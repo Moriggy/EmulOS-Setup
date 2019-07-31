@@ -79,6 +79,7 @@ _EOF_
         echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/filemanager.rp >> "/home/$user/EmulOS/roms/emulos/Administrador de Archivos.sh"
         if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
           echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/raspiconfig.rp >> "/home/$user/EmulOS/roms/emulos/Raspi-config.sh"
+        fi
         echo sudo reboot >> /home/$user/EmulOS/roms/emulos/Reiniar.sh
         echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retroarch.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch.sh"
         echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retronetplay.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch Netplay.sh"
@@ -140,7 +141,7 @@ _EOF_
       sed -i '/<\<gameList\>>/a \                <name>Attract-Mode</name>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <path>./Attract-Mode.sh</path>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \        <game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      
+    fi
     else
       iniSet "artwork flyer" "$path/flyer"
       iniSet "artwork marquee" "$path/marquee"
