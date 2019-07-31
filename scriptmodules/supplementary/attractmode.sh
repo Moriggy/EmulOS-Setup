@@ -147,7 +147,7 @@ _EOF_
       iniSet "artwork marquee" "$path/media/marquee"
       iniSet "artwork snap" "$path/media/$snap"
       iniSet "artwork wheel" "$path/media/wheel"
-
+    fi
     chown $user:$user "$config"
 
     # if no gameslist, generate one
