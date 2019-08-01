@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The MasOS Team Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The MasOS Team Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="attractmode"
-rp_module_desc="Attract Mode emulator frontend"
+rp_module_desc="Instalación del frontend Attract Mode"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/mickelson/attract/master/License.txt"
 rp_module_section="exp"
 rp_module_flags="!mali !kms frontend"
@@ -64,32 +64,34 @@ sudo reboot
 _EOF_
         cat > /home/$user/EmulOS/emulosmenu/Attract-Mode.sh <<_EOF_
 #!/usr/bin/env bash
+echo ""
 echo "Cambiando el arranque a Attract-Mode y reiniciando..."
 echo ""
-sed -i 's/emulationstation/attract/g' /opt/emulos/configs/all/autostart.sh
+echo "/opt/emulos/configs/all/attractmode/amboot/amromlist.sh" >> /opt/emulos/configs/all/autostart.sh
+echo "attract #auto" >> /opt/emulos/configs/all/autostart.sh
 sleep 2
 sudo reboot
 _EOF_
 
         chmod +x /home/$user/EmulOS/emulosmenu/Attract-Mode.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/audiosettings.rp >> "/home/$user/EmulOS/roms/emulos/Audio.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/bluetooth.rp >> /home/$user/EmulOS/roms/emulos/Bluetooth.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/configedit.rp >> "/home/$user/EmulOS/roms/emulos/Editor de Configuracion.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/emulosextrasall.rp >> "/home/$user/EmulOS/roms/emulos/EmulOS Herramientas y utils.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/personalizaremulos.rp >> "/home/$user/EmulOS/roms/emulos/Personalizar EmulOS.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/wifi.rp >> "/home/$user/EmulOS/roms/emulos/Configurar Wifi.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/filemanager.rp >> "/home/$user/EmulOS/roms/emulos/Administrador de Archivos.sh"
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/audiosettings.rp >> /home/$user/EmulOS/roms/emulos/Audio.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/bluetooth.rp >> /home/$user/EmulOS/roms/emulos/Bluetooth.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/configedit.rp >> /home/$user/EmulOS/roms/emulos/Editor de Configuracion.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/emulosextrasall.rp >> /home/$user/EmulOS/roms/emulos/EmulOS Herramientas y utils.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/personalizaremulos.rp >> /home/$user/EmulOS/roms/emulos/Personalizar EmulOS.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/wifi.rp >> /home/$user/EmulOS/roms/emulos/Configurar Wifi.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/filemanager.rp >> /home/$user/EmulOS/roms/emulos/Administrador de Archivos.sh
         if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-          echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/raspiconfig.rp >> "/home/$user/EmulOS/roms/emulos/Raspi-config.sh"
+          echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/raspiconfig.rp >> /home/$user/EmulOS/roms/emulos/Raspi-config.sh
         fi
         echo sudo reboot >> /home/$user/EmulOS/roms/emulos/Reiniar.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retroarch.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retronetplay.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch Netplay.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/rpsetup.rp >> "/home/$user/EmulOS/roms/emulos/EmulOS-Setup.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/runcommand.rp >> /home/$user/EmulOS/roms/emulos/RunCommand Configuracion.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/systeminfo.rp >> "/home/$user/EmulOS/roms/emulos/Informacion del sistema.sh"
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retroarch.rp >> /home/$user/EmulOS/roms/emulos/Retroarch.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retronetplay.rp >> /home/$user/EmulOS/roms/emulos/Retroarch Netplay.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/rpsetup.rp >> /home/$user/EmulOS/roms/emulos/EmulOS-Setup.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/runcommand.rp >> /home/$user/EmulOS/roms/emulos/RunCommand Configuracion.sh
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/systeminfo.rp >> /home/$user/EmulOS/roms/emulos/Informacion del sistema.sh
         echo sudo poweroff >> /home/$user/EmulOS/roms/emulos/Apagar.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_packages.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/splashscreen.rp >> "/home/$user/EmulOS/roms/emulos/Configurar Splash Screen.sh"
+        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/splashscreen.rp >> /home/$user/EmulOS/roms/emulos/Configurar Splash Screen.sh
         mkdir /home/$user/EmulOS/roms/emulos/box
         mkdir /home/$user/EmulOS/roms/emulos/cart
         mkdir /home/$user/EmulOS/roms/emulos/box
@@ -97,18 +99,19 @@ _EOF_
         mkdir /home/$user/EmulOS/roms/emulos/snap
         mkdir /home/$user/EmulOS/roms/emulos/video
         mkdir /home/$user/EmulOS/roms/emulos/wheel
-        cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png "/home/$user/EmulOS/roms/emulos/snap/Audio Settings.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png /home/$user/EmulOS/roms/emulos/snap/Audio.png
         cp /home/$user/EmulOS/emulosmenu/icons/bluetooth.png /home/$user/EmulOS/roms/emulos/snap/Bluetooth.png
-        cp /home/$user/EmulOS/emulosmenu/icons/configedit.png "/home/$user/EmulOS/roms/emulos/snap/Configuration Editor.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/wifi.png "/home/$user/EmulOS/roms/emulos/snap/Configure Wifi.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png "/home/$user/EmulOS/roms/emulos/snap/File Manager.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/raspiconfig.png "/home/$user/EmulOS/roms/emulos/snap/Raspberry Pie Setup.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/retroarch.png "/home/$user/EmulOS/roms/emulos/snap/Retroarch Setup.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/retronetplay.png "/home/$user/EmulOS/roms/emulos/snap/Retroarch Netplay.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/rpsetup.png "/home/$user/EmulOS/roms/emulos/snap/EmulOS Setup.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/runcommand.png /home/$user/EmulOS/roms/emulos/snap/RunCommand.png
-        cp /home/$user/EmulOS/emulosmenu/icons/showip.png "/home/$user/EmulOS/roms/emulos/snap/Show IP Address.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/splashscreen.png "/home/$user/EmulOS/roms/emulos/snap/Splash Screen.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/configedit.png /home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png
+        cd /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png /home/$user/EmulOS/roms/emulos/Personalizar EmulOS.png
+        cp /home/$user/EmulOS/emulosmenu/icons/wifi.png /home/$user/EmulOS/roms/emulos/snap/Configurar Wifi.png
+        cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png /home/$user/EmulOS/roms/emulos/snap/Administrador de Archivos.png
+        cp /home/$user/EmulOS/emulosmenu/icons/raspiconfig.png /home/$user/EmulOS/roms/emulos/snap/Raspi-config.png
+        cp /home/$user/EmulOS/emulosmenu/icons/retroarch.png /home/$user/EmulOS/roms/emulos/snap/Retroarch.png
+        cp /home/$user/EmulOS/emulosmenu/icons/retronetplay.png /home/$user/EmulOS/roms/emulos/snap/Retroarch Netplay.png
+        cp /home/$user/EmulOS/emulosmenu/icons/rpsetup.png /home/$user/EmulOS/roms/emulos/snap/EmulOS-Setup.png
+        cp /home/$user/EmulOS/emulosmenu/icons/runcommand.png /home/$user/EmulOS/roms/emulos/snap/RunCommand Configuracion.png
+        cp /home/$user/EmulOS/emulosmenu/icons/systeminfo.png /home/$user/EmulOS/roms/emulos/snap/Informacion del sistema.png
+        cp /home/$user/EmulOS/emulosmenu/icons/splashscreen.png /home/$user/EmulOS/roms/emulos/snap/Configurar Splash Screen.png
         chmod +x /home/$user/EmulOS/roms/emulos/*.sh
         wget http://attractmode.org/images/logo.png
         mv logo.png /home/$user/EmulOS/emulosmenu/icons/Attract-Mode.png
@@ -119,7 +122,7 @@ executable           /bin/bash
 args                 "[romfilename]"
 rompath              /home/$user/EmulOS/roms/emulos
 romext               .sh
-system               Setup
+system               EmulOS
 artwork    box       /home/$user/EmulOS/roms/emulos/box
 artwork    cart      /home/$user/EmulOS/roms/emulos/cart
 artwork    flyer     /home/$user/EmulOS/roms/emulos/box
@@ -145,7 +148,7 @@ _EOF_
       sed -i '/<\<gameList\>>/a \        <game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
 
     else
-      iniSet "artwork flyer" "$path//media/images"
+      iniSet "artwork flyer" "$path/media/images"
       iniSet "artwork marquee" "$path/media/marquee"
       iniSet "artwork snap" "$path/media/$snap"
       iniSet "artwork wheel" "$path/media/wheel"
@@ -153,9 +156,9 @@ _EOF_
     chown $user:$user "$config"
 
     # if no gameslist, generate one
-    # if [[ ! -f "$attract_dir/romlists/$fullname.txt" ]]; then
-    #    sudo -u $user attract --build-romlist "$fullname" -o "$fullname"
-    #fi
+    if [[ ! -f "$attract_dir/romlists/$fullname.txt" ]]; then
+        sudo -u $user attract --build-romlist "$fullname" -o "$fullname"
+    fi
 
     local config="$attract_dir/attract.cfg"
     local tab=$'\t'
@@ -258,7 +261,10 @@ function install_attractmode() {
 }
 
 function remove_attractmode() {
+    user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
     rm -f /usr/bin/attract
+    rm -R /home/$user/EmulOS/roms/emulos
+    rm -R /opt/emulos/configs/all/attractmode
 }
 
 function configure_attractmode() {
@@ -269,7 +275,11 @@ function configure_attractmode() {
     local config="$md_conf_root/all/attractmode/attract.cfg"
     if [[ ! -f "$config" ]]; then
         echo "general" >"$config"
+        echo -e "\tlanguage          es" >>"$config"
+        echo -e "\tstartup_mode          displays_menu" >>"$config"
         echo -e "\twindow_mode          fullscreen" >>"$config"
+        echo -e "\tvideo_decoder          mmal" >>"$config"
+        echo -e "\tmenu_prompt          Displays Menu" >>"$config"
     fi
 
     mkUserDir "$md_conf_root/all/attractmode/emulators"
@@ -283,8 +293,12 @@ _EOF_
     cd attract-config-rpi-master/attract/
     mv layouts/ /opt/emulos/configs/all/attractmode
     mv menu-art/ /opt/emulos/configs/all/attractmode
-    chown $user:$user /opt/emulos/configs/all/attractmode
+    cd
     rm -R attract-config-rpi-master/
+    mkdir /opt/emulos/configs/all/attractmode/amboot
+    cp /EmulOS-Setup/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
+    chown -R $user:$user /opt/emulos/configs/all/attractmode
+    
     local idx
     for idx in "${__mod_idx[@]}"; do
         if rp_isInstalled "$idx" && [[ -n "${__mod_section[$idx]}" ]] && ! hasFlag "${__mod_flags[$idx]}" "frontend"; then

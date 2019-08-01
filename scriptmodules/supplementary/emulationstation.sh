@@ -317,7 +317,7 @@ function gui_emulationstation() {
             options+=(2 "Configuración automática (Actualmente: Deshabilitada)")
         fi
 
-        if [[ "$es_swap" -eq 1 ]]; then
+        if [[ "$es_swap" -eq 0 ]]; then
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Predeterminado)")
         else
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
