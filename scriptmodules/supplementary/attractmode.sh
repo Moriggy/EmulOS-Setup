@@ -159,7 +159,7 @@ _EOF_
     local tab=$'\t'
     if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
         cp "$config" "$config.bak"
-        if [["$fullname" == "emulos"]]; then
+        if [["$fullname" == "EmulOS"]]; then
           cat >>"$config" <<_EOF_
 display${tab}$fullname
 ${tab}layout               robo
@@ -286,7 +286,7 @@ function configure_attractmode() {
         echo -e "\tmenu_prompt          Displays Menu" >>"$config"
         echo -e "\tmenu_layout          robospin_v4" >>"$config"
 
-        echo "layout_config	robospin_v4" >"$config"
+        echo "layout_config	robospin_v4" >>"$config"
         echo -e "\tparam                enable_Lmarquee No" >>"$config"
         echo -e "\tparam                enable_bg blue" >>"$config"
         echo -e "\tparam                enable_bloom No" >>"$config"
