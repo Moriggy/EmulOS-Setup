@@ -133,7 +133,7 @@ _EOF_
       sed -i '/\<sound\>/i \        in_menu              yes' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        filter               all' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \ ' /home/$user/.attract/attract.cfg
-      sed -i 's/window_mode          robo/window_mode          fullscreen/g' /home/$user/.attract/attract.cfg
+      sed -i 's/window_mode          default/window_mode          fullscreen/g' /home/$user/.attract/attract.cfg
       attract -b EmulOS
       sed -i '/<\<gameList\>>/a \        </game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <image>./icons/Attract-Mode.png</image>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
@@ -159,11 +159,19 @@ _EOF_
     local tab=$'\t'
     if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
         cp "$config" "$config.bak"
+        if [["$fullname" == "emulos"]]; then
+          cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               robo
+${tab}romlist              $fullname
+_EOF_
+      else
         cat >>"$config" <<_EOF_
 display${tab}$fullname
 ${tab}layout               robospin_v4
 ${tab}romlist              $fullname
 _EOF_
+    fi
         chown $user:$user "$config"
     fi
 }
