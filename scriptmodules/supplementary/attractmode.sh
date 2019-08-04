@@ -96,17 +96,17 @@ _EOF_
         mkdir /home/$user/EmulOS/roms/emulos/videos
         cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png /home/$user/EmulOS/roms/emulos/snap/Audio.png
         cp /home/$user/EmulOS/emulosmenu/icons/bluetooth.png /home/$user/EmulOS/roms/emulos/snap/Bluetooth.png
-        cp /home/$user/EmulOS/emulosmenu/icons/configedit.png /home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png
-        cd /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png /home/$user/EmulOS/roms/emulos/Personalizar EmulOS.png
-        cp /home/$user/EmulOS/emulosmenu/icons/wifi.png /home/$user/EmulOS/roms/emulos/snap/Configurar Wifi.png
-        cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png /home/$user/EmulOS/roms/emulos/snap/Administrador de Archivos.png
+        cp /home/$user/EmulOS/emulosmenu/icons/configedit.png "/home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png"
+        cd /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png "/home/$user/EmulOS/roms/emulos/Personalizar EmulOS.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/wifi.png "/home/$user/EmulOS/roms/emulos/snap/Configurar Wifi.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png "/home/$user/EmulOS/roms/emulos/snap/Administrador de Archivos.png"
         cp /home/$user/EmulOS/emulosmenu/icons/raspiconfig.png /home/$user/EmulOS/roms/emulos/snap/Raspi-config.png
         cp /home/$user/EmulOS/emulosmenu/icons/retroarch.png /home/$user/EmulOS/roms/emulos/snap/Retroarch.png
-        cp /home/$user/EmulOS/emulosmenu/icons/retronetplay.png /home/$user/EmulOS/roms/emulos/snap/Retroarch Netplay.png
+        cp /home/$user/EmulOS/emulosmenu/icons/retronetplay.png "/home/$user/EmulOS/roms/emulos/snap/Retroarch Netplay.png"
         cp /home/$user/EmulOS/emulosmenu/icons/rpsetup.png /home/$user/EmulOS/roms/emulos/snap/EmulOS-Setup.png
-        cp /home/$user/EmulOS/emulosmenu/icons/runcommand.png /home/$user/EmulOS/roms/emulos/snap/RunCommand Configuracion.png
-        cp /home/$user/EmulOS/emulosmenu/icons/systeminfo.png /home/$user/EmulOS/roms/emulos/snap/Informacion del sistema.png
-        cp /home/$user/EmulOS/emulosmenu/icons/splashscreen.png /home/$user/EmulOS/roms/emulos/snap/Configurar Splash Screen.png
+        cp /home/$user/EmulOS/emulosmenu/icons/runcommand.png "/home/$user/EmulOS/roms/emulos/snap/RunCommand Configuracion.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/systeminfo.png "/home/$user/EmulOS/roms/emulos/snap/Informacion del sistema.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/splashscreen.png "/home/$user/EmulOS/roms/emulos/snap/Configurar Splash Screen.png"
         chmod +x /home/$user/EmulOS/roms/emulos/*.sh
         wget http://attractmode.org/images/logo.png
         mv logo.png /home/$user/EmulOS/emulosmenu/icons/Attract-Mode.png
@@ -275,6 +275,25 @@ function configure_attractmode() {
         echo -e "\twindow_mode          fullscreen" >>"$config"
         echo -e "\tvideo_decoder          mmal" >>"$config"
         echo -e "\tmenu_prompt          Displays Menu" >>"$config"
+        echo -e "\tmenu_layout          robospin_v4" >>"$config"
+
+        echo"layout_config	robospin_v4" >>"$config"
+        echo -e "\tparam                enable_Lmarquee No" >>"$config"
+        echo -e "\tparam                enable_bg blue" >>"$config"
+        echo -e "\tparam                enable_bloom No" >>"$config"
+        echo -e "\tparam                enable_cab moon" >>"$config"
+        echo -e "\tparam                enable_colors yes" >>"$config"
+        echo -e "\tparam                enable_crt No" >>"$config"
+        echo -e "\tparam                enable_frame yes" >>"$config"
+        echo -e "\tparam                enable_list_type wheel" >>"$config"
+        echo -e "\tparam                enable_marquee Yes" >>"$config"
+        echo -e "\tparam                enable_mlogos Yes" >>"$config"
+        echo -e "\tparam                enable_overlay mask" >>"$config"
+        echo -e "\tparam                enable_pointer rocket" >>"$config"
+        echo -e "\tparam                enable_slogos Yes" >>"$config"
+        echo -e "\tparam                enable_static yes" >>"$config"
+        echo -e "\tparam                orbit_art wheel" >>"$config"
+        echo -e "\tparam                transition_ms 35" >>"$config"
     fi
 
     mkUserDir "$md_conf_root/all/attractmode/emulators"
@@ -291,7 +310,7 @@ _EOF_
     cd
     rm -R attract-config-rpi-master/
     mkdir /opt/emulos/configs/all/attractmode/amboot
-    cp EmulOS-Setup/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
+    cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
     chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
     chown -R $user:$user /opt/emulos/configs/all/attractmode
 
