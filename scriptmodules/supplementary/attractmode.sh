@@ -286,7 +286,7 @@ function configure_attractmode() {
         echo -e "\tmenu_prompt          Displays Menu" >>"$config"
         echo -e "\tmenu_layout          robospin_v4" >>"$config"
 
-        echo"layout_config	robospin_v4" >>"$config"
+        echo "layout_config	robospin_v4" >"$config"
         echo -e "\tparam                enable_Lmarquee No" >>"$config"
         echo -e "\tparam                enable_bg blue" >>"$config"
         echo -e "\tparam                enable_bloom No" >>"$config"
