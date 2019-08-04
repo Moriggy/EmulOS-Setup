@@ -159,8 +159,8 @@ _EOF_
     local tab=$'\t'
     if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
         cp "$config" "$config.bak"
-        if [["$fullname" == "EmulOS"]]; then
-          cat >>"$config" <<_EOF_
+        if [[ "$fullname" == "EmulOS" ]]; then
+        cat >>"$config" <<_EOF_
 display${tab}$fullname
 ${tab}layout               robo
 ${tab}romlist              $fullname
