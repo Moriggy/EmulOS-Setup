@@ -92,13 +92,8 @@ _EOF_
         echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/systeminfo.rp >> "/home/$user/EmulOS/roms/emulos/Informacion del sistema.sh"
         echo sudo poweroff >> "/home/$user/EmulOS/roms/emulos/Apagar.sh"
         echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/splashscreen.rp >> "/home/$user/EmulOS/roms/emulos/Configurar Splash Screen.sh"
-        mkdir /home/$user/EmulOS/roms/emulos/box
-        mkdir /home/$user/EmulOS/roms/emulos/cart
-        mkdir /home/$user/EmulOS/roms/emulos/box
-        mkdir /home/$user/EmulOS/roms/emulos/marquee
         mkdir /home/$user/EmulOS/roms/emulos/snap
-        mkdir /home/$user/EmulOS/roms/emulos/video
-        mkdir /home/$user/EmulOS/roms/emulos/wheel
+        mkdir /home/$user/EmulOS/roms/emulos/videos
         cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png /home/$user/EmulOS/roms/emulos/snap/Audio.png
         cp /home/$user/EmulOS/emulosmenu/icons/bluetooth.png /home/$user/EmulOS/roms/emulos/snap/Bluetooth.png
         cp /home/$user/EmulOS/emulosmenu/icons/configedit.png /home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png
@@ -131,14 +126,14 @@ artwork    snap      /home/$user/EmulOS/roms/emulos/video;/home/$user/EmulOS/rom
 artwork    wheel     /home/$user/EmulOS/roms/emulos/wheel
 _EOF_
 
-      sed -i '/\<sound\>/i \display Setup' /home/$user/.attract/attract.cfg
+      sed -i '/\<sound\>/i \display EmulOS' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        layout               robo' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        romlist              EmulOS' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        in_cycle             yes' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        in_menu              yes' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \        filter               all' /home/$user/.attract/attract.cfg
       sed -i '/\<sound\>/i \ ' /home/$user/.attract/attract.cfg
-      sed -i 's/window_mode          default/window_mode          fullscreen/g' /home/$user/.attract/attract.cfg
+      sed -i 's/window_mode          robo/window_mode          fullscreen/g' /home/$user/.attract/attract.cfg
       attract -b EmulOS
       sed -i '/<\<gameList\>>/a \        </game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <image>./icons/Attract-Mode.png</image>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
