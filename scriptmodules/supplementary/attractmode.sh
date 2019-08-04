@@ -272,6 +272,7 @@ function remove_attractmode() {
 
 function configure_attractmode() {
     moveConfigDir "$home/.attract" "$md_conf_root/all/attractmode"
+    user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
 
     [[ "$md_mode" == "remove" ]] && return
 
@@ -316,7 +317,7 @@ _EOF_
     mv layouts/ /opt/emulos/configs/all/attractmode
     mv menu-art/ /opt/emulos/configs/all/attractmode
     cd
-    rm -R attract-config-rpi-master/
+    rm -R /home/$user/attract-config-rpi-master/
     mkdir /opt/emulos/configs/all/attractmode/amboot
     cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
     chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
