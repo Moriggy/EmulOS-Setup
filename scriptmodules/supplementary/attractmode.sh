@@ -67,8 +67,7 @@ _EOF_
 echo ""
 echo "Cambiando el arranque a Attract-Mode y reiniciando..."
 echo ""
-echo "/opt/emulos/configs/all/attractmode/amboot/amromlist.sh" > /opt/emulos/configs/all/autostart.sh
-echo "attract #auto" >> /opt/emulos/configs/all/autostart.sh
+sed -i 's/emulationstation/attract/g' /opt/emulos/configs/all/autostart.sh
 sleep 2
 sudo reboot
 _EOF_
@@ -97,7 +96,8 @@ _EOF_
         cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png /home/$user/EmulOS/roms/emulos/snap/Audio.png
         cp /home/$user/EmulOS/emulosmenu/icons/bluetooth.png /home/$user/EmulOS/roms/emulos/snap/Bluetooth.png
         cp /home/$user/EmulOS/emulosmenu/icons/configedit.png "/home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png"
-        cd /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png "/home/$user/EmulOS/roms/emulos/Personalizar EmulOS.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png "/home/$user/EmulOS/roms/emulos/snap/Personalizar EmulOS.png"
+        cp /home/$user/EmulOS/emulosmenu/icons/emulosextrasall.png "/home/$user/EmulOS/roms/emulos/snap/EmulOS Herramientas y utils.png"
         cp /home/$user/EmulOS/emulosmenu/icons/wifi.png "/home/$user/EmulOS/roms/emulos/snap/Configurar Wifi.png"
         cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png "/home/$user/EmulOS/roms/emulos/snap/Administrador de Archivos.png"
         cp /home/$user/EmulOS/emulosmenu/icons/raspiconfig.png /home/$user/EmulOS/roms/emulos/snap/Raspi-config.png
@@ -166,11 +166,23 @@ ${tab}layout               robo
 ${tab}romlist              $fullname
 _EOF_
       else
+        if [ "$(ls $path)" ]; then
         cat >>"$config" <<_EOF_
 display${tab}$fullname
 ${tab}layout               robospin_v4
 ${tab}romlist              $fullname
+${tab}in_cycle             yes
+${tab}in_menu              yes
 _EOF_
+        else
+        cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               robospin_v4
+${tab}romlist              $fullname
+${tab}in_cycle             no
+${tab}in_menu              no
+_EOF_
+      fi
     fi
         chown $user:$user "$config"
     fi
@@ -318,9 +330,9 @@ _EOF_
     mv menu-art/ /opt/emulos/configs/all/attractmode
     cd
     rm -R /home/$user/attract-config-rpi-master/
-    mkdir /opt/emulos/configs/all/attractmode/amboot
-    cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
-    chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
+    #mkdir /opt/emulos/configs/all/attractmode/amboot
+    #cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
+    #chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
     chown -R $user:$user /opt/emulos/configs/all/attractmode
 
     local idx
