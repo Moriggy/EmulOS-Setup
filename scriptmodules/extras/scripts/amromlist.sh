@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #################################################
 #                                               #
@@ -8,196 +8,69 @@
 
 IFS=";"
 #clear
+attract_dir="/opt/emulos/configs/all/attractmode"
+#################################################
+# Si hay roms en el sistema, muestralo en la wheel
 
-rm /tmp/showdisplay.txt > /dev/null 2>&1
-rm /tmp/hidedisplay.txt > /dev/null 2>&1
-
-function show_display_nested() {
-systemname=$1
-if [[ "${systemname}" == "MAME (Advance)" ]]; then
-systemname="MAME \(Advance\)"
-fi
-if [[ "${systemname}" == "MAME (Libretro)" ]]; then
-systemname="MAME \(Libretro\)"
-fi
-if [[ "${systemname}" == "MAME (Mame4all)" ]]; then
-systemname="MAME \(Mame4all\)"
-fi
-perl -pi -w -e "s/#${systemname};/${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Arcades.txt
-perl -pi -w -e "s/#${systemname};/${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Computers.txt
-perl -pi -w -e "s/#${systemname};/${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Consoles.txt
-perl -pi -w -e "s/#${systemname};/${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Handhelds.txt
-}
-
-function hide_display_nested() {
-systemname=$1
-if [[ "${systemname}" == "MAME (Advance)" ]]; then
-systemname="MAME \(Advance\)"
-fi
-if [[ "${systemname}" == "MAME (Libretro)" ]]; then
-systemname="MAME \(Libretro\)"
-fi
-if [[ "${systemname}" == "MAME (Mame4all)" ]]; then
-systemname="MAME \(Mame4all\)"
-fi
-perl -pi -w -e "s/^${systemname};/#${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Arcades.txt
-perl -pi -w -e "s/^${systemname};/#${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Computers.txt
-perl -pi -w -e "s/^${systemname};/#${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Consoles.txt
-perl -pi -w -e "s/^${systemname};/#${systemname};/g;" /opt/emulos/configs/all/attractmode/romlists/Handhelds.txt
-}
-
-function show_display_traditional() {
-currentdisplay="${1}"
-ischoice="false"
-while read line
-do
-if [[ $line == "display"*"${currentdisplay}" ]]; then
-  echo $line >> /tmp/temp.cfg
-  ischoice="true"
-elif [[ $line == "display"* && $line != "displays_menu_exit"* ]]; then
-  echo $line >> /tmp/temp.cfg
-  ischoice="false"
-elif [[ $line == *"in_cycle"* && $ischoice = "true" ]]; then
-  echo -e "\tin_cycle             yes" >> /tmp/temp.cfg
-elif [[ $line == *"in_menu"* && $ischoice = "true" ]]; then
-  echo -e "\tin_menu              yes" >> /tmp/temp.cfg
-  ischoice="false"
-elif [[ $line == "rule"* ]]; then
-  echo -e "${line}" >> /tmp/temp.cfg
-elif [[ $line == "sound" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "input_map" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "general" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "saver_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "layout_config"* ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "intro_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "#"* ]]; then
-  echo $line >> /tmp/temp.cfg
-else
-  echo -e "${line}" >> /tmp/temp.cfg
-fi
-done < /tmp/attract_tmp.cfg
-}
-
-function hide_display_traditional() {
-  currentdisplay="${1}"
-  ischoice="false"
-  while read line
-  do
-  if [[ $line == "display"*"${currentdisplay}" ]]; then
-    echo $line >> /tmp/temp.cfg
-    ischoice="true"
-  elif [[ $line == "display"* && $line != "displays_menu_exit"* ]]; then
-    echo $line >> /tmp/temp.cfg
-    ischoice="false"
-  elif [[ $line == *"in_cycle"* && $ischoice = "true" ]]; then
-    echo -e "\tin_cycle             no" >> /tmp/temp.cfg
-  elif [[ $line == *"in_menu"* && $ischoice = "true" ]]; then
-    echo -e "\tin_menu              no" >> /tmp/temp.cfg
-    ischoice="false"
-  elif [[ $line == "rule"* ]]; then
-    echo -e "${line}" >> /tmp/temp.cfg
-  elif [[ $line == "sound" ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "input_map" ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "general" ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "saver_config" ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "layout_config"* ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "intro_config" ]]; then
-    echo $line >> /tmp/temp.cfg
-  elif [[ $line == "#"* ]]; then
-    echo $line >> /tmp/temp.cfg
+config="$attract_dir/attract.cfg"
+tab=$'\t'
+if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
+    cp "$config" "$config.bak"
+    if [[ "$fullname" == "EmulOS" ]]; then
+    cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               robo
+${tab}romlist              $fullname
+_EOF_
   else
-    echo -e "${line}" >> /tmp/temp.cfg
+    if [ "$(ls $path)" ]; then
+    cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               robospin_v4
+${tab}romlist              $fullname
+${tab}in_cycle             yes
+${tab}in_menu              yes
+_EOF_
+    else
+    cat >>"$config" <<_EOF_
+display${tab}$fullname
+${tab}layout               robospin_v4
+${tab}romlist              $fullname
+${tab}in_cycle             no
+${tab}in_menu              no
+_EOF_
+    fi
   fi
-  done < /tmp/attract_tmp.cfg
-}
-
-#########################################################################
-# Obtener lista de los sistemas y verificar los archivos ROM existentes #
-#########################################################################
-
-ifexist=0
-while read sname romdir ext
-do
-if [[ -d "/home/pi/EmulOS/roms/${romdir}" ]];then
- ext=`echo "$ext" | sed "s/ /|/g"`
- files=`ls /home/pi/EmulOS/roms/${romdir} |egrep ${ext}` 2> /dev/null
- if [[ -z $files ]];then
-  ifexist=0
-  echo "${sname}" >> /tmp/hidedisplay.txt
- else
-  ifexist=1
-  echo "${sname}" >> /tmp/showdisplay.txt
- fi
+    chown $user:$user "$config"
 fi
-done < /opt/emulos/configs/all/attractmode/amboot/amromlist.info
 
-###########################################
-# Actualice los archivos romlist anidados #
-###########################################
+#################################################
+# Si hay roms en el sistema, crea listado
 
-cp /opt/emulos/configs/all/attractmode/romlists/Arcades.txt /opt/emulos/configs/all/attractmode/romlists/Arcades.txt.bkp
-cp /opt/emulos/configs/all/attractmode/romlists/Computers.txt /opt/emulos/configs/all/attractmode/romlists/Computers.txt.bkp
-cp /opt/emulos/configs/all/attractmode/romlists/Consoles.txt /opt/emulos/configs/all/attractmode/romlists/Consoles.txt.bkp
-cp /opt/emulos/configs/all/attractmode/romlists/Handhelds.txt /opt/emulos/configs/all/attractmode/romlists/Handhelds.txt.bkp
+[[ ! -d "$attract_dir" ]] && return 0
 
-while read systemname
-do
-show_display_nested "${systemname}"
-done < /tmp/showdisplay.txt
+system_name="$1"
+system_fullname="$2"
+path="$3"
+name="$4"
+desc="$5"
+image="$6"
 
-while read systemname
-do
-hide_display_nested "${systemname}"
-done < /tmp/hidedisplay.txt
+configs="$attract_dir/romlists/$system_fullname.txt"
 
-###############################################
-# Actualizar el menú principal de attract.cfg #
-###############################################
+# remove extension
+path="${path/%.*}"
 
-cp /opt/emulos/configs/all/attractmode/attract.cfg /opt/emulos/configs/all/attractmode/attract.cfg.bkp
-cp /opt/emulos/configs/all/attractmode/attract.cfg /tmp/attract_tmp.cfg
-
-isarcade=`cat /opt/emulos/configs/all/attractmode/romlists/Arcades.txt |grep -v "#" |grep -v "Classic" |grep -v "Capcom" |wc -l`
-iscomputer=`cat /opt/emulos/configs/all/attractmode/romlists/Computers.txt |grep -v "#" |wc -l`
-isconsole=`cat /opt/emulos/configs/all/attractmode/romlists/Consoles.txt |grep -v "#" |wc -l`
-ishandheld=`cat /opt/emulos/configs/all/attractmode/romlists/Handhelds.txt |grep -v "#" |wc -l`
-
-if [[ $isarcade > "0" ]]; then
-  show_display_traditional "Arcades"
-else
-  hide_display_traditional "Arcades"
+if [[ ! -f "$configs" ]]; then
+    echo "#Name;Title;Emulator;CloneOf;Year;Manufacturer;Category;Players;Rotation;Control;Status;DisplayCount;DisplayType;AltRomname;AltTitle;Extra;Buttons" >"$config"
 fi
-mv /tmp/temp.cfg /tmp/attract_tmp.cfg
-if [[ $iscomputer > "0" ]]; then
-  show_display_traditional "Computers"
-else
-  hide_display_traditional "Computers"
-fi
-mv /tmp/temp.cfg /tmp/attract_tmp.cfg
-if [[ $isconsole > "0" ]]; then
-  show_display_traditional "Consoles"
-else
-  hide_display_traditional "Consoles"
-fi
-mv /tmp/temp.cfg /tmp/attract_tmp.cfg
-if [[ $ishandheld > "0" ]]; then
-  show_display_traditional "Handhelds"
-else
-  hide_display_traditional "Handhelds"
-fi
-mv /tmp/temp.cfg /tmp/attract_tmp.cfg
 
-cp /tmp/attract_tmp.cfg /opt/emulos/configs/all/attractmode/attract.cfg
+# if the entry already exists, remove it
+if grep -q "^$path;" "$configs"; then
+    sed -i "/^$path/d" "$configs"
+fi
+
+echo "$path;$name;$system_fullname;;;;;;;;;;;;;;" >>"$configs"
+chown $user:$user "$configs"
 
 #clear

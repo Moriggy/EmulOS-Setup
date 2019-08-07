@@ -182,8 +182,8 @@ ${tab}romlist              $fullname
 ${tab}in_cycle             no
 ${tab}in_menu              no
 _EOF_
+        fi
       fi
-    fi
         chown $user:$user "$config"
     fi
 }
