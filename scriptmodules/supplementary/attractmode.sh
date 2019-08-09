@@ -71,8 +71,8 @@ sed -i 's/emulationstation/attract/g' /opt/emulos/configs/all/autostart.sh
 sleep 2
 sudo reboot
 _EOF_
-
-      cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_cd /home/pi/.attract/romlists
+      cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_
+cd /opt/emulos/configs/all/attractmode/romlists
 rm Favorites.tag
 
 clear
