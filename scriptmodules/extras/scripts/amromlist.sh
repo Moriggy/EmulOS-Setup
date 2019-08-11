@@ -7,9 +7,11 @@
 #################################################
 
 IFS=";"
-#clear
+clear
+
 user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
 ruta="/opt/emulos/configs/all/attractmode"
+rm -R $ruta/romlists/*.txt
 
 #########################################################
 # Comprobar que sistemas tienen ROMS
@@ -37,15 +39,10 @@ done < $ruta/amboot/amromlist.info
 cp $ruta/attract.cfg $ruta/attract.cfg.bkp
 cp $ruta/attract.cfg /tmp/attract_tmp.cfg
 
-function show_display_traditional() {
+function show_display() {
 currentdisplay="${1}"
 ischoice="false"
-let i=0 # define counting variable
-W=() # define working array
-while read -r line; do # process file by file
-    let i=$i+1
-    W+=($i "$line")
-done < <(cat /tmp/showdisplay.txt)
+
 while read line
 do
 if [[ $line == "display"*"${currentdisplay}" ]]; then
@@ -59,79 +56,67 @@ elif [[ $line == *"in_cycle"* && $ischoice = "true" ]]; then
 elif [[ $line == *"in_menu"* && $ischoice = "true" ]]; then
   echo -e "\tin_menu              yes" >> /tmp/temp.cfg
   ischoice="false"
-elif [[ $line == "rule"* ]]; then
-  echo -e "${line}" >> /tmp/temp.cfg
-elif [[ $line == "sound" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "input_map" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "general" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "saver_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "layout_config"* ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "intro_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "#"* ]]; then
-  echo $line >> /tmp/temp.cfg
 else
   echo -e "${line}" >> /tmp/temp.cfg
 fi
 done < /tmp/attract_tmp.cfg
+rm /tmp/attract_tmp.cfg
+mv /tmp/temp.cfg /tmp/attract_tmp.cfg
 }
 
-function hide_display_traditional() {
+function hide_display() {
 currentdisplay="${1}"
 ischoice="false"
-let i=0 # define counting variable
-W=() # define working array
-while read -r line; do # process file by file
-    let i=$i+1
-    W+=($i "$line")
-done < <(cat /tmp/hidedisplay.txt)
 
 while read line
 do
-  if [[ $line == "display"*"EmulOS" || $line == "display"*"Favorites" ]]; then
+  if [[ $line == "display"*"${currentdisplay}" ]]; then
     echo $line >> /tmp/temp.cfg
-    ischoice="true"
-elif [[ $line == "display"* && $line != "displays_menu_exit"* ]]; then
-  echo $line >> /tmp/temp.cfg
-  ischoice="false"
-elif [[ $line == *"in_cycle"* && $ischoice = "true" ]]; then
-  echo -e "\tin_cycle             yes" >> /tmp/temp.cfg
-elif [[ $line == *"in_menu"* && $ischoice = "true" ]]; then
-  echo -e "\tin_menu              yes" >> /tmp/temp.cfg
-  ischoice="false"
-elif [[ $line == *"in_cycle"* && $ischoice = "false" ]]; then
-  echo -e "\tin_cycle             no" >> /tmp/temp.cfg
-elif [[ $line == *"in_menu"* && $ischoice = "false" ]]; then
-  echo -e "\tin_menu              no" >> /tmp/temp.cfg
-elif [[ $line == "rule"* ]]; then
-  echo -e "${line}" >> /tmp/temp.cfg
-elif [[ $line == "sound" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "input_map" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "general" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "saver_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "layout_config"* ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "intro_config" ]]; then
-  echo $line >> /tmp/temp.cfg
-elif [[ $line == "#"* ]]; then
-  echo $line >> /tmp/temp.cfg
-else
-  echo -e "${line}" >> /tmp/temp.cfg
-fi
+    ischoice="false"
+  elif [[ $line == "display"* && $line != "displays_menu_exit"* ]]; then
+    echo $line >> /tmp/temp.cfg
+    ischoice="false"
+  elif [[ $line == *"in_cycle"* && $ischoice = "false" ]]; then
+    echo -e "\tin_cycle             no" >> /tmp/temp.cfg
+  elif [[ $line == *"in_menu"* && $ischoice = "false" ]]; then
+    echo -e "\tin_menu              no" >> /tmp/temp.cfg
+  else
+    echo -e "${line}" >> /tmp/temp.cfg
+  fi
 done < /tmp/attract_tmp.cfg
+rm /tmp/attract_tmp.cfg
+mv /tmp/temp.cfg /tmp/attract_tmp.cfg
 }
 
-#show_display_traditional
-hide_display_traditional
-#rm /tmp/attract_tmp.cfg
-#cp /tmp/temp.cfg $ruta/attract.cfg
-#clear
+############################################################################
+# llamada a la funcion para ocultar pantalla de sistema que no tiene juegos
+
+let i=0 # definir contador
+W=() # definir array
+while read -r line; do # leemos linea a linea el txt
+    let i=$i+1
+    W+=($i "$line")
+    hide_display $line
+done < <(cat /tmp/hidedisplay.txt)
+
+#################################################################################################
+# llamada a la funcion para mostrar pantalla de sistema que tiene juegos y crear lista de juegos
+
+let o=0
+R=()
+while read -r lines; do
+  let o=$o+1
+  R+=($o "$lines")
+  show_display $lines
+  sudo -u $user attract --build-romlist "$lines" -o "$lines"
+done < <(cat /tmp/showdisplay.txt)
+
+##########################################
+# actualizar Meny Display de Attract Mode
+
+cp /tmp/attract_tmp.cfg $ruta/attract.cfg
+rm /tmp/attract_tmp.cfg
+rm /tmp/showdisplay.txt
+rm /tmp/hidedisplay.txt
+
+clear

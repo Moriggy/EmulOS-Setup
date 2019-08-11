@@ -187,13 +187,13 @@ artwork    wheel     /home/$user/EmulOS/roms/emulos/wheel
 _EOF_
 
       sed -i '/\<sound\>/i \display EmulOS' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        layout               robo' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        romlist              EmulOS' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        in_cycle             yes' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        in_menu              yes' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        filter               all' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \ ' /home/$user/.attract/attract.cfg
-      sed -i 's/window_mode          default/window_mode          fullscreen/g' /home/$user/.attract/attract.cfg
+      sed -i '/\<sound\>/i \        layout               robo' $attract_dir/attract.cfg
+      sed -i '/\<sound\>/i \        romlist              EmulOS' $attract_dir/attract.cfg
+      sed -i '/\<sound\>/i \        in_cycle             yes' $attract_dir/attract.cfg
+      sed -i '/\<sound\>/i \        in_menu              yes' $attract_dir/attract.cfg
+      sed -i '/\<sound\>/i \        filter               all' $attract_dir/attract.cfg
+      sed -i '/\<sound\>/i \ ' $attract_dir/attract.cfg
+      sed -i 's/window_mode          default/window_mode          fullscreen/g' $attract_dir/attract.cfg
       attract -b EmulOS
       sed -i '/<\<gameList\>>/a \        </game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
       sed -i '/<\<gameList\>>/a \                <image>./icons/Attract-Mode.png</image>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
@@ -224,6 +224,8 @@ _EOF_
 display${tab}$fullname
 ${tab}layout               robo
 ${tab}romlist              $fullname
+${tab}in_cycle             yes
+${tab}in_menu              yes
 _EOF_
       else
         if [ "$(ls $path)" ]; then
@@ -390,9 +392,10 @@ _EOF_
     mv menu-art/ /opt/emulos/configs/all/attractmode
     cd
     rm -R /home/$user/attract-config-rpi-master/
-    #mkdir /opt/emulos/configs/all/attractmode/amboot
-    #cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
-    #chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
+    mkdir /opt/emulos/configs/all/attractmode/amboot
+    cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
+    cp $scriptdir/scriptmodules/extras/scripts/amromlist.info /opt/emulos/configs/all/attractmode/amboot
+    chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
     chown -R $user:$user /opt/emulos/configs/all/attractmode
 
     local idx

@@ -8,7 +8,7 @@ Apple IIGS;apple2gs;.gsp .GSP .sh .SH
 Arcade;arcade;.fba .zip .FBA .ZIP .7z
 Atari 2600;atari2600;.a26 .bin .rom .zip .gz .A26 .BIN .ROM .ZIP .7z .GZ
 Atari 5200;atari5200;.a52 .bin .zip .A52 .BIN .ZIP .7z .car
-Atari 7800;atari7800;.a78 .bin .zip .A78 .BIN .ZIP .7z
+Atari 7800 ProSystem;atari7800;.a78 .bin .zip .A78 .BIN .ZIP .7z
 Atari 800;atari800;.bas .bin .car .com .xex .atr .xfd .dcm .atr .gz .xfd .gz .BAS .BIN .CAR .COM .XEX .ATR .XFD .DCM .ATR .GZ .XFD .GZ
 Atari XEGS;atarixegs;.bas .bin .car .com .xex .atr .rom .xfd .dcm .atr .gz .xfd .gz .BAS .BIN .CAR .COM .XEX .ATR .ROM .XFD .DCM .ATR .GZ .XFD .GZ
 Atari Jaguar;atarijaguar;.j64 .jag .zip .J64 .JAG .ZIP
@@ -32,13 +32,14 @@ Creatronic Mega Duck;megaduck;.bin .zip .BIN .ZIP
 Daphne;daphne;.daphne .DAPHNE
 Dragon 32;dragon32;.cas .wav .bas .asc .dmk .jvc .os9 .dsk .vdk .rom .ccc .sna .CAS .WAV .BAS .ASC .DMK .JVC .OS9 .DSK .VDK .ROM .CCC .SNA
 Emerson Arcadia 2001;arcadia;.zip .ZIP .bin .BIN
+EmulOS;emulos;.sh .SH
 Entex Adventure Vision;advision;.bin .zip .BIN .ZIP
 Epoch Game Pocket Computer;gamepock;.bin .BIN .zip .ZIP
 Epoch Super Cassette Vision;scv;.zip .ZIP .bin .BIN
 Fairchild Channel F;channelf;.zip .ZIP .bin .BIN
 Final Burn Alpha;fba;.zip .fba
 Fujitsu FM7;fm7;.d77 .t77 .d88 .2d .D77 .T77 .D88 .2D
-GCE Vectrex;vectrex;.vec .gam .bin .zip .VEC .GAM .BIN .ZIP .7z
+Vectrex;vectrex;.vec .gam .bin .zip .VEC .GAM .BIN .ZIP .7z
 Magnavox Odyssey 2;videopac;.bin .zip .BIN .ZIP .7z
 MAME (Advance);mame-advmame;.zip
 MAME (Libretro);mame-libretro;.zip
@@ -46,26 +47,29 @@ MAME (Mame4all);mame-mame4all;.zip
 Mattel Intellivision;intellivision;.int .bin .INT .bin .zip .ZIP .7z
 MGT Sam Coupe;samcoupe;.dsk .mgt .sbt .sad
 Microsoft MSX2;msx2;.rom .mx1 .mx2 .col .dsk .zip .ROM .MX1 .MX2 .COL .DSK .ZIP .7z
-Microsoft MSX;msx;.rom .mx1 .mx2 .col .dsk .zip .ROM .MX1 .MX2 .COL .DSK .ZIP .7z
+MSX;msx;.rom .mx1 .mx2 .col .dsk .zip .ROM .MX1 .MX2 .COL .DSK .ZIP .7z
 Microsoft MSX2 Plus;msx2plus;.rom .mx1 .mx2 .col .dsk .zip .ROM .MX1 .MX2 .COL .DSK .ZIP .7z
 Microsoft MSX Turbo R;msxturbo;.rom .mx1 .mx2 .col .dsk .zip .ROM .MX1 .MX2 .COL .DSK .ZIP .7z
-NEC PC Engine-CD;pce-cd;.cue .CUE .chd .CHD
-NEC PC Engine;pcengine;.zip .pce .ZIP .7z .PCE
+PC Engine-CD;pce-cd;.cue .CUE .chd .CHD
 NEC PC-FX;pcfx;.pce .ccd .cue .iso .chd .PCE .CCD .CUE .ISO .CHD
 NEC SuperGrafx;supergrafx;.zip .pce .ZIP .7z .PCE
 NEC TurboGrafx-16;tg16;.zip .pce .cue .ZIP .7z .PCE .CUE
 NEC TurboGrafx-CD;tg-cd;.cue .CUE .ccd .CCD .chd .CHD
+Neo Geo;neogeo;.zip .fba
+Neo Geo CD;neogeocd;.cue
+Neo Geo Pocket;ngp;.ngp .zip .NGP .ZIP .7z
+Neo Geo Pocket Color;ngpc;.ngc .zip .NGC .ZIP .7z
 Nintendo 64;n64;.z64 .n64 .v64 .Z64 .N64 .V64
 Nintendo DS;nds;.nds .zip .NDS .ZIP .7z
 Nintendo Entertainment System;nes;.nes .zip .NES .ZIP .7z
 Nintendo Entertainment System Hacks;nesh;.nes .zip .NES .ZIP .7z
-Nintendo Famicom;famicom;.nes .fds .zip .NES .FDS .ZIP .7z
-Nintendo Famicom Disk System;fds;.nes .fds .zip .NES .FDS .ZIP .7z
+Famicom;famicom;.nes .fds .zip .NES .FDS .ZIP .7z
+Famicom Disk System;fds;.nes .fds .zip .NES .FDS .ZIP .7z
 Nintendo Game and Watch;gameandwatch;.mgw .MGW .zip .ZIP .7z
-Nintendo Game Boy Advance;gba;.zip .gba .ZIP .7z .GBA
+Game Boy Advance;gba;.zip .gba .ZIP .7z .GBA
 Nintendo Game Boy Advance Hacks;gbah;.zip .gba .ZIP .7z .GBA
-Nintendo Game Boy;gb;.zip .gb .ZIP .7z .GB
-Nintendo Game Boy Color;gbc;.zip .gbc .ZIP .7z .GBC
+Game Boy;gb;.zip .gb .ZIP .7z .GB
+Game Boy Color;gbc;.zip .gbc .ZIP .7z .GBC
 Nintendo Game Boy Hacks;gbh;.zip .gb .ZIP .7z .GB
 Nintendo Pokemon Mini;pokemini;.min .zip
 Nintendo Satellaview;satellaview;.bin .smc .sfc .fig .swc .mgd .zip .BIN .SMC .SFC .FIG .SWC .MGD .ZIP .7z
@@ -75,17 +79,18 @@ Nintendo Virtual Boy;virtualboy;.zip .vb .VB .ZIP .7z
 OpenBOR;openbor;.pak .PAK
 Panasonic 3DO;3do;.iso .ISO
 PC;pc;.bat .com .exe .sh .conf .BAT .COM .EXE .SH .CONF
+PC Engine;pcengine;.zip .pce .ZIP .7z .PCE
 Philips CD-i;cdimono1;.chd
 Ports;ports;.sh .SH
 ResidualVM;residualvm;.rvm .RVM
 Sammy Atomiswave;atomiswave;.cdi .gdi .CDI .GDI .lst .LST .zip .ZIP
 ScummVM;scummvm;.svm
 Sega 32X;sega32x;.32x .smd .bin .md .zip .32X .SMD .BIN .MD .ZIP .7z
-Sega CD;segacd;.iso .cue .ISO .CUE .zip .chd .CHD
+Mega CD;segacd;.iso .cue .ISO .CUE .zip .chd .CHD
 Sega Dreamcast;dreamcast;.cdi .gdi .CDI .GDI .lst .LST
-Sega Game Gear;gamegear;.gg .bin .sms .zip .GG .BIN .SMS .ZIP .7z
+Sega Gamegear;gamegear;.gg .bin .sms .zip .GG .BIN .SMS .ZIP .7z
 Sega Game Gear Hacks;ggh;.gg .bin .sms .zip .GG .BIN .SMS .ZIP .7z
-Sega Genesis;megadrive;.smd .bin .gen .md .sg .zip .SMD .BIN .GEN .MD .SG .ZIP .7z
+Sega Mega Drive;megadrive;.smd .bin .gen .md .sg .zip .SMD .BIN .GEN .MD .SG .ZIP .7z
 Sega Genesis Hacks;genh;.smd .bin .gen .md .sg .zip .SMD .BIN .GEN .MD .SG .ZIP .7z
 Sega Mark III;markiii;.sms .bin .zip .SMS .BIN .ZIP .7z
 Sega Master System;mastersystem;.sms .bin .zip .SMS .BIN .ZIP .7z
@@ -97,13 +102,8 @@ Sega SC-3000;sc-3000;.sms .bin .zip .SMS .BIN .ZIP .7z
 Sega SG-1000;sg-1000;.sg .bin .zip .SG .BIN .ZIP .7z
 Sharp X1;x1;.dx1 .zip .2d .2hd .tfd .d88 .88d .hdm .xdf .dup .cmd .tap .xst
 Sharp X68000;x68000;.dim .hdf .2hd .d88 .DIM .HDF .2HD .D88
-Sinclair ZX Spectrum;zxspectrum;.sna .szx .z80 .tap .tzx .gz .udi .mgt .img .trd .scl .dsk .zip .SNA .SZX .Z80 .TAP .TZX .GZ .UDI .MGT .IMG .TRD .SCL .DSK .ZIP .7z
 Sinclair ZX81;zx81;.7z .p .tzx .t81 .zip .P .TZX .T81 .ZIP
-SNK Neo Geo AES;neogeo;.zip .fba
-SNK Neo Geo CD;neocdz;.chd
-SNK Neo Geo Pocket;ngp;.ngp .zip .NGP .ZIP .7z
-SNK Neo Geo Pocket Color;ngpc;.ngc .zip .NGC .ZIP .7z
-Sony PlayStation;psx;.cue .cbn .img .iso .m3u .mdf .pbp .toc .z .znx .CUE .CBN .IMG .ISO .M3U .MDF .PBP .TOC .Z .ZNX
+PlayStation;psx;.cue .cbn .img .iso .m3u .mdf .pbp .toc .z .znx .CUE .CBN .IMG .ISO .M3U .MDF .PBP .TOC .Z .ZNX
 Sony PSP;psp;.iso .pbp .cso .ISO .PBP .CSO
 Sony PSP Minis;pspminis;.iso .pbp .cso .ISO .PBP .CSO
 Sord M5;m5;.bin .zip .BIN .ZIP
@@ -117,3 +117,4 @@ Texas Instruments TI 99-4A;ti99;.ctg .CTG
 VTech Creativision;pv2000;.bin .BIN .zip .ZIP
 Watara Supervision;supervision;.zip .ZIP .sv .SV
 ZMachine;zmachine;.dat .zip .z1 .z2 .z3 .z4 .z5 .z6 .z7 .z8 .DAT .ZIP .7z .Z1 .Z2 .Z3 .Z4 .Z5 .Z6 .Z7 .Z8
+ZX Spectrum;zxspectrum;.sna .szx .z80 .tap .tzx .gz .udi .mgt .img .trd .scl .dsk .zip .SNA .SZX .Z80 .TAP .TZX .GZ .UDI .MGT .IMG .TRD .SCL .DSK .ZIP .7z
