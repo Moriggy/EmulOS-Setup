@@ -67,8 +67,10 @@ _EOF_
 echo ""
 echo "Cambiando el arranque a Attract-Mode y reiniciando..."
 echo ""
-sed -i 's/emulationstation/attract/g' /opt/emulos/configs/all/autostart.sh
-sleep 2
+sleep 5
+echo "while pgrep omxplayer >/dev/null; do sleep 1; done" > /opt/emulos/configs/all/autostart.sh
+echo "/home/pi/.attract/amboot/amromlist.sh" >> /opt/emulos/configs/all/autostart.sh
+echo "attract #auto" >> /opt/emulos/configs/all/autostart.sh
 sudo reboot
 _EOF_
       cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_
@@ -353,10 +355,12 @@ function configure_attractmode() {
     local config="$md_conf_root/all/attractmode/attract.cfg"
     if [[ ! -f "$config" ]]; then
         echo "general" >"$config"
-        echo -e "\tlanguage          es" >>"$config"
-        echo -e "\tstartup_mode          displays_menu" >>"$config"
+        echo -e "\tlanguage             es" >>"$config"
+        echo -e "\texit_command         sudo poweroff" >>"$config"
+        echo -e "\texit_message         Apagar Attract EmulOS" >>"$config"
+        echo -e "\tstartup_mode         displays_menu" >>"$config"
         echo -e "\twindow_mode          fullscreen" >>"$config"
-        echo -e "\tvideo_decoder          mmal" >>"$config"
+        echo -e "\tvideo_decoder        mmal" >>"$config"
         echo -e "\tmenu_prompt          Displays Menu" >>"$config"
         echo -e "\tmenu_layout          robospin_v4" >>"$config"
 
