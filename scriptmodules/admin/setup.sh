@@ -581,11 +581,11 @@ function gui_setup() {
                     rps_logStart
                     sudo apt-get install -y libboost-all-dev
                     basic_install_setup
-                    silencio
                     #### gancho nuevo copia de scripts nuestros
               			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-                			cd
-                			sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
+                      silencio
+                      cd
+                      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
                       sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown /home/pi/EmulOS/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/

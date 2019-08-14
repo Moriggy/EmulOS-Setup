@@ -53,7 +53,8 @@ function _add_system_attractmode() {
     if [[ "$name" == "emulos" ]]; then
       user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
       mkdir /home/$user/EmulOS/roms/emulos
-      cat > /home/$user/EmulOS/roms/emulos/EmulationStation.sh <<_EOF_
+      if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
+        cat > /home/$user/EmulOS/roms/emulos/EmulationStation.sh <<_EOF_
 #!/usr/bin/env bash
 echo ""
 echo "Cambiando el arranque a EmulationStation y reiniciando..."
@@ -73,7 +74,8 @@ echo "/home/pi/.attract/amboot/amromlist.sh" >> /opt/emulos/configs/all/autostar
 echo "attract #auto" >> /opt/emulos/configs/all/autostart.sh
 sudo reboot
 _EOF_
-      cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_
+    fi
+    cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_
 cd /opt/emulos/configs/all/attractmode/romlists
 rm Favorites.tag
 
