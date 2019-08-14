@@ -430,7 +430,7 @@ msgstr ""
 "Si no tienes videos, o si en varios intentos consecutivos los juegos "
 "seleccionados no tienen videos, será predeterminado en negro.\n"
 "\n"
-"Más opciones en el menú \"UI Settings\" > \"Video Screensaver\" . "
+"Más opciones en el menú \"Opciones de Interfaz\" > \"Video Screensaver\" . "
 
 msgid "USE HARDWARE BACKLIGHT CONTROL"
 msgstr "UTILIZAR EL CONTROL DE FONDO DEL HARDWARE"

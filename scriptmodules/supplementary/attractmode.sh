@@ -391,9 +391,9 @@ function configure_attractmode() {
 LD_LIBRARY_PATH="$md_inst/sfml/lib" "$md_inst/bin/attract" "\$@"
 _EOF_
     chmod +x "/usr/bin/attract"
-    wget https://github.com/DOCK-PI3/attract-config-rpi/archive/master.zip && unzip master.zip
+    wget https://github.com/DOCK-PI3/emulos-attract-config-rpi/archive/master.zip && unzip master.zip
     rm master.zip
-    cd attract-config-rpi-master/attract/
+    cd emulos-attract-config-rpi-master/
     mv layouts/ /opt/emulos/configs/all/attractmode
     mv menu-art/ /opt/emulos/configs/all/attractmode
     cd

@@ -27,7 +27,6 @@ function main_menu() {
             --ok-label OK --cancel-label Exit \
             --menu "Que accion te gustaria realizar?" 25 75 20 \
             100 "-------------- Para RPI ----------------" \
-            1 "RPI AttractMode Instalador/Configurador" \
             200 "-------------- Para PC ----------------" \
             2 "PC Reparar permisos en EmulOS" \
             3 "PC EmulationStation-dev idioma español para Ubuntu 16.04.5" \
@@ -38,7 +37,6 @@ function main_menu() {
 
         case "$choice" in
 			       100) separador_menu  ;;
-             1) pi_attractmode_ic ;;
              200) separador_menu  ;;
              2) permisos_pc  ;;
              3) pc_spanish  ;;
@@ -54,12 +52,6 @@ function main_menu() {
 function separador_menu() {                                          #
 dialog --infobox "... Separador para el menu, sin funcion ..." 30 55 ; sleep 3
 }
-
-function pi_attractmode_ic() {                                          #
-dialog --infobox "... Script instalador y configurador para attract mode ..." 30 55 ; sleep 3
-cd && sudo EmulOS-Setup/tools/attractmode.sh
-}
-
 
 #########################################################################
 # Funcion Reparar permisos en EmulOS PC ;-) #
