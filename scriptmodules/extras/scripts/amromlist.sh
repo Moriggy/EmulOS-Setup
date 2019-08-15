@@ -97,7 +97,6 @@ while read -r line; do # leemos linea a linea el txt
     let i=$i+1
     W+=($i "$line")
     hide_display $line
-    sudo -u $user attract --build-romlist "$lines" -o "$lines"
 done < <(cat /tmp/hidedisplay.txt)
 
 #################################################################################################
