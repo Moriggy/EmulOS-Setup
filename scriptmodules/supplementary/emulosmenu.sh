@@ -82,7 +82,7 @@ function configure_emulosmenu()
         'Configuraciones de audio Elija predeterminado de auto, jack de 3.5 mm o HDMI. Controles del mezclador y aplicar configuraciones predeterminadas.'
 		    'Regístra y conécta dispositivos bluetooth. Anula el registro y elimina los dispositivos y visualiza los dispositivos registrados y conectados.'
         'Cambie las opciones comunes de RetroArch y edite manualmente las configuraciones de RetroArch, las configuraciones globales y las configuraciones que no son de RetroArch.'
-        'Utilidades como script para instalar y configurar Attract Mode, traducir EmulationStation a español en PC y otras utilidades'
+        'Opciones para traducir EmulationStation a español en PC y otras utilidades'
         'Instalar, desinstalar, o actualizar themes de EmulationStation. Muchos themes los puedes ver en nuestra web: http://es-themes-masos.ml'
         'Administrador de archivos básico de ASCII para Linux que le permite navegar, copiar, eliminar y mover archivos. (Es necesario tener teclado conectado)'
         'Podrás añadir bezels, videoloading screen a tus sistemas y hacer Overclock a tu RPI'
