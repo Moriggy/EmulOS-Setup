@@ -397,7 +397,7 @@ _EOF_
     mv layouts/ /opt/emulos/configs/all/attractmode
     mv menu-art/ /opt/emulos/configs/all/attractmode
     cd
-    rm -R /home/$user/attract-config-rpi-master/
+    rm -R /home/$user/emulos-attract-config-rpi-master/
     mkdir /opt/emulos/configs/all/attractmode/amboot
     cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
     cp $scriptdir/scriptmodules/extras/scripts/amromlist.info /opt/emulos/configs/all/attractmode/amboot
