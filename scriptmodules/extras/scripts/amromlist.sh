@@ -12,7 +12,6 @@ clear
 user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
 ruta="/opt/emulos/configs/all/attractmode"
 
-
 #########################################################
 # Comprobar que sistemas tienen ROMS
 #
