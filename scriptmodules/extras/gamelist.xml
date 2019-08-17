@@ -75,7 +75,7 @@
 	<game>
 		<path>./emulosextrasall.rp</path>
 		<name>EmulOS Herramientas y utils</name>
-		<desc>Utilidades como script para instalar y configurar Attract Mode, traducir EmulationStation a español en PC y otras utilidades</desc>
+		<desc>Utilidades como para traducir EmulationStation a español en PC y otras opciones</desc>
 		<image>./icons/emulosextrasall.png</image>
 	</game>
 	<game>
