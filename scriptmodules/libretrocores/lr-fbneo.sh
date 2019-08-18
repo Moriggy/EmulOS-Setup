@@ -50,7 +50,7 @@ function install_lr-fbneo() {
 
 function configure_lr-fbneo() {
     local dir
-    for dir in arcade fba neogeo neogeocd msx; do
+    for dir in arcade fba neogeo neogeocd msx coleco; do
         mkRomDir "$dir"
         ensureSystemretroconfig "$dir"
     done
