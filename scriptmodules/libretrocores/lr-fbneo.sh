@@ -50,12 +50,10 @@ function install_lr-fbneo() {
 
 function configure_lr-fbneo() {
     local dir
-    for dir in arcade fba neogeo; do
+    for dir in arcade fba neogeo neogeocd msx; do
         mkRomDir "$dir"
         ensureSystemretroconfig "$dir"
     done
-    mkRomDir "neogeocd"
-    ensureSystemretroconfig "neogeocd"
 
     # Create samples directory
     mkUserDir "$biosdir/fbneo"
