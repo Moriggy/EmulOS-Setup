@@ -59,7 +59,7 @@ function _add_system_attractmode() {
 echo ""
 echo "Cambiando el arranque a EmulationStation y reiniciando..."
 echo ""
-sed -i 's/attract/emulationstation/g' /opt/emulos/configs/all/autostart.sh
+echo "emulationstation #auto" > /opt/emulos/configs/all/autostart.sh
 sleep 2
 sudo reboot
 _EOF_
