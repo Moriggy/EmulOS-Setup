@@ -38,7 +38,7 @@ NEC PC Engine;pcengine;.zip .pce .ZIP .7z .PCE
 NEC PC Engine-CD;pce-cd;.cue .CUE .chd .CHD
 NEC PC-FX;pcfx;.pce .ccd .cue .iso .chd .PCE .CCD .CUE .ISO .CHD
 NEC SuperGrafx;supergrafx;.zip .pce .ZIP .7z .PCE
-NEC TurboGrafx-16;tg16;.zip .pce .cue .ZIP .7z .PCE .CUE
+NEC TurboGrafx16;tg16;.zip .pce .cue .ZIP .7z .PCE .CUE
 NEC TurboGrafx-CD;tg-cd;.cue .CUE .ccd .CCD .chd .CHD
 SNK Neo Geo;neogeo;.zip .fba
 SNK Neo Geo CD;neogeocd;.cue
