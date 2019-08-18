@@ -54,6 +54,7 @@ function gui_esthemes() {
     'DOCK-PI3 PlataFina'
     'DOCK-PI3 XegasPi'
     'Moriggy EmulOS'
+    'Moriggy Noromu_v2'
     'Moriggy Resident_Evil'
     'Moriggy Blackhole'
     'Moriggy Neon'
