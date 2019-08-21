@@ -43,7 +43,7 @@ function disable_blanker_raspbiantools() {
 }
 
 function stretch_fix_raspbiantools() {
-    local ver="1.20190401-1"
+    local ver="1.20190215-1"
     # install an older kernel/firmware for stretch to resolve sony bt, composite and overscan issues
     if isPlatform "rpi" && [[ "$__os_debian_ver" -eq 9 ]] && hasPackage raspberrypi-kernel "$ver" ne; then
         install_firmware_raspbiantools "$ver" hold
