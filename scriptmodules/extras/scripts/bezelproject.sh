@@ -21,6 +21,7 @@ function main_menu() {
             3 "Disable system bezel pack" \
             4 "Information:  Retroarch cores setup for bezels per system" \
             5 "Uninstall the bezel project completely" \
+			6 "Reparar permisos en RetroArch _ new" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -29,9 +30,19 @@ function main_menu() {
             3) disable_bezel  ;;
             4) retroarch_bezelinfo  ;;
             5) removebezelproject  ;;
+			6) repara_permisos  ;;
             *)  break ;;
         esac
     done
+}
+
+#########################################################
+# Functions for repair permissions bezel packs #
+#########################################################
+
+function repara_permisos() {
+sudo chown -R pi:pi /opt/emulos/
+
 }
 
 #########################################################
@@ -42,11 +53,11 @@ function install_bezel_pack() {
     local theme="$1"
     local repo="$2"
     if [[ -z "$repo" ]]; then
-        repo="DOCK-PI3"
+        repo="default"
     fi
     if [[ -z "$theme" ]]; then
         theme="default"
-        repo="DOCK-PI3"
+        repo="default"
     fi
     atheme=`echo ${theme} | sed 's/.*/\L&/'`
 
@@ -109,7 +120,7 @@ hide_bezel gbc
 
 rm -rf /opt/emulos/configs/all/retroarch/overlay/GameBezels
 rm -rf /opt/emulos/configs/all/retroarch/overlay/ArcadeBezels
-rm /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/bezelproject.sh
+# rm /home/pi/EmulOS/emulosmenu/bezelproject.sh
 
 }
 
