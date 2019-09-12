@@ -3,7 +3,7 @@
 infobox= ""
 infobox="${infobox}___________________________________________________________________________\n\n"
 infobox="${infobox}Instalador Herramienta Musica de fondo para ES , BGM EmulOS\n\n"
-infobox="${infobox}14-06-2019...Version del script: 5.0a \n"
+infobox="${infobox}12-09-2019...Version del script: 7.0a \n"
 infobox="${infobox}Reproductor usado python-es-bgm ,creado por Rydra https://github.com/Rydra/bgm-for-es \n"
 infobox="${infobox}Install BGM EmulOS Backgroud Music Tool for emulationstation\n\n"
 infobox="${infobox}-Scrip instalador creado por mabedeep para EmulOS 4.X.X\n By EmulOS Team\n\n"
@@ -23,12 +23,13 @@ function main_menu() {
             --ok-label OK --cancel-label Exit \
             --menu "Que accion le gustaria realizar?" 25 75 20 \
             1 "Instalar BGM EmulOS Background Music" \
-			      2 "Desactivar o Activar BGM EmulOS ,solo despues de instalar" \
+			2 "Desactivar o Activar BGM EmulOS ,solo despues de instalar" \
             3 "Limpiar de .MP3 el directorio music" \
-			      4 "EXTRA BGM Descargar DOCK-PI3 ARCADE COLLECTIONS" \
-			      5 "EXTRA BGM Descargar HEAZYHAX Default install" \
-			      6 "EXTRA BGM Descargar DOCK-PI3 BSO COLLECTIONS" \
-            7 "BGM EmulOS Detector de cores, emuladores y ports. ACTUALIZAR..." \
+			4 "EXTRA BGM Descargar DOCK-PI3 ARCADE COLLECTIONS" \
+			5 "EXTRA BGM Descargar HEAZYHAX Default install" \
+			6 "EXTRA BGM Descargar DOCK-PI3 BSO COLLECTIONS" \
+            7 "EXTRA BGM Descargar DOCK-PI3 ULTIMATE-PACK" \
+			100 "BGM EmulOS Detector de cores, emuladores y ports. ACTUALIZAR..." \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -38,7 +39,8 @@ function main_menu() {
             4) dockpi3_bgmPack  ;;
             5) default_bgmPack  ;;
             6) dockpi3_bgmPackBSO  ;;
-            7) detector_cores  ;;
+            7) dockpi3_bgmPackULTIMATE  ;;
+			100) detector_cores  ;;
             *)  break ;;
         esac
     done
@@ -150,6 +152,22 @@ function default_bgmPack() {
 				  sudo chown -R pi:pi /home/pi/EmulOS/roms/music
 				echo -e "\n\n\n   El pack por defecto se descargo correctamente!.....\n\n\nRecuerde reiniciar el sistema para empezar a escuchar la musica.!\n\n\n"
 			sleep 3
+# ---------------------------- #
+}
+
+#########################################################################
+# Descargar pack dock-pi3 bgm ULTIMATE-PACK #
+function dockpi3_bgmPackULTIMATE() {
+			echo -e "\n\n\n   Descargando pack personal, ULTIMATE-PACK dock-pi3.  ,.....Espere!.....\n\n\nTamaño en disco: 260 mb\n\n\nCanciones: 35 ficheros\n\n\nCategoria: Pelis BSO\n\n\nFormato: .mp3"
+			sleep 5
+			cd && wget https://archive.org/download/bgmdockpi3ultimatepack/BGM_DOCK-PI3_ULTIMATE-PACK.zip -O /home/pi/BGM_DOCK-PI3_ULTIMATE-PACK.zip
+			sudo chown -R pi:pi /home/pi/EmulOS/roms/music
+			unzip -o BGM_DOCK-PI3_ULTIMATE-PACK.zip && cp -R /home/pi/BGM_DOCK-PI3_ULTIMATE-PACK/*.mp3 /home/pi/EmulOS/roms/music/
+			cd
+			rm BGM_DOCK-PI3_ULTIMATE-PACK.zip && rm -R /home/pi/BGM_DOCK-PI3_ULTIMATE-PACK/
+			sudo chown -R pi:pi /home/pi/EmulOS/roms/music
+		  echo -e "\n\n\n   El pack dock-pi3 ULTIMATE-PACK se descargo correctamente!.....\n\n\nRecuerde reiniciar el sistema para empezar a escuchar la musica.!\n\n\n"
+		sleep 3
 # ---------------------------- #
 }
 
