@@ -10,7 +10,7 @@
 #
 
 rp_module_id="image"
-rp_module_desc="Create/Manage EmulOS images"
+rp_module_desc="Create/Manage RetroPie images"
 rp_module_section=""
 rp_module_flags="!arm"
 
@@ -37,6 +37,9 @@ function create_chroot_image() {
             url="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/2017-07-05-raspbian-jessie-lite.zip"
             ;;
         stretch)
+            url="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/2019-04-08-raspbian-stretch-lite.zip"
+            ;;
+        buster)
             url="https://downloads.raspberrypi.org/raspbian_lite_latest"
             ;;
         *)
@@ -83,9 +86,9 @@ function install_rp_image() {
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
 
-    # hostname to MasOS
-    echo "masos" >"$chroot/etc/hostname"
-    sed -i "s/raspberrypi/masos/" "$chroot/etc/hosts"
+    # hostname to emulos
+    echo "emulos" >"$chroot/etc/hostname"
+    sed -i "s/raspberrypi/emulos/" "$chroot/etc/hosts"
 
     # quieter boot / disable plymouth (as without the splash parameter it
     # causes all boot messages to be displayed and interferes with people
@@ -97,13 +100,20 @@ function install_rp_image() {
         sed -i "s/quiet/quiet loglevel=3 consoleblank=0 plymouth.enable=0 quiet/" "$chroot/boot/cmdline.txt"
     fi
 
+    # set default GPU mem, and overscan_scale so ES scales to overscan settings.
+    iniConfig "=" "" "$chroot/boot/config.txt"
+    iniSet "gpu_mem_256" 128
+    iniSet "gpu_mem_512" 256
+    iniSet "gpu_mem_1024" 256
+    iniSet "overscan_scale" 1
+
     cat > "$chroot/home/pi/install.sh" <<_EOF_
 #!/bin/bash
 cd
 sudo apt-get update
 sudo apt-get -y install git dialog xmlstarlet joystick
-git clone https://github.com/Moriggy/EmulOS-Setup.git
-cd EmulOS-Setup
+git clone https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
 modules=(
     'raspbiantools apt_upgrade'
     'setup basic_install'
@@ -151,6 +161,9 @@ function _init_chroot_image() {
     local nameserver="$(nmcli device show | grep IP4.DNS  | awk '{print $NF; exit}')"
     # so we can resolve inside the chroot
     echo "nameserver $nameserver" >"$chroot"/etc/resolv.conf
+
+    # move /etc/ld.so.preload out of the way to avoid warnings
+    mv "$chroot/etc/ld.so.preload" "$chroot/etc/ld.so.preload.bak"
 }
 
 function _deinit_chroot_image() {
@@ -160,6 +173,10 @@ function _deinit_chroot_image() {
     trap "" INT
 
     >"$chroot/etc/resolv.conf"
+
+    # restore /etc/ld.so.preload
+    mv "$chroot/etc/ld.so.preload.bak" "$chroot/etc/ld.so.preload"
+
     umount -l "$chroot/proc" "$chroot/dev/pts"
     trap INT
 }
@@ -191,7 +208,7 @@ function create_image() {
 
     # make image size 300mb larger than contents of chroot
     local mb_size=$(du -s --block-size 1048576 $chroot 2>/dev/null | cut -f1)
-    ((mb_size+=300))
+    ((mb_size+=492))
 
     # create image
     printMsgs "console" "Creating image $image ..."
@@ -201,9 +218,10 @@ function create_image() {
     printMsgs "console" "partitioning $image ..."
     parted -s "$image" -- \
         mklabel msdos \
-        mkpart primary fat16 4 64 \
+        unit mib \
+        mkpart primary fat16 4 260 \
         set 1 boot on \
-        mkpart primary 64 -1
+        mkpart primary 260 -1s
 
     # format
     printMsgs "console" "Formatting $image ..."
@@ -219,7 +237,7 @@ function create_image() {
     local part_root="${partitions[1]}"
 
     mkfs.vfat -F 16 -n boot "$part_boot"
-    mkfs.ext4 -O ^metadata_csum,^huge_file -L masos "$part_root"
+    mkfs.ext4 -O ^metadata_csum,^huge_file -L emulos "$part_root"
 
     parted "$image_name" print
 

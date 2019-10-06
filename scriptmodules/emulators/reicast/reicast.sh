@@ -73,7 +73,7 @@ function mapInput() {
     echo "$params"
 }
 
-if [[ ! -f "$biosdir/dc/dc_boot.bin" ]]; then
+if [[ ! -f "$biosdir/dc_boot.bin" ]]; then
     dialog --no-cancel --pause "You need to copy the Dreamcast BIOS files (dc_boot.bin and dc_flash.bin) to the folder $biosdir to boot the Dreamcast emulator." 22 76 15
     exit 1
 fi
@@ -86,4 +86,4 @@ if [[ "$AUDIO" == "oss" ]]; then
     aoss "$rootdir/emulators/reicast/bin/reicast" "${params[@]}" >/dev/null
 else
     "$rootdir/emulators/reicast/bin/reicast" "${params[@]}" >/dev/null
-fi 
+fi

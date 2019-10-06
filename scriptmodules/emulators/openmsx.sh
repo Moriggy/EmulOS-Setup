@@ -10,8 +10,8 @@
 #
 
 rp_module_id="openmsx"
-rp_module_desc="MSX emulator OpenMSX"
-rp_module_help="ROM Extensions: .rom .mx1 .mx2 .col .dsk .zip\n\nCopy your MSX/MSX2 games to $romdir/msx"
+rp_module_desc="Emulador de MSX"
+rp_module_help="ROM Extensions: .rom .mx1 .mx2 .col .dsk .zip\n\nCopia tus juegos de MSX/MSX2 en $romdir/msx"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/openMSX/openMSX/master/doc/GPL.txt"
 rp_module_section="opt"
 rp_module_flags="!mali"

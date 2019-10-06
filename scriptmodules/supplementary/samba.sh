@@ -14,7 +14,7 @@ rp_module_desc="Configura Samba ROM Shares"
 rp_module_section="config"
 
 function depends_samba() {
-    getDepends samba
+    DEBIAN_FRONTEND=noninteractive getDepends samba
 }
 
 function remove_share_samba() {
@@ -41,7 +41,7 @@ _EOF_
 }
 
 function restart_samba() {
-    service samba restart
+    service samba restart || service smbd restart
 }
 
 # new samba shares by mabedeep: agregando rutas directas de ES y ovelays
