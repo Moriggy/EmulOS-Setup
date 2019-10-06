@@ -10,7 +10,7 @@
 #
 
 rp_module_id="image"
-rp_module_desc="Create/Manage RetroPie images"
+rp_module_desc="Create/Manage EmulOS images"
 rp_module_section=""
 rp_module_flags="!arm"
 
@@ -112,8 +112,8 @@ function install_rp_image() {
 cd
 sudo apt-get update
 sudo apt-get -y install git dialog xmlstarlet joystick
-git clone https://github.com/RetroPie/RetroPie-Setup.git
-cd RetroPie-Setup
+git clone https://github.com/Moriggy/EmulOS-Setup.git
+cd EmulOS-Setup
 modules=(
     'raspbiantools apt_upgrade'
     'setup basic_install'
