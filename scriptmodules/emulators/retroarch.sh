@@ -10,7 +10,7 @@
 #
 
 rp_module_id="retroarch"
-rp_module_desc="RetroArch - frontend de los núcleos de libretro - requeridos por todos los emuladores lr- *"
+rp_module_desc="RetroArch - frontend to the libretro emulator cores - required by all lr-* emulators"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/RetroArch/master/COPYING"
 rp_module_section="core"
 
@@ -22,6 +22,7 @@ function depends_retroarch() {
     isPlatform "mali" && depends+=(mali-fbdev)
     isPlatform "x11" && depends+=(libx11-xcb-dev libpulse-dev libvulkan-dev)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc zlib1g-dev libfreetype6-dev)
+    isPlatform "kms" && depends+=(libgbm-dev)
 
     if compareVersions "$__os_debian_ver" ge 9; then
         depends+=(libavcodec-dev libavformat-dev libavdevice-dev)
@@ -35,19 +36,16 @@ function depends_retroarch() {
     fi
 
     getDepends "${depends[@]}"
-
-    addUdevInputRules
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.7.7
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.7.9.2
     applyPatch "$md_data/01_hotkey_hack.diff"
     applyPatch "$md_data/02_disable_search.diff"
-    applyPatch "$md_data/03_disable_udev_sort.diff"
 }
 
 function build_retroarch() {
-    local params=(--disable-sdl --enable-sdl2 --enable-udev --enable-alsa --disable-oss --disable-al --disable-jack --disable-qt)
+    local params=(--disable-sdl --disable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt)
     if ! isPlatform "x11"; then
         params+=(--disable-pulse)
         ! isPlatform "mesa" && params+=(--disable-x11)
@@ -55,17 +53,21 @@ function build_retroarch() {
     if compareVersions "$__os_debian_ver" lt 9; then
         params+=(--disable-ffmpeg)
     fi
-    isPlatform "gles" && params+=(--enable-opengles --disable-opengl1 --disable-opengl_core)
-    # Temporarily block dispmanx support for fkms until upstream support is fixed
-    isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx)
-    isPlatform "rpi" && isPlatform "mesa" && params+=(--disable-videocore)
+    isPlatform "gles" && params+=(--enable-opengles)
+    if isPlatform "rpi" && isPlatform "mesa"; then
+        params+=(--disable-videocore --disable-vulkan)
+        [ -f "/opt/vc/lib/pkgconfig/egl.pc" ] && PKG_CONFIG_PATH=""
+    fi
+    isPlatform "gles3" && params+=(--enable-opengles3) 
+     # Temporarily block dispmanx support for fkms until upstream support is fixed
+    isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx --disable-opengl1)
     isPlatform "mali" && params+=(--enable-mali_fbdev)
-    isPlatform "kms" && params+=(--enable-kms)
+    isPlatform "kms" && params+=(--enable-kms --enable-egl)
     isPlatform "arm" && params+=(--enable-floathard)
     isPlatform "neon" && params+=(--enable-neon)
     isPlatform "x11" && params+=(--enable-vulkan)
     isPlatform "vero4k" && params+=(--enable-mali_fbdev --with-opengles_libs='-L/opt/vero3/lib')
-    ./configure --prefix="$md_inst" "${params[@]}"
+   ./configure --prefix="$md_inst" "${params[@]}"
     make clean
     make
     md_ret_require="$md_build/retroarch"
@@ -122,6 +124,8 @@ function _package_xmb_monochrome_assets_retroarch() {
 
 function configure_retroarch() {
     [[ "$md_mode" == "remove" ]] && return
+    
+    addUdevInputRules
 
     # move / symlink the retroarch configuration
     moveConfigDir "$home/.config/retroarch" "$configdir/all/retroarch"
@@ -134,12 +138,12 @@ function configure_retroarch() {
     moveConfigDir "$md_inst/overlays" "$configdir/all/retroarch/overlay"
     moveConfigDir "$md_inst/shader" "$configdir/all/retroarch/shaders"
 
-    # install shaders by default
+    # install assets, cheats and shaders by default
     update_shaders_retroarch
 
-    # install minimal assets
+	# install minimal assets
     install_xmb_monochrome_assets_retroarch
-
+	
     local config="$(mktemp)"
 
     cp "$md_inst/retroarch.cfg" "$config"
@@ -156,22 +160,22 @@ function configure_retroarch() {
     iniSet "video_aspect_ratio_auto" "true"
     iniSet "video_smooth" "false"
     iniSet "rgui_show_start_screen" "false"
+    iniSet "rgui_browser_directory" "$romdir"
 
     if ! isPlatform "x86"; then
         iniSet "video_threaded" "true"
     fi
-
-    iniSet "video_font_size" "12"
+	
     iniSet "core_options_path" "$configdir/all/retroarch-core-options.cfg"
     isPlatform "x11" && iniSet "video_fullscreen" "true"
     isPlatform "mesa" && iniSet "video_fullscreen" "true"
-
-    # set default render resolution to 640x480 for rpi1
+	
+	# set default render resolution to 640x480 for rpi1
     if isPlatform "rpi1"; then
         iniSet "video_fullscreen_x" "640"
         iniSet "video_fullscreen_y" "480"
     fi
-
+	
     # enable hotkey ("select" button)
     iniSet "input_enable_hotkey" "nul"
     iniSet "input_exit_emulator" "escape"
@@ -204,42 +208,48 @@ function configure_retroarch() {
     iniSet "input_player1_down" "down"
 
     # input settings
+    iniSet "input_joypad_driver" "udev"
     iniSet "input_autodetect_enable" "true"
     iniSet "auto_remaps_enable" "true"
-    iniSet "input_joypad_driver" "udev"
     iniSet "all_users_control_menu" "true"
 
     # rgui by default
     iniSet "menu_driver" "rgui"
 
-    # hide online updater menu options
+    # hide online updater menu options and the restart option
     iniSet "menu_show_core_updater" "false"
     iniSet "menu_show_online_updater" "false"
+    iniSet "menu_show_restart_retroarch" "false"
 
     # disable unnecessary xmb menu tabs
     iniSet "xmb_show_add" "false"
     iniSet "xmb_show_history" "false"
     iniSet "xmb_show_images" "false"
     iniSet "xmb_show_music" "false"
-
-    # disable xmb menu driver icon shadows
+	
+	# disable xmb menu driver icon shadows
     iniSet "xmb_shadows_enable" "false"
 
     # swap A/B buttons based on ES configuration
     iniSet "menu_swap_ok_cancel_buttons" "$es_swap"
 
+    # disable 'press twice to quit'
+    iniSet "quit_press_twice" "false"
+
+    # enable video shaders
+    iniSet "video_shader_enable" "true"
+	
+	#aumento de letra de texto
+	iniSet "video_font_size" "24.000000"
+   
     copyDefaultConfig "$config" "$configdir/all/retroarch.cfg"
     rm "$config"
 
-    # if no menu_driver is set, force RGUI, as the default has now changed to XMB.
-    iniConfig " = " '"' "$configdir/all/retroarch.cfg"
-    iniGet "menu_driver"
-    [[ -z "$ini_value" ]] && iniSet "menu_driver" "rgui"
-
-    # if no menu_unified_controls is set, force it on so that keyboard player 1 can control
-    # the RGUI menu which is important for arcade sticks etc that map to keyboard inputs
-    iniGet "menu_unified_controls"
-    [[ -z "$ini_value" ]] && iniSet "menu_unified_controls" "true"
+    # force settings on existing configs
+    _set_config_option_retroarch "menu_driver" "rgui"
+    _set_config_option_retroarch "menu_unified_controls" "true"
+    _set_config_option_retroarch "quit_press_twice" "false"
+    _set_config_option_retroarch "video_shader_enable" "true"
 
     # remapping hack for old 8bitdo firmware
     addAutoConf "8bitdo_hack" 0
@@ -303,10 +313,16 @@ function hotkey_retroarch() {
     fi
 }
 
+function config_retroarch() {
+    cp "$scriptdir/configs/all/retroarch.cfg" "$md_conf_root/all"
+    cp "$scriptdir/configs/all/retroarch.cfg.bak" "$md_conf_root/all"
+    cp "$scriptdir/configs/all/retroarch-core-options.cfg" "$md_conf_root/all"
+}
+
 function gui_retroarch() {
     while true; do
-        local names=(shaders overlays assets)
-        local dirs=(shaders overlay assets)
+        local names=(assets cheats overlays shaders)
+        local dirs=(assets cheats overlays shaders)
         local options=()
         local name
         local dir
@@ -320,13 +336,14 @@ function gui_retroarch() {
             ((i++))
         done
         options+=(
-            4 "Configure keyboard for use with RetroArch"
-            5 "Configure keyboard hotkey behaviour for RetroArch"
+            5 "Configure keyboard for use with RetroArch"
+            6 "Configure keyboard hotkey behaviour for RetroArch"
+            7 "Reset retroarch and retroarch-core-option configs"
         )
         local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         case "$choice" in
-            1|2|3)
+            1|2|3|4)
                 name="${names[choice-1]}"
                 dir="${dirs[choice-1]}"
                 options=(1 "Install/Update $name" 2 "Uninstall $name" )
@@ -339,7 +356,6 @@ function gui_retroarch() {
                         ;;
                     2)
                         rm -rf "$configdir/all/retroarch/$dir"
-                        [[ "$dir" == "assets" ]] && install_xmb_monochrome_assets_retroarch
                         ;;
                     *)
                         continue
@@ -347,11 +363,15 @@ function gui_retroarch() {
 
                 esac
                 ;;
-            4)
+            5)
                 keyboard_retroarch
                 ;;
-            5)
+            6)
                 hotkey_retroarch
+                ;;
+            7)
+                config_retroarch
+                printMsgs "dialog" "Completed the reset of retroarch and retroarch-core-options configs."
                 ;;
             *)
                 break
@@ -359,4 +379,14 @@ function gui_retroarch() {
         esac
 
     done
+}
+
+function _set_config_option_retroarch() {
+    local option="$1"
+    local value="$2"
+    iniConfig " = " "\"" "$configdir/all/retroarch.cfg"
+    iniGet "$option"
+    if [[ -z "$ini_value" ]]; then
+        iniSet "$option" "$value"
+    fi
 }
