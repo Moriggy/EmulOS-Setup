@@ -128,7 +128,7 @@ function depends_emulationstation() {
         libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
         libvlc-dev libvlccore-dev vlc
     )
-    compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
+
     isPlatform "x11" && depends+=(gnome-terminal)
     getDepends "${depends[@]}"
 }
