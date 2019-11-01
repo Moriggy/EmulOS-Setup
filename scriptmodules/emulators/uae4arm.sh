@@ -62,7 +62,7 @@ function configure_uae4arm() {
 
         local conf="$(mktemp)"
         iniConfig "=" "" "$conf"
-        iniSet "config_description" "RetroPie A500, 68000, OCS, 512KB Chip + 512KB Slow Fast"
+        iniSet "config_description" "EmulOS A500, 68000, OCS, 512KB Chip + 512KB Slow Fast"
         iniSet "chipmem_size" "1"
         iniSet "bogomem_size" "2"
         iniSet "chipset" "ocs"
@@ -73,7 +73,7 @@ function configure_uae4arm() {
 
         conf="$(mktemp)"
         iniConfig "=" "" "$conf"
-        iniSet "config_description" "RetroPie A1200, 68EC020, AGA, 2MB Chip"
+        iniSet "config_description" "EmulOS A1200, 68EC020, AGA, 2MB Chip"
         iniSet "chipmem_size" "4"
         iniSet "finegrain_cpu_speed" "1024"
         iniSet "cpu_type" "68ec020"

@@ -63,7 +63,7 @@ function configure_lr-parallel-n64() {
     setRetroArchCoreOption "parallel-n64-screensize" "640x480"
 
     # Copy config files
-    cat > $home/RetroPie/BIOS/gles2n64rom.conf << _EOF_
+    cat > $home/EmulOS/BIOS/gles2n64rom.conf << _EOF_
 #rom specific settings
 
 rom name=SUPER MARIO 64

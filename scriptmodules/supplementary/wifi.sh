@@ -172,7 +172,7 @@ function _check_country_wifi() {
     iniConfig "=" "" /etc/wpa_supplicant/wpa_supplicant.conf
     iniGet "country"
     if [[ -z "$ini_value" ]]; then
-        if dialog --defaultno --yesno "Actualmente no tienes tu pais WiFi configurado en /etc/wpa_supplicant/wpa_supplicant.conf\n\nEn una Raspberry Pi 3 Modelo B+ su WiFi se deshabilitara hasta que se establezca el pais. Puede hacerlo a traves de raspi-config, que esta disponible en el menu MasOS en EmulationStation. Una vez en raspi-config, puede configurar su pais a traves del menu 4 (Opciones de localizacion)\n\n¿Desea que inicie raspi-config para usted ahora?" 22 76 2>&1 >/dev/tty; then
+        if dialog --defaultno --yesno "Actualmente no tienes tu pais WiFi configurado en /etc/wpa_supplicant/wpa_supplicant.conf\n\nEn una Raspberry Pi 3 Modelo B+ su WiFi se deshabilitara hasta que se establezca el pais. Puede hacerlo a traves de raspi-config, que esta disponible en el menu EmulOS en EmulationStation. Una vez en raspi-config, puede configurar su pais a traves del menu 4 (Opciones de localizacion)\n\n¿Desea que inicie raspi-config para usted ahora?" 22 76 2>&1 >/dev/tty; then
             raspi-config
         fi
     fi

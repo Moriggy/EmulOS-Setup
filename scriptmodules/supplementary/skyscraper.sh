@@ -10,7 +10,7 @@
 #
 
 rp_module_id="skyscraper"
-rp_module_desc="Scraper for EmulationStation by Lars Muldjord, ADAPTADO PARA EMULOS POR MASOS TEAM"
+rp_module_desc="Scraper for EmulationStation by Lars Muldjord, ADAPTADO PARA EMULOS POR EMULOS TEAM"
 rp_module_licence="GPLv3.0 https://raw.githubusercontent.com/muldjord/skyscraper/master/LICENSE"
 rp_module_section="exp"
 

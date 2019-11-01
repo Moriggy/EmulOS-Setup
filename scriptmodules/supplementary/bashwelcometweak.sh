@@ -117,7 +117,7 @@ function retropie_welcome() {
                 out+="${bfgred}Temperatura.........: CPU: $cpuTempC°C/$cpuTempF°F GPU: $gpuTempC°C/$gpuTempF°F"
                 ;;
             10)
-                out+="${fgwht}Proyecto MasOS Team, http://masos.dx.am"
+                out+="${fgwht}Proyecto EmulOS Team, http://masos.dx.am"
                 ;;
         esac
         out+="\n"

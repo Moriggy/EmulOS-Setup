@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Este fichero es parte del Proyecto MasOS Team
+# Este fichero es parte del Proyecto EmulOS Team
 #
 # The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.

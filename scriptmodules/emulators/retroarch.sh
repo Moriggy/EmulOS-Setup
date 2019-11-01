@@ -58,7 +58,7 @@ function build_retroarch() {
         params+=(--disable-videocore --disable-vulkan)
         [ -f "/opt/vc/lib/pkgconfig/egl.pc" ] && PKG_CONFIG_PATH=""
     fi
-    isPlatform "gles3" && params+=(--enable-opengles3) 
+    isPlatform "gles3" && params+=(--enable-opengles3)
      # Temporarily block dispmanx support for fkms until upstream support is fixed
     isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx --disable-opengl1)
     isPlatform "mali" && params+=(--enable-mali_fbdev)
@@ -124,7 +124,7 @@ function _package_xmb_monochrome_assets_retroarch() {
 
 function configure_retroarch() {
     [[ "$md_mode" == "remove" ]] && return
-    
+
     addUdevInputRules
 
     # move / symlink the retroarch configuration
@@ -143,7 +143,7 @@ function configure_retroarch() {
 
 	# install minimal assets
     install_xmb_monochrome_assets_retroarch
-	
+
     local config="$(mktemp)"
 
     cp "$md_inst/retroarch.cfg" "$config"
@@ -157,31 +157,31 @@ function configure_retroarch() {
     iniSet "cache_directory" "/tmp/retroarch"
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
-	iniSet "video_scale" "1.0"
+    iniSet "video_scale" "1.0"
     iniSet "video_threaded" "true"
     iniSet "video_smooth" "false"
     iniSet "video_aspect_ratio_auto" "true"
     iniSet "video_smooth" "false"
-	iniSet "video_shader_enable" "false"
+    iniSet "video_shader_enable" "true"
     iniSet "auto_shaders_enable" "false"
     iniSet "rgui_show_start_screen" "false"
-    iniSet "rgui_browser_directory" "$romdir"    
+    iniSet "rgui_browser_directory" "$romdir"
     iniSet "audio_out_rate" "44100"
 
     if ! isPlatform "x86"; then
         iniSet "video_threaded" "true"
     fi
-	
+
     iniSet "core_options_path" "$configdir/all/retroarch-core-options.cfg"
     isPlatform "x11" && iniSet "video_fullscreen" "true"
     isPlatform "mesa" && iniSet "video_fullscreen" "true"
-	
+
 	# set default render resolution to 640x480 for rpi1
     if isPlatform "rpi1"; then
         iniSet "video_fullscreen_x" "640"
         iniSet "video_fullscreen_y" "480"
     fi
-	
+
     # enable hotkey ("select" button)
     iniSet "input_enable_hotkey" "nul"
     iniSet "input_exit_emulator" "escape"
@@ -232,7 +232,7 @@ function configure_retroarch() {
     iniSet "xmb_show_history" "false"
     iniSet "xmb_show_images" "false"
     iniSet "xmb_show_music" "false"
-	
+
 	# disable xmb menu driver icon shadows
     iniSet "xmb_shadows_enable" "false"
 
@@ -242,12 +242,9 @@ function configure_retroarch() {
     # disable 'press twice to quit'
     iniSet "quit_press_twice" "false"
 
-    # enable video shaders
-    iniSet "video_shader_enable" "true"
-	
-	#aumento de letra de texto
-	iniSet "video_font_size" "26.000000"
-	
+    #aumento de letra de texto
+    iniSet "video_font_size" "26.000000"
+
 	# visual settings
     iniSet "content_show_add" "false"
     iniSet "content_show_favorites" "false"
@@ -380,8 +377,8 @@ function configure_retroarch() {
     iniSet "video_msg_bgcolor_green" "0"
     iniSet "video_msg_bgcolor_opacity" "1.000000"
     iniSet "video_msg_bgcolor_red" "0"
-	iniSet "user_language" "0"
-	
+    iniSet "user_language" "0"
+
 	rm "$configdir/all/retroarch.cfg"
     copyDefaultConfig "$config" "$configdir/all/retroarch.cfg"
     rm "$config"
@@ -398,7 +395,7 @@ function configure_retroarch() {
 
 function keyboard_retroarch() {
     if [[ ! -f "$configdir/all/retroarch.cfg" ]]; then
-        printMsgs "dialog" "No RetroArch configuration file found at $configdir/all/retroarch.cfg"
+        printMsgs "dialog" "No se encontró el archivo de configuración de RetroArch en $configdir/all/retroarch.cfg"
         return
     fi
     local input
@@ -411,7 +408,7 @@ function keyboard_retroarch() {
         options+=("${parts[0]}" $i 2 "${parts[*]:2}" $i 26 16 0)
         ((i++))
     done < <(grep "^[[:space:]]*input_player[0-9]_[a-z]*" "$configdir/all/retroarch.cfg")
-    local cmd=(dialog --backtitle "$__backtitle" --form "RetroArch keyboard configuration" 22 48 16)
+    local cmd=(dialog --backtitle "$__backtitle" --form "Configuración de teclado en RetroArch" 22 48 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         local value
@@ -428,10 +425,10 @@ function keyboard_retroarch() {
 
 function hotkey_retroarch() {
     iniConfig " = " '"' "$configdir/all/retroarch.cfg"
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose the desired hotkey behaviour." 22 76 16)
-    local options=(1 "Hotkeys enabled. (default)"
-             2 "Press ALT to enable hotkeys."
-             3 "Hotkeys disabled. Press ESCAPE to open RGUI.")
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige el comportamiento deseado de las teclas de acceso rápido." 22 76 16)
+    local options=(1 "Hotkeys activado. (por defecto)"
+             2 "Pulsar ALT para activar hotkeys."
+             3 "Hotkeys desactivado. Pulsa ESCAPE para abrir la RGUI.")
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         case "$choice" in
@@ -454,12 +451,6 @@ function hotkey_retroarch() {
     fi
 }
 
-function config_retroarch() {
-    cp "$scriptdir/configs/all/retroarch.cfg" "$md_conf_root/all"
-    cp "$scriptdir/configs/all/retroarch.cfg.bak" "$md_conf_root/all"
-    cp "$scriptdir/configs/all/retroarch-core-options.cfg" "$md_conf_root/all"
-}
-
 function gui_retroarch() {
     while true; do
         local names=(assets cheats overlays shaders)
@@ -470,16 +461,16 @@ function gui_retroarch() {
         local i=1
         for name in "${names[@]}"; do
             if [[ -d "$configdir/all/retroarch/${dirs[i-1]}/.git" ]]; then
-                options+=("$i" "Manage $name (installed)")
+                options+=("$i" "Gestionar $name (instalado)")
             else
-                options+=("$i" "Manage $name (not installed)")
+                options+=("$i" "Gestionar $name (no instalado)")
             fi
             ((i++))
         done
         options+=(
-            5 "Configure keyboard for use with RetroArch"
-            6 "Configure keyboard hotkey behaviour for RetroArch"
-            7 "Reset retroarch and retroarch-core-option configs"
+            5 "Configurar teclado para usar con RetroArch"
+            6 "Configurar el comportamiento de las teclas de acceso rápido del teclado para RetroArch"
+            7 "Restablecer las configuraciones retroarch y retroarch-core-option"
         )
         local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -487,8 +478,8 @@ function gui_retroarch() {
             1|2|3|4)
                 name="${names[choice-1]}"
                 dir="${dirs[choice-1]}"
-                options=(1 "Install/Update $name" 2 "Uninstall $name" )
-                cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option for $dir" 12 40 06)
+                options=(1 "Instalar/Actualizar $name" 2 "Desinstalar $name" )
+                cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para $dir" 12 40 06)
                 choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
                 case "$choice" in
@@ -512,7 +503,7 @@ function gui_retroarch() {
                 ;;
             7)
                 config_retroarch
-                printMsgs "dialog" "Completed the reset of retroarch and retroarch-core-options configs."
+                printMsgs "dialog" "Completado el restablecimiento de las configuraciones retroarch y retroarch-core-options."
                 ;;
             *)
                 break

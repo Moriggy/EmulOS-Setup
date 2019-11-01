@@ -183,7 +183,7 @@ function randomize_splashscreen() {
     iniConfig "=" '"' "$md_inst/asplashscreen.sh"
     case "$choice" in
         1)
-            iniSet "RANDOMIZE" "retropie"
+            iniSet "RANDOMIZE" "emulos"
             printMsgs "dialog" "Splashscreen random habilitado en el directorio $path"
             ;;
         2)
@@ -245,8 +245,8 @@ function preview_splashscreen() {
 }
 
 function download_extra_splashscreen() {
-    gitPullOrClone "$datadir/splashscreens/retropie-extra" https://github.com/DOCK-PI3/masos-splashscreens-extra
-    chown -R $user:$user "$datadir/splashscreens/masos-extra"
+    gitPullOrClone "$datadir/splashscreens/emulos-extra" https://github.com/DOCK-PI3/masos-splashscreens-extra
+    chown -R $user:$user "$datadir/splashscreens/emulos-extra"
 }
 
 function gui_splashscreen() {
@@ -324,7 +324,7 @@ function gui_splashscreen() {
                     ;;
                 9)
                     rp_callModule splashscreen download_extra
-                    printMsgs "dialog" "Los splashscreens de EmulOS-Extra se han descargado en $datadir/splashscreens/masos-extra"
+                    printMsgs "dialog" "Los splashscreens de EmulOS-Extra se han descargado en $datadir/splashscreens/emulos-extra"
                     ;;
             esac
         else

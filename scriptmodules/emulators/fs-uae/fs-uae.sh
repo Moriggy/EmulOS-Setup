@@ -11,8 +11,8 @@
 
 rom="$1"
 
-rootdir="/opt/retropie"
-datadir="$HOME/RetroPie"
+rootdir="/opt/emulos"
+datadir="$HOME/EmulOS"
 romdir="$datadir/roms/amiga"
 savedir="$romdir"
 biosdir="$datadir/BIOS"

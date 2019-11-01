@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Este fichero es parte del Proyecto MasOS Team
+# Este fichero es parte del Proyecto EmulOS Team
 #
 # The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
@@ -15,10 +15,10 @@ rp_module_section=""
 
 infobox="${infobox}___________________________________________________\n\n"
 infobox="${infobox}\nHerramienta para personalizar EmulOS\n"
-infobox="${infobox}\nMasOS Team no se hace responsable de un mal uso de estos scripts\n\n"
+infobox="${infobox}\nEmulOS Team no se hace responsable de un mal uso de estos scripts\n\n"
 infobox="${infobox}\n"
 
-dialog --backtitle "http://masos.dx.am		MasOS Team" \
+dialog --backtitle "http://masos.dx.am		EmulOS Team" \
 --title "Personalizacion de EmulOS (by Moriggy)" \
 --msgbox "${infobox}" 15 55
 
@@ -26,7 +26,7 @@ function main_menu() {
 
 	local choice
     while true; do
-        choice=$(dialog --backtitle "MasOS Team		Personalización de EmulOS (script hecho por Moriggy)" --title " MENU PRINCIPAL " \
+        choice=$(dialog --backtitle "EmulOS Team		Personalización de EmulOS (script hecho por Moriggy)" --title " MENU PRINCIPAL " \
             --ok-label OK --cancel-label Exit \
             --menu "Que acción te gustaría personalizar?" 25 75 20 \
 						1 "Instalar Bezels" \

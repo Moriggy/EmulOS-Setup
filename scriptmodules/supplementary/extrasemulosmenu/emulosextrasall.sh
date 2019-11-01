@@ -14,7 +14,7 @@ infobox="${infobox}Se recomienda instalacion de EXTRAS para el menu solo en rasp
 infobox="${infobox}\nEn PC puede instalar los extras si usa de nombre de usuario pi"
 
 dialog --backtitle "EmulOS extras y herramientas base" \
---title "EmulOS EXTRAS, herramientas y raparador de permisos en PC(The MasOS TEAM)" \
+--title "EmulOS EXTRAS, herramientas y raparador de permisos en PC(The EmulOS TEAM)" \
 --msgbox "${infobox}" 35 110
 
 
