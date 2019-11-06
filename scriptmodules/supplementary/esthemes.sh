@@ -48,6 +48,7 @@ function gui_esthemes() {
     'DOCK-PI3 BASE-DEV'
     'DOCK-PI3 BIGGRID'
     'DOCK-PI3 bluepixel'
+    'DOCK-PI3 CaPCoM'
     'DOCK-PI3 ColdSummer'
 	'DOCK-PI3 MasterCollections'
     'DOCK-PI3 paralleluniverse'
