@@ -6,10 +6,13 @@ Para una compilación de retropie muy wip, tendrá que instalarlo manualmente.
 
 2) Instala Git. 
 
-3) Luego escriba: git clone --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.git
+3) Luego escriba: 
+
+git clone --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.git
 
 4) Habilite el controlador GL (Fake KMS) en raspi-config.
 
+sudo raspi-config
 
 ![Test Image 1](https://github.com/DOCK-PI3/MasOS-Setup/blob/fkms_rpi4/tools/FELIZ_tenor.gif)
 
