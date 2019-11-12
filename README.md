@@ -1,6 +1,6 @@
 BETA PARA (RPI4) Utilice este método de instalación manual en su lugar. Esto solo ha sido probado en raspbian lite.
 
-Para una compilación de retropie muy wip, tendrá que instalarlo manualmente. 
+Para una compilación de EmulOS muy VIP, tendrá que instalarlo manualmente. 
 
 1) Instala raspbian lite. 
 
@@ -13,6 +13,8 @@ git clone --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.g
 4) Habilite el controlador GL (Fake KMS) en raspi-config.
 
 sudo raspi-config
+
+Luego puede continuar con los pasos de instalacion estandar.
 
 ![Test Image 1](https://github.com/DOCK-PI3/MasOS-Setup/blob/fkms_rpi4/tools/FELIZ_tenor.gif)
 
