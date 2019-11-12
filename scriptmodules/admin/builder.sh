@@ -111,7 +111,7 @@ _EOF_
                 PATH="/usr/lib/distcc:$PATH" \
                 MAKEFLAGS="-j4 PATH=/usr/lib/distcc:$PATH" \
                 __platform="$sys" \
-                /home/pi/EmulOS-Setup/retropie_packages.sh builder "$@"
+                /home/pi/EmulOS-Setup/emulos_pkgs.sh builder "$@"
         done
 
         rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$home/EmulOS-Setup/tmp/archives/"

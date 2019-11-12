@@ -11,7 +11,7 @@
 
 rp_module_id="ps3controller"
 rp_module_desc="PS3 controller driver and pair via sixad"
-rp_module_licence="GPL2 https://raw.githubusercontent.com/EmulOS/sixad/master/COPYING"
+rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/sixad/master/COPYING"
 rp_module_section="driver"
 
 function depends_ps3controller() {
@@ -24,7 +24,7 @@ function sources_ps3controller() {
     local branch="$1"
     [[ "$branch" == "gasia-only" ]] && branch="master"
 
-    gitPullOrClone "$md_build/sixad" https://github.com/EmulOS/sixad.git $branch
+    gitPullOrClone "$md_build/sixad" https://github.com/RetroPie/sixad.git $branch
 }
 
 function build_ps3controller() {

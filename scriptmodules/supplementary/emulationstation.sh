@@ -11,7 +11,7 @@
 
 rp_module_id="emulationstation"
 rp_module_desc="EmulationStation - Frontend used by EmulOS for launching emulators"
-rp_module_licence="MIT https://raw.githubusercontent.com/EmulOS/EmulationStation/master/LICENSE.md"
+rp_module_licence="MIT https://raw.githubusercontent.com/Moriggy/EmulationStation/master/LICENSE.md"
 rp_module_section="core"
 rp_module_flags="frontend"
 
@@ -136,7 +136,7 @@ function depends_emulationstation() {
 function sources_emulationstation() {
     local repo="$1"
     local branch="$2"
-    [[ -z "$repo" ]] && repo="https://github.com/EmulOS/EmulationStation"
+    [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
     if [[ -z "$branch" ]]; then
         if compareVersions "$__os_debian_ver" gt 8; then
             branch="stable"
@@ -234,8 +234,8 @@ _EOF_
 
     if isPlatform "x11"; then
         mkdir -p /usr/local/share/{icons,applications}
-        cp "$scriptdir/scriptmodules/$md_type/emulationstation/retropie.svg" "/usr/local/share/icons/"
-        cat > /usr/local/share/applications/retropie.desktop << _EOF_
+        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulos.svg" "/usr/local/share/icons/"
+        cat > /usr/local/share/applications/emulos.desktop << _EOF_
 [Desktop Entry]
 Type=Application
 Exec=gnome-terminal --full-screen --hide-menubar -e emulationstation
@@ -245,8 +245,8 @@ X-GNOME-Autostart-enabled=true
 Name[de_DE]=EmulOS
 Name=rpie
 Comment[de_DE]=EmulOS
-Comment=retropie
-Icon=/usr/local/share/icons/retropie.svg
+Comment=emulos
+Icon=/usr/local/share/icons/emulos.svg
 Categories=Game
 _EOF_
     fi
@@ -260,7 +260,7 @@ function clear_input_emulationstation() {
 function remove_emulationstation() {
     rm -f "/usr/bin/emulationstation"
     if isPlatform "x11"; then
-        rm -rfv "/usr/local/share/icons/retropie.svg" "/usr/local/share/applications/retropie.desktop"
+        rm -rfv "/usr/local/share/icons/emulos.svg" "/usr/local/share/applications/emulos.desktop"
     fi
 }
 

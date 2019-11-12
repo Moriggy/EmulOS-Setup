@@ -1,31 +1,22 @@
 #!/usr/bin/env bash
 
-# This file is part of The EmulOS Project
+# This file is part of The RetroPie Project
 #
-# The EmulOS Project is the legal property of its developers, whose names are
+# The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="bashwelcometweak"
-rp_module_desc="Bash Welcome Tweak (shows additional system info on login)"
-rp_module_section="config"
+rp_module_desc="Bash Welcome Tweak (muestra información adicional del sistema al loguear)"
+rp_module_section="main"
 
 function install_bashwelcometweak() {
     remove_bashwelcometweak
     cat >> "$home/.bashrc" <<\_EOF_
 # RETROPIE PROFILE START
-
-function getIPAddress() {
-    local ip_route
-    ip_route=$(ip -4 route get 8.8.8.8 2>/dev/null)
-    if [[ -z "$ip_route" ]]; then
-        ip_route=$(ip -6 route get 2001:4860:4860::8888 2>/dev/null)
-    fi
-    [[ -n "$ip_route" ]] && grep -oP "src \K[^\s]+" <<< "$ip_route"
-}
 
 function retropie_welcome() {
     local upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
@@ -80,17 +71,17 @@ function retropie_welcome() {
     local bfgwht="${bld}$(tput setaf 7)"
 
     local logo=(
-        "${fgred}   .***.   "
-        "${fgred}   ***${bfgwht}*${fgred}*   "
-        "${fgred}   \`***'   "
-        "${bfgwht}    |*|    "
-        "${bfgwht}    |*|    "
-        "${bfgred}  ..${bfgwht}|*|${bfgred}..  "
-        "${bfgred}.*** ${bfgwht}*${bfgred} ***."
-        "${bfgred}*******${fggrn}@@${bfgred}**"
-        "${fgred}\`*${bfgred}****${bfgylw}@@${bfgred}*${fgred}*'"
-        "${fgred} \`*******'${fgrst} "
-        "${fgred}   \`\"\"\"'${fgrst}   "
+        "${fgred}****************************************************"
+        "${fgred}**                                                **"
+        "${fgred}**   ${bfgwht}******                  **    ****   ****    ${fgred}**"
+		    "${fgred}**   ${bfgwht}**                      **   **  ** **   *   ${fgred}**"
+        "${fgred}**   ${bfgwht}**                      **   **  ** **       ${fgred}**"
+        "${fgred}**   ${bfgwht}******   ** **   **  ** **   **  **  ****    ${fgred}**"
+        "${fgred}**   ${bfgwht}**     **  *  ** **  ** **   **  **     **   ${fgred}**"
+        "${fgred}**   ${bfgwht}**     **     ** **  ** **   **  ** *   **   ${fgred}**"
+        "${fgred}**   ${bfgwht}****** **     **  ****   ***  ****   ****    ${fgred}**"
+        "${fgred}**                                                **"
+        "${fgred}****************************************************"
         )
 
     local out
@@ -111,25 +102,25 @@ function retropie_welcome() {
                 out+="${fgwht}${df_out[1]}"
                 ;;
             5)
-                out+="${fgred}Uptime.............: ${UPTIME}"
+                out+="${bfgred}Tiempo de actividad.: ${UPTIME}"
                 ;;
             6)
-                out+="${fgred}Memory.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total)"
+                out+="${bfgred}Memoria.............: $(grep MemFree /proc/meminfo | awk {'print $2'})kB (Free) / $(grep MemTotal /proc/meminfo | awk {'print $2'})kB (Total)"
                 ;;
             7)
-                out+="${fgred}Running Processes..: $(ps ax | wc -l | tr -d " ")"
+                out+="${bfgred}Procesos Corriendo..: $(ps ax | wc -l | tr -d " ")"
                 ;;
             8)
-                out+="${fgred}IP Address.........: $(getIPAddress)"
+                out+="${bfgred}Dirección IP........: $(ip route get 8.8.8.8 2>/dev/null | awk '{print $NF; exit}')"
                 ;;
             9)
-                out+="Temperature........: CPU: $cpuTempC°C/$cpuTempF°F GPU: $gpuTempC°C/$gpuTempF°F"
+                out+="${bfgred}Temperatura.........: CPU: $cpuTempC°C/$cpuTempF°F GPU: $gpuTempC°C/$gpuTempF°F"
                 ;;
             10)
-                out+="${fgwht}The EmulOS Project, https://retropie.org.uk"
+                out+="${fgwht}Proyecto EmulOS Team, http://masos.dx.am"
                 ;;
         esac
-        out+="${rst}\n"
+        out+="\n"
     done
     echo -e "\n$out"
 }
@@ -148,19 +139,19 @@ function remove_bashwelcometweak() {
 function gui_bashwelcometweak() {
     local cmd=(dialog --backtitle "$__backtitle" --menu "Bash Welcome Tweak Configuration" 22 86 16)
     local options=(
-        1 "Install Bash Welcome Tweak"
-        2 "Remove Bash Welcome Tweak"
+        1 "Instalar Bash Welcome Tweak"
+        2 "Desinstalar Bash Welcome Tweak"
     )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         case "$choice" in
             1)
                 rp_callModule bashwelcometweak install
-                printMsgs "dialog" "Installed Bash Welcome Tweak."
+                printMsgs "dialog" "Instalado el Bash Welcome Tweak."
                 ;;
             2)
                 rp_callModule bashwelcometweak remove
-                printMsgs "dialog" "Removed Bash Welcome Tweak."
+                printMsgs "dialog" "Eliminado el Bash Welcome Tweak."
                 ;;
         esac
     fi

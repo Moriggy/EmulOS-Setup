@@ -139,11 +139,11 @@ function create_config_wifi() {
     remove_wifi
     wpa_config=$(echo -e "$wpa_config")
     cat >> "/etc/wpa_supplicant/wpa_supplicant.conf" <<_EOF_
-# RETROPIE CONFIG START
+# EMULOS CONFIG START
 network={
 $wpa_config
 }
-# RETROPIE CONFIG END
+# EMULOS CONFIG END
 _EOF_
 }
 

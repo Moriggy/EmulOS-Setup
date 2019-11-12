@@ -57,7 +57,7 @@ function gui_wikiview() {
         if [[ -n "$choice" ]]; then
             case "$choice" in
                 1)
-                    gitPullOrClone "$wikidir" "https://github.com/EmulOS/EmulOS-Setup.wiki.git"
+                    gitPullOrClone "$wikidir" "https://github.com/Moriggy/EmulOS-Setup/EmulOS-Setup.wiki.git"
                     ;;
                 2)
                     while [[ -n  "$file" ]]; do

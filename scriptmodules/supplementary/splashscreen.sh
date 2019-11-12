@@ -52,7 +52,7 @@ RemainAfterExit=yes
 WantedBy=sysinit.target
 _EOF_
 
-    gitPullOrClone "$md_inst" https://github.com/EmulOS/retropie-splashscreens.git
+    gitPullOrClone "$md_inst" https://github.com/Moriggy/emulos-splashscreens.git
 
     cp "$md_data/asplashscreen.sh" "$md_inst"
 
@@ -82,7 +82,7 @@ function disable_plymouth_splashscreen() {
 }
 
 function default_splashscreen() {
-    echo "$md_inst/retropie-default.png" >/etc/splashscreen.list
+    echo "$md_inst/emulos-default.png" >/etc/splashscreen.list
 }
 
 function enable_splashscreen() {
@@ -245,8 +245,8 @@ function preview_splashscreen() {
 }
 
 function download_extra_splashscreen() {
-    gitPullOrClone "$datadir/splashscreens/retropie-extra" https://github.com/HerbFargus/retropie-splashscreens-extra
-    chown -R $user:$user "$datadir/splashscreens/retropie-extra"
+    gitPullOrClone "$datadir/splashscreens/emulos-extra" https://github.com/Moriggy/emulos-splashscreens-extra
+    chown -R $user:$user "$datadir/splashscreens/emulos-extra"
 }
 
 function gui_splashscreen() {
@@ -324,7 +324,7 @@ function gui_splashscreen() {
                     ;;
                 9)
                     rp_callModule splashscreen download_extra
-                    printMsgs "dialog" "The EmulOS-Extra splashscreens have been downloaded to $datadir/splashscreens/retropie-extra"
+                    printMsgs "dialog" "The EmulOS-Extra splashscreens have been downloaded to $datadir/splashscreens/emulos-extra"
                     ;;
             esac
         else

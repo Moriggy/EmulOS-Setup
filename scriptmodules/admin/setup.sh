@@ -65,7 +65,7 @@ function depends_setup() {
     # on first upgrade to 4.x
     if [[ ! -f "$rootdir/VERSION" ]]; then
         joy2keyStop
-        exec "$scriptdir/retropie_packages.sh" setup post_update gui_setup
+        exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
     fi
 
     if isPlatform "rpi" && isPlatform "mesa" && ! isPlatform "rpi4"; then
@@ -406,7 +406,7 @@ function update_packages_gui_setup() {
         updatescript_setup
         # restart at post_update and then call "update_packages_gui_setup update" afterwards
         joy2keyStop
-        exec "$scriptdir/retropie_packages.sh" setup post_update update_packages_gui_setup update
+        exec "$scriptdir/emulos_pkgs.sh" setup post_update update_packages_gui_setup update
     fi
 
     local update_os=0
@@ -562,7 +562,7 @@ function gui_setup() {
                 dialog --defaultno --yesno "Are you sure you want to update the EmulOS-Setup script ?" 22 76 2>&1 >/dev/tty || continue
                 if updatescript_setup; then
                     joy2keyStop
-                    exec "$scriptdir/retropie_packages.sh" setup post_update gui_setup
+                    exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
                 fi
                 ;;
             X)

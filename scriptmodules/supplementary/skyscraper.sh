@@ -19,7 +19,7 @@ function depends_skyscraper() {
 }
 
 function sources_skyscraper() {
-    gitPullOrClone "$md_build" "https://github.com/muldjord/skyscraper" "$(_latest_ver_skyscraper)"
+    gitPullOrClone "$md_build" "https://github.com/DOCK-PI3/skyscraper" "$(_latest_ver_skyscraper)"
 }
 
 function build_skyscraper() {
@@ -124,7 +124,7 @@ function _get_ver_skyscraper() {
 }
 
 function _latest_ver_skyscraper() {
-    wget -qO- https://api.github.com/repos/muldjord/skyscraper/releases/latest | grep -m 1 tag_name | cut -d\" -f4
+    wget -qO- https://api.github.com/repos/DOCK-PI3/skyscraper/releases/latest | grep -m 1 tag_name | cut -d\" -f4
 }
 
 # List any non-empty systems found in the ROM folder

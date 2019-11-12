@@ -21,7 +21,7 @@ function depends_sixaxis() {
 }
 
 function sources_sixaxis() {
-    gitPullOrClone "$md_build/sixaxis" https://github.com/EmulOS/sixaxis.git
+    gitPullOrClone "$md_build/sixaxis" https://github.com/RetroPie/sixaxis.git
 }
 
 function build_sixaxis() {
