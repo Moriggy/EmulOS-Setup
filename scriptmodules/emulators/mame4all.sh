@@ -12,7 +12,7 @@
 rp_module_id="mame4all"
 rp_module_desc="MAME emulator MAME4All-Pi"
 rp_module_help="ROM Extension: .zip\n\nCopy your MAME4all-Pi roms to either $romdir/mame-mame4all or\n$romdir/arcade"
-rp_module_licence="NONCOM https://raw.githubusercontent.com/EmulOS/mame4all-pi/master/readme.txt"
+rp_module_licence="NONCOM https://raw.githubusercontent.com/RetroPie/mame4all-pi/master/readme.txt"
 rp_module_section="main"
 rp_module_flags="!x11 !mali !kms !vero4k"
 
@@ -21,7 +21,7 @@ function depends_mame4all() {
 }
 
 function sources_mame4all() {
-    gitPullOrClone "$md_build" https://github.com/EmulOS/mame4all-pi.git
+    gitPullOrClone "$md_build" https://github.com/RetroPie/mame4all-pi.git
 }
 
 function build_mame4all() {

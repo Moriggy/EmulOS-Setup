@@ -13,7 +13,7 @@
 ## @brief EmulOS archivefuncs library
 ## @copyright GPLv3
 
-readonly arch_dir="/tmp/retropie-archive"
+readonly arch_dir="/tmp/emulos-archive"
 
 ## @fn archiveExtract()
 ## @param src_file Full path to archive file to extract
@@ -37,7 +37,7 @@ function archiveExtract() {
             unzip "$src_file" -d "$arch_dir"
             ;;
         *)
-            echo "Unsupported archive: $src_file"
+            echo "Archivo no soportado: $src_file"
             return 1
             ;;
     esac

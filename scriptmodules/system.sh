@@ -32,7 +32,7 @@ function setup_env() {
 
     get_platform
     get_os_version
-    get_retropie_depends
+    get_emulos_depends
 
     __gcc_version=$(gcc -dumpversion)
 
@@ -74,7 +74,7 @@ function get_os_version() {
     __os_desc="${os[1]}"
     __os_release="${os[2]}"
     __os_codename="${os[3]}"
-    
+
     local error=""
     case "$__os_id" in
         Raspbian|Debian)
@@ -184,7 +184,7 @@ function get_os_version() {
             error="Unsupported OS"
             ;;
     esac
-    
+
     [[ -n "$error" ]] && fatalError "$error\n\n$(lsb_release -idrc)"
 
     # add 32bit/64bit to platform flags
@@ -194,7 +194,7 @@ function get_os_version() {
     isPlatform "rpi" && get_rpi_video
 }
 
-function get_retropie_depends() {
+function get_emulos_depends() {
     local depends=(git dialog wget gcc g++ build-essential unzip xmlstarlet python-pyudev ca-certificates)
 
     if ! getDepends "${depends[@]}"; then
@@ -297,7 +297,7 @@ function get_platform() {
 
     # check if we wish to target kms for platform
     if [[ -z "$__has_kms" ]]; then
-        iniConfig " = " '"' "$configdir/all/retropie.cfg"
+        iniConfig " = " '"' "$configdir/all/emulos.cfg"
         iniGet "force_kms"
         [[ "$ini_value" == 1 ]] && __has_kms=1
         [[ "$ini_value" == 0 ]] && __has_kms=0
@@ -420,4 +420,3 @@ function platform_vero4k() {
     __default_makeflags="-j4"
     __platform_flags="arm armv7 neon vero4k gles"
 }
-

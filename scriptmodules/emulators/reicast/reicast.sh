@@ -13,9 +13,9 @@ AUDIO="$1"
 ROM="$2"
 XRES="$3"
 YRES="$4"
-rootdir="/opt/retropie"
+rootdir="/opt/emulos"
 configdir="$rootdir/configs"
-biosdir="$HOME/RetroPie/BIOS/dc"
+biosdir="$HOME/EmulOS/BIOS/dc"
 
 source "$rootdir/lib/inifuncs.sh"
 

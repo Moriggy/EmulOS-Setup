@@ -1,5 +1,5 @@
-MasOS - RetroPie FORK spanish Project 
-Copyright (C) 2018-2045 by the following: 
+EmulOS - RetroPie FORK spanish Project 
+Copyright (C) 2018-2045 by the following:
 
 Si hace alguna contribucion sera añadido a esta lista. (ver: AUTHORS)
 

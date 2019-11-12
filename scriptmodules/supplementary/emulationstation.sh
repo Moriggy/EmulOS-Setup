@@ -10,7 +10,7 @@
 #
 
 rp_module_id="emulationstation"
-rp_module_desc="EmulationStation - Frontend used by EmulOS for launching emulators"
+rp_module_desc="EmulationStation - Frontend usado por EmulOS para lanzar emuladores"
 rp_module_licence="MIT https://raw.githubusercontent.com/Moriggy/EmulationStation/master/LICENSE.md"
 rp_module_section="core"
 rp_module_flags="frontend"
@@ -207,13 +207,13 @@ function install_launch_emulationstation() {
 #!/bin/bash
 
 if [[ \$(id -u) -eq 0 ]]; then
-    echo "emulationstation should not be run as root. If you used 'sudo emulationstation' please run without sudo."
+    echo "EmulationStation no debe ejecutarse como root. Si usaste 'sudo emulationstation', ejecutalo sin sudo."
     exit 1
 fi
 
 if [[ "\$(uname --machine)" != *86* ]]; then
     if [[ -n "\$(pidof X)" ]]; then
-        echo "X is running. Please shut down X in order to mitigate problems with losing keyboard input. For example, logout from LXDE."
+        echo "X se esta ejecutando. Cierre la X para mitigar los problemas de perdida de entrada del teclado. Por ejemplo, cierre la sesion de LXDE."
         exit 1
     fi
 fi
@@ -226,7 +226,7 @@ clear
 tput civis
 "$md_inst/emulationstation.sh" "\$@"
 if [[ \$? -eq 139 ]]; then
-    dialog --cr-wrap --no-collapse --msgbox "Emulation Station crashed!\n\nIf this is your first boot of EmulOS - make sure you are using the correct image for your system.\n\\nCheck your rom file/folder permissions and if running on a Raspberry Pi, make sure your gpu_split is set high enough and/or switch back to using carbon theme.\n\nFor more help please use the EmulOS forum." 20 60 >/dev/tty
+    dialog --cr-wrap --no-collapse --msgbox "¡EmulationStation falló!\n\nSi esta es la primera vez que inicia EmulOS, asegurese de estar usando la imagen correcta para su sistema.\n\\nVerifique los permisos de su archivo/carpeta rom y, si se esta ejecutando en una Raspberry Pi, asegurese de que gpu_split esta configurado lo suficientemente alto y/o vuelve a usar el theme EmulOS.\n\nPara obtener mas ayuda, utiliza el telegram de EmulOS." 20 60 >/dev/tty
 fi
 tput cnorm
 _EOF_
@@ -283,7 +283,16 @@ function configure_emulationstation() {
     copy_inputscripts_emulationstation
 
     install_launch_emulationstation
-
+##### AÑADIDO #####
+    if isPlatform "rpi"; then
+    # make sure that ES has enough GPU memory
+    iniConfig "=" "" /boot/config.txt
+    iniSet "gpu_mem_256" 128
+    iniSet "gpu_mem_512" 256
+    iniSet "gpu_mem_1024" 256
+    iniSet "overscan_scale" 1
+fi
+##### FIN AÑADIDO #####
     mkdir -p "/etc/emulationstation"
 
     # ensure we have a default theme
@@ -304,20 +313,20 @@ function gui_emulationstation() {
     local options
     while true; do
         local options=(
-            1 "Clear/Reset Emulation Station input configuration"
-        )
+          1 "Borrar/restablecer la configuración de mandos de EmulationStation"
+      )
 
-        if [[ "$disable" -eq 0 ]]; then
-            options+=(2 "Auto Configuration (Currently: Enabled)")
-        else
-            options+=(2 "Auto Configuration (Currently: Disabled)")
-        fi
+      if [[ "$disable" -eq 0 ]]; then
+          options+=(2 "Configuración automática (Actualmente: Habilitada)")
+      else
+          options+=(2 "Configuración automática (Actualmente: Deshabilitada)")
+      fi
 
-        if [[ "$es_swap" -eq 0 ]]; then
-            options+=(3 "Swap A/B Buttons in ES (Currently: Default)")
-        else
-            options+=(3 "Swap A/B Buttons in ES (Currently: Swapped)")
-        fi
+      if [[ "$es_swap" -eq 0 ]]; then
+          options+=(3 "Intercambiar botones A/B en ES (Actualmente: Predeterminado)")
+      else
+          options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
+      fi
 
         local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Choose an option" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -326,9 +335,9 @@ function gui_emulationstation() {
 
         case "$choice" in
             1)
-                if dialog --defaultno --yesno "Are you sure you want to reset the Emulation Station controller configuration ? This will wipe all controller configs for ES and it will prompt to reconfigure on next start" 22 76 2>&1 >/dev/tty; then
+                if dialog --defaultno --yesno "¿Seguro que quieres restablecer la configuración de mandos de EmulationStation? Esto borrara todas las configuraciones de mandos para ES y le pedira que lo configure en el siguiente inicio." 22 76 2>&1 >/dev/tty; then
                     clear_input_emulationstation
-                    printMsgs "dialog" "$(_get_input_cfg_emulationstation) has been reset to default values."
+                    printMsgs "dialog" "$(_get_input_cfg_emulationstation) ha sido restablecido a los valores predeterminados."
                 fi
                 ;;
             2)
@@ -341,7 +350,7 @@ function gui_emulationstation() {
                 local ra_swap="false"
                 getAutoConf "es_swap_a_b" && ra_swap="true"
                 iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch.cfg"
-                printMsgs "dialog" "You will need to reconfigure you controller in Emulation Station for the changes to take effect."
+                printMsgs "dialog" "Tendrás que configurar tu mando en EmulationStation para que los cambios surtan efecto."
                 ;;
         esac
     done

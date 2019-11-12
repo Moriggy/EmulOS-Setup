@@ -1,12 +1,12 @@
 BETA PARA (RPI4) Utilice este método de instalación manual en su lugar. Esto solo ha sido probado en raspbian lite.
 
-Para una compilación de EmulOS muy VIP, tendrá que instalarlo manualmente. 
+Para una compilación de EmulOS muy VIP, tendrá que instalarlo manualmente.
 
-1) Instala raspbian lite. 
+1) Instala Raspbian Buster lite. 
 
-2) Instala Git. 
+2) Instala Git.
 
-3) Luego escriba: 
+3) Luego escriba:
 
 git clone --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.git
 

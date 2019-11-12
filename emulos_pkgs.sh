@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of The MasOS Team Project
+# This file is part of The EmulOS Team Project
 #
 # The EmulOS Project es legal, esta contruido bajo raspbian que es de codigo abierto, en este nuevo
 # sistema trabajan unos pocos desarroladores independientes de diversas partes del planeta.
@@ -19,7 +19,7 @@ rootdir="/opt/emulos"
 if [[ -n "$__user" ]]; then
     user="$__user"
     if ! id -u "$__user" &>/dev/null; then
-        echo "User $__user not exist"
+        echo "Usuario $__user no existe"
         exit 1
     fi
 else

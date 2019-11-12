@@ -202,7 +202,7 @@ function getDepends() {
     # default to off for x11 targets due to issues with dependencies with recent
     # Ubuntu (19.04). eg libavdevice58 requiring exactly 2.0.9 sdl2.
     isPlatform "x11" && own_sdl2=0
-    iniConfig " = " '"' "$configdir/all/retropie.cfg"
+    iniConfig " = " '"' "$configdir/all/emulos.cfg"
     iniGet "own_sdl2"
     [[ "$ini_value" == 1 ]] && own_sdl2=1
     [[ "$ini_value" == 0 ]] && own_sdl2=0
@@ -393,7 +393,7 @@ function gitPullOrClone() {
 }
 
 # @fn setupDirectories()
-# @brief Makes sure some required retropie directories and files are created.
+# @brief Makes sure some required EmulOS directories and files are created.
 function setupDirectories() {
     mkdir -p "$rootdir"
     mkUserDir "$datadir"
@@ -420,7 +420,7 @@ function setupDirectories() {
     # create template for autoconf.cfg and make sure it is owned by $user
     local config="$configdir/all/autoconf.cfg"
     if [[ ! -f "$config" ]]; then
-        echo "# this file can be used to enable/disable retropie autoconfiguration features" >"$config"
+        echo "# this file can be used to enable/disable emulos autoconfiguration features" >"$config"
     fi
     chown $user:$user "$config"
 }
@@ -1091,7 +1091,7 @@ function getPlatformConfig() {
         [[ -n "$ini_value" ]] && break
     done
     # workaround for EmulOS platform
-    [[ "$key" == "retropie_fullname" ]] && ini_value="EmulOS"
+    [[ "$key" == "emulos_fullname" ]] && ini_value="EmulOS"
     echo "$ini_value"
 }
 
@@ -1235,7 +1235,7 @@ _EOF_
 ## @param cmd commandline to launch
 ## @brief Adds a new emulator for a system.
 ## @details This is the primary function for adding emulators to a system which can be
-## switched between via the runcommand launch menu 
+## switched between via the runcommand launch menu
 ##
 ##     addEmulator 1 "vice-x64" "c64" "$md_inst/bin/x64 %ROM%"
 ##     addEmulator 0 "vice-xvic" "c64" "$md_inst/bin/xvic %ROM%"
