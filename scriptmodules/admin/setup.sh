@@ -97,7 +97,7 @@ function updatescript_setup()
     printHeading "Fetching latest version of the EmulOS Setup Script."
     pushd "$scriptdir" >/dev/null
     if [[ ! -d ".git" ]]; then
-        printMsgs "dialog" "Cannot find directory '.git'. Please clone the EmulOS Setup script via 'git clone https://github.com/EmulOS/EmulOS-Setup.git'"
+        printMsgs "dialog" "Cannot find directory '.git'. Please clone the EmulOS Setup script via 'git clone https://github.com/Moriggy/EmulOS-Setup.git'"
         popd >/dev/null
         return 1
     fi
