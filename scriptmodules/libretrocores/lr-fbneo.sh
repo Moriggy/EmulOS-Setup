@@ -50,7 +50,7 @@ function install_lr-fbneo() {
 
 function configure_lr-fbneo() {
     local dir
-    for dir in arcade fba neogeo; do
+    for dir in arcade fba neogeo neogeocd msx coleco; do
         mkRomDir "$dir"
         ensureSystemretroconfig "$dir"
     done
@@ -72,6 +72,7 @@ function configure_lr-fbneo() {
     addEmulator 0 "$md_id-neocd" "arcade" "$md_inst/fbneo_libretro.so --subsystem neocd"
     addEmulator $def "$md_id" "neogeo" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "neogeo" "$md_inst/fbneo_libretro.so --subsystem neocd"
+    addEmulator $def "$md_id-neocd" "neogeocd" "$md_inst/fbneo_libretro.so --subsystem neocd"
     addEmulator $def "$md_id" "fba" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "fba" "$md_inst/fbneo_libretro.so --subsystem neocd"
 
@@ -88,8 +89,9 @@ function configure_lr-fbneo() {
 
     addSystem "arcade"
     addSystem "neogeo"
+    addSystem "neogeocd"
     addSystem "fba"
-    
+
     addSystem "pcengine"
     addSystem "gamegear"
     addSystem "mastersystem"
