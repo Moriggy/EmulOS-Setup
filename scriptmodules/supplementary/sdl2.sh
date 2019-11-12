@@ -16,7 +16,11 @@ rp_module_section=""
 rp_module_flags=""
 
 function get_ver_sdl2() {
+    if isPlatform "x11" || compareVersions "$__os_debian_ver" ge 10; then
+        echo "2.0.9"
+    else
         echo "2.0.8"
+    fi
 }
 
 function get_pkg_ver_sdl2() {
@@ -35,10 +39,12 @@ function depends_sdl2() {
     # Dependencies from the debian package control + additional dependencies for the pi (some are excluded like dpkg-dev as they are
     # already covered by the build-essential package retropie relies on.
     local depends=(devscripts debhelper dh-autoreconf libasound2-dev libudev-dev libibus-1.0-dev libdbus-1-dev fcitx-libs-dev)
+    # these were removed by a PR for vero4k support (cannot test). Needed though at least for for RPI and X11
+    ! isPlatform "vero4k" && depends+=(libx11-dev libxcursor-dev libxext-dev libxi-dev libxinerama-dev libxrandr-dev libxss-dev libxt-dev libxxf86vm-dev libgl1-mesa-dev)
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
     isPlatform "mali" && depends+=(mali-fbdev)
     isPlatform "kms" && depends+=(libdrm-dev libgbm-dev)
-    isPlatform "x11" && depends+=(libpulse-dev libegl1-mesa-dev libgles2-mesa-dev libglu1-mesa-dev libx11-dev libxcursor-dev libxext-dev libxi-dev libxinerama-dev libxrandr-dev libxss-dev libxt-dev libxxf86vm-dev libgl1-mesa-dev)
+    isPlatform "x11" && depends+=(libpulse-dev libegl1-mesa-dev libgles2-mesa-dev libglu1-mesa-dev)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc)
     getDepends "${depends[@]}"
 }
@@ -102,11 +108,13 @@ function install_bin_sdl2() {
 
 function revert_sdl2() {
     aptUpdate
-    local packaged="$(apt-cache madison libsdl2-dev | cut -d" " -f3)"
-    aptInstall --force-yes libsdl2-2.0-0="$packaged" libsdl2-dev="$packaged"
+    local packaged="$(apt-cache madison libsdl2-dev | cut -d" " -f3 | head -n1)"
+    if ! aptInstall --allow-downgrades --allow-change-held-packages libsdl2-2.0-0="$packaged" libsdl2-dev="$packaged"; then
+        md_ret_errors+=("Failed to revert to OS packaged sdl2 versions")
+    fi
 }
 
 function remove_sdl2() {
-    apt-get remove -y --force-yes libsdl2-dev
+    apt-get remove -y --allow-change-held-packages libsdl2-dev libsdl2-2.0-0
     apt-get autoremove -y
 }
