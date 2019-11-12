@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-# This file is part of The MasOS Team Project
+# This file is part of The EmulOS Project
 #
 # The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="emulationstation"
-rp_module_desc="EmulationStation - Frontend usado por EmulOS para lanzar emuladores"
-rp_module_licence="MIT https://raw.githubusercontent.com/RetroPie/EmulationStation/master/LICENSE.md"
+rp_module_desc="EmulationStation - Frontend used by EmulOS for launching emulators"
+rp_module_licence="MIT https://raw.githubusercontent.com/EmulOS/EmulationStation/master/LICENSE.md"
 rp_module_section="core"
 rp_module_flags="frontend"
 
@@ -123,12 +123,12 @@ function _add_rom_emulationstation() {
 
 function depends_emulationstation() {
     local depends=(
-        libboost-system-dev libboost-filesystem-dev
-        libboost-date-time-dev libfreeimage-dev libfreetype6-dev
+        libfreeimage-dev libfreetype6-dev
         libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
         libvlc-dev libvlccore-dev vlc
     )
 
+    compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
     isPlatform "x11" && depends+=(gnome-terminal)
     getDepends "${depends[@]}"
 }
@@ -136,14 +136,23 @@ function depends_emulationstation() {
 function sources_emulationstation() {
     local repo="$1"
     local branch="$2"
-    [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
-    [[ -z "$branch" ]] && branch="stable"
+    [[ -z "$repo" ]] && repo="https://github.com/RetroPie/EmulationStation"
+    if [[ -z "$branch" ]]; then
+        if compareVersions "$__os_debian_ver" gt 8; then
+            branch="stable"
+        else
+            branch="v2.7.6"
+        fi
+    fi
     gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
 function build_emulationstation() {
+    local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
+    # Temporary workaround until GLESv2 support is implemented
+    isPlatform "rpi" && isPlatform "mesa" && params+=(-DGL=On)
     rpSwap on 1000
-    cmake . -DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/
+    cmake . "${params[@]}"
     make clean
     make
     rpSwap off
@@ -157,6 +166,7 @@ function install_emulationstation() {
         'emulationstation.sh'
         'GAMELISTS.md'
         'README.md'
+        'resources'
         'THEMES.md'
     )
 }
@@ -197,18 +207,13 @@ function install_launch_emulationstation() {
 #!/bin/bash
 
 if [[ \$(id -u) -eq 0 ]]; then
-    echo "EmulationStation no debe ejecutarse como root. Si usaste 'sudo emulationstation', ejecutalo sin sudo."
-    exit 1
-fi
-
-if [[ -d "/sys/module/vc4" ]]; then
-    echo -e "ERROR: Tienes el controlador experimental de escritorio GL habilitado. Esto NO es compatible con EmulOS, y EmulationStation y los emuladores no podran iniciarse.\\n\\nDeshabilite el controlador GL de escritorio experimental desde el menu 'Opciones avanzadas' de raspi-config."
+    echo "emulationstation should not be run as root. If you used 'sudo emulationstation' please run without sudo."
     exit 1
 fi
 
 if [[ "\$(uname --machine)" != *86* ]]; then
     if [[ -n "\$(pidof X)" ]]; then
-        echo "X se esta ejecutando. Cierre la X para mitigar los problemas de perdida de entrada del teclado. Por ejemplo, cierre la sesion de LXDE."
+        echo "X is running. Please shut down X in order to mitigate problems with losing keyboard input. For example, logout from LXDE."
         exit 1
     fi
 fi
@@ -220,8 +225,8 @@ export TTY="\${tty:8:1}"
 clear
 tput civis
 "$md_inst/emulationstation.sh" "\$@"
-if [[ $? -eq 139 ]]; then
-    dialog --cr-wrap --no-collapse --msgbox "¡EmulationStation fallo!\n\nSi esta es la primera vez que inicia EmulOS, asegurese de estar usando la imagen correcta para su sistema.\n\\nVerifique los permisos de su archivo/carpeta rom y, si se esta ejecutando en una Raspberry Pi, asegurese de que gpu_split esta configurado lo suficientemente alto y/o vuelve a usar el theme EmulOS.\n\nPara obtener mas ayuda, utiliza el telegram de EmulOS." 20 60 >/dev/tty
+if [[ \$? -eq 139 ]]; then
+    dialog --cr-wrap --no-collapse --msgbox "Emulation Station crashed!\n\nIf this is your first boot of EmulOS - make sure you are using the correct image for your system.\n\\nCheck your rom file/folder permissions and if running on a Raspberry Pi, make sure your gpu_split is set high enough and/or switch back to using carbon theme.\n\nFor more help please use the EmulOS forum." 20 60 >/dev/tty
 fi
 tput cnorm
 _EOF_
@@ -229,7 +234,7 @@ _EOF_
 
     if isPlatform "x11"; then
         mkdir -p /usr/local/share/{icons,applications}
-        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulOS.svg" "/usr/local/share/icons/"
+        cp "$scriptdir/scriptmodules/$md_type/emulationstation/retropie.svg" "/usr/local/share/icons/"
         cat > /usr/local/share/applications/emulos.desktop << _EOF_
 [Desktop Entry]
 Type=Application
@@ -238,10 +243,10 @@ Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
 Name[de_DE]=EmulOS
-Name=EmulOS
+Name=rpie
 Comment[de_DE]=EmulOS
-Comment=EmulOS
-Icon=/usr/local/share/icons/emulOS.svg
+Comment=emulos
+Icon=/usr/local/share/icons/retropie.svg
 Categories=Game
 _EOF_
     fi
@@ -255,7 +260,7 @@ function clear_input_emulationstation() {
 function remove_emulationstation() {
     rm -f "/usr/bin/emulationstation"
     if isPlatform "x11"; then
-        rm -rfv "/usr/local/share/icons/emulOS.svg" "/usr/local/share/applications/emulos.desktop"
+        rm -rfv "/usr/local/share/icons/retropie.svg" "/usr/local/share/applications/emulos.desktop"
     fi
 }
 
@@ -287,7 +292,7 @@ function configure_emulationstation() {
         iniSet "gpu_mem_1024" 256
         iniSet "overscan_scale" 1
     fi
-
+    
     mkdir -p "/etc/emulationstation"
 
     # ensure we have a default theme
@@ -308,32 +313,31 @@ function gui_emulationstation() {
     local options
     while true; do
         local options=(
-            1 "Borrar/restablecer la configuración de mandos de EmulationStation"
+            1 "Clear/Reset Emulation Station input configuration"
         )
 
         if [[ "$disable" -eq 0 ]]; then
-            options+=(2 "Configuración automática (Actualmente: Habilitada)")
+            options+=(2 "Auto Configuration (Currently: Enabled)")
         else
-            options+=(2 "Configuración automática (Actualmente: Deshabilitada)")
+            options+=(2 "Auto Configuration (Currently: Disabled)")
         fi
 
         if [[ "$es_swap" -eq 0 ]]; then
-            options+=(3 "Intercambiar botones A/B en ES (Actualmente: Predeterminado)")
+            options+=(3 "Swap A/B Buttons in ES (Currently: Default)")
         else
-            options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
+            options+=(3 "Swap A/B Buttons in ES (Currently: Swapped)")
         fi
 
-        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Escoge una opción:" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Choose an option" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         default="$choice"
 
         case "$choice" in
             1)
-                if dialog --defaultno --yesno "¿Seguro que quieres restablecer la configuración de mandos de EmulationStation? Esto borrara todas las configuraciones de mandos para ES y le pedira que lo configure en el siguiente inicio" 22 76 2>&1 >/dev/tty; then
+                if dialog --defaultno --yesno "Are you sure you want to reset the Emulation Station controller configuration ? This will wipe all controller configs for ES and it will prompt to reconfigure on next start" 22 76 2>&1 >/dev/tty; then
                     clear_input_emulationstation
-                    sudo rm -R /opt/emulos/configs/all/retroarch/autoconfig/*
-                    printMsgs "dialog" "$(_get_input_cfg_emulationstation) ha sido restablecido a los valores predeterminados."
+                    printMsgs "dialog" "$(_get_input_cfg_emulationstation) has been reset to default values."
                 fi
                 ;;
             2)
@@ -346,7 +350,7 @@ function gui_emulationstation() {
                 local ra_swap="false"
                 getAutoConf "es_swap_a_b" && ra_swap="true"
                 iniSet "menu_swap_ok_cancel_buttons" "$ra_swap" "$configdir/all/retroarch.cfg"
-                printMsgs "dialog" "Tendra que configurar su controlador en EmulationStation para que los cambios surtan efecto."
+                printMsgs "dialog" "You will need to reconfigure you controller in Emulation Station for the changes to take effect."
                 ;;
         esac
     done

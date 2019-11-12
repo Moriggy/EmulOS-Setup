@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 ## @file supplementary/runcommand/runcommand.sh
@@ -40,9 +40,9 @@
 ## (via tvservice) and the requested mode differs from the currently active mode
 ##
 ## If `_SYS_` or `_PORT_` is provided for the second parameter, the commandline
-## will be extracted from `/opt/retropie/configs/SYSTEM/emulators.cfg` with
+## will be extracted from `/opt/emulos/configs/SYSTEM/emulators.cfg` with
 ## `%ROM%` `%BASENAME%` being replaced with the ROM parameter. This is the
-## default mode used when launching in RetroPie so the user can switch emulator
+## default mode used when launching in EmulOS so the user can switch emulator
 ## used as well as other options from the runcommand GUI.
 ##
 ## If SAVE_NAME is included, that is used for loading and saving of video output

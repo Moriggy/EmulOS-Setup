@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The EmulOS Project
+# This file is part of The RetroPie Project
 #
-# The EmulOS Project is the legal property of its developers, whose names are
+# The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 function setup_env() {
@@ -32,7 +32,7 @@ function setup_env() {
 
     get_platform
     get_os_version
-    get_emulos_depends
+    get_retropie_depends
 
     __gcc_version=$(gcc -dumpversion)
 
@@ -108,7 +108,7 @@ function get_os_version() {
             ;;
         Devuan)
             if isPlatform "rpi"; then
-                error="We do not support Devuan on the Raspberry Pi. We recommend you use Raspbian to run EmulOS."
+                error="We do not support Devuan on the Raspberry Pi. We recommend you use Raspbian to run RetroPie."
             fi
             # devuan lsb-release version numbers don't match jessie
             case "$__os_codename" in
@@ -194,7 +194,7 @@ function get_os_version() {
     isPlatform "rpi" && get_rpi_video
 }
 
-function get_emulos_depends() {
+function get_retropie_depends() {
     local depends=(git dialog wget gcc g++ build-essential unzip xmlstarlet python-pyudev ca-certificates)
 
     if ! getDepends "${depends[@]}"; then
@@ -297,7 +297,7 @@ function get_platform() {
 
     # check if we wish to target kms for platform
     if [[ -z "$__has_kms" ]]; then
-        iniConfig " = " '"' "$configdir/all/emulos.cfg"
+        iniConfig " = " '"' "$configdir/all/retropie.cfg"
         iniGet "force_kms"
         [[ "$ini_value" == 1 ]] && __has_kms=1
         [[ "$ini_value" == 0 ]] && __has_kms=0

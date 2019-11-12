@@ -6,7 +6,7 @@
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 declare -A __mod_id_to_idx
@@ -22,10 +22,10 @@ __mod_flags=()
 declare -A __sections
 __sections[core]="core"
 __sections[main]="main"
-__sections[opt]="opcional"
+__sections[opt]="optional"
 __sections[exp]="experimental"
 __sections[driver]="driver"
-__sections[config]="configuracion"
+__sections[config]="configuration"
 
 function rp_listFunctions() {
     local idx

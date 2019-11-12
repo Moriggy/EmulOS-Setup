@@ -6,7 +6,7 @@
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="crosscomp"
@@ -128,7 +128,7 @@ function build_crosscomp() {
     printHeading "Building gcc"
     mkdir -p build-gcc
     cd build-gcc
-    ../gcc/configure --prefix="$dest" --target="$target" --enable-languages=c,c++ --disable-multilib --disable-werror "${params[@]}" 
+    ../gcc/configure --prefix="$dest" --target="$target" --enable-languages=c,c++ --disable-multilib --disable-werror "${params[@]}"
     make all-gcc
     make install-gcc
     cd ..
@@ -171,7 +171,7 @@ function build_crosscomp() {
 function setup_crosscomp() {
     local dist="$1"
     [[ -z "$dist" ]] && dist="$(_default_dist_crosscomp)"
-    
+
     if rp_callModule crosscomp sources "$dist"; then
         rp_callModule crosscomp build "$dist"
         rp_callModule crosscomp switch_distcc "$dist"

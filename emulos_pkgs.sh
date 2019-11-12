@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# This file is part of The EmulOS Team Project
+# This file is part of The EmulOS Project
 #
-# The EmulOS Project es legal, esta contruido bajo raspbian que es de codigo abierto, en este nuevo
-# sistema trabajan unos pocos desarroladores independientes de diversas partes del planeta.
+# The EmulOS Project is the legal property of its developers, whose names are
+# too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 #EmulOS El sistema operativo retro en español con emulationstation, retroarch y varios scripts independientes mas configuraciones y themes nuevos.!
 #Evolución de MasOS (fork de retropie)
@@ -54,6 +54,7 @@ source "$scriptdir/scriptmodules/system.sh"
 source "$scriptdir/scriptmodules/helpers.sh"
 source "$scriptdir/scriptmodules/inifuncs.sh"
 source "$scriptdir/scriptmodules/packages.sh"
+
 setup_env
 
 rp_registerAllModules

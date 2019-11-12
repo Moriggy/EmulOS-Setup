@@ -1,4 +1,4 @@
-emulos#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 # This file is part of The EmulOS Project
 #
@@ -6,7 +6,7 @@ emulos#!/usr/bin/env bash
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="runcommand"
@@ -14,7 +14,7 @@ rp_module_desc="The 'runcommand' launch script - needed for launching the emulat
 rp_module_section="core"
 
 function _update_hook_runcommand() {
-    # make sure runcommand is always updated when updating retropie-setup
+    # make sure runcommand is always updated when updating emulos-setup
     rp_isInstalled "$md_idx" && install_bin_runcommand
 }
 

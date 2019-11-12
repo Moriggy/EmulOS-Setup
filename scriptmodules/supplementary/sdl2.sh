@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The EmulOS Project
+# This file is part of The RetroPie Project
 #
-# The EmulOS Project is the legal property of its developers, whose names are
+# The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 rp_module_id="sdl2"
@@ -91,7 +91,7 @@ function build_sdl2() {
     fi
 
     md_ret_require="$md_build/libsdl2-dev_$(get_pkg_ver_sdl2)_$(get_arch_sdl2).deb"
-    local dest="$__tmpdir/archives/$__binary_path"
+    local dest="$__tmpdir/archives/$__os_codename/$__platform"
     mkdir -p "$dest"
     cp ../*.deb "$dest/"
 }
