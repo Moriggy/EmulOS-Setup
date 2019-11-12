@@ -1,4 +1,4 @@
-emulos#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 # This file is part of The EmulOS Project
 #
