@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="rpix86"
-rp_module_desc="Emulador de MS-DOS rpix86"
-rp_module_help="ROM Extensions: .bat .com .exe .sh\n\nCopia tus juegos de MS-DOS en $romdir/pc"
+rp_module_desc="DOS Emulator rpix86"
+rp_module_help="ROM Extensions: .bat .com .exe .sh\n\nCopy your DOS games to $romdir/pc"
 rp_module_licence="FREEWARE http://rpix86.patrickaalto.com/rdown.html"
 rp_module_section="opt"
 rp_module_flags="!x86 !mali !kms"

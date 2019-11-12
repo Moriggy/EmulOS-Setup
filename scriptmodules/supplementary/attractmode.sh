@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The MasOS Team Project
+# This file is part of The EmulOS Project
 #
-# The MasOS Team Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/Moriggy/EmulOS-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="attractmode"
-rp_module_desc="Instalación del frontend Attract Mode"
+rp_module_desc="Attract Mode emulator frontend"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/mickelson/attract/master/License.txt"
 rp_module_section="exp"
 rp_module_flags="!mali !kms frontend"
@@ -49,169 +49,13 @@ function _add_system_attractmode() {
     iniSet "romext" "$extensions"
 
     # snap path
-    local snap="videos"
-    if [[ "$name" == "emulos" ]]; then
-      user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
-      mkdir /home/$user/EmulOS/roms/emulos
-      if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-        cat > /home/$user/EmulOS/roms/emulos/EmulationStation.sh <<_EOF_
-#!/usr/bin/env bash
-echo ""
-echo "Cambiando el arranque a EmulationStation y reiniciando..."
-echo ""
-echo "emulationstation #auto" > /opt/emulos/configs/all/autostart.sh
-sleep 2
-sudo reboot
-_EOF_
-        cat > /home/$user/EmulOS/emulosmenu/Attract-Mode.sh <<_EOF_
-#!/usr/bin/env bash
-echo ""
-echo "Cambiando el arranque a Attract-Mode y reiniciando..."
-echo ""
-sleep 5
-echo "while pgrep omxplayer >/dev/null; do sleep 1; done" > /opt/emulos/configs/all/autostart.sh
-echo "/home/pi/.attract/amboot/amromlist.sh" >> /opt/emulos/configs/all/autostart.sh
-echo "attract #auto" >> /opt/emulos/configs/all/autostart.sh
-sudo reboot
-_EOF_
-    fi
-    cat > /home/$user/EmulOS/roms/emulos/Favoritos.sh <<_EOF_
-cd /opt/emulos/configs/all/attractmode/romlists
-rm Favorites.tag
+    local snap="snap"
+    [[ "$name" == "retropie" ]] && snap="icons"
+    iniSet "artwork flyer" "$path/flyer"
+    iniSet "artwork marquee" "$path/marquee"
+    iniSet "artwork snap" "$path/$snap"
+    iniSet "artwork wheel" "$path/wheel"
 
-clear
-echo
-echo "Este script va a generar una nueva lista de juegos llamada Favorites.txt."
-echo
-echo "Esta nueva lista contendrá todos los juegos que hayas marcado como favoritos de todos los los sistemas distintos."
-echo
-sleep 2
-
-echo
-echo "Renombrando el viejo fichero de Favorites.txt ....."
-sleep 1
-mv Favorites.txt Favorites.txt.backup
-
-echo
-echo "Recopilación de lista de archivos de favoritos etiquetados ....."
-sleep 1
-
-echo
-echo "Generando nuevo fichero de Favorites.txt ....."
-sleep 1
-echo
-
-ls *.tag > tagfiles
-
-while read filename
-do
-echo "Usando ${filename} ....."
-echo
-
-  while read gamename
-  do
-    romlist=`echo ${filename} |cut -f1 -d '.'`
-    echo "     Buscando ${romlist}.txt para ${gamename} ....."
-    cat "${romlist}.txt"|egrep "^${gamename};" >> Favorites.txt
-    cat "${romlist}.txt"|grep "[;]${gamename}[;]" >> Favorites.txt
-  done < "${filename}"
-
-sleep 5
-echo
-done < tagfiles
-
-rm tagfiles
-
-cat Favorites.txt |sort -u > tmp_favorites.txt
-mv tmp_favorites.txt Favorites.txt
-
-echo "Finalizada la creación del nuevo fichero de Favorites.txt ....."
-echo
-echo
-echo "Con esta nueva lista de rom, cree una nueva pantalla y elija Favoritos como la lista de rom."
-echo
-echo "Es posible que debas actualizar periÃ³dicamente la lista de Favoritos a medida que agregues nuevos juegos a favoritos."
-echo
-echo
-sleep 5
-echo
-_EOF_
-        chmod +x /home/$user/EmulOS/emulosmenu/Attract-Mode.sh
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/audiosettings.rp >> "/home/$user/EmulOS/roms/emulos/Audio.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/bluetooth.rp >> "/home/$user/EmulOS/roms/emulos/Bluetooth.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/configedit.rp >> "/home/$user/EmulOS/roms/emulos/Editor de Configuracion.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/emulosextrasall.rp >> "/home/$user/EmulOS/roms/emulos/EmulOS Herramientas y utils.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/personalizaremulos.rp >> "/home/$user/EmulOS/roms/emulos/Personalizar EmulOS.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/wifi.rp >> "/home/$user/EmulOS/roms/emulos/Configurar Wifi.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/filemanager.rp >> "/home/$user/EmulOS/roms/emulos/Administrador de Archivos.sh"
-        if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-          echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/raspiconfig.rp >> "/home/$user/EmulOS/roms/emulos/Raspi-config.sh"
-        fi
-        echo sudo reboot >> "/home/$user/EmulOS/roms/emulos/Reiniar.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retroarch.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/retronetplay.rp >> "/home/$user/EmulOS/roms/emulos/Retroarch Netplay.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/rpsetup.rp >> "/home/$user/EmulOS/roms/emulos/EmulOS-Setup.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/runcommand.rp >> "/home/$user/EmulOS/roms/emulos/RunCommand Configuracion.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/systeminfo.rp >> "/home/$user/EmulOS/roms/emulos/Informacion del sistema.sh"
-        echo sudo poweroff >> "/home/$user/EmulOS/roms/emulos/Apagar.sh"
-        echo sudo /home/$user/EmulOS-Setup/emulos_pkgs.sh emulosmenu launch /home/$user/EmulOS/emulosmenu/splashscreen.rp >> "/home/$user/EmulOS/roms/emulos/Configurar Splash Screen.sh"
-        mkdir /home/$user/EmulOS/roms/emulos/snap
-        mkdir /home/$user/EmulOS/roms/emulos/videos
-        cp /home/$user/EmulOS/emulosmenu/icons/audiosettings.png /home/$user/EmulOS/roms/emulos/snap/Audio.png
-        cp /home/$user/EmulOS/emulosmenu/icons/bluetooth.png /home/$user/EmulOS/roms/emulos/snap/Bluetooth.png
-        cp /home/$user/EmulOS/emulosmenu/icons/configedit.png "/home/$user/EmulOS/roms/emulos/snap/Editor de Configuracion.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/personalizaremulos.png "/home/$user/EmulOS/roms/emulos/snap/Personalizar EmulOS.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/emulosextrasall.png "/home/$user/EmulOS/roms/emulos/snap/EmulOS Herramientas y utils.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/wifi.png "/home/$user/EmulOS/roms/emulos/snap/Configurar Wifi.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/filemanager.png "/home/$user/EmulOS/roms/emulos/snap/Administrador de Archivos.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/raspiconfig.png /home/$user/EmulOS/roms/emulos/snap/Raspi-config.png
-        cp /home/$user/EmulOS/emulosmenu/icons/retroarch.png /home/$user/EmulOS/roms/emulos/snap/Retroarch.png
-        cp /home/$user/EmulOS/emulosmenu/icons/retronetplay.png "/home/$user/EmulOS/roms/emulos/snap/Retroarch Netplay.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/rpsetup.png /home/$user/EmulOS/roms/emulos/snap/EmulOS-Setup.png
-        cp /home/$user/EmulOS/emulosmenu/icons/runcommand.png "/home/$user/EmulOS/roms/emulos/snap/RunCommand Configuracion.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/systeminfo.png "/home/$user/EmulOS/roms/emulos/snap/Informacion del sistema.png"
-        cp /home/$user/EmulOS/emulosmenu/icons/splashscreen.png "/home/$user/EmulOS/roms/emulos/snap/Configurar Splash Screen.png"
-        chmod +x /home/$user/EmulOS/roms/emulos/*.sh
-        wget http://attractmode.org/images/logo.png
-        mv logo.png /home/$user/EmulOS/emulosmenu/icons/Attract-Mode.png
-        cat > /home/$user/.attract/emulators/EmulOS.cfg <<_EOF_
-# Generated by Attract-Mode v2.5.1
-#
-executable           /bin/bash
-args                 "[romfilename]"
-rompath              /home/$user/EmulOS/roms/emulos
-romext               .sh
-system               EmulOS
-artwork    box       /home/$user/EmulOS/roms/emulos/box
-artwork    cart      /home/$user/EmulOS/roms/emulos/cart
-artwork    flyer     /home/$user/EmulOS/roms/emulos/box
-artwork    marquee   /home/$user/EmulOS/roms/emulos/marquee
-artwork    snap      /home/$user/EmulOS/roms/emulos/video;/home/$user/EmulOS/roms/emulos/snap
-artwork    wheel     /home/$user/EmulOS/roms/emulos/wheel
-_EOF_
-
-      sed -i '/\<sound\>/i \display EmulOS' /home/$user/.attract/attract.cfg
-      sed -i '/\<sound\>/i \        layout               robo' $attract_dir/attract.cfg
-      sed -i '/\<sound\>/i \        romlist              EmulOS' $attract_dir/attract.cfg
-      sed -i '/\<sound\>/i \        in_cycle             yes' $attract_dir/attract.cfg
-      sed -i '/\<sound\>/i \        in_menu              yes' $attract_dir/attract.cfg
-      sed -i '/\<sound\>/i \        filter               all' $attract_dir/attract.cfg
-      sed -i '/\<sound\>/i \ ' $attract_dir/attract.cfg
-      sed -i 's/window_mode          default/window_mode          fullscreen/g' $attract_dir/attract.cfg
-      attract -b EmulOS
-      sed -i '/<\<gameList\>>/a \        </game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      sed -i '/<\<gameList\>>/a \                <image>./icons/Attract-Mode.png</image>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      sed -i '/<\<gameList\>>/a \                <desc>Cambiar el arranque a Attract-Mode y reinicia el sistema.</desc>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      sed -i '/<\<gameList\>>/a \                <name>Attract-Mode</name>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      sed -i '/<\<gameList\>>/a \                <path>./Attract-Mode.sh</path>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-      sed -i '/<\<gameList\>>/a \        <game>' /opt/emulos/configs/all/emulationstation/gamelists/emulos/gamelist.xml
-
-    else
-      iniSet "artwork flyer" "$path/media/images"
-      iniSet "artwork marquee" "$path/media/marquee"
-      iniSet "artwork snap" "$path/media/$snap"
-      iniSet "artwork wheel" "$path/media/wheel"
-    fi
     chown $user:$user "$config"
 
     # if no gameslist, generate one
@@ -223,33 +67,11 @@ _EOF_
     local tab=$'\t'
     if [[ -f "$config" ]] && ! grep -q "display$tab$fullname" "$config"; then
         cp "$config" "$config.bak"
-        if [[ "$fullname" == "EmulOS" ]]; then
         cat >>"$config" <<_EOF_
 display${tab}$fullname
-${tab}layout               robo
+${tab}layout               Basic
 ${tab}romlist              $fullname
-${tab}in_cycle             yes
-${tab}in_menu              yes
 _EOF_
-      else
-        if [ "$(ls $path)" ]; then
-        cat >>"$config" <<_EOF_
-display${tab}$fullname
-${tab}layout               robospin_v4
-${tab}romlist              $fullname
-${tab}in_cycle             yes
-${tab}in_menu              yes
-_EOF_
-        else
-        cat >>"$config" <<_EOF_
-display${tab}$fullname
-${tab}layout               robospin_v4
-${tab}romlist              $fullname
-${tab}in_cycle             no
-${tab}in_menu              no
-_EOF_
-        fi
-      fi
         chown $user:$user "$config"
     fi
 }
@@ -264,7 +86,7 @@ function _del_system_attractmode() {
     rm -rf "$attract_dir/romlists/$fullname.txt"
 
     local tab=$'\t'
-    # eliminando el bloque de visualización de "^display $tab $fullname" al siguiente "^display" o línea vacía manteniendo la siguiente línea de visualización
+    # remove display block from "^display$tab$fullname" to next "^display" or empty line keeping the next display line
     sed -i "/^display$tab$fullname/,/^display\|^$/{/^display$tab$fullname/d;/^display\$/!d}" "$attract_dir/attract.cfg"
 }
 
@@ -306,7 +128,7 @@ function depends_attractmode() {
     )
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
     isPlatform "x11" && depends+=(libsfml-dev)
-    getDepends "${depends[@]}"
+    getDepends "${depends[@]}" 
 }
 
 function sources_attractmode() {
@@ -342,47 +164,18 @@ function install_attractmode() {
 }
 
 function remove_attractmode() {
-    user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
     rm -f /usr/bin/attract
-    rm -R /home/$user/EmulOS/roms/emulos
-    rm -R /opt/emulos/configs/all/attractmode
 }
 
 function configure_attractmode() {
     moveConfigDir "$home/.attract" "$md_conf_root/all/attractmode"
-    user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
 
     [[ "$md_mode" == "remove" ]] && return
 
     local config="$md_conf_root/all/attractmode/attract.cfg"
     if [[ ! -f "$config" ]]; then
         echo "general" >"$config"
-        echo -e "\tlanguage             es" >>"$config"
-        echo -e "\texit_command         sudo poweroff" >>"$config"
-        echo -e "\texit_message         Apagar Attract EmulOS" >>"$config"
-        echo -e "\tstartup_mode         displays_menu" >>"$config"
         echo -e "\twindow_mode          fullscreen" >>"$config"
-        echo -e "\tvideo_decoder        mmal" >>"$config"
-        echo -e "\tmenu_prompt          Displays Menu" >>"$config"
-        echo -e "\tmenu_layout          robospin_v4" >>"$config"
-
-        echo "layout_config	robospin_v4" >>"$config"
-        echo -e "\tparam                enable_Lmarquee No" >>"$config"
-        echo -e "\tparam                enable_bg blue" >>"$config"
-        echo -e "\tparam                enable_bloom No" >>"$config"
-        echo -e "\tparam                enable_cab moon" >>"$config"
-        echo -e "\tparam                enable_colors yes" >>"$config"
-        echo -e "\tparam                enable_crt No" >>"$config"
-        echo -e "\tparam                enable_frame yes" >>"$config"
-        echo -e "\tparam                enable_list_type wheel" >>"$config"
-        echo -e "\tparam                enable_marquee Yes" >>"$config"
-        echo -e "\tparam                enable_mlogos Yes" >>"$config"
-        echo -e "\tparam                enable_overlay mask" >>"$config"
-        echo -e "\tparam                enable_pointer rocket" >>"$config"
-        echo -e "\tparam                enable_slogos Yes" >>"$config"
-        echo -e "\tparam                enable_static yes" >>"$config"
-        echo -e "\tparam                orbit_art wheel" >>"$config"
-        echo -e "\tparam                transition_ms 35" >>"$config"
     fi
 
     mkUserDir "$md_conf_root/all/attractmode/emulators"
@@ -391,18 +184,6 @@ function configure_attractmode() {
 LD_LIBRARY_PATH="$md_inst/sfml/lib" "$md_inst/bin/attract" "\$@"
 _EOF_
     chmod +x "/usr/bin/attract"
-    wget https://github.com/DOCK-PI3/emulos-attract-config-rpi/archive/master.zip && unzip master.zip
-    rm master.zip
-    cd emulos-attract-config-rpi-master/
-    mv layouts/ /opt/emulos/configs/all/attractmode
-    mv menu-art/ /opt/emulos/configs/all/attractmode
-    cd
-    rm -R /home/$user/emulos-attract-config-rpi-master
-    mkdir /opt/emulos/configs/all/attractmode/amboot
-    cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
-    cp $scriptdir/scriptmodules/extras/scripts/amromlist.info /opt/emulos/configs/all/attractmode/amboot
-    chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
-    chown -R $user:$user /opt/emulos/configs/all/attractmode
 
     local idx
     for idx in "${__mod_idx[@]}"; do

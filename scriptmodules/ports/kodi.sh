@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="kodi"
 rp_module_desc="Kodi - Open source home theatre software"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/xbmc/xbmc/master/LICENSE.GPL"
 rp_module_section="opt"
-rp_module_flags="!mali !osmc !xbian !kms"
+rp_module_flags="!mali !osmc !xbian"
 
 function _update_hook_kodi() {
     # to show as installed in retropie-setup 4.x
@@ -35,7 +35,8 @@ function depends_kodi() {
         apt-add-repository -y ppa:team-xbmc/ppa
     fi
 
-    getDepends policykit-1
+    # required for reboot/shutdown options. Don't try and remove if removing dependencies
+    [[ "$md_mode" == "install" ]] && getDepends policykit-1
 
     addUdevInputRules
 }

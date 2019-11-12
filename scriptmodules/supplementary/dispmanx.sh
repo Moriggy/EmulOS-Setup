@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="dispmanx"
-rp_module_desc="Configurar emuladores para usar dispmanx SDL."
+rp_module_desc="Configure emulators to use dispmanx SDL"
 rp_module_section="config"
 rp_module_flags="!mali !x11 !kms"
 
@@ -25,17 +25,17 @@ function gui_dispmanx() {
                 local mod_id=${__mod_id[idx]}
                 iniGet "$mod_id"
                 if [[ "$ini_value" == "1" ]]; then
-                    options+=($count "Deshabilitar para $mod_id (actualmente: habilitado)")
+                    options+=($count "Disable for $mod_id (currently enabled)")
                     command[$count]="$mod_id off"
                 else
-                    options+=($count "Habilitar para $mod_id (actualmente: desactivado)")
+                    options+=($count "Enable for $mod_id (currently disabled)")
                     command[$count]="$mod_id on"
                 fi
                 ((count++))
             fi
         done
         [[ -z "${options[*]}" ]] && break
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Configurar emuladores para usar dispmanx SDL." 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Configure emulators to use dispmanx SDL" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
             local params=(${command[$choice]})

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="dxx-rebirth"
@@ -114,6 +114,7 @@ function game_data_dxx-rebirth() {
 }
 
 function configure_dxx-rebirth() {
+    local config
     local ver
     local name="Descent Rebirth"
     for ver in 1 2; do
@@ -123,6 +124,12 @@ function configure_dxx-rebirth() {
 
         # copy any existing configs from ~/.d1x-rebirth and symlink the config folder to $md_conf_root/descent1/
         moveConfigDir "$home/.d${ver}x-rebirth" "$md_conf_root/descent${ver}/"
+        if isPlatform "kms"; then
+            config="$md_conf_root/descent${ver}/descent.cfg"
+            iniConfig "=" '' "$config"
+            iniSet "VSync" "1"
+            chown $user:$user "$config"
+        fi
     done
 
     [[ "$md_mode" == "install" ]] && game_data_dxx-rebirth

@@ -10,7 +10,7 @@ function depends_joystick-selection() {
 }
 
 function sources_joystick-selection() {
-    gitPullOrClone "$md_build" "https://github.com/meleu/RetroPie-joystick-selection.git"
+    gitPullOrClone "$md_build" "https://github.com/meleu/EmulOS-joystick-selection.git"
 }
 
 function build_joystick-selection() {
@@ -18,14 +18,14 @@ function build_joystick-selection() {
 }
 
 function install_joystick-selection() {
-    local gamelistxml="$datadir/emulosmenu/gamelist.xml"
-    local rpmenu_js_sh="$datadir/emulosmenu/joystick_selection.sh"
+    local gamelistxml="$datadir/retropiemenu/gamelist.xml"
+    local rpmenu_js_sh="$datadir/retropiemenu/joystick_selection.sh"
 
     ln -sfv "$md_inst/joystick_selection.sh" "$rpmenu_js_sh"
     # maybe the user is using a partition that doesn't support symbolic links...
     [[ -L "$rpmenu_js_sh" ]] || cp -v "$md_inst/joystick_selection.sh" "$rpmenu_js_sh"
 
-    cp -v "$md_build/icon.png" "$datadir/emulosmenu/icons/joystick_selection.png"
+    cp -v "$md_build/icon.png" "$datadir/retropiemenu/icons/joystick_selection.png"
 
     cp -nv "$configdir/all/emulationstation/gamelists/retropie/gamelist.xml" "$gamelistxml"
     if grep -vq "<path>./joystick_selection.sh</path>" "$gamelistxml"; then
@@ -47,7 +47,7 @@ function install_joystick-selection() {
     fi
 
     # needed for proper permissions for gamelist.xml and icons/joystick_selection.png
-    chown -R $user:$user "$datadir/emulosmenu"
+    chown -R $user:$user "$datadir/retropiemenu"
 
     md_ret_files=(
         'jslist'
@@ -57,8 +57,8 @@ function install_joystick-selection() {
 }
 
 function remove_joystick-selection() {
-    rm -rfv "$configdir"/*/joystick-selection.cfg "$datadir/emulosmenu/icons/joystick_selection.png" "$datadir/emulosmenu/joystick_selection.sh"
-    xmlstarlet ed -P -L -d "/gameList/game[contains(path,'joystick_selection.sh')]" "$datadir/emulosmenu/gamelist.xml"
+    rm -rfv "$configdir"/*/joystick-selection.cfg "$datadir/retropiemenu/icons/joystick_selection.png" "$datadir/retropiemenu/joystick_selection.sh"
+    xmlstarlet ed -P -L -d "/gameList/game[contains(path,'joystick_selection.sh')]" "$datadir/retropiemenu/gamelist.xml"
 }
 
 function gui_joystick-selection() {

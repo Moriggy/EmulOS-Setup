@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="custombluez"
-rp_module_desc="Versión actualizada de la pila Bluetooth BlueZ\n\nInstale junto al controlador 'sixaxis' si necesita emparejar los mandos DualShock 3 de terceros (Gasia/Shanwan).\nSe necesita solo si la versión BlueZ de su distribución es <5.48."
+rp_module_desc="Updated version of BlueZ Bluetooth stack\n\nInstall alongside 'sixaxis' driver if you need to pair third-party (Gasia/Shanwan) DualShock 3 controllers.\nNeeded only if your distribution's BlueZ version is <5.48."
 rp_module_licence="GPL2 http://www.bluez.org/faq/common/"
 rp_module_section="driver"
 
@@ -66,20 +66,6 @@ function _install_custombluez_packages() {
 
 function install_custombluez() {
     _install_custombluez_packages "install" "$md_build"
-}
-
-function install_bin_custombluez() {
-    local dest="$__tmpdir/archives/$__os_codename/$__platform/custombluez"
-
-    if ! isPlatform "rpi"; then
-        md_ret_errors+=("$md_id sólo está disponible como paquete binario para la plataforma rpi.")
-        return 1
-    fi
-
-    rm -rf "$dest"
-    mkdir -p "$dest"
-    downloadAndExtract "$__binary_url/custombluez_$(_version_custombluez).tar.bz2" "$dest/" --strip-components 1
-    _install_custombluez_packages "install" "$dest"
 }
 
 function remove_custombluez() {

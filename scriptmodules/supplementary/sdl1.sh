@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="sdl1"
-rp_module_desc="SDL 1.2.15 con arreglos rpi y dispmanx"
+rp_module_desc="SDL 1.2.15 with rpi fixes and dispmanx"
 rp_module_licence="GPL2 https://hg.libsdl.org/SDL/raw-file/7676476631ce/COPYING"
 rp_module_section=""
 rp_module_flags="!mali !x86 !kms"
@@ -19,8 +19,11 @@ function get_pkg_ver_sdl1() {
     local basever
     local revision
 
-    if compareVersions "$__os_release" ge 9; then
+    if compareVersions "$__os_debian_ver" eq 9; then
         basever="1.2.15+dfsg1"
+        revision="4"
+    elif compareVersions "$__os_debian_ver" eq 10; then
+        basever="1.2.15+dfsg2"
         revision="4"
     else
         basever="1.2.15"
@@ -48,18 +51,18 @@ function sources_sdl1() {
     dpkg-source -x libsdl1.2_$(get_pkg_ver_sdl1 source).dsc
 
     cd libsdl1.2-$(get_pkg_ver_sdl1 base)
-    # add fixes from https://github.com/RetroPie/sdl1/compare/master...rpi
-    wget https://github.com/RetroPie/sdl1/compare/master...rpi.diff -O debian/patches/rpi.diff
+    # add fixes from https://github.com/EmulOS/sdl1/compare/master...rpi
+    wget https://github.com/EmulOS/sdl1/compare/master...rpi.diff -O debian/patches/rpi.diff
     echo "rpi.diff" >>debian/patches/series
     # force building without tslib on Jessie (as Raspbian Jessie has tslib, but Debian Jessie doesn't and we want cross compatibility
     sed -i "s/--enable-video-caca/--enable-video-caca --disable-input-tslib/" debian/rules
-    DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v $(get_pkg_ver_sdl1) "Added rpi fixes and dispmanx support from https://github.com/RetroPie/sdl1/compare/master...rpi"
+    DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v $(get_pkg_ver_sdl1) "Added rpi fixes and dispmanx support from https://github.com/EmulOS/sdl1/compare/master...rpi"
 }
 
 function build_sdl1() {
     cd libsdl1.2-$(get_pkg_ver_sdl1 base)
     dpkg-buildpackage
-    local dest="$__tmpdir/archives/$__os_codename/$__platform"
+    local dest="$__tmpdir/archives/$__binary_path"
     mkdir -p "$dest"
     cp ../*.deb "$dest/"
 }
@@ -84,6 +87,6 @@ function install_bin_sdl1() {
 }
 
 function remove_sdl1() {
-    apt-get remove -y --force-yes libsdl1.2-dev
+    apt-get remove -y --allow-change-held-packages libsdl1.2-dev libsdl1.2debian
     apt-get autoremove -y
 }

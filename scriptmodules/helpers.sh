@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 ## @file helpers.sh
@@ -202,7 +202,7 @@ function getDepends() {
     # default to off for x11 targets due to issues with dependencies with recent
     # Ubuntu (19.04). eg libavdevice58 requiring exactly 2.0.9 sdl2.
     isPlatform "x11" && own_sdl2=0
-    iniConfig " = " '"' "$configdir/all/emulos.cfg"
+    iniConfig " = " '"' "$configdir/all/retropie.cfg"
     iniGet "own_sdl2"
     [[ "$ini_value" == 1 ]] && own_sdl2=1
     [[ "$ini_value" == 0 ]] && own_sdl2=0
@@ -232,7 +232,7 @@ function getDepends() {
 
         if [[ "$md_mode" == "install" ]]; then
             # make sure we have our sdl1 / sdl2 installed
-            if ! isPlatform "x11" && [[ "$required" == "libsdl1.2-dev" ]] && hasPackage libsdl1.2-dev $(get_pkg_ver_sdl1) "ne"; then
+            if ! isPlatform "x11" && ! isPlatform "mesa" && [[ "$required" == "libsdl1.2-dev" ]] && hasPackage libsdl1.2-dev $(get_pkg_ver_sdl1) "ne"; then
                 packages+=("$required")
                 continue
             fi
@@ -260,12 +260,12 @@ function getDepends() {
             apt-get autoremove --purge -y
             return 0
         fi
-        echo "No se encontro el(los) paquete(s) necesarios: ${packages[@]}. Estoy tratando de instalarlos ahora."
+        echo "Did not find needed package(s): ${packages[@]}. I am trying to install them now."
 
         # workaround to force installation of our fixed libsdl1.2 and custom compiled libsdl2
         local temp=()
         for required in ${packages[@]}; do
-            if isPlatform "videocore" && [[ "$required" == "libsdl1.2-dev" ]]; then
+            if [[ "$required" == "libsdl1.2-dev" ]]; then
                 if [[ "$__has_binaries" -eq 1 ]]; then
                     rp_callModule sdl1 install_bin
                 else
@@ -303,9 +303,9 @@ function getDepends() {
             fi
         done
         if [[ ${#failed[@]} -eq 0 ]]; then
-            printMsgs "console" "Paquete(s) instalado(s) correctamente: ${packages[*]}."
+            printMsgs "console" "Successfully installed package(s): ${packages[*]}."
         else
-            md_ret_errors+=("No se ha podido instalar el(los) paquete(s): ${failed[*]}.")
+            md_ret_errors+=("Could not install package(s): ${failed[*]}.")
             return 1
         fi
     fi
@@ -336,7 +336,7 @@ function rpSwap() {
             fi
             ;;
         off)
-            echo "Eliminado swap adeicional"
+            echo "Removing additional swap"
             swapoff "$swapfile" 2>/dev/null
             rm -f "$swapfile"
             ;;
@@ -376,7 +376,7 @@ function gitPullOrClone() {
         if [[ "$depth" -gt 0 ]]; then
             git+=" --depth $depth"
         fi
-        [[ "$branch" != "master" ]] && git+=" --branch $branch"
+        git+=" --branch $branch"
         printMsgs "console" "$git \"$repo\" \"$dir\""
         runCmd $git "$repo" "$dir"
     fi
@@ -389,11 +389,11 @@ function gitPullOrClone() {
 
     branch=$(runCmd git -C "$dir" rev-parse --abbrev-ref HEAD)
     commit=$(runCmd git -C "$dir" rev-parse HEAD)
-    printMsgs "console" "HEAD esta ahora en la rama '$branch' en el commit '$commit'"
+    printMsgs "console" "HEAD is now in branch '$branch' at commit '$commit'"
 }
 
 # @fn setupDirectories()
-# @brief Makes sure some required emulos directories and files are created.
+# @brief Makes sure some required retropie directories and files are created.
 function setupDirectories() {
     mkdir -p "$rootdir"
     mkUserDir "$datadir"
@@ -420,7 +420,7 @@ function setupDirectories() {
     # create template for autoconf.cfg and make sure it is owned by $user
     local config="$configdir/all/autoconf.cfg"
     if [[ ! -f "$config" ]]; then
-        echo "# Este archivo se puede usar para habilitar/deshabilitar las funciones de configuracion automática de emulos" >"$config"
+        echo "# this file can be used to enable/disable retropie autoconfiguration features" >"$config"
     fi
     chown $user:$user "$config"
 }
@@ -553,11 +553,11 @@ function copyDefaultConfig() {
     if [[ -f "$to" ]]; then
         if ! diffFiles "$from" "$to"; then
             to+=".rp-dist"
-            printMsgs "console" "Copiando nueva configuracion por defecto en $to"
+            printMsgs "console" "Copying new default configuration to $to"
             cp "$from" "$to"
         fi
     else
-        printMsgs "console" "Copiando nueva configuracion por defecto en $to"
+        printMsgs "console" "Copying default configuration to $to"
         cp "$from" "$to"
     fi
 
@@ -728,7 +728,7 @@ function iniFileEditor() {
             ((i++))
         done
 
-        local cmd=(dialog --backtitle "$__backtitle" --default-item "$sel" --item-help --help-button --menu "Por favor, elija la configuracion para modificar en $config" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --default-item "$sel" --item-help --help-button --menu "Please choose the setting to modify in $config" 22 76 16)
         sel=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ "${sel[@]:0:4}" == "HELP" ]]; then
             printMsgs "dialog" "${sel[@]:5}"
@@ -755,7 +755,7 @@ function iniFileEditor() {
 
         case "$mode" in
             _string_)
-                options+=("E" "Editar (Actualmente ${values[sel]})")
+                options+=("E" "Edit (Currently ${values[sel]})")
                 ;;
             _file_)
                 local match="${params[1]}"
@@ -783,7 +783,7 @@ function iniFileEditor() {
         esac
         [[ -z "$default" ]] && default="U"
         # display values
-        cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Por favor, elija el valor para ${keys[sel]}" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Please choose the value for ${keys[sel]}" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
         # if it is a _string_ type we will open an inputbox dialog to get a manual value
@@ -791,7 +791,7 @@ function iniFileEditor() {
             continue
         elif [[ "$choice" == "E" ]]; then
             [[ "${values[sel]}" == "unset" ]] && values[sel]=""
-            cmd=(dialog --backtitle "$__backtitle" --inputbox "Por favor, introduce el valor para ${keys[sel]}" 10 60 "${values[sel]}")
+            cmd=(dialog --backtitle "$__backtitle" --inputbox "Please enter the value for ${keys[sel]}" 10 60 "${values[sel]}")
             value=$("${cmd[@]}" 2>&1 >/dev/tty)
         elif [[ "$choice" == "U" ]]; then
             value=""
@@ -837,7 +837,7 @@ function setESSystem() {
 ## @fn ensureSystemretroconfig()
 ## @param system system to create retroarch.cfg for
 ## @param shader set a default shader to use (deprecated)
-## @brief Creates a default retroarch.cfg for specified system in `/opt/emulos/configs/$system/retroarch.cfg`.
+## @brief Creates a default retroarch.cfg for specified system in `/opt/masos/configs/$system/retroarch.cfg`.
 function ensureSystemretroconfig() {
     local system="$1"
     local shader="$2"
@@ -848,7 +848,7 @@ function ensureSystemretroconfig() {
 
     local config="$(mktemp)"
     # add the initial comment regarding include order
-    echo -e "# Las configuraciones hechas aqui solo anularan las configuraciones en el archivo retroarch.cfg global si se colocan sobre la linea #include\n" >"$config"
+    echo -e "# Settings made here will only override settings in the global retroarch.cfg if placed above the #include line\n" >"$config"
 
     # add the per system default settings
     iniConfig " = " '"' "$config"
@@ -945,9 +945,9 @@ function applyPatch() {
     if [[ ! -f "$patch_applied" ]]; then
         if patch -f -p1 <"$patch"; then
             touch "$patch_applied"
-            printMsgs "console" "Patch aplicado correctamente: $patch"
+            printMsgs "console" "Successfully applied patch: $patch"
         else
-            md_ret_errors+=("$md_id patch $patch ha fallado su aplicacion.")
+            md_ret_errors+=("$md_id patch $patch failed to apply")
             return 1
         fi
     fi
@@ -1091,7 +1091,7 @@ function getPlatformConfig() {
         [[ -n "$ini_value" ]] && break
     done
     # workaround for EmulOS platform
-    [[ "$key" == "emulos_fullname" ]] && ini_value="EmulOS"
+    [[ "$key" == "retropie_fullname" ]] && ini_value="EmulOS"
     echo "$ini_value"
 }
 
@@ -1235,7 +1235,7 @@ _EOF_
 ## @param cmd commandline to launch
 ## @brief Adds a new emulator for a system.
 ## @details This is the primary function for adding emulators to a system which can be
-## switched between via the runcommand launch menu
+## switched between via the runcommand launch menu 
 ##
 ##     addEmulator 1 "vice-x64" "c64" "$md_inst/bin/x64 %ROM%"
 ##     addEmulator 0 "vice-xvic" "c64" "$md_inst/bin/xvic %ROM%"
@@ -1330,7 +1330,7 @@ function patchVendorGraphics() {
     compareVersions "$__os_debian_ver" lt 9 && return
 
     getDepends patchelf
-    printMsgs "console" "Aplicacion de parche de graficos de proveedores: $filename"
+    printMsgs "console" "Applying vendor graphics patch: $filename"
     patchelf --replace-needed libEGL.so libbrcmEGL.so \
              --replace-needed libGLES_CM.so libbrcmGLESv2.so \
              --replace-needed libGLESv1_CM.so libbrcmGLESv2.so \

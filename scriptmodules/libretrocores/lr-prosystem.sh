@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 #  Many, many thanks go to all people that provide the individual modules!!!
 #
 
 rp_module_id="lr-prosystem"
-rp_module_desc="Emulador de Atari 7800 ProSystem - ProSystem port para libretro"
-rp_module_help="ROM Extensions: .a78 .bin .zip\n\nCopia tus roms de Atari 7800 en $romdir/atari7800\n\nCopia la BIOS (opcional) 7800 BIOS (U).rom en $biosdir"
+rp_module_desc="Atari 7800 ProSystem emu - ProSystem port for libretro"
+rp_module_help="ROM Extensions: .a78 .bin .zip\n\nCopy your Atari 7800 roms to $romdir/atari7800\n\nCopy the optional BIOS file 7800 BIOS (U).rom to $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/prosystem-libretro/master/License.txt"
 rp_module_section="main"
 

@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/petrockblog/RetroPie-Setup/master/LICENSE.md.
+# at https://raw.githubusercontent.com/petrockblog/EmulOS-Setup/master/LICENSE.md.
 #
 
 rp_module_id="zesarux"
-rp_module_desc="Emulador de ZX Spectrum - ZEsarUX"
-rp_module_help="ROM Extensions: .sna .szx .z80 .tap .tzx .gz .udi .mgt .img .trd .scl .dsk .zip\n\nCopia tus juegos de ZX Spectrum en $romdir/zxspectrum"
+rp_module_desc="ZX Spectrum emulator ZEsarUX"
+rp_module_help="ROM Extensions: .sna .szx .z80 .tap .tzx .gz .udi .mgt .img .trd .scl .dsk .zip\n\nCopy your ZX Spectrum games to $romdir/zxspectrum"
 rp_module_licence="GPL3 https://sourceforge.net/p/zesarux/code/ci/master/tree/LICENSE"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali"
 
 function depends_zesarux() {
     local depends=(libssl-dev libpthread-stubs0-dev libsdl1.2-dev libasound2-dev)
-    isPlatform "videocore" && params+=(--enable-raspberry)
-    ! isPlatform "x11" && params+=(--disable-pulse)
+    isPlatform "x11" && depends+=(libpulse-dev)
     getDepends "${depends[@]}"
 }
 
@@ -29,7 +28,8 @@ function sources_zesarux() {
 
 function build_zesarux() {
     local params=()
-    isPlatform "rpi" && params+=(--enable-raspberry --disable-pulse)
+    isPlatform "videocore" && params+=(--enable-raspberry)
+    ! isPlatform "x11" && params+=(--disable-pulse)
     cd src
     ./configure --prefix "$md_inst" "${params[@]}"
     make clean

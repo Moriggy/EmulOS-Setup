@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# This file is part of The MasOS Team Project
+# This file is part of The RetroPie Project
 #
-# The EmulOS Project is the legal property of its developers, whose names are
+# The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://github.com/Moriggy/EmulOS-Setup/blob/master/LICENSE.md
+# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
 #
 
 ## config / defaults
 user="USERTOBECHOSEN"
 
 home="$(eval echo ~$user)"
-emulos_path="$home/EmulOS"
+retropie_path="$home/RetroPie"
 
-usb_path="$UM_MOUNTPOINT/emulos-mount"
+usb_path="$UM_MOUNTPOINT/retropie-mount"
 
 ## internals
 hook_name=${0##*/}
@@ -50,9 +50,9 @@ if [[ ! -d "$usb_path" ]]; then
 fi
 
 if [[ -z "$(ls -A "$usb_path")" ]]; then
-    log info "Copying existing $emulos_path to $usb_path ..."
-    log_cmd rsync -rtu "$emulos_path/" "$usb_path/"
+    log info "Copying existing $retropie_path to $usb_path ..."
+    log_cmd rsync -rtu "$retropie_path/" "$usb_path/"
 fi
 
-log info "Mounting $usb_path over $emulos_path ..."
-log_cmd mount -o bind "$usb_path" "$emulos_path"
+log info "Mounting $usb_path over $retropie_path ..."
+log_cmd mount -o bind "$usb_path" "$retropie_path"

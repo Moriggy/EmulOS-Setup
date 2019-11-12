@@ -5,8 +5,8 @@
 #
 
 # applying standard, factory settings
-sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/scripts/config_std.txt /boot/config.txt
-echo "Aplicados valores por defecto, reiniciando..."
+sudo cp /home/pi/MasOS/scripts/config_std.txt /boot/config.txt
+echo "Applied factory settings, now rebooting"
 echo
 
 # rebooting

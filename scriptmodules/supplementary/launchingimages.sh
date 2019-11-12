@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="launchingimages"
@@ -26,7 +26,7 @@ function depends_launchingimages() {
 }
 
 function install_bin_launchingimages() {
-    gitPullOrClone "$md_inst" "https://github.com/DOCK-PI3/generate-launching-images.git"
+    gitPullOrClone "$md_inst" "https://github.com/meleu/generate-launching-images.git"
 }
 
 function _show_images_launchingimages() {
@@ -107,7 +107,7 @@ function _set_system_launchingimages() {
 }
 
 function _set_extension_launchingimages() {
-    _dialog_menu_launchingimages "Choose the file extension of the final launching image." png jpg\
+    _dialog_menu_launchingimages "Choose the file extension of the final launching image." png jpg \
     || echo "$extension"
 }
 
@@ -123,7 +123,7 @@ function _set_loading_text_launchingimages() {
         --backtitle "$__backtitle" \
         --inputbox "Enter the \"NOW LOADING\" text (or leave blank to no text):" \
         0 70 \
-        "CARGANDO..." \
+        "NOW LOADING" \
         2>&1 >/dev/tty \
     || echo "$loading_text"
 }

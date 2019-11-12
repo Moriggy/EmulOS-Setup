@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
-#
-# The RetroPie Project is the legal property of its developers, whose names are
+# This file is part of The EmulOS Project
+# 
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
-#
-# See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# 
+# See the LICENSE.md file at the top-level directory of this distribution and 
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="kodi-extra"
@@ -44,10 +44,10 @@ function configure_kodi-extra() {
 
     cat > "$romdir/kodi/Kodi.sh" << _EOF_
 #!/bin/bash
-/opt/emulos/supplementary/runcommand/runcommand.sh 0 "kodi-standalone" "kodi"
+/opt/masos/supplementary/runcommand/runcommand.sh 0 "kodi-standalone" "kodi"
 _EOF_
 
     chmod +x "$romdir/kodi/Kodi.sh"
 
-    setESSystem 'Kodi' 'kodi' '~/EmulOS/roms/kodi' '.sh .SH' '%ROM%' 'pc' 'kodi'
+    setESSystem 'Kodi' 'kodi' '~/MasOS/roms/kodi' '.sh .SH' '%ROM%' 'pc' 'kodi'
 }

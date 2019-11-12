@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 # 
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 # 
 # See the LICENSE.md file at the top-level directory of this distribution and 
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="abuse"
@@ -16,7 +16,7 @@ rp_module_section="exp"
 
 # abuse-lib & abuse-sfx will pull in the older abuse package which only works under X
 function depends_abuse() {
-    getDepends libsdl2-dev libsdl2-mixer-dev abuse-lib abuse-sfx
+    getDepends cmake libsdl2-dev libsdl2-mixer-dev abuse-lib abuse-sfx
 }
 
 function sources_abuse() {
@@ -38,5 +38,5 @@ function install_abuse() {
 function configure_abuse() {
     mkRomDir "ports"
     moveConfigDir "$home/.abuse" "$md_conf_root/abuse"
-    addPort "$md_id" "abuse" "Abuse" "pushd $md_inst; $md_inst/abuse; popd"
+    addPort "$md_id" "abuse" "Abuse" "pushd $md_inst; $md_inst/abuse -datadir /usr/share/games/abuse/; popd"
 }

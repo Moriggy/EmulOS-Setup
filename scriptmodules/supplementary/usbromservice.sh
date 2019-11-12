@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="usbromservice"
 rp_module_desc="USB ROM Service"
-rp_module_section="main"
+rp_module_section="opt"
 
 function _get_ver_usbromservice() {
     echo 0.0.24
 }
 
 function _update_hook_usbromservice() {
+    ! rp_isInstalled "$md_idx" && return
     [[ ! -f "$md_inst/disabled" ]] && install_scripts_usbromservice
 }
 
@@ -26,12 +27,11 @@ function depends_usbromservice() {
     if ! hasPackage usbmount $(_get_ver_usbromservice); then
         depends+=(debhelper devscripts pmount lockfile-progs)
         getDepends "${depends[@]}"
-        gitPullOrClone "$md_build" https://github.com/RetroPie/usbmount.git systemd
-        cd "$md_build"
+        gitPullOrClone "$md_build/usbmount" https://github.com/EmulOS/usbmount.git systemd
+        cd "$md_build/usbmount"
         dpkg-buildpackage
         dpkg -i ../usbmount_*_all.deb
         rm -f ../usbmount_*
-        rm -rf "$md_build"
     fi
 }
 
@@ -62,7 +62,7 @@ function disable_usbromservice() {
         file="/etc/usbmount/mount.d/${file##*/}"
         rm -f "$file"
     done
-    touch "$md_inst/disabled"
+    [[ -d "$md_inst" ]] && touch "$md_inst/disabled"
 }
 
 function remove_usbromservice() {

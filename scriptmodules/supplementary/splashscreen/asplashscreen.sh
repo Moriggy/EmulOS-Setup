@@ -14,7 +14,7 @@ do_start () {
         disabled)
             line="$(head -1 "$config")"
             ;;
-        emulos)
+        retropie)
             line="$(find "$ROOTDIR/supplementary/splashscreen" -type f | grep "$re" | shuf -n1)"
             ;;
         custom)

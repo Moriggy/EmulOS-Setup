@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="builder"
@@ -40,7 +40,7 @@ function module_builder() {
         ! fnExists "install_${md_id}" && continue
 
         # skip already built archives, so we can retry failed modules
-        [[ -f "$__tmpdir/archives/$__os_codename/$__platform/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
+        [[ -f "$__tmpdir/archives/$__binary_path/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
 
         # build, install and create binary archive.
         # initial clean in case anything was in the build folder when calling
@@ -61,7 +61,7 @@ function section_builder() {
 }
 
 function upload_builder() {
-    rsync -av --progress --delay-updates "$__tmpdir/archives/" "emulos@$__binary_host:files/binaries/"
+    rsync -av --progress --delay-updates "$__tmpdir/archives/" "retropie@$__binary_host:files/binaries/"
 }
 
 function clean_archives_builder() {
@@ -76,18 +76,20 @@ function chroot_build_builder() {
     local ip="$(getIPAddress)"
 
     local dist
+    local dists="$__dists"
+    [[ -z "$dists" ]] && dists="stretch buster"
     local sys
 
-    for dist in stretch; do
+    for dist in $dists; do
         local use_distcc=0
         if [[ -d "$rootdir/admin/crosscomp/$dist" ]]; then
             use_distcc=1
             rp_callModule crosscomp switch_distcc "$dist"
         fi
 
-        if [[ ! -d "$md_build/$dist" ]]; then
-            rp_callModule image create_chroot "$dist" "$md_build/$dist"
-            git clone "$HOME/EmulOS-Setup" "$md_build/$dist/home/pi/EmulOS-Setup"
+        [[ ! -d "$md_build/$dist" ]] && rp_callModule image create_chroot "$dist" "$md_build/$dist"
+        if [[ ! -d "$md_build/$dist/home/pi/EmulOS-Setup" ]]; then
+            sudo -u $user git clone "$home/EmulOS-Setup" "$md_build/$dist/home/pi/EmulOS-Setup"
             cat > "$md_build/$dist/home/pi/install.sh" <<_EOF_
 #!/bin/bash
 cd
@@ -100,18 +102,18 @@ fi
 _EOF_
             rp_callModule image chroot "$md_build/$dist" bash /home/pi/install.sh
         else
-            git -C "$md_build/$dist/home/pi/EmulOS-Setup" pull
+            sudo -u $user git -C "$md_build/$dist/home/pi/EmulOS-Setup" pull
         fi
 
-        for sys in rpi1 rpi2; do
+        for sys in rpi1 rpi2 rpi4; do
             rp_callModule image chroot "$md_build/$dist" \
                 sudo \
                 PATH="/usr/lib/distcc:$PATH" \
                 MAKEFLAGS="-j4 PATH=/usr/lib/distcc:$PATH" \
                 __platform="$sys" \
-                /home/pi/EmulOS-Setup/emulos_pkgs.sh builder "$@"
+                /home/pi/EmulOS-Setup/retropie_packages.sh builder "$@"
         done
 
-        rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$HOME/EmulOS-Setup/tmp/archives/"
+        rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$home/EmulOS-Setup/tmp/archives/"
     done
 }

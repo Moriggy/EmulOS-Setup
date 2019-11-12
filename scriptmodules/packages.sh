@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 declare -A __mod_id_to_idx
@@ -22,10 +22,10 @@ __mod_flags=()
 declare -A __sections
 __sections[core]="core"
 __sections[main]="main"
-__sections[opt]="opcional"
+__sections[opt]="optional"
 __sections[exp]="experimental"
 __sections[driver]="driver"
-__sections[config]="configuracion"
+__sections[config]="configuration"
 
 function rp_listFunctions() {
     local idx
@@ -34,7 +34,7 @@ function rp_listFunctions() {
     local mode
     local func
 
-    echo -e "Index/ID:                 Description:                                 Listado de acciones disponibles"
+    echo -e "Index/ID:                 Description:                                 List of available actions"
     echo "-----------------------------------------------------------------------------------------------------------------------------------"
     for idx in ${__mod_idx[@]}; do
         mod_id=${__mod_id[$idx]};
@@ -310,7 +310,7 @@ function rp_hasBinary() {
     # threaded C++ apps on Raspbian (armv6 userland)
     if [[ "$__os_id" != "Raspbian" ]] && ! isPlatform "armv6"; then
         case "$id" in
-            emulationstation|zdoom|lr-dinothawr|lr-ppsspp|ppsspp)
+            emulationstation|lzdoom|lr-dinothawr|lr-ppsspp|ppsspp)
                 return 1
                 ;;
         esac
@@ -345,7 +345,7 @@ function rp_createBin() {
     fi
 
     local archive="$md_id.tar.gz"
-    local dest="$__tmpdir/archives/$__os_codename/$__platform/$md_type"
+    local dest="$__tmpdir/archives/$__binary_path/$md_type"
     rm -f "$dest/$archive"
     mkdir -p "$dest"
     tar cvzf "$dest/$archive" -C "$rootdir/$md_type" "$md_id"

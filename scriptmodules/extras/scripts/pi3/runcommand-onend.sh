@@ -1,1 +1,1 @@
-[[ -f /home/pi/EmulOS/videoloadingscreens/salir.mp4 ]] && omxplayer -b "/home/pi/EmulOS/videoloadingscreens/salir.mp4" > /dev/null
+[[ -f /home/pi/MasOS/videoloadingscreens/salir.mp4 ]] && omxplayer -b "/home/pi/MasOS/videoloadingscreens/salir.mp4" > /dev/null
