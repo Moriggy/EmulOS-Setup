@@ -44,13 +44,19 @@ function restart_samba() {
     service samba restart || service smbd restart
 }
 
+# new samba shares by mabedeep: agregando rutas directas de ES y ovelays
+emulosemulationstation="/etc/emulationstation"
+#fin -----------------------------------------------------------
+
 function install_shares_samba() {
     cp /etc/samba/smb.conf /etc/samba/smb.conf.bak
     add_share_samba "roms" "$romdir"
     add_share_samba "bios" "$home/EmulOS/BIOS"
     add_share_samba "configs" "$configdir"
     add_share_samba "splashscreens" "$datadir/splashscreens"
-    restart_samba
+    add_share_samba "emulationstation" "$emulosemulationstation"
+    # Agregar permisos para usuario pi en directorios nuevos
+  	sudo chown -R $user:$user /etc/emulationstation
 }
 
 function remove_shares_samba() {
