@@ -45,14 +45,14 @@ function sources_retroarch() {
 }
 
 function build_retroarch() {
-    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
+    CFLAGS='-mfpu=neon' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
     make clean
     make -j4
     md_ret_require="$md_build/retroarch"
 }
 
 function install_retroarch() {
-    make install
+    sudo make install
     md_ret_files=(
         'retroarch.cfg'
     )
