@@ -15,7 +15,7 @@ rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/RetroArch/mas
 rp_module_section="core"
 
 function depends_retroarch() {
-    local depends=(libudev-dev libxkbcommon-dev libsdl2-dev libasound2-dev libusb-1.0-0-dev)
+    local depends=(build-essential libasound2-dev libudev-dev)
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
     isPlatform "gles" && depends+=(libgles2-mesa-dev)
     isPlatform "mesa" && depends+=(libx11-xcb-dev)
@@ -39,13 +39,13 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.0
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.1
     applyPatch "$md_data/01_hotkey_hack.diff"
     applyPatch "$md_data/02_disable_search.diff"
 }
 
 function build_retroarch() {
-    local params=(--disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt)
+    local params=('-mfpu=neon' --disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --enable-alsa --enable-udev --enable-floathard --enable-neon --enable-dispmanx )
     if ! isPlatform "x11"; then
         params+=(--disable-pulse)
         ! isPlatform "mesa" && params+=(--disable-x11)
@@ -55,7 +55,7 @@ function build_retroarch() {
     fi
     isPlatform "gles" && params+=(--enable-opengles)
     if isPlatform "rpi" && isPlatform "mesa"; then
-        params+=(--disable-videocore --disable-vulkan)
+        params+=(--disable-videocore --disable-vulkan --disable-opengl1)
         [ -f "/opt/vc/lib/pkgconfig/egl.pc" ] && PKG_CONFIG_PATH=""
     fi
     isPlatform "gles3" && params+=(--enable-opengles3)
@@ -69,7 +69,7 @@ function build_retroarch() {
     isPlatform "vero4k" && params+=(--enable-mali_fbdev --with-opengles_libs='-L/opt/vero3/lib')
    ./configure --prefix="$md_inst" "${params[@]}"
     make clean
-    make
+    make -j4
     md_ret_require="$md_build/retroarch"
 }
 
