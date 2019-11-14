@@ -21,13 +21,13 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    curl -LO 'https://github.com/libretro/RetroArch/archive/v1.8.1.tar.gz'
-    tar -zxvf v1.8.1.tar.gz
-    cd RetroArch-1.8.1
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.0
+    applyPatch "$md_data/01_hotkey_hack.diff"
+    applyPatch "$md_data/02_disable_search.diff"
 }
 
 function build_retroarch() {
-     CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
+    CFLAGS='-mfpu=neon' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
     #make clean
     make -j4
     md_ret_require="$md_build/retroarch"
