@@ -15,38 +15,20 @@ rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/RetroArch/mas
 rp_module_section="core"
 
 function depends_retroarch() {
-    local depends=(build-essential libasound2-dev libudev-dev)
-    isPlatform "rpi" && depends+=(libraspberrypi-dev)
-    isPlatform "gles" && depends+=(libgles2-mesa-dev)
-    isPlatform "mesa" && depends+=(libx11-xcb-dev)
-    isPlatform "mali" && depends+=(mali-fbdev)
-    isPlatform "x11" && depends+=(libx11-xcb-dev libpulse-dev libvulkan-dev)
-    isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc zlib1g-dev libfreetype6-dev)
-    isPlatform "kms" && depends+=(libgbm-dev)
-
-    if compareVersions "$__os_debian_ver" ge 9; then
-        depends+=(libavcodec-dev libavformat-dev libavdevice-dev)
-    fi
-
-    # only install nvidia-cg-toolkit if it is available (as the non-free repo may not be enabled)
-    if isPlatform "x86"; then
-        if [[ -n "$(apt-cache search --names-only nvidia-cg-toolkit)" ]]; then
-            depends+=(nvidia-cg-toolkit)
-        fi
-    fi
+    local depends=(build-essential libasound2-dev libudev-dev libxkbcommon-dev zlib1g-dev libfreetype6-dev libegl1-mesa-dev libgles2-mesa-dev libgbm-dev libavcodec-dev libsdl2-dev libsdl-image1.2-dev libxml2-dev yasm libavformat-dev libavdevice-dev libswresample-dev libavresample-dev libswscale-dev libv4l-dev libgl*-mesa-dev)
 
     getDepends "${depends[@]}"
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.0
-    applyPatch "$md_data/01_hotkey_hack.diff"
-    applyPatch "$md_data/02_disable_search.diff"
+    curl -LO 'https://github.com/libretro/RetroArch/archive/v1.8.1.tar.gz'
+    tar -zxvf v1.8.1.tar.gz
+    cd RetroArch-1.8.1
 }
 
 function build_retroarch() {
-    CFLAGS='-mfpu=neon' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
-    make clean
+     CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
+    #make clean
     make -j4
     md_ret_require="$md_build/retroarch"
 }
