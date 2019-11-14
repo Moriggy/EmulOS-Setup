@@ -45,29 +45,7 @@ function sources_retroarch() {
 }
 
 function build_retroarch() {
-    local params=( --disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --enable-alsa --enable-udev --enable-floathard --enable-neon --enable-dispmanx )
-    if ! isPlatform "x11"; then
-        params+=(--disable-pulse)
-        ! isPlatform "mesa" && params+=(--disable-x11)
-    fi
-    if compareVersions "$__os_debian_ver" lt 9; then
-        params+=(--disable-ffmpeg)
-    fi
-    isPlatform "gles" && params+=(--enable-opengles)
-    if isPlatform "rpi" && isPlatform "mesa"; then
-        params+=(--disable-videocore --disable-vulkan --disable-opengl1)
-        [ -f "/opt/vc/lib/pkgconfig/egl.pc" ] && PKG_CONFIG_PATH=""
-    fi
-    isPlatform "gles3" && params+=(--enable-opengles3)
-     # Temporarily block dispmanx support for fkms until upstream support is fixed
-    isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx --disable-opengl1)
-    isPlatform "mali" && params+=(--enable-mali_fbdev)
-    isPlatform "kms" && params+=(--enable-kms --enable-egl)
-    isPlatform "arm" && params+=(--enable-floathard)
-    isPlatform "neon" && params+=(--enable-neon)
-    isPlatform "x11" && params+=(--enable-vulkan)
-    isPlatform "vero4k" && params+=(--enable-mali_fbdev --with-opengles_libs='-L/opt/vero3/lib')
-    CLFAGS='-mfpu=neon' ./configure --prefix="$md_inst" "${params[@]}"
+    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --enable-alsa --enable-udev --enable-neon --disable-videocore --enable-opengles --enable-opengles3 --disable-opengl1 --enable-x11
     make clean
     make -j4
     md_ret_require="$md_build/retroarch"
