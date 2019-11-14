@@ -45,7 +45,7 @@ function sources_retroarch() {
 }
 
 function build_retroarch() {
-    local params=('-mfpu=neon' --disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --enable-alsa --enable-udev --enable-floathard --enable-neon --enable-dispmanx )
+    local params=( --disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --enable-alsa --enable-udev --enable-floathard --enable-neon --enable-dispmanx )
     if ! isPlatform "x11"; then
         params+=(--disable-pulse)
         ! isPlatform "mesa" && params+=(--disable-x11)
@@ -67,7 +67,7 @@ function build_retroarch() {
     isPlatform "neon" && params+=(--enable-neon)
     isPlatform "x11" && params+=(--enable-vulkan)
     isPlatform "vero4k" && params+=(--enable-mali_fbdev --with-opengles_libs='-L/opt/vero3/lib')
-   ./configure --prefix="$md_inst" "${params[@]}"
+    CLFAGS='-mfpu=neon' ./configure --prefix="$md_inst" "${params[@]}"
     make clean
     make -j4
     md_ret_require="$md_build/retroarch"
