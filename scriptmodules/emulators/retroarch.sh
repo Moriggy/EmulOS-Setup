@@ -45,7 +45,7 @@ function sources_retroarch() {
 }
 
 function build_retroarch() {
-    local params=(--disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt)
+    local params=(--disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --disable-discord)
     if ! isPlatform "x11"; then
         params+=(--disable-pulse)
         ! isPlatform "mesa" && params+=(--disable-x11)
@@ -155,6 +155,7 @@ function configure_retroarch() {
     # configure default options
     iniConfig " = " '"' "$config"
     iniSet "cache_directory" "/tmp/retroarch"
+    iniSet "core_options_path" "/$configdir/all/retroarch-core-options.cfg"
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
     iniSet "video_scale" "1.0"
@@ -163,7 +164,7 @@ function configure_retroarch() {
     iniSet "video_aspect_ratio_auto" "true"
     iniSet "video_smooth" "false"
     iniSet "video_shader_enable" "true"
-    iniSet "auto_shaders_enable" "false"
+    iniSet "auto_shaders_enable" "true"
     iniSet "rgui_show_start_screen" "false"
     iniSet "rgui_browser_directory" "$romdir"
     iniSet "audio_out_rate" "44100"
