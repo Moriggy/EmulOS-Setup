@@ -21,14 +21,13 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.0
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.1
     applyPatch "$md_data/01_hotkey_hack.diff"
     applyPatch "$md_data/02_disable_search.diff"
 }
 
 function build_retroarch() {
-    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --disable-opengl1 --enable-neon --enable -udev --enable-floathard --enable-opengles3 --enable-opengles --disable-videocore --disable-pulse --disable-oss
-    #make clean
+    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --disable-opengl1 --enable-neon --enable -udev --enable-floathard --enable-opengles3 --enable-opengles --disable-videocore --disable-pulse --disable-oss --disable-discord
     make -j4
     md_ret_require="$md_build/retroarch"
 }
@@ -115,6 +114,7 @@ function configure_retroarch() {
     # configure default options
     iniConfig " = " '"' "$config"
     iniSet "cache_directory" "/tmp/retroarch"
+    iniSet "core_options_path" "/$configdir/all/retroarch-core-options.cfg"
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
     iniSet "video_scale" "1.0"
@@ -123,7 +123,7 @@ function configure_retroarch() {
     iniSet "video_aspect_ratio_auto" "true"
     iniSet "video_smooth" "false"
     iniSet "video_shader_enable" "true"
-    iniSet "auto_shaders_enable" "false"
+    iniSet "auto_shaders_enable" "true"
     iniSet "rgui_show_start_screen" "false"
     iniSet "rgui_browser_directory" "$romdir"
     iniSet "audio_out_rate" "44100"

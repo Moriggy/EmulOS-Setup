@@ -64,6 +64,7 @@ function gui_esthemes() {
     'Moriggy es-next-pixel-Legacy'
     'Moriggy es-next-pixel-Wheel'
     'Moriggy hypernostalgic'
+    'Moriggy HUD'
     'Moriggy MasOS'
     'Moriggy maximus-v3'
     'Moriggy retro'
