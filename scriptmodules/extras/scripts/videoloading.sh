@@ -125,6 +125,7 @@ function download_video() {
             2 "Pack Supreme" \
             3 "Pack Mabedeep Dock-pi3" \
             4 "Pack Moriggy Bloques 3D" \
+            5 "Pack Moriggy Holograma 3D" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -217,6 +218,30 @@ function download_video() {
       					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
       					mv $enable_dir/videoloadingscreens-Bloques-3D-master/*.mp4 $enable_dir
       					rm -R $enable_dir/videoloadingscreens-Bloques-3D-master/
+      					chown -R $user:$user $enable_dir
+      					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
+      				else
+      					dialog --infobox "Debe estar activada la opción de videolaunchingscreens!!" 3 80 ; sleep 5
+      			fi
+            break;;
+
+            5) clear
+      				if [[ -d "$enable_dir" ]]; then
+      					if [ "$(ls $enable_dir)" ]
+      						then
+      							echo "Borrando el pack de videos anterior"; sleep 2
+      							rm -R $enable_dir/*
+      						else
+      							echo "No hay videos en $enable_dir"; sleep 2
+      						fi
+      					echo "Empezando la descarga del pack de videos elegido"
+      					echo ""; sleep 2
+      					cd $enable_dir && wget https://github.com/Moriggy/videoloadingscreens-Holograma-3D/archive/master.zip && unzip master.zip
+      					rm $enable_dir/master.zip
+      					clear
+      					echo "Moviendo videos a la carpeta de destino, un momento por favor..."; sleep 2
+      					mv $enable_dir/videoloadingscreens-Holograma-3D-master/*.mp4 $enable_dir
+      					rm -R $enable_dir/videoloadingscreens-Holograma-3D-master/
       					chown -R $user:$user $enable_dir
       					dialog --infobox "Descarga completada!!" 3 25 ; sleep 3
       				else
