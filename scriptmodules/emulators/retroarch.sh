@@ -27,7 +27,7 @@ function sources_retroarch() {
 }
 
 function build_retroarch() {
-    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --disable-opengl1 --enable-neon --enable -udev --enable-floathard --enable-opengles3 --enable-opengles --disable-videocore --disable-pulse --disable-oss --disable-discord
+    CFLAGS='-mfpu=neon -mtune=cortex-a72 -march=armv8-a' ./configure --disable-opengl1 --enable-neon --enable-udev --enable-floathard --enable-opengles3 --enable-opengles --disable-videocore --disable-pulse --disable-oss --disable-discord
     make -j4
     md_ret_require="$md_build/retroarch"
 }
