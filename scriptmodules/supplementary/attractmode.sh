@@ -43,7 +43,9 @@ function _add_system_attractmode() {
 
     iniSet "rompath" "$path"
     iniSet "system" "$fullname"
-
+    if [[ "$fullname" == "Arcade" || "$fullname" == "SNK Neo Geo" || "$fullname" == "Final Burn Alpha" || "$fullname" == "MAME (Libretro)" || "$fullname" == "MAME (Advmame)" || "$fullname" == "MAME (Mame4all)" ]]; then
+      iniSet "import_extras" "        /home/pi/.attract/mame-config/catver.ini;/home/pi/.attract/mame-config/nplayers.ini;/home/pi/.attract/mame-config/mame.xml"
+    fi
     # extensions separated by semicolon
     extensions="${extensions// /;}"
     iniSet "romext" "$extensions"
@@ -401,6 +403,7 @@ _EOF_
     mkdir /opt/emulos/configs/all/attractmode/amboot
     cp $scriptdir/scriptmodules/extras/scripts/amromlist.sh /opt/emulos/configs/all/attractmode/amboot
     cp $scriptdir/scriptmodules/extras/scripts/amromlist.info /opt/emulos/configs/all/attractmode/amboot
+    cp -R $scriptdir/scriptmodules/extras/scripts/mame-config/ /opt/emulos/configs/all/attractmode/
     chmod +x /opt/emulos/configs/all/attractmode/amboot/amromlist.sh
     chown -R $user:$user /opt/emulos/configs/all/attractmode
 
