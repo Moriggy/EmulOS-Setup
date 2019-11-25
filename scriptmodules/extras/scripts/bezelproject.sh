@@ -16,12 +16,12 @@ function main_menu() {
         choice=$(dialog --backtitle "$BACKTITLE" --title " MAIN MENU " \
             --ok-label OK --cancel-label Exit \
             --menu "What action would you like to perform?" 25 75 20 \
-            1 "Download system bezel pack (will automatcally enable bezels)" \
-            2 "Enable system bezel pack" \
-            3 "Disable system bezel pack" \
-            4 "Information:  Retroarch cores setup for bezels per system" \
-            5 "Uninstall the bezel project completely" \
-			6 "Reparar permisos en RetroArch _ new" \
+            1 "Descargar pack de bezels de los sistemas (se habilitarán automáticamente los bezels)" \
+            2 "Activar pack de bezels de los sistemas" \
+            3 "Desactivar pack de bezels de los sistemas" \
+            4 "Informacion:  Configuración de cores de Retroarch para bezels por sistema" \
+            5 "Desinstalar The Bezel Project completamente" \
+			      #6 "Reparar permisos en RetroArch _ new" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -30,7 +30,7 @@ function main_menu() {
             3) disable_bezel  ;;
             4) retroarch_bezelinfo  ;;
             5) removebezelproject  ;;
-			6) repara_permisos  ;;
+			      #6) repara_permisos  ;;
             *)  break ;;
         esac
     done
@@ -41,8 +41,8 @@ function main_menu() {
 #########################################################
 
 function repara_permisos() {
-sudo chown -R pi:pi /opt/emulos/
-
+  user="$(cat /etc/passwd | grep '1000' | cut -d: -f1)"
+  sudo chown -R $user:$user /opt/emulos/
 }
 
 #########################################################
@@ -185,11 +185,11 @@ function download_bezel() {
                 # if [[ -d "/home/pigaming" ]]; then
                     # cd "/home/pigaming/EmulOS/emulosmenu"
                 # else
-                    # cd "/home/pi/EmulOS/emulosmenu" 
+                    # cd "/home/pi/EmulOS/emulosmenu"
                 # fi
-                # mv "bezelproject.sh" "bezelproject.sh.bkp" 
-                # wget "https://raw.githubusercontent.com/DOCK-PI3/BezelProject/master/bezelproject.sh" 
-                # chmod 777 "bezelproject.sh" 
+                # mv "bezelproject.sh" "bezelproject.sh.bkp"
+                # wget "https://raw.githubusercontent.com/DOCK-PI3/BezelProject/master/bezelproject.sh"
+                # chmod 777 "bezelproject.sh"
                 # exit
                 # ;;
             *)  #install or update themes
@@ -204,6 +204,7 @@ function download_bezel() {
                     case "$choice" in
                         1)
                             install_bezel_pack "$theme" "$repo"
+                            repara_permisos
                             ;;
                         2)
                             uninstall_bezel_pack "$theme"
@@ -211,6 +212,7 @@ function download_bezel() {
                     esac
                 else
                     install_bezel_pack "$theme" "$repo"
+                    repara_permisos
                 fi
                 ;;
         esac
@@ -343,7 +345,7 @@ clear
 }
 
 function hide_bezel() {
-dialog --infobox "...processing..." 3 20 ; sleep 2
+dialog --infobox "...desactivando bezels..." 3 27 ; sleep 2
 emulator=$1
 file="/opt/emulos/configs/${emulator}/retroarch.cfg"
 
@@ -381,7 +383,7 @@ esac
 }
 
 function show_bezel() {
-dialog --infobox "...processing..." 3 20 ; sleep 2
+dialog --infobox "...activando bezels..." 3 27 ; sleep 2
 emulator=$1
 file="/opt/emulos/configs/${emulator}/retroarch.cfg"
 
@@ -1204,4 +1206,3 @@ dialog --backtitle "The Bezel Project" \
 # Main
 
 main_menu
-
