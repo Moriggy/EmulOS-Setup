@@ -21,7 +21,7 @@ function main_menu() {
             3 "Desactivar pack de bezels de los sistemas" \
             4 "Informacion:  Configuración de cores de Retroarch para bezels por sistema" \
             5 "Desinstalar The Bezel Project completamente" \
-
+			      6 "Reparar permisos en RetroArch _ new" \
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -30,7 +30,7 @@ function main_menu() {
             3) disable_bezel  ;;
             4) retroarch_bezelinfo  ;;
             5) removebezelproject  ;;
-			      
+			      6) repara_permisos  ;;
             *)  break ;;
         esac
     done
@@ -199,7 +199,7 @@ function download_bezel() {
 #                if [[ "${status[choice]}" == "i" ]]; then
                 if [[ -d "/opt/emulos/configs/all/retroarch/overlay/GameBezels/$theme" ]]; then
                     options=(1 "Update $theme" 2 "Uninstall $theme")
-                    cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option for the bezel pack" 12 40 06)
+                    cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para pack de bezels" 12 40 06)
                     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
                     case "$choice" in
                         1)
@@ -226,7 +226,7 @@ clear
     while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " MAIN MENU " \
             --ok-label OK --cancel-label Exit \
-            --menu "Which system would you like to disable bezels for?" 25 75 20 \
+            --menu "Qué sistema te gustaría deshabilitar los bezels?" 25 75 20 \
             1 "GCEVectrex" \
             2 "SuperGrafx" \
             3 "Sega32X" \
@@ -288,7 +288,7 @@ clear
     while true; do
         choice=$(dialog --backtitle "$BACKTITLE" --title " MAIN MENU " \
             --ok-label OK --cancel-label Exit \
-            --menu "Which system would you like to enable bezels for?" 25 75 20 \
+            --menu "Qué sistema te gustaría activar los bezels?" 25 75 20 \
             1 "GCEVectrex" \
             2 "SuperGrafx" \
             3 "Sega32X" \
