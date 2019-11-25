@@ -156,7 +156,7 @@ function download_bezel() {
         local status=()
         local default
 
-        options+=(U "Update install script - script will exit when updated")
+        #options+=(U "Update install script - script will exit when updated")
 
         local i=1
         for theme in "${themes[@]}"; do
@@ -168,15 +168,15 @@ function download_bezel() {
             fi
             if [[ -d "/opt/emulos/configs/all/retroarch/overlay/GameBezels/$theme" ]]; then
                 status+=("i")
-                options+=("$i" "Update or Uninstall $theme (installed)")
+                options+=("$i" "Actualizar or Desinstalar $theme (instalados)")
                 installed_bezelpacks+=("$theme $repo")
             else
                 status+=("n")
-                options+=("$i" "Install $theme (not installed)")
+                options+=("$i" "Instalar $theme (not instalado)")
             fi
             ((i++))
         done
-        local cmd=(dialog --default-item "$default" --backtitle "$__backtitle" --menu "The Bezel Project -  Bezel Pack Downloader - Choose an option" 22 76 16)
+        local cmd=(dialog --default-item "$default" --backtitle "$__backtitle" --menu "The Bezel Project -  Bezel Pack Downloader - Elige una opción" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         default="$choice"
         [[ -z "$choice" ]] && break
@@ -198,7 +198,7 @@ function download_bezel() {
                 theme="${theme[1]}"
 #                if [[ "${status[choice]}" == "i" ]]; then
                 if [[ -d "/opt/emulos/configs/all/retroarch/overlay/GameBezels/$theme" ]]; then
-                    options=(1 "Update $theme" 2 "Uninstall $theme")
+                    options=(1 "Actualizar $theme" 2 "Desinstalar $theme")
                     cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para pack de bezels" 12 40 06)
                     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
                     case "$choice" in
