@@ -21,7 +21,7 @@ function main_menu() {
             3 "Desactivar pack de bezels de los sistemas" \
             4 "Informacion:  Configuración de cores de Retroarch para bezels por sistema" \
             5 "Desinstalar The Bezel Project completamente" \
-			      #6 "Reparar permisos en RetroArch _ new" \
+
             2>&1 > /dev/tty)
 
         case "$choice" in
@@ -30,7 +30,7 @@ function main_menu() {
             3) disable_bezel  ;;
             4) retroarch_bezelinfo  ;;
             5) removebezelproject  ;;
-			      #6) repara_permisos  ;;
+			      
             *)  break ;;
         esac
     done
