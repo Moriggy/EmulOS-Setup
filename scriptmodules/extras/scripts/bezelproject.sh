@@ -172,7 +172,7 @@ function download_bezel() {
                 installed_bezelpacks+=("$theme $repo")
             else
                 status+=("n")
-                options+=("$i" "Instalar $theme (not instalado)")
+                options+=("$i" "Instalar $theme (no instalado)")
             fi
             ((i++))
         done
