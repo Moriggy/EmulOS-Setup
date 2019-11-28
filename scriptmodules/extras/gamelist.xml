@@ -62,7 +62,7 @@
 	</game>
 	<game>
 		<path>./rpsetup.rp</path>
-		<name>EmulOS Setup</name>
+		<name>EmulOS-Setup</name>
 		<desc>Instale EmulOS desde binario o fuente, instale paquetes experimentales, controladores adicionales, edite recursos compartidos de samba, raspador personalizado, así como otras configuraciones relacionadas con EmulOS.</desc>
 		<image>./icons/rpsetup.png</image>
 	</game>
@@ -117,5 +117,11 @@
 		<path>./EmulOS Utilidades/Instalar Pistola Aimtrak.sh</path>
 		<name>Instalar Pistola Aimtrak</name>
 		<desc>Instala todos los drivers necesarios para poder usar la pistola Aimtrak en advance-mame 1.4 con los juegos compatibles con ello. Necesitas dicha pistola y realizar una configuración previa.</desc>
+	</game>
+	<game>
+		<path>./Attract-Mode.sh</path>
+		<name>Attract Mode</name>
+		<desc>Cambiar al frontend Attract Mode.</desc>
+		<image>./icons/attractmode.png</image>
 	</game>
 </gameList>
