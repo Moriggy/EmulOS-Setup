@@ -6,6 +6,8 @@ Para una compilación de EmulOS muy VIP, tendrá que instalarlo manualmente.
 
 2) Instala Git.
 
+sudo apt-get install git
+
 3) Luego escriba:
 
 git clone --single-branch --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.git
