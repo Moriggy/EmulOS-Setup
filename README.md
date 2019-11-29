@@ -16,15 +16,15 @@ sudo raspi-config
 
 5) Ejecutar estos pasos para completar la instalacion en rpi4
 
-cd ./RetroPie-Setup
+cd ./EmulOS-Setup
 
 git fetch && git checkout fkms_rpi4
 
-sudo ./retropie_packages.sh 833 depends
+sudo ./emulos_pkgs.sh 833 depends
 
-sudo ./retropie_packages.sh 833 sources
+sudo ./emulos_pkgs.sh 833 sources
 
-sudo ./retropie_packages.sh 833 build
+sudo ./emulos_pkgs.sh 833 build
 
 cd ./tmp/build/sdl2/
 
@@ -32,7 +32,7 @@ sudo dpkg -i libsdl2-2.0-0_2.0.10*.deb
 
 cd ../../..
 
-sudo ./retropie_setup.sh
+sudo ./emulos_setup.sh
 
 # go to basic install
 
