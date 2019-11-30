@@ -1,20 +1,30 @@
-BETA PARA (RPI4) Utilice este método de instalación manual en su lugar. Esto solo ha sido probado en raspbian lite.
+BETA PARA (RPI4) Utilice este método de instalación manual en su lugar. Esto solo ha sido probado en raspbian buster lite y desktop.
 
 Para una compilación de EmulOS muy VIP, tendrá que instalarlo manualmente.
 
-1) Instala Raspbian Buster lite. 
+1) Preparativos antes de la instalación:
+
+a) descargar y grabar la imagen más reciente Raspbian buster Lite
+b) cambiar el tamaño de la tarjeta (acción automática en la primera ejecución + reinicio)
+c) conectarse a wifi, dividir la memoria (dedicar 256 MB al video), habilitar ssh y la configuración regional a en_US.UTF-8través desudo raspi-config
+d) actualizar todo:sudo apt-get update -y && sudo apt-get upgrade -y && reboot
+e) preinstalar algunas cosas: sudo apt-get install git lsb-release
+
 
 2) Instala Git.
 
 sudo apt-get install git
 
+
 3) Luego escriba:
 
 git clone --single-branch --branch fkms_rpi4 --depth=1 https://github.com/Moriggy/EmulOS-Setup.git
 
+
 4) Habilite el controlador GL (Fake KMS) en raspi-config.
 
 sudo raspi-config
+
 
 5) Ejecutar estos pasos para completar la instalacion en rpi4
 
@@ -28,17 +38,11 @@ sudo ./emulos_pkgs.sh 833 sources
 
 sudo ./emulos_pkgs.sh 833 build
 
-cd ./tmp/build/sdl2/
-
-sudo dpkg -i libsdl2-2.0-0_2.0.10*.deb
-
-cd ../../..
-
 sudo ./emulos_setup.sh
 
 # go to basic install
 
-#setup autoboot to emulation station
+#setup autostart to emulation station
 
 
 
