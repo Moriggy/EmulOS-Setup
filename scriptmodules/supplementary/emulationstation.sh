@@ -129,6 +129,7 @@ function depends_emulationstation() {
         libvlc-dev libvlccore-dev vlc
     )
 
+    compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
     isPlatform "x11" && depends+=(gnome-terminal)
     getDepends "${depends[@]}"
 }
@@ -137,7 +138,13 @@ function sources_emulationstation() {
     local repo="$1"
     local branch="$2"
     [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
-    [[ -z "$branch" ]] && branch="stable"
+    if [[ -z "$branch" ]]; then
+        if compareVersions "$__os_debian_ver" gt 8; then
+            branch="stable"
+        else
+            branch="v2.7.6"
+        fi
+    fi
     gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
@@ -145,7 +152,7 @@ function build_emulationstation() {
     rpSwap on 1000
     cmake . -DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/
     make clean
-    make
+    make -j4
     rpSwap off
     md_ret_require="$md_build/emulationstation"
 }
