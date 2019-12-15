@@ -336,7 +336,7 @@ function rpSwap() {
             fi
             ;;
         off)
-            echo "Eliminado swap adeicional"
+            echo "Eliminado swap adicional"
             swapoff "$swapfile" 2>/dev/null
             rm -f "$swapfile"
             ;;

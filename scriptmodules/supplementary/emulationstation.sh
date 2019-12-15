@@ -122,50 +122,53 @@ function _add_rom_emulationstation() {
 }
 
 function depends_emulationstation() {
-    local depends=(
-        libboost-system-dev libboost-filesystem-dev
-        libboost-date-time-dev libfreeimage-dev libfreetype6-dev
-        libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
-        libvlc-dev libvlccore-dev vlc
-    )
+  local depends=(
+      libfreeimage-dev libfreetype6-dev
+      libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
+      libvlc-dev libvlccore-dev vlc
+  )
 
-    compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
-    isPlatform "x11" && depends+=(gnome-terminal)
-    getDepends "${depends[@]}"
+  compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
+  isPlatform "x11" && depends+=(gnome-terminal)
+  getDepends "${depends[@]}"
 }
 
 function sources_emulationstation() {
-    local repo="$1"
-    local branch="$2"
-    [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
-    if [[ -z "$branch" ]]; then
-        if compareVersions "$__os_debian_ver" gt 8; then
-            branch="stable"
-        else
-            branch="v2.7.6"
-        fi
-    fi
-    gitPullOrClone "$md_build" "$repo" "$branch"
+  local repo="$1"
+  local branch="$2"
+  [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
+  if [[ -z "$branch" ]]; then
+      if compareVersions "$__os_debian_ver" gt 8; then
+          branch="stable"
+      else
+          branch="v2.7.6"
+      fi
+  fi
+  gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
 function build_emulationstation() {
-    rpSwap on 1000
-    cmake . -DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/
-    make clean
-    make -j4
-    rpSwap off
-    md_ret_require="$md_build/emulationstation"
+  local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
+  # Temporary workaround until GLESv2 support is implemented
+  isPlatform "rpi" && isPlatform "mesa" && params+=(-DGL=On)
+  rpSwap on 1000
+  cmake . "${params[@]}"
+  make clean
+  make
+  rpSwap off
+  md_ret_require="$md_build/emulationstation"
 }
 
 function install_emulationstation() {
-    md_ret_files=(
-        'CREDITS.md'
-        'emulationstation'
-        'emulationstation.sh'
-        'GAMELISTS.md'
-        'README.md'
-        'THEMES.md'
-    )
+  md_ret_files=(
+      'CREDITS.md'
+      'emulationstation'
+      'emulationstation.sh'
+      'GAMELISTS.md'
+      'README.md'
+      'resources'
+      'THEMES.md'
+  )
 }
 
 function init_input_emulationstation() {
