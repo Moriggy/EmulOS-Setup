@@ -148,7 +148,7 @@ function sources_emulationstation() {
 }
 
 function install_bin_emulationstation() {
-  downloadAndExtract "https://github.com/Moriggy/EmulationStation/blob/stable/emulationstation.tar" "$md_inst"
+  sudo cp "$scriptdir/scriptmodules/extras/emulationstation" "$md_inst"
 }
 
 function build_emulationstation() {
