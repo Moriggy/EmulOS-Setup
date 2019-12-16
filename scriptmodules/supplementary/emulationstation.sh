@@ -147,6 +147,10 @@ function sources_emulationstation() {
   gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
+function install_bin() {
+  downloadAndExtract "https://github.com/Moriggy/EmulationStation/blob/stable/emulationstation.zip" "$md_inst"
+}
+
 function build_emulationstation() {
   local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
   # Temporary workaround until GLESv2 support is implemented
