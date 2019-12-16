@@ -148,7 +148,7 @@ function sources_emulationstation() {
 }
 
 function install_bin_emulationstation() {
-  downloadAndExtract "https://github.com/Moriggy/EmulationStation/blob/stable/emulationstation.zip" "$md_inst"
+  downloadAndExtract "https://github.com/Moriggy/EmulationStation/blob/stable/emulationstation" "$md_inst"
 }
 
 function build_emulationstation() {
