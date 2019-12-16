@@ -147,7 +147,7 @@ function sources_emulationstation() {
   gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
-function install_bin() {
+function install_bin_emulationstation() {
   downloadAndExtract "https://github.com/Moriggy/EmulationStation/blob/stable/emulationstation.zip" "$md_inst"
 }
 
