@@ -148,7 +148,9 @@ function sources_emulationstation() {
 }
 
 function install_bin_emulationstation() {
-  sudo cp "$scriptdir/scriptmodules/extras/emulationstation" "$md_inst"
+  donwloadAndExtract "https://archive.org/download/emulationstation_201912/EmulationStation.zip" "$md_inst"
+  sudo chmod +x $md_inst/emulationstation.sh
+  sudo chmod +x $md_inst/emulationstation
 }
 
 function build_emulationstation() {
