@@ -31,11 +31,16 @@ function build_lr-flycast() {
     local params=()
     make clean
     if isPlatform "rpi"; then
-      # MAKEFLAGS replace removes any distcc from path, as it segfaults with cross compiler and lto
-      MAKEFLAGS="${MAKEFLAGS/\/usr\/lib\/distcc:/}" make platform=rpi
-    else
-      make
+        if isPlatform "rpi4"; then
+            params+=("platform=rpi4")
+        elif isPlatform "mesa"; then
+            params+=("platform=rpi-mesa")
+        else
+            params+=("platform=rpi")
+        fi
     fi
+    # MAKEFLAGS replace removes any distcc from path, as it segfaults with cross compiler and lto
+    MAKEFLAGS="${MAKEFLAGS/\/usr\/lib\/distcc:/}" make "${params[@]}"
     md_ret_require="$md_build/flycast_libretro.so"
 }
 
@@ -48,11 +53,7 @@ function install_lr-flycast() {
 
 function configure_lr-flycast() {
     mkRomDir "dreamcast"
-    mkRomDir "naomi"
-    mkRomDir "atomiswave"
     ensureSystemretroconfig "dreamcast"
-    ensureSystemretroconfig "naomi"
-    ensureSystemretroconfig "atomiswave"
 
     mkUserDir "$biosdir/dc"
 
@@ -63,8 +64,4 @@ function configure_lr-flycast() {
     # segfaults on the rpi without redirecting stdin from </dev/null
     addEmulator 0 "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "dreamcast"
-    addEmulator 1 "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
-    addSystem "naomi"
-    addEmulator 1 "$md_id" "atomiswave" "$md_inst/flycast_libretro.so </dev/null"
-    addSystem "atomiswave"
 }
