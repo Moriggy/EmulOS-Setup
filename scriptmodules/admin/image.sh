@@ -10,7 +10,7 @@
 #
 
 rp_module_id="image"
-rp_module_desc="Create/Manage EmulOS images"
+rp_module_desc="Create/Manage RetroPie images"
 rp_module_section=""
 rp_module_flags="!arm"
 
@@ -19,8 +19,8 @@ function depends_image() {
 }
 
 function create_chroot_image() {
-    local version="$1"
-    [[ -z "$version" ]] && version="stretch"
+    local dist="$1"
+    [[ -z "$dist" ]] && dist="stretch"
 
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
@@ -32,7 +32,7 @@ function create_chroot_image() {
 
     local url
     local image
-    case "$version" in
+    case "$dist" in
         jessie)
             url="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2017-07-05/2017-07-05-raspbian-jessie-lite.zip"
             ;;
@@ -48,7 +48,7 @@ function create_chroot_image() {
             ;;
     esac
 
-    local base="raspbian-${version}-lite"
+    local base="raspbian-${dist}-lite"
     local image="$base.img"
     if [[ ! -f "$image" ]]; then
         wget -c -O "$base.zip" "$url"
@@ -86,9 +86,9 @@ function install_rp_image() {
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
 
-    # hostname to emulos
-    echo "emulos" >"$chroot/etc/hostname"
-    sed -i "s/raspberrypi/emulos/" "$chroot/etc/hosts"
+    # hostname to retropie
+    echo "retropie" >"$chroot/etc/hostname"
+    sed -i "s/raspberrypi/retropie/" "$chroot/etc/hosts"
 
     # quieter boot / disable plymouth (as without the splash parameter it
     # causes all boot messages to be displayed and interferes with people
@@ -100,20 +100,23 @@ function install_rp_image() {
         sed -i "s/quiet/quiet loglevel=3 consoleblank=0 plymouth.enable=0 quiet/" "$chroot/boot/cmdline.txt"
     fi
 
-    # set default GPU mem, and overscan_scale so ES scales to overscan settings.
+    # set default GPU mem (videocore only) and overscan_scale so ES scales to overscan settings.
     iniConfig "=" "" "$chroot/boot/config.txt"
-    iniSet "gpu_mem_256" 128
-    iniSet "gpu_mem_512" 256
-    iniSet "gpu_mem_1024" 256
+    if ! [[ "$platform" =~ rpi.*kms|rpi4 ]]; then
+        iniSet "gpu_mem_256" 128
+        iniSet "gpu_mem_512" 256
+        iniSet "gpu_mem_1024" 256
+    fi
     iniSet "overscan_scale" 1
 
+    [[ -z "$__chroot_branch" ]] && __chroot_branch="master"
     cat > "$chroot/home/pi/install.sh" <<_EOF_
 #!/bin/bash
 cd
 sudo apt-get update
 sudo apt-get -y install git dialog xmlstarlet joystick
-git clone https://github.com/Moriggy/EmulOS-Setup.git
-cd EmulOS-Setup
+git clone -b "$__chroot_branch" https://github.com/RetroPie/RetroPie-Setup.git
+cd RetroPie-Setup
 modules=(
     'raspbiantools apt_upgrade'
     'setup basic_install'
@@ -130,9 +133,8 @@ modules=(
 )
 for module in "\${modules[@]}"; do
     # rpi1 platform would use QEMU_CPU set to arm1176, but it seems buggy currently (lots of segfaults)
-    sudo QEMU_CPU=cortex-a15 __platform=$platform __nodialog=1 ./emulos_pkgs.sh \$module
+    sudo __platform=$platform __nodialog=1 __has_binaries=$__chroot_has_binaries ./retropie_packages.sh \$module
 done
-
 rm -rf tmp
 sudo apt-get clean
 _EOF_
@@ -158,7 +160,8 @@ function _init_chroot_image() {
     # required for emulated chroot
     cp "/usr/bin/qemu-arm-static" "$chroot"/usr/bin/
 
-    local nameserver="$(nmcli device show | grep IP4.DNS  | awk '{print $NF; exit}')"
+    local nameserver="$__nameserver"
+    [[ -z "$nameserver" ]] && nameserver="$(nmcli device show | grep IP4.DNS | awk '{print $NF; exit}')"
     # so we can resolve inside the chroot
     echo "nameserver $nameserver" >"$chroot"/etc/resolv.conf
 
@@ -237,7 +240,7 @@ function create_image() {
     local part_root="${partitions[1]}"
 
     mkfs.vfat -F 16 -n boot "$part_boot"
-    mkfs.ext4 -O ^metadata_csum,^huge_file -L emulos "$part_root"
+    mkfs.ext4 -O ^metadata_csum,^huge_file -L retropie "$part_root"
 
     parted "$image_name" print
 
@@ -295,26 +298,40 @@ function create_bb_image() {
 function all_image() {
     local platform
     local image
-    local version="$1"
-    for platform in rpi1 rpi2; do
-        platform_image "$platform" "$version"
+    local dist="$1"
+    for platform in rpi1 rpi2 rpi4; do
+        platform_image "$platform" "$dist"
     done
 }
 
 function platform_image() {
     local platform="$1"
     local dist="$2"
-    [[ -z "$platform" ]] && exit
+    [[ -z "$platform" ]] && return 1
+
+    if [[ "$dist" == "stretch" && "$platform" == "rpi4" ]]; then
+        printMsgs "console" "Platform $platform on $dist is unsupported."
+        return 1
+    fi
 
     local dest="$__tmpdir/images"
     mkdir -p "$dest"
 
-    local image
-    if [[ "$platform" == "rpi1" ]]; then
-        image="$dest/emulos-${__version}-rpi1_zero"
-    else
-        image="$dest/emulos-${__version}-rpi2_rpi3"
-    fi
+    local image="$dest/retropie-${dist}-${__version}-"
+    case "$platform" in
+        rpi1)
+            image+="rpi1_zero"
+            ;;
+        rpi2)
+            image+="rpi2_rpi3"
+            ;;
+        rpi3|rpi4)
+            image+="$platform"
+            ;;
+        *)
+            fatalError "Unknown platform $platform for image building"
+            ;;
+    esac
 
     rp_callModule image create_chroot "$dist"
     rp_callModule image install_rp "$platform"

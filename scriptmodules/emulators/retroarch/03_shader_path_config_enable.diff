@@ -94,3 +94,4 @@ index d6ae484ca2..308c6e97ad 100644
 +
     free(shader_directory);
     return false;
+ 
