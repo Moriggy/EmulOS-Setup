@@ -10,7 +10,7 @@
 #
 
 rp_module_id="image"
-rp_module_desc="Create/Manage RetroPie images"
+rp_module_desc="Create/Manage EmulOS images"
 rp_module_section=""
 rp_module_flags="!arm"
 
@@ -86,9 +86,9 @@ function install_rp_image() {
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
 
-    # hostname to retropie
-    echo "retropie" >"$chroot/etc/hostname"
-    sed -i "s/raspberrypi/retropie/" "$chroot/etc/hosts"
+    # hostname to emulos
+    echo "EmulOS" >"$chroot/etc/hostname"
+    sed -i "s/raspberrypi/emulos/" "$chroot/etc/hosts"
 
     # quieter boot / disable plymouth (as without the splash parameter it
     # causes all boot messages to be displayed and interferes with people
@@ -115,8 +115,8 @@ function install_rp_image() {
 cd
 sudo apt-get update
 sudo apt-get -y install git dialog xmlstarlet joystick
-git clone -b "$__chroot_branch" https://github.com/RetroPie/RetroPie-Setup.git
-cd RetroPie-Setup
+git clone -b "$__chroot_branch" https://github.com/Moriggy/EmulOS-Setup.git
+cd EmulOS-Setup
 modules=(
     'raspbiantools apt_upgrade'
     'setup basic_install'
@@ -133,7 +133,7 @@ modules=(
 )
 for module in "\${modules[@]}"; do
     # rpi1 platform would use QEMU_CPU set to arm1176, but it seems buggy currently (lots of segfaults)
-    sudo __platform=$platform __nodialog=1 __has_binaries=$__chroot_has_binaries ./retropie_packages.sh \$module
+    sudo __platform=$platform __nodialog=1 __has_binaries=$__chroot_has_binaries ./emulos_pkgs.sh \$module
 done
 rm -rf tmp
 sudo apt-get clean
@@ -240,7 +240,7 @@ function create_image() {
     local part_root="${partitions[1]}"
 
     mkfs.vfat -F 16 -n boot "$part_boot"
-    mkfs.ext4 -O ^metadata_csum,^huge_file -L retropie "$part_root"
+    mkfs.ext4 -O ^metadata_csum,^huge_file -L emulos "$part_root"
 
     parted "$image_name" print
 
@@ -317,7 +317,7 @@ function platform_image() {
     local dest="$__tmpdir/images"
     mkdir -p "$dest"
 
-    local image="$dest/retropie-${dist}-${__version}-"
+    local image="$dest/emulos-${dist}-${__version}-"
     case "$platform" in
         rpi1)
             image+="rpi1_zero"
