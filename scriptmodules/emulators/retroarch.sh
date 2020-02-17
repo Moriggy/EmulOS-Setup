@@ -17,7 +17,7 @@ rp_module_section="core"
 function depends_retroarch() {
     local depends=(libudev-dev libxkbcommon-dev libsdl2-dev libasound2-dev libusb-1.0-0-dev)
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
-    isPlatform "gles" && depends+=(libgles2-mesa-dev)
+    isPlatform "gles" && ! isPlatform "vero4k" && depends+=(libgles2-mesa-dev)
     isPlatform "mesa" && depends+=(libx11-xcb-dev)
     isPlatform "mali" && depends+=(mali-fbdev)
     isPlatform "x11" && depends+=(libx11-xcb-dev libpulse-dev libvulkan-dev)
@@ -39,13 +39,14 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.0
+    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.4
     applyPatch "$md_data/01_hotkey_hack.diff"
     applyPatch "$md_data/02_disable_search.diff"
+    applyPatch "$md_data/03_shader_path_config_enable.diff"
 }
 
 function build_retroarch() {
-    local params=(--disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt --disable-discord)
+    local params=(--disable-sdl --enable-sdl2 --disable-oss --disable-al --disable-jack --disable-qt)
     if ! isPlatform "x11"; then
         params+=(--disable-pulse)
         ! isPlatform "mesa" && params+=(--disable-x11)
@@ -54,20 +55,18 @@ function build_retroarch() {
         params+=(--disable-ffmpeg)
     fi
     isPlatform "gles" && params+=(--enable-opengles)
-    if isPlatform "rpi" && isPlatform "mesa"; then
-        params+=(--disable-videocore --disable-vulkan)
-        [ -f "/opt/vc/lib/pkgconfig/egl.pc" ] && PKG_CONFIG_PATH=""
-    fi
     isPlatform "gles3" && params+=(--enable-opengles3)
-     # Temporarily block dispmanx support for fkms until upstream support is fixed
+    isPlatform "rpi" && isPlatform "mesa" && params+=(--disable-videocore)
+    # Temporarily block dispmanx support for fkms until upstream support is fixed
     isPlatform "dispmanx" && ! isPlatform "kms" && params+=(--enable-dispmanx --disable-opengl1)
     isPlatform "mali" && params+=(--enable-mali_fbdev)
     isPlatform "kms" && params+=(--enable-kms --enable-egl)
     isPlatform "arm" && params+=(--enable-floathard)
     isPlatform "neon" && params+=(--enable-neon)
     isPlatform "x11" && params+=(--enable-vulkan)
+    ! isPlatform "x11" && params+=(--disable-vulkan --disable-wayland)
     isPlatform "vero4k" && params+=(--enable-mali_fbdev --with-opengles_libs='-L/opt/vero3/lib')
-   ./configure --prefix="$md_inst" "${params[@]}"
+    ./configure --prefix="$md_inst" "${params[@]}"
     make clean
     make
     md_ret_require="$md_build/retroarch"
@@ -106,20 +105,20 @@ function update_assets_retroarch() {
     chown -R $user:$user "$dir"
 }
 
-function install_xmb_monochrome_assets_retroarch() {
+function install_minimal_assets_retroarch() {
     local dir="$configdir/all/retroarch/assets"
     [[ -d "$dir/.git" ]] && return
     [[ ! -d "$dir" ]] && mkUserDir "$dir"
-    downloadAndExtract "$__archive_url/retroarch-xmb-monochrome.tar.gz" "$dir"
+    downloadAndExtract "$__binary_base_url/retroarch-minimal-assets.tar.gz" "$dir"
     chown -R $user:$user "$dir"
 }
 
-function _package_xmb_monochrome_assets_retroarch() {
+function _package_minimal_assets_retroarch() {
     gitPullOrClone "$md_build/assets" https://github.com/libretro/retroarch-assets.git
     mkdir -p "$__tmpdir/archives"
-    local archive="$__tmpdir/archives/retroarch-xmb-monochrome.tar.gz"
+    local archive="$__tmpdir/archives/retroarch-minimal-assets.tar.gz"
     rm -f "$archive"
-    tar cvzf "$archive" -C "$md_build/assets" xmb/monochrome
+    tar cvzf "$archive" -C "$md_build/assets" ozone menu_widgets xmb/monochrome
 }
 
 function configure_retroarch() {
@@ -138,11 +137,11 @@ function configure_retroarch() {
     moveConfigDir "$md_inst/overlays" "$configdir/all/retroarch/overlay"
     moveConfigDir "$md_inst/shader" "$configdir/all/retroarch/shaders"
 
-    # install assets, cheats and shaders by default
+    # install shaders by default
     update_shaders_retroarch
 
-	# install minimal assets
-    install_xmb_monochrome_assets_retroarch
+    # install minimal assets
+    install_minimal_assets_retroarch
 
     local config="$(mktemp)"
 
@@ -155,30 +154,24 @@ function configure_retroarch() {
     # configure default options
     iniConfig " = " '"' "$config"
     iniSet "cache_directory" "/tmp/retroarch"
-    iniSet "core_options_path" "/$configdir/all/retroarch-core-options.cfg"
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
-    iniSet "video_scale" "1.0"
-    iniSet "video_threaded" "true"
-    iniSet "video_smooth" "false"
     iniSet "video_aspect_ratio_auto" "true"
     iniSet "video_smooth" "false"
-    iniSet "video_shader_enable" "true"
-    iniSet "auto_shaders_enable" "true"
     iniSet "rgui_show_start_screen" "false"
     iniSet "rgui_browser_directory" "$romdir"
-    iniSet "audio_out_rate" "44100"
 
     if ! isPlatform "x86"; then
         iniSet "video_threaded" "true"
     fi
 
+    iniSet "video_font_size" "24"
     iniSet "core_options_path" "$configdir/all/retroarch-core-options.cfg"
     isPlatform "x11" && iniSet "video_fullscreen" "true"
     isPlatform "mesa" && iniSet "video_fullscreen" "true"
 
-	# set default render resolution to 640x480 for rpi1
-    if isPlatform "rpi1"; then
+    # set default render resolution to 640x480 for rpi1
+    if isPlatform "videocore" && isPlatform "rpi1"; then
         iniSet "video_fullscreen_x" "640"
         iniSet "video_fullscreen_y" "480"
     fi
@@ -215,13 +208,14 @@ function configure_retroarch() {
     iniSet "input_player1_down" "down"
 
     # input settings
-    iniSet "input_joypad_driver" "udev"
     iniSet "input_autodetect_enable" "true"
     iniSet "auto_remaps_enable" "true"
+    iniSet "input_joypad_driver" "udev"
     iniSet "all_users_control_menu" "true"
 
     # rgui by default
     iniSet "menu_driver" "rgui"
+    iniSet "rgui_aspect_ratio_lock" "2"
 
     # hide online updater menu options and the restart option
     iniSet "menu_show_core_updater" "false"
@@ -234,7 +228,7 @@ function configure_retroarch() {
     iniSet "xmb_show_images" "false"
     iniSet "xmb_show_music" "false"
 
-	# disable xmb menu driver icon shadows
+    # disable xmb menu driver icon shadows
     iniSet "xmb_shadows_enable" "false"
 
     # swap A/B buttons based on ES configuration
@@ -243,151 +237,26 @@ function configure_retroarch() {
     # disable 'press twice to quit'
     iniSet "quit_press_twice" "false"
 
-    #aumento de letra de texto
-    iniSet "video_font_size" "26.000000"
+    # enable video shaders
+    iniSet "video_shader_enable" "true"
 
-	# visual settings
-    iniSet "content_show_add" "false"
-    iniSet "content_show_favorites" "false"
-    iniSet "content_show_history" "false"
-    iniSet "content_show_images" "false"
-    iniSet "content_show_music" "false"
-    iniSet "content_show_netplay" "false"
-    iniSet "content_show_playlists" "false"
-    iniSet "content_show_settings" "true"
-    iniSet "content_show_settings_password" ""
-    iniSet "content_show_video" "false"
-    iniSet "kiosk_mode_enable" "false"
-    iniSet "kiosk_mode_password" ""
-    iniSet "menu_battery_level_enable" "false"
-    iniSet "menu_core_enable" "true"
-    iniSet "menu_dynamic_wallpaper_enable" "false"
-    iniSet "menu_enable_widgets" "false"
-    iniSet "menu_entry_hover_color" "ff64ff64"
-    iniSet "menu_entry_normal_color" "ffffffff"
-    iniSet "menu_font_color_blue" "255"
-    iniSet "menu_font_color_green" "255"
-    iniSet "menu_font_color_red" "255"
-    iniSet "menu_footer_opacity" "1.000000"
-    iniSet "menu_framebuffer_opacity" "0.500000"
-    iniSet "menu_header_opacity" "1.000000"
-    iniSet "menu_horizontal_animation" "true"
-    iniSet "menu_left_thumbnails" "0"
-    iniSet "menu_linear_filter" "true"
-    iniSet "menu_mouse_enable" "true"
-    iniSet "menu_navigation_browser_filter_supported_extensions_enable" "true"
-    iniSet "menu_navigation_wraparound_enable" "true"
-    iniSet "menu_pause_libretro" "true"
-    iniSet "menu_pointer_enable" "false"
-    iniSet "menu_shader_pipeline" "0"
-    iniSet "menu_show_advanced_settings" "true"
-    iniSet "menu_show_configurations" "true"
-    iniSet "menu_show_core_updater" "false"
-    iniSet "menu_show_help" "false"
-    iniSet "menu_show_information" "false"
-    iniSet "menu_show_latency" "false"
-    iniSet "menu_show_legacy_thumbnail_updater" "false"
-    iniSet "menu_show_load_content" "false"
-    iniSet "menu_show_load_core" "false"
-    iniSet "menu_show_online_updater" "false"
-    iniSet "menu_show_overlays" "true"
-    iniSet "menu_show_quit_retroarch" "true"
-    iniSet "menu_show_reboot" "false"
-    iniSet "menu_show_restart_retroarch" "true"
-    iniSet "menu_show_rewind" "false"
-    iniSet "menu_show_shutdown" "true"
-    iniSet "menu_show_sublabels" "true"
-    iniSet "menu_swap_ok_cancel_buttons" "$es_swap"
-    iniSet "menu_throttle_framerate" "true"
-    iniSet "menu_thumbnails" "3"
-    iniSet "menu_timedate_enable" "true"
-    iniSet "menu_timedate_style" "1"
-    iniSet "menu_title_color" "ff64ff64"
-    iniSet "menu_unified_controls" "true"
-    iniSet "menu_use_preferred_system_color_theme" "false"
-    iniSet "menu_wallpaper" ""
-    iniSet "menu_wallpaper_opacity" "0.500000"
-    iniSet "ozone_menu_color_theme" "1"
-    iniSet "quick_menu_show_add_to_favorites" "false"
-    iniSet "quick_menu_show_cheats" "true"
-    iniSet "quick_menu_show_close_content" "true"
-    iniSet "quick_menu_show_controls" "true"
-    iniSet "quick_menu_show_download_thumbnails" "false"
-    iniSet "quick_menu_show_information" "false"
-    iniSet "quick_menu_show_options" "true"
-    iniSet "quick_menu_show_recording" "false"
-    iniSet "quick_menu_show_reset_core_association" "false"
-    iniSet "quick_menu_show_restart_content" "true"
-    iniSet "quick_menu_show_resume_content" "true"
-    iniSet "quick_menu_show_save_content_dir_overrides" "true"
-    iniSet "quick_menu_show_save_core_overrides" "true"
-    iniSet "quick_menu_show_save_game_overrides" "true"
-    iniSet "quick_menu_show_save_load_state" "true"
-    iniSet "quick_menu_show_set_core_association" "false"
-    iniSet "quick_menu_show_shaders" "true"
-    iniSet "quick_menu_show_start_recording" "false"
-    iniSet "quick_menu_show_start_streaming" "false"
-    iniSet "quick_menu_show_streaming" "false"
-    iniSet "quick_menu_show_take_screenshot" "false"
-    iniSet "quick_menu_show_undo_save_load_state" "false"
-    iniSet "quit_press_twice" "false"
-    iniSet "rgui_aspect_ratio" "0"
-    iniSet "rgui_aspect_ratio_lock" "1"
-    iniSet "rgui_background_filler_thickness_enable" "true"
-    iniSet "rgui_border_filler_enable" "true"
-    iniSet "rgui_border_filler_thickness_enable" "true"
-    iniSet "rgui_browser_directory" "$romdir"
-    iniSet "rgui_config_directory" "~/.config/retroarch/config"
-    iniSet "rgui_extended_ascii" "false"
-    iniSet "rgui_inline_thumbnails" "false"
-    iniSet "rgui_internal_upscale_level" "0"
-    iniSet "rgui_menu_color_theme" "4"
-    iniSet "rgui_menu_theme_preset" ""
-    iniSet "rgui_particle_effect" "0"
-    iniSet "rgui_show_start_screen" "false"
-    iniSet "rgui_swap_thumbnails" "false"
-    iniSet "rgui_thumbnail_delay" "0"
-    iniSet "rgui_thumbnail_downscaler" "0"
-    iniSet "settings_show_achievements" "true"
-    iniSet "settings_show_ai_service" "true"
-    iniSet "settings_show_audio" "true"
-    iniSet "settings_show_configuration" "true"
-    iniSet "settings_show_core" "true"
-    iniSet "settings_show_directory" "true"
-    iniSet "settings_show_drivers" "true"
-    iniSet "settings_show_frame_throttle" "true"
-    iniSet "settings_show_input" "true"
-    iniSet "settings_show_latency" "true"
-    iniSet "settings_show_logging" "true"
-    iniSet "settings_show_network" "true"
-    iniSet "settings_show_onscreen_display" "true"
-    iniSet "settings_show_playlists" "false"
-    iniSet "settings_show_power_management" "false"
-    iniSet "settings_show_recording" "true"
-    iniSet "settings_show_saving" "true"
-    iniSet "settings_show_user" "true"
-    iniSet "settings_show_user_interface" "true"
-    iniSet "settings_show_video" "true"
-    iniSet "video_font_enable" "true"
-    iniSet "video_font_path" ""
-    iniSet "video_message_color" "33ff00"
-    iniSet "video_message_pos_x" "0.050000"
-    iniSet "video_message_pos_y" "0.050000"
-    iniSet "video_msg_bgcolor_blue" "0"
-    iniSet "video_msg_bgcolor_enable" "false"
-    iniSet "video_msg_bgcolor_green" "0"
-    iniSet "video_msg_bgcolor_opacity" "1.000000"
-    iniSet "video_msg_bgcolor_red" "0"
-    iniSet "user_language" "0"
-
-	rm "$configdir/all/retroarch.cfg"
     copyDefaultConfig "$config" "$configdir/all/retroarch.cfg"
     rm "$config"
 
-    # force settings on existing configs
+    # if no menu_driver is set, force RGUI, as the default has now changed to XMB.
     _set_config_option_retroarch "menu_driver" "rgui"
+
+    # set RGUI aspect ratio to "Integer Scaling" to prevent stretching
+    _set_config_option_retroarch "rgui_aspect_ratio_lock" "2"
+
+    # if no menu_unified_controls is set, force it on so that keyboard player 1 can control
+    # the RGUI menu which is important for arcade sticks etc that map to keyboard inputs
     _set_config_option_retroarch "menu_unified_controls" "true"
+
+    # disable `quit_press_twice` on existing configs
     _set_config_option_retroarch "quit_press_twice" "false"
+
+    # enable video shaders on existing configs
     _set_config_option_retroarch "video_shader_enable" "true"
 
     # remapping hack for old 8bitdo firmware

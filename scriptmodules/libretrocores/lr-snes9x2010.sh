@@ -13,7 +13,7 @@ rp_module_id="lr-snes9x2010"
 rp_module_desc="Emulador de Super Nintendo - Snes9x 1.52 based port para libretro"
 rp_module_help="Anteriormente llamado lr-snes9x-next\n\nROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/snes9x2010/master/docs/snes9x-license.txt"
-rp_module_section="main"
+rp_module_section="opt arm=main"
 
 function _update_hook_lr-snes9x2010() {
     # move from old location and update emulators.cfg
@@ -48,8 +48,8 @@ function configure_lr-snes9x2010() {
     mkRomDir "snes"
     ensureSystemretroconfig "snes"
 
-    local def=1
-    isPlatform "armv6" && def=0
+    local def=0
+    isPlatform "armv7" && def=1
     addEmulator $def "$md_id" "snes" "$md_inst/snes9x2010_libretro.so"
     addSystem "snes"
 }

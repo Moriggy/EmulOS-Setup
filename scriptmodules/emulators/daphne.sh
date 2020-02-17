@@ -14,7 +14,7 @@ rp_module_desc="Emulador Daphne - Laserdisc"
 rp_module_help="ROM Extension: .daphne\n\nCopia tus roms de Daphne en $romdir/daphne"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/daphne-emu/master/COPYING"
 rp_module_section="opt"
-rp_module_flags="!x86 !mali !kms"
+rp_module_flags="dispmanx !x86 !mali"
 
 function depends_daphne() {
     getDepends libsdl1.2-dev libvorbis-dev libglew-dev zlib1g-dev
@@ -46,7 +46,14 @@ function configure_daphne() {
     mkRomDir "daphne"
     mkRomDir "daphne/roms"
 
+    addEmulator 1 "$md_id" "daphne" "$md_inst/daphne.sh %ROM%"
+    addSystem "daphne"
+
+    [[ "$md_mode" == "remove" ]] && return
+
     mkUserDir "$md_conf_root/daphne"
+
+    setDispmanx "$md_id" 1
 
     if [[ ! -f "$md_conf_root/daphne/dapinput.ini" ]]; then
         cp -v "$md_data/dapinput.ini" "$md_conf_root/daphne/dapinput.ini"
@@ -59,11 +66,9 @@ function configure_daphne() {
 dir="\$1"
 name="\${dir##*/}"
 name="\${name%.*}"
-
 if [[ -f "\$dir/\$name.commands" ]]; then
     params=\$(<"\$dir/\$name.commands")
 fi
-
 "$md_inst/daphne.bin" "\$name" vldp -nohwaccel -framefile "\$dir/\$name.txt" -homedir "$md_inst" -fullscreen \$params
 _EOF_
     chmod +x "$md_inst/daphne.sh"
@@ -71,6 +76,4 @@ _EOF_
     chown -R $user:$user "$md_inst"
     chown -R $user:$user "$md_conf_root/daphne/dapinput.ini"
 
-    addEmulator 1 "$md_id" "daphne" "$md_inst/daphne.sh %ROM%"
-    addSystem "daphne"
 }

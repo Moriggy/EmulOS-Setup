@@ -13,7 +13,7 @@ rp_module_id="lr-snes9x2005"
 rp_module_desc="Emulador de Super Nintendo - Snes9x 1.43 based port para libretro"
 rp_module_help="Anteriormente llamado lr-catsfc\n\nROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/snes9x2005/master/copyright"
-rp_module_section="main"
+rp_module_section="opt arm=main"
 
 function _update_hook_lr-snes9x2005() {
     # move from old location and update emulators.cfg

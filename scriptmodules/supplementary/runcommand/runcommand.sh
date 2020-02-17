@@ -21,19 +21,30 @@
 ##
 ## `runcommand.sh VIDEO_MODE _SYS_/_PORT_ SYSTEM ROM`
 ##
-## Video mode switching is only supported on the Raspberry Pi
+## Video mode switching is supported on X11, KMS and Raspberry Pi (legacy graphics) systems
 ##
-## Automatic video mode selection:
+## Automatic video mode selection (all):
 ##
 ## * VIDEO_MODE = 0: use the current video mode
+##
+## Automatic video mode (Raspberry Pi legacy graphics):
+##
 ## * VIDEO_MODE = 1: set video mode to 640x480 (4:3) or 720x480 (16:9) @60hz
 ## * VIDEO_MODE = 4: set video mode to 1024x768 (4:3) or 1280x720 (16:9) @60hz
 ##
-## Manual video mode selection
+## Manual video mode selection (Raspberry Pi legacy graphics):
 ##
 ## * VIDEO_MODE = "CEA-#": set video mode to CEA mode #
 ## * VIDEO_MODE = "DMT-#": set video mode to DMT mode #
 ## * VIDEO_MODE = "PAL/NTSC-RATIO": set mode to SD output with RATIO of 4:3 / 16:10 or 16:9
+##
+## Manual video mode selection (KMS):
+##
+## * VIDEO_MODE = "CRTCID-MODEID": set video mode to CRTC connector id and mode id
+##
+## Manual video mode selection (X11):
+##
+## * VIDEO_MODE = "OUTPUT:MODEID": set video mode to connected output name and mode index
 ##
 ## @note
 ## Video mode switching only happens if the monitor reports the modes as available
@@ -55,7 +66,7 @@
 ## pressed the GUI is shown, where a user can set video modes, default emulators
 ## and other options (depending what is being launched).
 
-ROOTDIR="/opt/emulos"
+ROOTDIR="/opt/retropie"
 CONFIGDIR="$ROOTDIR/configs"
 LOG="/dev/shm/runcommand.log"
 
@@ -65,7 +76,10 @@ EMU_CONF="$CONFIGDIR/all/emulators.cfg"
 DISPMANX_CONF="$CONFIGDIR/all/dispmanx.cfg"
 RETRONETPLAY_CONF="$CONFIGDIR/all/retronetplay.cfg"
 
+# modesetting tools
 TVSERVICE="/opt/vc/bin/tvservice"
+KMSTOOL="$ROOTDIR/supplementary/mesa-drm/modetest"
+XRANDR="xrandr"
 
 source "$ROOTDIR/lib/inifuncs.sh"
 
@@ -95,10 +109,13 @@ function get_config() {
         [[ -z "$IMAGE_DELAY" ]] && IMAGE_DELAY=2
     fi
 
-    if [[ -f "$TVSERVICE" ]]; then
-        HAS_TVS=1
-    else
-        HAS_TVS=0
+    if [[ -n "$DISPLAY" ]] && $XRANDR &>/dev/null; then
+        HAS_MODESET="x11"
+    # copy kms tool output to global variable to avoid multiple invocations
+    elif KMS_BUFFER="$($KMSTOOL -r 2>/dev/null)"; then
+        HAS_MODESET="kms"
+    elif [[ -f "$TVSERVICE" ]]; then
+        HAS_MODESET="tvs"
     fi
 }
 
@@ -199,7 +216,7 @@ function set_save_vars() {
     fi
 }
 
-function get_all_modes() {
+function get_all_tvs_modes() {
     declare -Ag MODE
     local group
     for group in CEA DMT; do
@@ -222,7 +239,75 @@ function get_all_modes() {
     done
 }
 
-function get_mode_info() {
+function get_all_kms_modes() {
+    declare -Ag MODE
+    local default_mode="$(echo "$KMS_BUFFER" | grep -m1 "^Mode:.*driver.*crtc")"
+    local crtc="$(echo "$default_mode" | awk '{ print $(NF-1) }')"
+    local crtc_encoder="$(echo "$KMS_BUFFER" | grep "Encoder map:" | awk -v crtc="$crtc" '$5 == crtc { print $3 }')"
+
+    local info
+    local line
+    local mode_id
+
+    # add default mode as fallback in case real mode cannot be mapped
+    MODE[def-def]="$(echo "$default_mode" | awk '{--NF --NF --NF; print}' | cut -c7-)"
+
+    while read -r line; do
+        # encoder id
+        encoder_id="$(echo "$line" | awk '{ print $(NF-1) }')"
+
+        # only match encoders that are linked to the currently active crtc
+        if [[ "$encoder_id" == "$crtc_encoder" ]]; then
+            # mode id
+            mode_id="$(echo "$line" | awk '{ print $NF }')"
+
+            # make output more human-readable
+            info="$(echo "$line" | awk '{--NF --NF --NF; print}' | cut -c7-)"
+
+            # populate resolution into arrays (using mapped crtc encoder value)
+            MODE_ID+=($crtc-$mode_id)
+            MODE[$crtc-$mode_id]="$info"
+
+            # if string matches default mode, add a special mapped entry
+            [[ "$default_mode" =~ "$info" ]] && MODE[map-map]="$crtc $mode_id"
+        fi
+    done < <(echo "$KMS_BUFFER" | grep "Mode:" | grep "connector")
+}
+
+function get_all_x11_modes()
+{
+        declare -Ag MODE
+        local id
+        local info
+        local line
+        local verbose_info=()
+        local output="$($XRANDR --verbose | grep " connected" | awk '{ print $1 }')"
+
+        while read -r line; do
+            # scan for line that contains bracketed mode id
+            id="$(echo "$line" | awk '{ print $2 }' | grep "([0-9]\{1,\}x[0-9]\{1,\})")"
+
+            if [[ -n "$id" ]]; then
+                # strip brackets from mode id
+                id="$(echo ${id:1:-1})"
+
+                # extract extended details
+                verbose_info=($(echo "$line" | awk '{ for (i=3; i<=NF; ++i) print $i }'))
+
+                # extract x/y resolution, vertical refresh rate and append details
+                read -r line
+                info="$(echo "$line" | awk '{ print $3 }')"
+                read -r line
+                info+="x$(echo "$line" | awk '{ print $3 }') @ $(echo "$line" | awk '{ print $NF }') ("${verbose_info[*]}")"
+
+                # populate resolution into arrays
+                MODE_ID+=($output:$id)
+                MODE[$output:$id]="$info"
+            fi
+        done < <($XRANDR --verbose)
+}
+
+function get_tvs_mode_info() {
     local status="$($TVSERVICE -s)"
     local temp
     local mode_info=()
@@ -249,6 +334,78 @@ function get_mode_info() {
     # get refresh rate
     temp=$(echo "$status" | grep -oE "[0-9\.]+Hz" | cut -d"." -f1)
     mode_info[5]="$temp"
+
+    echo "${mode_info[@]}"
+}
+
+function get_kms_mode_info() {
+    local mode_id=(${1/-/ })
+    local mode_info=()
+    local status
+
+    if [[ -z "${mode_id[*]}" ]]; then
+	if [[ -n "${MODE[map-map]}" ]]; then
+            # use mapped mode directly
+            mode_id=(${MODE[map-map]})
+        else
+            # use fallback mode
+            mode_id=(def def)
+        fi
+    fi
+
+    # split resolution
+    status=(${MODE[${mode_id[0]}-${mode_id[1]}]/x/ })
+
+    # get crtc id
+    mode_info[0]="${mode_id[0]}"
+
+    # get mode id
+    mode_info[1]="${mode_id[1]}"
+
+    # get mode resolution
+    mode_info[2]="${status[0]}"
+    mode_info[3]="${status[1]}"
+
+    # get aspect ratio
+    mode_info[4]="${status[5]}"
+
+    # get refresh rate
+    mode_info[5]="${status[3]}"
+
+    echo "${mode_info[@]}"
+}
+
+function get_x11_mode_info() {
+    local mode_id=(${1/:/ })
+    local mode_info=()
+    local status
+
+    if [[ -z "$mode_id" ]]; then
+        # determine current output
+        mode_id[0]="$($XRANDR --verbose | grep " connected" | awk '{ print $1 }')"
+        # determine current mode id & strip brackets
+        mode_id[1]="$($XRANDR --verbose | grep " connected" | grep -o "([0-9]\{1,\}x[0-9]\{1,\})")"
+        mode_id[1]="$(echo ${mode_id[1]:1:-1})"
+    fi
+
+    # mode type corresponds to the currently connected output name
+    mode_info[0]="${mode_id[0]}"
+
+    # get mode id
+    mode_info[1]="${mode_id[1]}"
+
+    # get status line and split resolution
+    status=(${MODE[${mode_id[0]}:${mode_id[1]}]/x/ })
+
+    # get resolution
+    mode_info[2]="${status[0]}"
+    mode_info[3]="${status[1]}"
+
+    # aspect ratio cannot be determined for X11
+    mode_info[4]="n/a"
+
+    # get refresh rate (stripping Hz, rounded to integer)
+    mode_info[5]="$(printf '%.0f\n' ${status[3]::-2})"
 
     echo "${mode_info[@]}"
 }
@@ -334,24 +491,34 @@ function default_emulator() {
 }
 
 function load_mode_defaults() {
+    local separator="-"
+    [[ "$HAS_MODESET" == "x11" ]] && separator=":"
     local temp
     MODE_ORIG=()
 
-    if [[ "$HAS_TVS" -eq 1 ]]; then
-        # get current mode / aspect ratio
-        MODE_ORIG=($(get_mode_info))
-        MODE_CUR=("${MODE_ORIG[@]}")
-        MODE_ORIG_ID="${MODE_ORIG[0]}-${MODE_ORIG[1]}"
 
-        # get default mode for requested mode of 1 or 4
-        if [[ "$MODE_REQ" == "0" ]]; then
+    if [[ -n "$HAS_MODESET" ]]; then
+        # populate available modes
+        [[ -z "$MODE_ID" ]] && get_all_${HAS_MODESET}_modes
+
+        # get current mode / aspect ratio
+        MODE_ORIG=($(get_${HAS_MODESET}_mode_info))
+        MODE_CUR=("${MODE_ORIG[@]}")
+        MODE_ORIG_ID="${MODE_ORIG[0]}${separator}${MODE_ORIG[1]}"
+
+       if [[ "$MODE_REQ" == "0" ]]; then
             MODE_REQ_ID="$MODE_ORIG_ID"
-        elif [[ "$MODE_REQ" =~ (1|4) ]]; then
-            # if current aspect is anything else like 5:4 / 10:9 just choose a 4:3 mode
-            local aspect="${MODE_ORIG[4]}"
-            [[ "$aspect" =~ (4:3|16:9) ]] || aspect="4:3"
-            temp="${MODE_REQ}-${MODE_ORIG[0]}-$aspect"
-            MODE_REQ_ID="${MODE_MAP[$temp]}"
+       elif [[ "$HAS_MODESET" == "tvs" ]]; then
+            # get default mode for requested mode of 1 or 4
+            if [[ "$MODE_REQ" =~ (1|4) ]]; then
+                # if current aspect is anything else like 5:4 / 10:9 just choose a 4:3 mode
+                local aspect="${MODE_ORIG[4]}"
+                [[ "$aspect" =~ (4:3|16:9) ]] || aspect="4:3"
+                temp="${MODE_REQ}-${MODE_ORIG[0]}-$aspect"
+                MODE_REQ_ID="${MODE_MAP[$temp]}"
+            else
+                MODE_REQ_ID="$MODE_REQ"
+            fi
         else
             MODE_REQ_ID="$MODE_REQ"
         fi
@@ -387,7 +554,7 @@ function load_mode_defaults() {
             [[ -n "$mode" ]] && MODE_REQ_ID="$mode"
         fi
 
-        if [[ -z "$DISPLAY" ]]; then
+        if [[ "$HAS_MODESET" == "tvs" ]]; then
             # load default framebuffer res for emulator / rom
             mode="$(default_mode get fb_emu)"
             [[ -n "$mode" ]] && FB_NEW="$mode"
@@ -429,59 +596,59 @@ function main_menu() {
             local emu_sys="$(default_emulator get emu_sys)"
             local emu_rom="$(default_emulator get emu_rom)"
             options+=(
-                1 "Selecciona el emulador predeterminado para $SYSTEM ($emu_sys)"
-                2 "Selecciona emulador para la ROM ($emu_rom)"
+                1 "Select default emulator for $SYSTEM ($emu_sys)"
+                2 "Select emulator for ROM ($emu_rom)"
             )
-            [[ -n "$emu_rom" ]] && options+=(3 "Eliminar la opción del emulador para la ROM")
+            [[ -n "$emu_rom" ]] && options+=(3 "Remove emulator choice for ROM")
         fi
 
-        if [[ "$HAS_TVS" -eq 1 ]]; then
+        if [[ -n "$HAS_MODESET" ]]; then
             local vid_emu="$(default_mode get vid_emu)"
             local vid_rom="$(default_mode get vid_rom)"
             options+=(
-                4 "Selecciona el modo de video predeterminado para $EMULATOR ($vid_emu)"
-                5 "Selecciona el modo de video para $EMULATOR + rom ($vid_rom)"
+                4 "Select default video mode for $EMULATOR ($vid_emu)"
+                5 "Select video mode for $EMULATOR + rom ($vid_rom)"
             )
-            [[ -n "$vid_emu" ]] && options+=(6 "Eliminar la opción de modo de video para $EMULATOR")
-            [[ -n "$vid_rom" ]] && options+=(7 "Eliminar la opción de modo de video para $EMULATOR + ROM")
+            [[ -n "$vid_emu" ]] && options+=(6 "Remove video mode choice for $EMULATOR")
+            [[ -n "$vid_rom" ]] && options+=(7 "Remove video mode choice for $EMULATOR + ROM")
         fi
 
         if [[ "$EMULATOR" == lr-* ]]; then
-            options+=(
-                8 "Selecciona RetroArch render res para $EMULATOR ($RENDER_RES)"
-                9 "Editar la configuración de RetroArch personalizada para esta ROM"
-            )
-        elif [[ -z "$DISPLAY" ]]; then
+            if [[ "$HAS_MODESET" == "tvs" ]]; then
+                options+=(8 "Select RetroArch render res for $EMULATOR ($RENDER_RES)")
+            fi
+            options+=(9 "Edit custom RetroArch config for this ROM")
+        elif [[ "$HAS_MODESET" == "tvs" ]]; then
             local fb_emu="$(default_mode get fb_emu)"
             local fb_rom="$(default_mode get fb_rom)"
             options+=(
-                10 "Selecciona framebuffer res para $EMULATOR ($fb_emu)"
-                11 "Selecciona framebuffer res para $EMULATOR + ROM ($fb_rom)"
+                10 "Select framebuffer res for $EMULATOR ($fb_emu)"
+                11 "Select framebuffer res for $EMULATOR + ROM ($fb_rom)"
             )
-            [[ -n "$fb_emu" ]] && options+=(12 "Eliminar elección de framebuffer res para $EMULATOR")
-            [[ -n "$fb_rom" ]] && options+=(13 "Eliminar elección de framebuffer res para $EMULATOR + ROM")
+            [[ -n "$fb_emu" ]] && options+=(12 "Remove framebuffer res choice for $EMULATOR")
+            [[ -n "$fb_rom" ]] && options+=(13 "Remove framebuffer res choice for $EMULATOR + ROM")
         fi
 
-        options+=(X "Lanzar")
+        options+=(X "Launch")
 
         if [[ "$EMULATOR" == lr-* ]]; then
-            options+=(L "Iniciar con el registro detallado")
-            options+=(Z "Lanzar con netplay habilitado")
+            options+=(L "Launch with verbose logging")
+            options+=(Z "Launch with netplay enabled")
         fi
 
         if [[ "$user_menu" -eq 1 ]]; then
-            options+=(U "Menú del Usuario")
+            options+=(U "User Menu")
         fi
 
-        options+=(Q "Salir (sin lanzar)")
+        options+=(Q "Exit (without launching)")
 
         local temp_mode
-        if [[ "$HAS_TVS" -eq 1 ]]; then
+        if [[ -n "$HAS_MODESET" ]]; then
             temp_mode="${MODE[$MODE_REQ_ID]}"
         else
             temp_mode="n/a"
         fi
-        cmd=(dialog --nocancel --menu "Sistema: $SYSTEM\nEmulador: $EMULATOR\nVideo Mode: $temp_mode\nROM: $ROM_BN"  22 76 16 )
+        cmd=(dialog --nocancel --menu "System: $SYSTEM\nEmulator: $EMULATOR\nVideo Mode: $temp_mode\nROM: $ROM_BN"  22 76 16 )
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         case "$choice" in
             1)
@@ -568,7 +735,7 @@ function choose_mode() {
     for key in "${MODE_ID[@]}"; do
         options+=("$key" "${MODE[$key]}")
     done
-    local cmd=(dialog --default-item "$default" --menu "Elige el modo de salida de video"  22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Choose video output mode"  22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
 
@@ -599,11 +766,11 @@ function choose_emulator() {
         ((i++))
     done < <(sort "$EMU_SYS_CONF")
     if [[ -z "${options[*]}" ]]; then
-        dialog --msgbox "No se han encontrado opciones de emulador para $SYSTEM - Tienes un valido $EMU_SYS_CONF ?" 20 60 >/dev/tty
+        dialog --msgbox "No emulator options found for $SYSTEM - Do you have a valid $EMU_SYS_CONF ?" 20 60 >/dev/tty
         stop_joy2key
         exit 1
     fi
-    local cmd=(dialog $cancel --default-item "$default_id" --menu "Elige el emulador por defecto"  22 76 16 )
+    local cmd=(dialog $cancel --default-item "$default_id" --menu "Choose default emulator"  22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
 
@@ -632,6 +799,8 @@ function get_resolutions() {
         "1280x800"
         "1280x960"
         "1280x1024"
+        "1360x768"
+        "1366x768"
         "1920x1080"
     )
     echo "${res[@]}"
@@ -651,12 +820,12 @@ function choose_render_res() {
         ((i++))
     done
     options+=(
-        O "Usa resolución de salida de video"
-        C "Usa la resolución del archivo de configuración"
+        O "Use video output resolution"
+        C "Use config file resolution"
     )
     [[ "$default" == "output" ]] && default="O"
     [[ "$default" == "config" ]] && default="C"
-    local cmd=(dialog --default-item "$default" --menu "Elige la resolución de render RetroArch" 22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Choose RetroArch render resolution" 22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
     case "$choice" in
@@ -687,7 +856,7 @@ function choose_fb_res() {
         options+=($i "$item")
         ((i++))
     done
-    local cmd=(dialog --default-item "$default" --menu "Elija la resolución de framebuffer (útil para X y aplicaciones de consola)" 22 76 16 )
+    local cmd=(dialog --default-item "$default" --menu "Choose framebuffer resolution (Useful for X and console apps)" 22 76 16 )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -z "$choice" ]] && return
     choice="${res[$choice-1]}"
@@ -712,7 +881,7 @@ function user_menu() {
     local choice
     local ret
     while true; do
-        cmd=(dialog --default-item "$default" --cancel-label "Back" --menu "Elegir opción"  22 76 16)
+        cmd=(dialog --default-item "$default" --cancel-label "Back" --menu "Choose option"  22 76 16)
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && return 0
         default="$choice"
@@ -739,28 +908,86 @@ function switch_fb_res() {
     fi
 }
 
+function build_xinitrc() {
+    local mode="$1"
+    local xinitrc="/dev/shm/retropie_xinitrc"
+
+    case "$mode" in
+        clear)
+            rm -rf "$xinitrc"
+            ;;
+        build)
+            echo "#!/bin/bash" >"$xinitrc"
+
+            # do modesetting (if supported)
+            if [[ -n "$HAS_MODESET" ]]; then
+                cat >>"$xinitrc" <<_EOF_
+XRANDR_OUTPUT="\$($XRANDR --verbose | grep " connected" | awk '{ print \$1 }')"
+$XRANDR --output \$XRANDR_OUTPUT --mode ${MODE_CUR[2]}x${MODE_CUR[3]} --refresh ${MODE_CUR[5]}
+echo "Set mode ${MODE_CUR[2]}x${MODE_CUR[3]}@${MODE_CUR[5]}Hz on \$XRANDR_OUTPUT"
+_EOF_
+            fi
+
+            # echo command line for runcommand log
+            cat >>"$xinitrc" <<_EOF_
+echo -e "\nExecuting (via xinit): "${COMMAND//\$/\\\$}"\n"
+${COMMAND//\$/\\\$}
+_EOF_
+            chmod +x "$xinitrc"
+
+            # rewrite command to launch our xinit script (if not startx)
+            if ! [[ "$COMMAND" =~ ^startx ]]; then
+                COMMAND="xinit $xinitrc"
+            fi
+
+            # workaround for launching xserver on correct/user owned tty
+            # see https://github.com/RetroPie/RetroPie-Setup/issues/1805
+            if [[ -n "$TTY" ]]; then
+                COMMAND="$COMMAND -- vt$TTY -keeptty"
+            fi
+            ;;
+    esac
+}
+
 function mode_switch() {
-    local mode_id="$1"
+    local command_prefix
+    local separator="-"
+    # X11 uses hypens in connector names
+    [[ $HAS_MODESET == "x11" ]] && separator=":"
+    local mode_id=(${1/${separator}/ })
 
-    [[ "$HAS_TVS" -eq 0 ]] && return 1
+    # if the requested mode is the same as the current mode, don't switch
+    [[ "${mode_id[*]}" == "${MODE_CUR[0]} ${MODE_CUR[1]}" ]] && return 1
 
-    # if the requested mode is the same as the current mode don't switch
-    [[ "$mode_id" == "${MODE_CUR[0]}-${MODE_CUR[1]}" ]] && return 1
+    if [[ "$HAS_MODESET" == "kms" ]]; then
+        # update the target resolution even though the underlying fb hasn't changed
+        MODE_CUR=($(get_${HAS_MODESET}_mode_info "${mode_id[*]}"))
+        # inject the environment variables to do modesetting for SDL2 applications
+        command_prefix="SDL_VIDEO_KMSDRM_CRTCID=${MODE_CUR[0]} SDL_VIDEO_KMSDRM_MODEID=${MODE_CUR[1]}"
+        COMMAND="$(echo "$command_prefix $COMMAND" | sed -e "s/;/; $command_prefix /g")"
 
-    local mode_id=(${mode_id/-/ })
-
-    if [[ "${mode_id[0]}" == "PAL" ]] || [[ "${mode_id[0]}" == "NTSC" ]]; then
-        $TVSERVICE -c "${mode_id[*]}" >/dev/null
-    else
-        $TVSERVICE -e "${mode_id[*]}" >/dev/null
-    fi
-
-    # if we have switched mode, switch the framebuffer resolution also
-    if [[ "$?" -eq 0 ]]; then
-        sleep 1
-        MODE_CUR=($(get_mode_info))
-        [[ -z "$FB_NEW" ]] && FB_NEW="${MODE_CUR[2]}x${MODE_CUR[3]}"
         return 0
+    elif [[ "$HAS_MODESET" == "x11" ]]; then
+        # query the target resolution
+        MODE_CUR=($(get_${HAS_MODESET}_mode_info "${mode_id[*]}"))
+        # set target resolution
+        $XRANDR --output "${MODE_CUR[0]}" --mode "${MODE_CUR[1]}"
+
+        [[ "$?" -eq 0 ]] && return 0
+    elif [[ "$HAS_MODESET" == "tvs" ]]; then
+        if [[ "${mode_id[0]}" == "PAL" ]] || [[ "${mode_id[0]}" == "NTSC" ]]; then
+            $TVSERVICE -c "${mode_id[*]}" >/dev/null
+        else
+            $TVSERVICE -e "${mode_id[*]}" >/dev/null
+        fi
+
+        # if we have switched mode, switch the framebuffer resolution also
+        if [[ "$?" -eq 0 ]]; then
+            sleep 1
+            MODE_CUR=($(get_${HAS_MODESET}_mode_info))
+            [[ -z "$FB_NEW" ]] && FB_NEW="${MODE_CUR[2]}x${MODE_CUR[3]}"
+            return 0
+        fi
     fi
 
     return 1
@@ -772,6 +999,8 @@ function restore_fb() {
 }
 
 function config_dispmanx() {
+    # if we are running under X then don't try and use dispmanx
+    [[ -n "$DISPLAY" || "$XINIT" -eq 1 ]] && return
     local name="$1"
     # if we have a dispmanx conf file and $name is in it (as a variable) and set to 1,
     # change the library path to load dispmanx sdl first
@@ -783,30 +1012,38 @@ function config_dispmanx() {
 }
 
 function retroarch_append_config() {
+    local conf="/dev/shm/retroarch.cfg"
+    local dim
+
     # only for retroarch emulators
     [[ "$EMULATOR" != lr-* ]] && return
 
     # make sure tmp folder exists for unpacking archives
     mkdir -p "/tmp/retroarch"
 
-    local conf="/dev/shm/retroarch.cfg"
     rm -f "$conf"
     touch "$conf"
-    if [[ "$HAS_TVS" -eq 1 && "${MODE_CUR[5]}" -gt 0 ]]; then
+    iniConfig " = " '"' "$conf"
+
+    if [[ -n "$HAS_MODESET" && "${MODE_CUR[5]}" -gt 0 ]]; then
         # set video_refresh_rate in our config to the same as the screen refresh
-        [[ -n "${MODE_CUR[5]}" ]] && echo "video_refresh_rate = ${MODE_CUR[5]}" >>"$conf"
+        iniSet "video_refresh_rate" "${MODE_CUR[5]}"
     fi
 
-    local dim
+    # populate with target resolution & fullscreen flag if KMS is active
+    if [[ "$HAS_MODESET" != "tvs" ]]; then
+        iniSet "video_fullscreen" "true"
+        iniSet "video_fullscreen_x" "${MODE_CUR[2]}"
+        iniSet "video_fullscreen_y" "${MODE_CUR[3]}"
     # if our render resolution is "config", then we don't set anything (use the value in the retroarch.cfg)
-    if [[ "$RENDER_RES" != "config" ]]; then
+    elif [[ "$RENDER_RES" != "config" ]]; then
         if [[ "$RENDER_RES" == "output" ]]; then
             dim=(0 0)
         else
             dim=(${RENDER_RES/x/ })
         fi
-        echo "video_fullscreen_x = ${dim[0]}" >>"$conf"
-        echo "video_fullscreen_y = ${dim[1]}" >>"$conf"
+        iniSet "video_fullscreen_x" "${dim[0]}"
+        iniSet "video_fullscreen_y" "${dim[1]}"
     fi
 
     # if the ROM has a custom configuration then append that too
@@ -851,7 +1088,7 @@ function restore_governor() {
 
 function get_sys_command() {
     if [[ ! -f "$EMU_SYS_CONF" ]]; then
-        echo "No se encontraron configuraciones para el sistema $SYSTEM"
+        echo "No config found for system $SYSTEM"
         stop_joy2key
         exit 1
     fi
@@ -859,7 +1096,7 @@ function get_sys_command() {
     # get system & rom specific emulator if set
     local emulator="$(default_emulator get emu_sys)"
     if [[ -z "$emulator" ]]; then
-        echo "No se ha encontrado un emulador predeterminado para el sistema $SYSTEM"
+        echo "No default emulator found for system $SYSTEM"
         start_joy2key
         choose_emulator "emu_sys" "" "--nocancel"
         stop_joy2key
@@ -900,6 +1137,13 @@ function get_sys_command() {
         COMMAND="${COMMAND:4}"
         CONSOLE_OUT=1
     fi
+
+    # if it starts with XINIT: it is an X11 application (so we need to launch via xinit)
+    if [[ "$COMMAND" == XINIT:* ]]; then
+        # remove XINIT:
+        COMMAND="${COMMAND:6}"
+        XINIT=1
+    fi
 }
 
 function show_launch() {
@@ -908,7 +1152,7 @@ function show_launch() {
     if [[ "$IS_SYS" -eq 1 && "$USE_ART" -eq 1 ]]; then
         # if using art look for images in paths for es art.
         images+=(
-            "$HOME/EmulOS/roms/$SYSTEM/images/${ROM_BN}-image"
+            "$HOME/RetroPie/roms/$SYSTEM/images/${ROM_BN}-image"
             "$HOME/.emulationstation/downloaded_images/$SYSTEM/${ROM_BN}-image"
         )
     fi
@@ -916,7 +1160,7 @@ function show_launch() {
     # look for custom launching images
     if [[ "$IS_SYS" -eq 1 ]]; then
         images+=(
-            "$HOME/EmulOS/roms/$SYSTEM/images/${ROM_BN}-launching"
+            "$HOME/RetroPie/roms/$SYSTEM/images/${ROM_BN}-launching"
             "$CONF_ROOT/launching"
         )
     fi
@@ -951,7 +1195,7 @@ function show_launch() {
         else
             launch_name="$EMULATOR"
         fi
-        DIALOGRC="$CONFIGDIR/all/runcommand-launch-dialog.cfg" dialog --infobox "\nLanzando $launch_name ...\n\nPresiona el botón A para configurar\n\nLos errores se registran en $LOG" 9 60
+        DIALOGRC="$CONFIGDIR/all/runcommand-launch-dialog.cfg" dialog --infobox "\nLaunching $launch_name ...\n\nPress a button to configure\n\nErrors are logged to $LOG" 9 60
     fi
 }
 
@@ -961,9 +1205,6 @@ function check_menu() {
     IFS= read -s -t 2 -N 1 key </dev/tty
     if [[ -n "$key" ]]; then
         [[ -n "$IMG_PID" ]] && kill -SIGINT "$IMG_PID"
-        if [[ "$HAS_TVS" -eq 1 ]]; then
-            get_all_modes
-        fi
         tput cnorm
         main_menu
         dont_launch=$?
@@ -1045,9 +1286,10 @@ function runcommand() {
 
     mode_switch "$MODE_REQ_ID"
 
-    # replace X/Y resolution (needed for KMS applications)
-    COMMAND="${COMMAND//\%XRES\%/${MODE_CUR[0]}}"
-    COMMAND="${COMMAND//\%YRES\%/${MODE_CUR[1]}}"
+    # replace X/Y resolution and refresh (useful for KMS/modesetting)
+    COMMAND="${COMMAND//\%XRES\%/${MODE_CUR[2]}}"
+    COMMAND="${COMMAND//\%YRES\%/${MODE_CUR[3]}}"
+    COMMAND="${COMMAND//\%REFRESH\%/${MODE_CUR[5]}}"
 
     [[ -n "$FB_NEW" ]] && switch_fb_res $FB_NEW
 
@@ -1058,10 +1300,9 @@ function runcommand() {
 
     retroarch_append_config
 
-    # workaround for launching xserver on correct/user owned tty
-    # see https://github.com/RetroPie/RetroPie-Setup/issues/1805
-    if [[ -n "$TTY" && "$COMMAND" =~ ^(startx|xinit) ]]; then
-        COMMAND+=" -- vt$TTY -keeptty"
+    # build xinitrc and rewrite command if not already in X11 context
+    if [[ "$XINIT" -eq 1 && "$HAS_MODESET" != "x11" ]]; then
+        build_xinitrc build
     fi
 
     local ret
@@ -1080,6 +1321,11 @@ function runcommand() {
 
     # if we switched mode - restore preferred mode
     mode_switch "$MODE_ORIG_ID"
+
+    # delete temporary xinitrc launch script
+    if [[ "$XINIT" -eq 1 && "$HAS_MODESET" != "x11" ]]; then
+        build_xinitrc clear
+    fi
 
     # reset/restore framebuffer res (if it was changed)
     [[ -n "$FB_NEW" ]] && restore_fb

@@ -13,7 +13,7 @@ rp_module_id="lr-fbalpha2012"
 rp_module_desc="Emulador de Arcade - Final Burn Alpha (0.2.97.30) port para libretro"
 rp_module_help="Anteriormente llamado lr-fba\n\nROM Extension: .zip\n\nCopia tus roms de FBA en\n$romdir/fba o\n$romdir/neogeo o\n$romdir/arcade\n\nPara los juegos de NeoGeo, la BIOS neogeo.zip debe estar en el mismo directorio que tus roms de FBA."
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/fbalpha2012/master/docs/license.txt"
-rp_module_section="main"
+rp_module_section="opt armv6=main"
 
 function _update_hook_lr-fbalpha2012() {
     # move from old location and update emulators.cfg

@@ -17,14 +17,15 @@ rp_module_section="opt"
 rp_module_flags="dispmanx !mali"
 
 function depends_dosbox() {
-    local depends=(libsdl1.2-dev libsdl-net1.2-dev libsdl-sound1.2-dev libasound2-dev libpng-dev automake autoconf zlib1g-dev subversion "$@")
+    local depends=(libasound2-dev libpng-dev automake autoconf zlib1g-dev subversion "$@")
+    [[ "$md_id" == "dosbox" ]] && depends+=(libsdl1.2-dev libsdl-net1.2-dev libsdl-sound1.2-dev)
     isPlatform "rpi" && depends+=(timidity freepats)
     getDepends "${depends[@]}"
 }
 
 function sources_dosbox() {
     local revision="$1"
-    [[ -z "$revision" ]] && revision="4194"
+    [[ -z "$revision" ]] && revision="4252"
 
     svn checkout https://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk "$md_build" -r "$revision"
     applyPatch "$md_data/01-fully-bindable-joystick.diff"
@@ -78,12 +79,9 @@ function configure_dosbox() {
     if [[ "$md_mode" == "install" ]]; then
         cat > "$romdir/pc/$launcher_name" << _EOF_
 #!/bin/bash
-
 [[ ! -n "\$(aconnect -o | grep -e TiMidity -e FluidSynth)" ]] && needs_synth="$needs_synth"
-
 function midi_synth() {
     [[ "\$needs_synth" != "1" ]] && return
-
     case "\$1" in
         "start")
             timidity -Os -iAD &
@@ -98,7 +96,6 @@ function midi_synth() {
             ;;
     esac
 }
-
 params=("\$@")
 if [[ -z "\${params[0]}" ]]; then
     params=(-c "@MOUNT C $romdir/pc" -c "@C:")
@@ -112,7 +109,6 @@ elif [[ "\${params[0]}" == *.conf ]]; then
 else
     params+=(-exit)
 fi
-
 midi_synth start
 "$md_inst/bin/dosbox" "\${params[@]}"
 midi_synth stop

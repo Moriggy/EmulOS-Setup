@@ -13,7 +13,7 @@ rp_module_id="lr-flycast"
 rp_module_desc="Emulador par Dreamcast - Naomi - Atomiswave - Flycast port para libretro"
 rp_module_help="Anteriormente llamado lr-reicast ahora lr-flycast\n\nDreamcast ROM Extensions: .cdi .gdi .chd, Naomi/Atomiswave ROM Extension: .lst .bin .zip\n\nCopia tus roms de Dreamcast en $romdir/dreamcast\n\nCopia tus roms de Atomiswave en $romdir/atomiswave\n\nCopia tus roms de Naomi en $romdir/naomi\n\nCopia las BIOS de Dreamcast dc_boot.bin y dc_flash.bin en $biosdir/dc\n\nCopia las BIOS de Naomi/Atomiswave naomi.zip y awbios.zip en $biosdir/dc"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/flycast/master/LICENSE"
-rp_module_section="exp"
+rp_module_section="opt"
 rp_module_flags="!mali !armv6"
 
 function _update_hook_lr-flycast() {
@@ -22,19 +22,26 @@ function _update_hook_lr-flycast() {
 }
 
 function sources_lr-flycast() {
-    gitPullOrClone "$md_build" https://github.com/libretro/flycast.git
-    # don't override our C/CXXFLAGS
-    sed -i "/^C.*FLAGS.*:=/d" Makefile
+    # build from an older commit due to current broken upstream
+    gitPullOrClone "$md_build" https://github.com/libretro/flycast.git "" "c59eac0"
+    # don't override our C/CXXFLAGS and set LDFLAGS to CFLAGS to avoid warnings on linking
+    applyPatch "$md_data/01_flags_fix.diff"
 }
 
 function build_lr-flycast() {
+    local params=()
     make clean
     if isPlatform "rpi"; then
-        # MAKEFLAGS replace removes any distcc from path, as it segfaults with cross compiler and lto
-        MAKEFLAGS="${MAKEFLAGS/\/usr\/lib\/distcc:/}" make platform=rpi
-    else
-        make
+        if isPlatform "rpi4"; then
+            params+=("platform=rpi4")
+        elif isPlatform "mesa"; then
+            params+=("platform=rpi-mesa")
+        else
+            params+=("platform=rpi")
+        fi
     fi
+    # temporarily disable distcc due to segfaults with cross compiler and lto
+    DISTCC_HOSTS="" make "${params[@]}"
     md_ret_require="$md_build/flycast_libretro.so"
 }
 
@@ -59,8 +66,10 @@ function configure_lr-flycast() {
     iniConfig " = " "" "$configdir/dreamcast/retroarch.cfg"
     iniSet "video_shared_context" "true"
 
+    local def=0
+    isPlatform "kms" && def=1
     # segfaults on the rpi without redirecting stdin from </dev/null
-    addEmulator 1 "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
+    addEmulator $def "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "dreamcast"
     addEmulator 1 "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "naomi"

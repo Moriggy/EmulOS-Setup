@@ -13,7 +13,7 @@ rp_module_id="lr-mupen64plus-next"
 rp_module_desc="Emulador de Nintendo 64 - Mupen64Plus + GLideN64 para libretro (next version)"
 rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopia tus roms de Nintendo 64 en $romdir/n64"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/mupen64plus-libretro-nx/master/LICENSE"
-rp_module_section="exp"
+rp_module_section="opt kms=main"
 rp_module_flags="!armv6"
 
 function depends_lr-mupen64plus-next() {
@@ -26,7 +26,12 @@ function depends_lr-mupen64plus-next() {
 }
 
 function sources_lr-mupen64plus-next() {
-    gitPullOrClone "$md_build" https://github.com/libretro/mupen64plus-libretro-nx.git develop
+    # the core is crashing when using legacy/broadcom drivers since commit 9f316922
+    # while the problem is being resolved, use the previous commit for now
+    local commit
+    isPlatform "videocore" && commit="4a663ef0"
+
+    gitPullOrClone "$md_build" https://github.com/libretro/mupen64plus-libretro-nx.git develop "$commit"
 }
 
 function build_lr-mupen64plus-next() {
@@ -40,8 +45,11 @@ function build_lr-mupen64plus-next() {
     else
         isPlatform "arm" && params+=(WITH_DYNAREC=arm)
         isPlatform "neon" && params+=(HAVE_NEON=1)
-        isPlatform "gles" && params+=(FORCE_GLES=1)
-        isPlatform "kms" && params+=(FORCE_GLES3=1)
+    fi
+    if isPlatform "gles3"; then
+        params+=(FORCE_GLES3=1)
+    elif isPlatform "gles"; then
+        params+=(FORCE_GLES=1)
     fi
     # use a custom core name to avoid core option name clashes with lr-mupen64plus
     params+=(CORE_NAME=mupen64plus-next)
@@ -53,6 +61,7 @@ function build_lr-mupen64plus-next() {
 function install_lr-mupen64plus-next() {
     md_ret_files=(
         'mupen64plus_next_libretro.so'
+        'LICENSE'
         'README.md'
     )
 }
@@ -61,6 +70,6 @@ function configure_lr-mupen64plus-next() {
     mkRomDir "n64"
     ensureSystemretroconfig "n64"
 
-    addEmulator 0 "$md_id" "n64" "$md_inst/mupen64plus_next_libretro.so"
+    addEmulator 1 "$md_id" "n64" "$md_inst/mupen64plus_next_libretro.so"
     addSystem "n64"
 }

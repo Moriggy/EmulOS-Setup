@@ -13,7 +13,7 @@ rp_module_id="lr-mame2000"
 rp_module_desc="Emulador Arcade - MAME 0.37b5 (2000) port para libretro"
 rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME 0.37b5 (2000) en $romdir/mame-mame4all o\n$romdir/arcade"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/mame2000-libretro/master/readme.txt"
-rp_module_section="main"
+rp_module_section="opt arm=main"
 
 function _update_hook_lr-mame2000() {
     # move from old location and update emulators.cfg

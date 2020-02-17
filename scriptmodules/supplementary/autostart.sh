@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project and EmulOS
+# This file is part of The RetroPie Project
 #
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
@@ -27,8 +27,8 @@ function _autostart_script_autostart() {
     local script="$configdir/all/autostart.sh"
 
     cat >/etc/profile.d/10-retropie.sh <<_EOF_
-# launch our autostart apps (if we are on the correct tty)
-if [ "\`tty\`" = "/dev/tty1" ] && [ "\$USER" = "$user" ]; then
+# launch our autostart apps (if we are on the correct tty and not in X)
+if [ "\`tty\`" = "/dev/tty1" ] && [ -z "\$DISPLAY" ] && [ "\$USER" = "$user" ]; then
     bash "$script"
 fi
 _EOF_
@@ -40,7 +40,7 @@ _EOF_
     sed -i '$a\' "$script"
     case "$mode" in
         kodi)
-            echo -e "kodi #auto\nemulationstation #auto" >>"$script"
+            echo -e "kodi-standalone #auto\nemulationstation #auto" >>"$script"
             ;;
         es|*)
             echo "emulationstation #auto" >>"$script"
@@ -57,15 +57,9 @@ function enable_autostart() {
         ln -sf "/usr/local/share/applications/emulos.desktop" "$home/.config/autostart/"
     else
         if [[ "$__os_id" == "Raspbian" ]]; then
-            if [[ "$__chroot" -eq 1 ]]; then
-                mkdir -p /etc/systemd/system/getty@tty1.service.d
-                systemctl set-default multi-user.target
-                ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
-            else
-                # remove any old autologin.conf - we use raspi-config now
-                rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
-                raspi-config nonint do_boot_behaviour B2
-            fi
+            # remove any old autologin.conf - we use raspi-config now
+            rm -f /etc/systemd/system/getty@tty1.service.d/autologin.conf
+            raspi-config nonint do_boot_behaviour B2
         elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
             mkdir -p /etc/systemd/system/getty@tty1.service.d/
             cat >/etc/systemd/system/getty@tty1.service.d/autologin.conf <<_EOF_
@@ -122,7 +116,7 @@ function gui_autostart() {
             options=(
                 1 "Iniciar EmulationStation en el arranque"
                 2 "Iniciar Kodi en el arranque (salir de EmulationStation)"
-                E "Editar manualmente $configdir/autostart.sh"
+                E "Editar manualmente $configdir/all/autostart.sh"
             )
             if [[ "$__os_id" == "Raspbian" ]]; then
                 options+=(

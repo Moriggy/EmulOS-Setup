@@ -40,7 +40,7 @@ function module_builder() {
         ! fnExists "install_${md_id}" && continue
 
         # skip already built archives, so we can retry failed modules
-        [[ -f "$__tmpdir/archives/$__os_codename/$__platform/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
+        [[ -f "$__tmpdir/archives/$__binary_path/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
 
         # build, install and create binary archive.
         # initial clean in case anything was in the build folder when calling
@@ -61,7 +61,11 @@ function section_builder() {
 }
 
 function upload_builder() {
-    rsync -av --progress --delay-updates "$__tmpdir/archives/" "emulos@$__binary_host:files/binaries/"
+  local host="$__upload_host"
+  [[ -z "$host" ]] && host="$__binary_host"
+  local port="$__upload_port"
+  [[ -z "$port" ]] && port=22
+  rsync -av --progress --delay-updates -e "ssh -p $port" "$__tmpdir/archives/" "emulos@$host:files/binaries/"
 }
 
 function clean_archives_builder() {
@@ -76,42 +80,40 @@ function chroot_build_builder() {
     local ip="$(getIPAddress)"
 
     local dist
-    local sys
+    local dists="$__builder_dists"
+    [[ -z "$dists" ]] && dists="stretch buster"
 
-    for dist in stretch; do
-        local use_distcc=0
-        if [[ -d "$rootdir/admin/crosscomp/$dist" ]]; then
-            use_distcc=1
-            rp_callModule crosscomp switch_distcc "$dist"
+    local platform
+    local platforms="$__builder_platforms"
+    [[ -z "$platforms" ]] && platforms="rpi1 rpi2 rpi4"
+
+    for dist in $dists; do
+      local distcc_hosts="$__builder_distcc_hosts"
+      if [[ -d "$rootdir/admin/crosscomp/$dist" ]]; then
+          rp_callModule crosscomp switch_distcc "$dist"
+          [[ -z "$distcc_hosts" ]] && distcc_hosts="$ip"
         fi
 
-        if [[ ! -d "$md_build/$dist" ]]; then
-            rp_callModule image create_chroot "$dist" "$md_build/$dist"
-            git clone "$HOME/EmulOS-Setup" "$md_build/$dist/home/pi/EmulOS-Setup"
-            cat > "$md_build/$dist/home/pi/install.sh" <<_EOF_
-#!/bin/bash
-cd
-sudo apt-get update
-sudo apt-get install -y git
-if [[ "$use_distcc" -eq 1 ]]; then
-    sudo apt-get install -y distcc
-    sudo sed -i s/\+zeroconf/$ip/ /etc/distcc/hosts;
-fi
-_EOF_
-            rp_callModule image chroot "$md_build/$dist" bash /home/pi/install.sh
+        local makeflags="$__builder_makeflags"
+        [[ -z "$makeflags" ]] && makeflags="-j$(nproc)"
+
+        [[ ! -d "$md_build/$dist" ]] && rp_callModule image create_chroot "$dist" "$md_build/$dist"
+        if [[ ! -d "$md_build/$dist/home/pi/EmulOS-Setup" ]]; then
+            sudo -u $user git clone "$home/EmulOS-Setup" "$md_build/$dist/home/pi/EmulOS-Setup"
+            rp_callModule image chroot "$md_build/$dist" bash -c "sudo apt-get update; sudo apt-get install -y git"
         else
-            git -C "$md_build/$dist/home/pi/EmulOS-Setup" pull
+            sudo -u $user git -C "$md_build/$dist/home/pi/EmulOS-Setup" pull
         fi
 
-        for sys in rpi1 rpi2; do
+        for platform in $platforms; do
             rp_callModule image chroot "$md_build/$dist" \
                 sudo \
-                PATH="/usr/lib/distcc:$PATH" \
-                MAKEFLAGS="-j4 PATH=/usr/lib/distcc:$PATH" \
-                __platform="$sys" \
+                MAKEFLAGS="$makeflags" \
+                DISTCC_HOSTS="$distcc_hosts" \
+                __platform="$platform" \
                 /home/pi/EmulOS-Setup/emulos_pkgs.sh builder "$@"
         done
 
-        rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$HOME/EmulOS-Setup/tmp/archives/"
+        rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$home/EmulOS-Setup/tmp/archives/"
     done
 }

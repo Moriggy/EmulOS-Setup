@@ -13,7 +13,7 @@ rp_module_id="lr-snes9x"
 rp_module_desc="Emulador de Super Nintendo - Snes9x (corriente) port para libretro"
 rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/snes9x/master/docs/snes9x-license.txt"
-rp_module_section="opt"
+rp_module_section="opt armv8=main x86=main"
 
 function sources_lr-snes9x() {
     gitPullOrClone "$md_build" https://github.com/libretro/snes9x.git
@@ -25,7 +25,8 @@ function build_lr-snes9x() {
 
     cd libretro
     make "${params[@]}" clean
-    make "${params[@]}"
+    # temporarily disable distcc due to segfaults with cross compiler and lto
+    DISTCC_HOSTS="" make "${params[@]}"
     md_ret_require="$md_build/libretro/snes9x_libretro.so"
 }
 
@@ -40,6 +41,8 @@ function configure_lr-snes9x() {
     mkRomDir "snes"
     ensureSystemretroconfig "snes"
 
-    addEmulator 0 "$md_id" "snes" "$md_inst/snes9x_libretro.so"
+    local def=0
+    ! isPlatform "armv6" && ! isPlatform "armv7" && def=1
+    addEmulator $def "$md_id" "snes" "$md_inst/snes9x_libretro.so"
     addSystem "snes"
 }

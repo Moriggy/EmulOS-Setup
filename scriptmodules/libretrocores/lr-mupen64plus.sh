@@ -33,26 +33,40 @@ function depends_lr-mupen64plus() {
     local depends=(flex bison libpng-dev)
     isPlatform "x11" && depends+=(libglew-dev libglu1-mesa-dev)
     isPlatform "x86" && depends+=(nasm)
-    isPlatform "rpi" && depends+=(libraspberrypi-dev)
+    isPlatform "mesa" && depends+=(libgles2-mesa-dev)
+    isPlatform "videocore" && depends+=(libraspberrypi-dev)
     getDepends "${depends[@]}"
 }
 
 function sources_lr-mupen64plus() {
     gitPullOrClone "$md_build" https://github.com/libretro/mupen64plus-libretro.git
+
+    # mesa workaround; see: https://github.com/libretro/libretro-common/issues/98
+    if hasPackage libgles2-mesa-dev 18.2 ge; then
+        applyPatch "$md_data/0001-eliminate-conflicting-typedefs.patch"
+    fi
+
+    # Allows GLES3 with rpi
+    applyPatch "$md_data/0002-rpi-gles3.patch"
 }
 
 function build_lr-mupen64plus() {
     rpSwap on 750
     local params=()
-    if isPlatform "rpi"; then
+    if isPlatform "videocore"; then
         params+=(platform="$__platform")
+    elif isPlatform "mesa"; then
+        params+=(platform="$__platform-mesa")
     elif isPlatform "mali"; then
         params+=(platform="odroid")
     else
         isPlatform "arm" && params+=(WITH_DYNAREC=arm)
         isPlatform "neon" && params+=(HAVE_NEON=1)
-        isPlatform "gles" && params+=(FORCE_GLES=1)
-        isPlatform "kms" && params+=(FORCE_GLES3=1)
+    fi
+    if isPlatform "gles3"; then
+        params+=(FORCE_GLES3=1)
+    elif isPlatform "gles"; then
+        params+=(FORCE_GLES=1)
     fi
     make clean
     make "${params[@]}"
@@ -63,6 +77,7 @@ function build_lr-mupen64plus() {
 function install_lr-mupen64plus() {
     md_ret_files=(
         'mupen64plus_libretro.so'
+        'LICENSE'
         'README.md'
         'BUILDING.md'
     )
