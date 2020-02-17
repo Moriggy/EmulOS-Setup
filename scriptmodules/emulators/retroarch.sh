@@ -265,7 +265,7 @@ function configure_retroarch() {
 
 function keyboard_retroarch() {
     if [[ ! -f "$configdir/all/retroarch.cfg" ]]; then
-        printMsgs "dialog" "No se encontró el archivo de configuración de RetroArch en $configdir/all/retroarch.cfg"
+        printMsgs "dialog" "No RetroArch configuration file found at $configdir/all/retroarch.cfg"
         return
     fi
     local input
@@ -278,7 +278,7 @@ function keyboard_retroarch() {
         options+=("${parts[0]}" $i 2 "${parts[*]:2}" $i 26 16 0)
         ((i++))
     done < <(grep "^[[:space:]]*input_player[0-9]_[a-z]*" "$configdir/all/retroarch.cfg")
-    local cmd=(dialog --backtitle "$__backtitle" --form "Configuración de teclado en RetroArch" 22 48 16)
+    local cmd=(dialog --backtitle "$__backtitle" --form "RetroArch keyboard configuration" 22 48 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         local value
@@ -295,10 +295,10 @@ function keyboard_retroarch() {
 
 function hotkey_retroarch() {
     iniConfig " = " '"' "$configdir/all/retroarch.cfg"
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige el comportamiento deseado de las teclas de acceso rápido." 22 76 16)
-    local options=(1 "Hotkeys activado. (por defecto)"
-             2 "Pulsar ALT para activar hotkeys."
-             3 "Hotkeys desactivado. Pulsa ESCAPE para abrir la RGUI.")
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose the desired hotkey behaviour." 22 76 16)
+    local options=(1 "Hotkeys enabled. (default)"
+             2 "Press ALT to enable hotkeys."
+             3 "Hotkeys disabled. Press ESCAPE to open RGUI.")
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         case "$choice" in
@@ -323,33 +323,32 @@ function hotkey_retroarch() {
 
 function gui_retroarch() {
     while true; do
-        local names=(assets cheats overlays shaders)
-        local dirs=(assets cheats overlays shaders)
+        local names=(shaders overlays assets)
+        local dirs=(shaders overlay assets)
         local options=()
         local name
         local dir
         local i=1
         for name in "${names[@]}"; do
             if [[ -d "$configdir/all/retroarch/${dirs[i-1]}/.git" ]]; then
-                options+=("$i" "Gestionar $name (instalado)")
+                options+=("$i" "Manage $name (installed)")
             else
-                options+=("$i" "Gestionar $name (no instalado)")
+                options+=("$i" "Manage $name (not installed)")
             fi
             ((i++))
         done
         options+=(
-            5 "Configurar teclado para usar con RetroArch"
-            6 "Configurar el comportamiento de las teclas de acceso rápido del teclado para RetroArch"
-            7 "Restablecer las configuraciones retroarch y retroarch-core-option"
+            4 "Configure keyboard for use with RetroArch"
+            5 "Configure keyboard hotkey behaviour for RetroArch"
         )
         local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         case "$choice" in
-            1|2|3|4)
+            1|2|3)
                 name="${names[choice-1]}"
                 dir="${dirs[choice-1]}"
-                options=(1 "Instalar/Actualizar $name" 2 "Desinstalar $name" )
-                cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción para $dir" 12 40 06)
+                options=(1 "Install/Update $name" 2 "Uninstall $name" )
+                cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option for $dir" 12 40 06)
                 choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
                 case "$choice" in
@@ -358,6 +357,7 @@ function gui_retroarch() {
                         ;;
                     2)
                         rm -rf "$configdir/all/retroarch/$dir"
+                        [[ "$dir" == "assets" ]] && install_xmb_monochrome_assets_retroarch
                         ;;
                     *)
                         continue
@@ -365,15 +365,11 @@ function gui_retroarch() {
 
                 esac
                 ;;
-            5)
+            4)
                 keyboard_retroarch
                 ;;
-            6)
+            5)
                 hotkey_retroarch
-                ;;
-            7)
-                config_retroarch
-                printMsgs "dialog" "Completado el restablecimiento de las configuraciones retroarch y retroarch-core-options."
                 ;;
             *)
                 break
@@ -383,7 +379,9 @@ function gui_retroarch() {
     done
 }
 
-function _set_config_option_retroarch() {
+# adds a retroarch global config option in `$configdir/all/retroarch.cfg`, if not already set
+function _set_config_option_retroarch()
+{
     local option="$1"
     local value="$2"
     iniConfig " = " "\"" "$configdir/all/retroarch.cfg"
