@@ -573,7 +573,7 @@ function gui_setup() {
                 rps_logInit
                 {
                     rps_logStart
-                    sudo apt-get install -y libboost-all-dev
+                    #sudo apt-get install -y libboost-all-dev
                     basic_install_setup
                     #### gancho nuevo copia de scripts nuestros
               			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
