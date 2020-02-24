@@ -88,7 +88,7 @@ function install_rp_image() {
 
     # hostname to emulos
     echo "EmulOS" >"$chroot/etc/hostname"
-    sed -i "s/raspberrypi/emulos/" "$chroot/etc/hosts"
+    sed -i "s/raspberrypi/EmulOS/" "$chroot/etc/hosts"
 
     # quieter boot / disable plymouth (as without the splash parameter it
     # causes all boot messages to be displayed and interferes with people

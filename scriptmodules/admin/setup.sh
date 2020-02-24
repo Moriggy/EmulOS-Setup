@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of MasOS Team Project
+# This file is part of The EmulOS Project
 #
-# EmulOS is a fork of The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="setup"
@@ -35,7 +35,7 @@ function rps_logInit() {
 function rps_logStart() {
     echo -e "Inicio sesion el: $(date -d @$time_start)\n"
     echo "EmulOS-Setup version: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
-    echo "System: $(uname -a)"
+    echo "System: $__os_desc - $(uname -a)"
 }
 
 function rps_logEnd() {
@@ -68,13 +68,12 @@ function depends_setup() {
         exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
     fi
 
-    if isPlatform "rpi" && isPlatform "mesa"; then
+    if isPlatform "rpi" && isPlatform "mesa" && ! isPlatform "rpi4"; then
         printMsgs "dialog" "ERROR: Tiene habilitado el controlador experimental GL de escritorio. Esto NO es compatible con EmulOS, EmulationStation y los emuladores no se ejecutarán.\n\nDeshabilite el controlador experimental GL de escritorio desde el menú 'Opciones avanzadas' de raspi-config."
-        exit 1
     fi
 
     if [[ "$__os_debian_ver" -eq 8 ]]; then
-        printMsgs "dialog" "Raspbian/Debian Jessie and versions of Ubuntu below 18.04 are no longer supported.\n\nPlease install EmulOS 1.0 or newer from a fresh image which is based on Raspbian Stretch (or if running Ubuntu, upgrade your OS)."
+        printMsgs "dialog" "Raspbian/Debian Jessie and versions of Ubuntu below 16.04 are no longer supported.\n\nPlease install EmulOS 4.4 or newer from a fresh image which is based on Raspbian Stretch (or if running Ubuntu, upgrade your OS)."
     fi
 
     # make sure user has the correct group permissions
@@ -172,7 +171,7 @@ function package_setup() {
         fi
 
         if fnExists "sources_${md_id}"; then
-            options+=(S "$install de la fuente")
+            options+=(S "$install desde la fuente")
         fi
 
         if rp_isInstalled "$idx"; then
@@ -191,7 +190,7 @@ function package_setup() {
             options+=(H "Paquete de ayuda")
         fi
 
-        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --menu "Escoge una opcion para ${__mod_id[$idx]} ($status)" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --menu "Elige una opción para ${__mod_id[$idx]} ($status)" 22 76 16)
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 
         local logfilename
@@ -276,14 +275,14 @@ function section_gui_setup() {
         local idx
         for idx in $(rp_getSectionIds $section); do
             if rp_isInstalled "$idx"; then
-                installed="(Instalado)"
+                installed="(instalado)"
             else
                 installed=""
             fi
             options+=("$idx" "${__mod_id[$idx]} $installed" "$idx ${__mod_desc[$idx]}"$'\n\n'"${__mod_help[$idx]}")
         done
 
-        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Escoge una opción" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción" 22 76 16)
 
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
@@ -332,7 +331,7 @@ function section_gui_setup() {
 
             X)
                 local text="¿Seguro que quieres eliminar todos los paquetes de $section?"
-                [[ "$section" == "core" ]] && text+="\n\nADVERTENCIA - core ¡se necesitan estos paquetes para que EmulOS funcione!"
+                [[ "$section" == "core" ]] && text+="\n\nDVERTENCIA - core ¡se necesitan estos paquetes para que EmulOS funcione!"
                 dialog --defaultno --yesno "$text" 22 76 2>&1 >/dev/tty || continue
                 rps_logInit
                 {
@@ -364,7 +363,7 @@ function config_gui_setup() {
             fi
         done
 
-        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Escoge una opción:" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción:" 22 76 16)
 
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
@@ -430,19 +429,14 @@ function update_packages_gui_setup() {
     rps_logInit
     {
         rps_logStart
-        [[ "$update_os" -eq 1 ]] && apt_upgrade_raspbiantools
+        [[ "$update_os" -eq 1 ]] && rp_callModule raspbiantools apt_upgrade
         update_packages_setup
         rps_logEnd
     } &> >(_setup_gzip_log "$logfilename")
 
     rps_printInfo "$logfilename"
-    printMsgs "dialog" "Los paquetes instalados se han actualizado. Se reiniciará el sistema para efectuar todos los cambios"
-    if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-      cd
-      sudo killall emulationstation
-      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
-    fi
-    reboot_setup
+    printMsgs "dialog" "Los paquetes instalados se han actualizado."
+    gui_setup
 }
 
 function basic_install_setup() {
@@ -458,12 +452,12 @@ function packages_gui_setup() {
     local options=()
 
     for section in core main opt driver exp; do
-        options+=($section "Administrar ${__sections[$section]} paquetes" "$section Elija la parte superior instalar/actualizar/configurar paquetes de la ${__sections[$section]}")
+        options+=($section "Administrar ${__sections[$section]} paquetes" "$section Elige la parte superior instalar/actualizar/configurar paquetes de la ${__sections[$section]}")
     done
 
     local cmd
     while true; do
-        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Escoge una opción:" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción:" 22 76 16)
 
         local choice
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -535,26 +529,26 @@ function gui_setup() {
     while true; do
         local commit=$(git -C "$scriptdir" log -1 --pretty=format:"%cr (%h)")
 
-        cmd=(dialog --backtitle "$__backtitle" --title "EmulOS-Setup Script" --cancel-label "Salir" --item-help --help-button --default-item "$default" --menu "Version: $__version\nLast Commit: $commit" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --title "EmulOS-Setup Script" --cancel-label "Salir" --item-help --help-button --default-item "$default" --menu "Versión: $__version (funcionando en $__os_desc)\nÚltimo Commit: $commit" 22 76 16)
         options=(
-            I "EmulOS Instalacion basica" "Esto instalará todos los paquetes de Core y Main, lo que da una instalación basica de EmulOS.\nPosteriormente, se pueden instalar más paquetes desde las secciones Opcional y Experimental. Si hay binarios disponibles, se usarán, o los paquetes se construirán desde la fuente, lo que llevará más tiempo."
+        I "EmulOS Instalacion basica" "Esto instalará todos los paquetes de Core y Main, lo que da una instalación basica de EmulOS.\nPosteriormente, se pueden instalar más paquetes desde las secciones Opcional y Experimental. Si hay binarios disponibles, se usarán, o los paquetes se construirán desde la fuente, lo que llevará más tiempo."
 
-            U "Update" "U Actualiza el script EmulOS-Setup y todos los paquetes instalados actualmente. También permitirá actualizar paquetes de sistema operativo. Si hay binarios disponibles, se usarán. De lo contrario, los paquetes se compilarán a partir de la fuente."
+        U "Update" "U Actualiza el script EmulOS-Setup y todos los paquetes instalados actualmente. También permitirá actualizar paquetes de sistema operativo. Si hay binarios disponibles, se usarán. De lo contrario, los paquetes se compilarán a partir de la fuente."
 
-            P "Administrar paquetes"
-            "P Instalar / Quitar y configurar los diversos componentes de EmulOS, incluidos emuladores, ports y controladores."
+        P "Administrar paquetes"
+        "P Instalar / Quitar y configurar los diversos componentes de EmulOS, incluidos emuladores, ports y controladores."
 
-            C "Configuración / herramientas"
-            "C Configuración y herramientas. Configure samba y cualquier paquete que haya instalado que tenga opciones de configuración adicionales también aparecerán aquí."
+        C "Configuración / herramientas"
+        "C Configuración y herramientas. Configure samba y cualquier paquete que haya instalado que tenga opciones de configuración adicionales también aparecerán aquí."
 
-            S "Actualizar script EmulOS-Setup"
-            "S Actualice el script EmulOS-Setup. Esto actualizará SÓLO este script de administración principal, pero NO actualizará ningún paquete de software. Para actualizar los paquetes, use la opción 'Update' del menú principal, que también actualizará el script de instalación de EmulOS."
+        S "Actualizar script EmulOS-Setup"
+        "S Actualice el script EmulOS-Setup. Esto actualizará SÓLO este script de administración principal, pero NO actualizará ningún paquete de software. Para actualizar los paquetes, use la opción 'Update' del menú principal, que también actualizará el script de instalación de EmulOS."
 
-            # X "Desinstalar EmulOS"
-            # "X Desinstalar completamente EmulOS."
+        # X "Desinstalar EmulOS"
+        # "X Desinstalar completamente EmulOS."
 
-            R "Realice un reinicio"
-            "R Reinicia tu dispositivo, reinicie su máquina para que las modificaciones tengan efecto."
+        R "Realice un reinicio"
+        "R Reinicia tu dispositivo, reinicie su máquina para que las modificaciones tengan efecto."
         )
 
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -583,12 +577,13 @@ function gui_setup() {
                     basic_install_setup
                     #### gancho nuevo copia de scripts nuestros
               			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-                      silencio
+                      #silencio
                       cd
                       sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
                 			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
                       sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown /home/pi/EmulOS/
-                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
+                      #sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/emulationstation.sh /opt/emulos/supplementary/emulationstation/
+                			#sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
       		          fi
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
@@ -604,10 +599,9 @@ function gui_setup() {
                 config_gui_setup
                 ;;
             S)
-                dialog --defaultno --yesno "Estás seguro que quieres actualizar el script EmulOS-Setup?" 22 76 2>&1 >/dev/tty || continue
+                dialog --defaultno --yesno "¿Estás seguro que quieres actualizar el script EmulOS-Setup?" 22 76 2>&1 >/dev/tty || continue
                 if updatescript_setup; then
                     joy2keyStop
-
                     exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
                 fi
                 ;;

@@ -127,7 +127,7 @@ function get_os_version() {
             ;;
         Devuan)
             if isPlatform "rpi"; then
-                error="We do not support Devuan on the Raspberry Pi. We recommend you use Raspbian to run EmulOS."
+                error="We do not support Devian on the Raspberry Pi. We recommend you use Raspbian to run EmulOS."
             fi
             # devuan lsb-release version numbers don't match jessie
             case "$__os_codename" in

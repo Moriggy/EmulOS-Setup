@@ -61,11 +61,7 @@ function section_builder() {
 }
 
 function upload_builder() {
-  local host="$__upload_host"
-  [[ -z "$host" ]] && host="$__binary_host"
-  local port="$__upload_port"
-  [[ -z "$port" ]] && port=22
-  rsync -av --progress --delay-updates -e "ssh -p $port" "$__tmpdir/archives/" "emulos@$host:files/binaries/"
+    adminRsync "$__tmpdir/archives/" "files/binaries/"
 }
 
 function clean_archives_builder() {
@@ -88,10 +84,10 @@ function chroot_build_builder() {
     [[ -z "$platforms" ]] && platforms="rpi1 rpi2 rpi4"
 
     for dist in $dists; do
-      local distcc_hosts="$__builder_distcc_hosts"
-      if [[ -d "$rootdir/admin/crosscomp/$dist" ]]; then
-          rp_callModule crosscomp switch_distcc "$dist"
-          [[ -z "$distcc_hosts" ]] && distcc_hosts="$ip"
+        local distcc_hosts="$__builder_distcc_hosts"
+        if [[ -d "$rootdir/admin/crosscomp/$dist" ]]; then
+            rp_callModule crosscomp switch_distcc "$dist"
+            [[ -z "$distcc_hosts" ]] && distcc_hosts="$ip"
         fi
 
         local makeflags="$__builder_makeflags"
@@ -106,11 +102,17 @@ function chroot_build_builder() {
         fi
 
         for platform in $platforms; do
+            if [[ "$dist" == "stretch" && "$platform" == "rpi4" ]]; then
+                printMsgs "heading" "Skipping platform $platform on $dist ..."
+                continue
+            fi
+
             rp_callModule image chroot "$md_build/$dist" \
                 sudo \
                 MAKEFLAGS="$makeflags" \
                 DISTCC_HOSTS="$distcc_hosts" \
                 __platform="$platform" \
+                __has_binaries="$__chroot_has_binaries" \
                 /home/pi/EmulOS-Setup/emulos_pkgs.sh builder "$@"
         done
 

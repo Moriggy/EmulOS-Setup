@@ -153,25 +153,25 @@ function rp_callModule() {
         depends)
             if [[ "$1" == "remove" ]]; then
                 md_mode="remove"
-                action="Removing"
+                action="Eliminando"
             else
-                action="Installing"
+                action="Instalando"
             fi
-            action+=" dependencies for"
+            action+=" dependencias para"
             ;;
         sources)
-            action="Getting sources for"
+            action="Obteniendo fuente para"
             mkdir -p "$md_build"
             pushd "$md_build"
             pushed=$?
             ;;
         build)
-            action="Building"
+            action="Construyendo"
             pushd "$md_build" 2>/dev/null
             pushed=$?
             ;;
         install|install_bin)
-            action="Installing"
+            action="Instalando"
             # remove any previous install folder before installing
             if ! hasFlag "${__mod_flags[$md_idx]}" "noinstclean"; then
                 rmDirExists "$md_inst"
@@ -181,17 +181,17 @@ function rp_callModule() {
             pushed=$?
             ;;
         configure)
-            action="Configuring"
+            action="Configurando"
             pushd "$md_inst" 2>/dev/null
             pushed=$?
             ;;
         remove)
-            action="Removing"
+            action="Eliminando"
             ;;
         _update_hook)
             ;;
         *)
-            action="Running action '$mode' for"
+            action="Ejecutando accion para '$mode' "
             ;;
     esac
 
@@ -210,7 +210,7 @@ function rp_callModule() {
                 "configure_${md_id}"
             fi
             rm -rf "$md_inst"
-            printMsgs "console" "Removed directory $md_inst"
+            printMsgs "console" "Eliminado directorio $md_inst"
             ;;
         install)
             if fnExists "$function"; then
@@ -222,13 +222,13 @@ function rp_callModule() {
         install_bin)
             if fnExists "install_bin_${md_id}"; then
                 if ! "$function" "$@"; then
-                    md_ret_errors+=("Unable to install binary for $md_id")
+                    md_ret_errors+=("Incapaz de instalar binario para $md_id")
                 fi
             else
                 if rp_hasBinary "$md_idx"; then
                     rp_installBin
                 else
-                    md_ret_errors+=("Could not find a binary for $md_id")
+                    md_ret_errors+=("No se ha encontrado binario para $md_id")
                 fi
             fi
             ;;
@@ -242,7 +242,7 @@ function rp_callModule() {
     if [[ -n "$md_ret_require" ]]; then
         for file in "${md_ret_require[@]}"; do
             if [[ ! -e "$file" ]]; then
-                md_ret_errors+=("Could not successfully $mode $md_id - $md_desc ($file not found).")
+                md_ret_errors+=("No pudo con exito $mode $md_id - $md_desc ($file no encontrado).")
                 break
             fi
         done
@@ -253,7 +253,7 @@ function rp_callModule() {
         local file
         for file in "${md_ret_files[@]}"; do
             if [[ ! -e "$md_build/$file" ]]; then
-                md_ret_errors+=("Could not successfully install $md_desc ($md_build/$file not found).")
+                md_ret_errors+=("No se pudo instalar correctamente $md_desc ($md_build/$file no encontrado).")
                 break
             fi
             cp -Rvf "$md_build/$file" "$md_inst"
@@ -314,7 +314,7 @@ function rp_hasBinary() {
 }
 
 function rp_installBin() {
-    rp_hasBinaries || fatalError "There are no binary archives for platform $__platform"
+    rp_hasBinaries || fatalError "No hay archivos binarios para la plataforma $__platform"
     local archive="$md_type/$md_id.tar.gz";
     local dest="$rootdir/$md_type"
     mkdir -p "$dest"
@@ -322,15 +322,14 @@ function rp_installBin() {
 }
 
 function rp_createBin() {
-    printHeading "Creating binary archive for $md_desc"
-
+    printHeading "Creando archivo binario para $md_desc"
     if [[ ! -d "$rootdir/$md_type/$md_id" ]]; then
-        printMsgs "console" "No install directory $rootdir/$md_type/$md_id - no archive created"
+        printMsgs "console" "Directorio no instalado $rootdir/$md_type/$md_id - no se creo el archivo"
         return 1
     fi
 
     if dirIsEmpty "$rootdir/$md_type/$md_id"; then
-        printMsgs "console" "Empty install directory $rootdir/$md_type/$md_id - no archive created"
+        printMsgs "console" "Directorio de instalacion vacio $rootdir/$md_type/$md_id - no se creo el archivo"
         return 1
     fi
 
@@ -373,7 +372,7 @@ function rp_registerModule() {
 
     for var in rp_module_id rp_module_desc; do
         if [[ -z "${!var}" ]]; then
-            echo "Module $module_path is missing valid $var"
+            echo "Modulo $module_path falta valido $var"
             error=1
         fi
     done
