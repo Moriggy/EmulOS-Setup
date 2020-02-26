@@ -51,9 +51,9 @@
 ## (via tvservice) and the requested mode differs from the currently active mode
 ##
 ## If `_SYS_` or `_PORT_` is provided for the second parameter, the commandline
-## will be extracted from `/opt/retropie/configs/SYSTEM/emulators.cfg` with
+## will be extracted from `/opt/emulos/configs/SYSTEM/emulators.cfg` with
 ## `%ROM%` `%BASENAME%` being replaced with the ROM parameter. This is the
-## default mode used when launching in RetroPie so the user can switch emulator
+## default mode used when launching in EmulOS so the user can switch emulator
 ## used as well as other options from the runcommand GUI.
 ##
 ## If SAVE_NAME is included, that is used for loading and saving of video output
@@ -66,7 +66,7 @@
 ## pressed the GUI is shown, where a user can set video modes, default emulators
 ## and other options (depending what is being launched).
 
-ROOTDIR="/opt/retropie"
+ROOTDIR="/opt/emulos"
 CONFIGDIR="$ROOTDIR/configs"
 LOG="/dev/shm/runcommand.log"
 
@@ -910,7 +910,7 @@ function switch_fb_res() {
 
 function build_xinitrc() {
     local mode="$1"
-    local xinitrc="/dev/shm/retropie_xinitrc"
+    local xinitrc="/dev/shm/emulos_xinitrc"
 
     case "$mode" in
         clear)
@@ -1152,7 +1152,7 @@ function show_launch() {
     if [[ "$IS_SYS" -eq 1 && "$USE_ART" -eq 1 ]]; then
         # if using art look for images in paths for es art.
         images+=(
-            "$HOME/RetroPie/roms/$SYSTEM/images/${ROM_BN}-image"
+            "$HOME/EmulOS/roms/$SYSTEM/images/${ROM_BN}-image"
             "$HOME/.emulationstation/downloaded_images/$SYSTEM/${ROM_BN}-image"
         )
     fi
@@ -1160,7 +1160,7 @@ function show_launch() {
     # look for custom launching images
     if [[ "$IS_SYS" -eq 1 ]]; then
         images+=(
-            "$HOME/RetroPie/roms/$SYSTEM/images/${ROM_BN}-launching"
+            "$HOME/EmulOS/roms/$SYSTEM/images/${ROM_BN}-launching"
             "$CONF_ROOT/launching"
         )
     fi

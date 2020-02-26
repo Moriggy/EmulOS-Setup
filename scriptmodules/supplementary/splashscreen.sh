@@ -14,9 +14,6 @@ rp_module_desc="Configurar Splashscreen"
 rp_module_section="main"
 rp_module_flags="noinstclean !x86 !osmc !xbian !mali"
 
-rp_module_section="main"
-rp_module_flags="noinstclean !x86 !osmc !xbian !mali"
-
 function _update_hook_splashscreen() {
     # make sure splashscreen is always up to date if updating just RetroPie-Setup
     if rp_isInstalled "$md_idx"; then
