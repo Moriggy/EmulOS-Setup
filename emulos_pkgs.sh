@@ -5,10 +5,11 @@
 # The EmulOS Project es legal, esta contruido bajo raspbian que es de codigo abierto, en este nuevo
 # sistema trabajan unos pocos desarroladores independientes de diversas partes del planeta.
 #
-#EmulOS El sistema operativo retro en español con emulationstation, retroarch y varios scripts independientes mas configuraciones y themes nuevos.!
-#Evolución de MasOS (fork de retropie)
+# EmulOS El sistema operativo retro en español con emulationstation, retroarch y varios scripts independientes mas configuraciones y themes nuevos.!
+# Evolución de MasOS (fork de retropie)
 
-__version="2.4.0"
+
+__version="2.4.1"
 
 [[ "$__debug" -eq 1 ]] && set -x
 
@@ -54,6 +55,7 @@ source "$scriptdir/scriptmodules/system.sh"
 source "$scriptdir/scriptmodules/helpers.sh"
 source "$scriptdir/scriptmodules/inifuncs.sh"
 source "$scriptdir/scriptmodules/packages.sh"
+
 setup_env
 
 rp_registerAllModules

@@ -122,40 +122,34 @@ function _add_rom_emulationstation() {
 }
 
 function depends_emulationstation() {
-  local depends=(
-      libfreeimage-dev libfreetype6-dev
-      libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
-      libvlc-dev libvlccore-dev vlc
-  )
+    local depends=(
+        libfreeimage-dev libfreetype6-dev
+        libcurl4-openssl-dev libasound2-dev cmake libsdl2-dev libsm-dev
+        libvlc-dev libvlccore-dev vlc
+    )
 
-  compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
-  isPlatform "x11" && depends+=(gnome-terminal)
-  isPlatform "rpi" && depends+=(omxplayer)
-  getDepends "${depends[@]}"
+    compareVersions "$__os_debian_ver" gt 8 && depends+=(rapidjson-dev)
+    isPlatform "x11" && depends+=(gnome-terminal)
+    isPlatform "rpi" && depends+=(omxplayer)
+    getDepends "${depends[@]}"
 }
 
 function sources_emulationstation() {
-  local repo="$1"
-  local branch="$2"
-  [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
-  if [[ -z "$branch" ]]; then
-      if compareVersions "$__os_debian_ver" gt 8; then
-          branch="stable"
-      else
-          branch="v2.7.6"
-      fi
-  fi
-  gitPullOrClone "$md_build" "$repo" "$branch"
-}
-
-function install_bin_emulationstation() {
-  downloadAndExtract "https://archive.org/download/emulationstation_201912/EmulationStation.zip" "$md_inst"
-  sudo chmod +x $md_inst/emulationstation.sh
-  sudo chmod +x $md_inst/emulationstation
+    local repo="$1"
+    local branch="$2"
+    [[ -z "$repo" ]] && repo="https://github.com/Moriggy/EmulationStation"
+    if [[ -z "$branch" ]]; then
+        if compareVersions "$__os_debian_ver" gt 8; then
+            branch="stable"
+        else
+            branch="v2.7.6"
+        fi
+    fi
+    gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
 function build_emulationstation() {
-  local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
+    local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
     # Temporary workaround until GLESv2 support is implemented
     isPlatform "rpi" && isPlatform "mesa" && params+=(-DGL=On)
     isPlatform "rpi" && params+=(-DRPI=On)
@@ -168,15 +162,19 @@ function build_emulationstation() {
 }
 
 function install_emulationstation() {
-  md_ret_files=(
-      'CREDITS.md'
-      'emulationstation'
-      'emulationstation.sh'
-      'GAMELISTS.md'
-      'README.md'
-      'resources'
-      'THEMES.md'
-  )
+    md_ret_files=(
+        'CREDITS.md'
+        'emulationstation'
+        'emulationstation.sh'
+        'GAMELISTS.md'
+        'README.md'
+        'THEMES.md'
+    )
+
+    # This folder is present only from 2.8.x, don't include it for older releases
+    if compareVersions "$__os_debian_ver" gt 8; then
+        md_ret_files+=('resources')
+    fi
 }
 
 function init_input_emulationstation() {
@@ -213,32 +211,23 @@ function copy_inputscripts_emulationstation() {
 function install_launch_emulationstation() {
     cat > /usr/bin/emulationstation << _EOF_
 #!/bin/bash
-
 if [[ \$(id -u) -eq 0 ]]; then
     echo "EmulationStation no debe ejecutarse como root. Si usaste 'sudo emulationstation', ejecutalo sin sudo."
     exit 1
 fi
-
-if [[ -d "/sys/module/vc4" ]]; then
-    echo -e "ERROR: Tienes el controlador experimental de escritorio GL habilitado. Esto NO es compatible con EmulOS, y EmulationStation y los emuladores no podran iniciarse.\\n\\nDeshabilite el controlador GL de escritorio experimental desde el menu 'Opciones avanzadas' de raspi-config."
-    exit 1
-fi
-
 if [[ "\$(uname --machine)" != *86* ]]; then
     if [[ -n "\$(pidof X)" ]]; then
         echo "X se esta ejecutando. Cierre la X para mitigar los problemas de perdida de entrada del teclado. Por ejemplo, cierre la sesion de LXDE."
         exit 1
     fi
 fi
-
 # save current tty/vt number for use with X so it can be launched on the correct tty
 tty=\$(tty)
 export TTY="\${tty:8:1}"
-
 clear
 tput civis
 "$md_inst/emulationstation.sh" "\$@"
-if [[ $? -eq 139 ]]; then
+if [[ \$? -eq 139 ]]; then
     dialog --cr-wrap --no-collapse --msgbox "¡EmulationStation fallo!\n\nSi esta es la primera vez que inicia EmulOS, asegurese de estar usando la imagen correcta para su sistema.\n\\nVerifique los permisos de su archivo/carpeta rom y, si se esta ejecutando en una Raspberry Pi, asegurese de que gpu_split esta configurado lo suficientemente alto y/o vuelve a usar el theme EmulOS.\n\nPara obtener mas ayuda, utiliza el telegram de EmulOS." 20 60 >/dev/tty
 fi
 tput cnorm
@@ -247,7 +236,7 @@ _EOF_
 
     if isPlatform "x11"; then
         mkdir -p /usr/local/share/{icons,applications}
-        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulOS.svg" "/usr/local/share/icons/"
+        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulos.svg" "/usr/local/share/icons/"
         cat > /usr/local/share/applications/emulos.desktop << _EOF_
 [Desktop Entry]
 Type=Application
@@ -259,7 +248,7 @@ Name[de_DE]=EmulOS
 Name=EmulOS
 Comment[de_DE]=EmulOS
 Comment=EmulOS
-Icon=/usr/local/share/icons/emulOS.svg
+Icon=/usr/local/share/icons/emulos.svg
 Categories=Game
 _EOF_
     fi
@@ -273,7 +262,7 @@ function clear_input_emulationstation() {
 function remove_emulationstation() {
     rm -f "/usr/bin/emulationstation"
     if isPlatform "x11"; then
-        rm -rfv "/usr/local/share/icons/emulOS.svg" "/usr/local/share/applications/emulos.desktop"
+        rm -rfv "/usr/local/share/icons/emulos.svg" "/usr/local/share/applications/emulos.desktop"
     fi
 }
 
@@ -281,7 +270,7 @@ function configure_emulationstation() {
     # move the $home/emulationstation configuration dir and symlink it
     moveConfigDir "$home/.emulationstation" "$configdir/all/emulationstation"
 
-    [[ "$mode" == "remove" ]] && return
+    [[ "$md_mode" == "remove" ]] && return
 
     # remove other emulation station if it's installed, so we don't end up with
     # both packages interfering - but leave configs alone so switching is easy
@@ -341,7 +330,7 @@ function gui_emulationstation() {
             options+=(3 "Intercambiar botones A/B en ES (Actualmente: Intercambiados)")
         fi
 
-        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Escoge una opción:" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --default-item "$default" --menu "Escoge una opción" 22 76 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         default="$choice"
@@ -350,7 +339,6 @@ function gui_emulationstation() {
             1)
                 if dialog --defaultno --yesno "¿Seguro que quieres restablecer la configuración de mandos de EmulationStation? Esto borrara todas las configuraciones de mandos para ES y le pedira que lo configure en el siguiente inicio" 22 76 2>&1 >/dev/tty; then
                     clear_input_emulationstation
-                    sudo rm -R /opt/emulos/configs/all/retroarch/autoconfig/*
                     printMsgs "dialog" "$(_get_input_cfg_emulationstation) ha sido restablecido a los valores predeterminados."
                 fi
                 ;;
