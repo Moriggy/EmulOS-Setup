@@ -81,7 +81,7 @@ function disable_plymouth_splashscreen() {
 }
 
 function default_splashscreen() {
-    echo "$md_inst/retropie-default.png" >/etc/splashscreen.list
+    echo "$md_inst/emulos-default.png" >/etc/splashscreen.list
 }
 
 function enable_splashscreen() {
@@ -212,9 +212,9 @@ function preview_splashscreen() {
 
     local path
     local file
-    local omxiv="/opt/retropie/supplementary/omxiv/omxiv"
+    local omxiv="/opt/emulos/supplementary/omxiv/omxiv"
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         path="$(choose_path_splashscreen)"
