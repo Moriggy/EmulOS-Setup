@@ -14,7 +14,7 @@ rp_module_desc="Emulador de MS-DOS rpix86"
 rp_module_help="ROM Extensions: .bat .com .exe .sh\n\nCopia tus juegos de MS-DOS en $romdir/pc"
 rp_module_licence="FREEWARE http://rpix86.patrickaalto.com/rdown.html"
 rp_module_section="opt"
-rp_module_flags="!x86 !mali !kms"
+rp_module_flags="!all rpi !kms"
 
 function install_bin_rpix86() {
     downloadAndExtract "$__archive_url/rpix86.tar.gz" "$md_inst"

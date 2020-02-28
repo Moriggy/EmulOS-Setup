@@ -14,7 +14,7 @@ rp_module_desc="Emulador de NDS"
 rp_module_help="ROM Extensions: .nds .zip\n\nCopia tus roms de Nintendo DS en $romdir/nds"
 rp_module_licence="PROP"
 rp_module_section="exp"
-rp_module_flags="!mali !x86 !armv6"
+rp_module_flags="!all arm !armv6 !mali"
 
 function depends_drastic() {
     getDepends libasound2-dev libsdl2-dev zlib1g-dev

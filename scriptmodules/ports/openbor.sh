@@ -11,10 +11,10 @@
 
 rp_module_id="openbor"
 rp_module_desc="OpenBOR - Beat 'em Up Game Engine"
-rp_module_help="Los juegos de OpenBOR se deben extraer para funcionar correctamente. Coloque sus archivos pak en $romdir/ports/openbor y luego ejecute $rootdir/ports/openbor/extract.sh. Cuando el script haya finalizado, los archivos pak originales se encontrarán en $romdir/ports/openbor/originals y se pueden eliminar."
+rp_module_help="OpenBOR games need to be extracted to function properly. Place your pak files in $romdir/ports/openbor and then run $rootdir/ports/openbor/extract.sh. When the script is done, your original pak files will be found in $romdir/ports/openbor/originals and can be deleted."
 rp_module_licence="BSD https://raw.githubusercontent.com/rofl0r/openbor/master/LICENSE"
 rp_module_section="exp"
-rp_module_flags="!mali !x11 !kms"
+rp_module_flags="dispmanx !mali !x11"
 
 function depends_openbor() {
     getDepends libsdl1.2-dev libsdl-gfx1.2-dev libogg-dev libvorbisidec-dev libvorbis-dev libpng-dev zlib1g-dev
@@ -43,9 +43,18 @@ function install_openbor() {
 }
 
 function configure_openbor() {
-    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR; popd"
+    addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "$md_inst/openbor.sh"
 
     mkRomDir "ports/$md_id"
+    setDispmanx "$md_id" 1
+
+    cat >"$md_inst/openbor.sh" << _EOF_
+#!/bin/bash
+pushd "$md_inst"
+./OpenBOR "\$@"
+popd
+_EOF_
+    chmod +x "$md_inst/openbor.sh"
 
     cat >"$md_inst/extract.sh" <<_EOF_
 #!/bin/bash
@@ -65,7 +74,8 @@ do
   mv data/ "\$CURRENTFILE"/
   mv "\$CURRENTFILE"/ ../
 done
-echo "Tus juegos están extraídos y listos para jugarlos. Los originales se guardan de forma segura en $BORROMDIR/original/ pero ya no serán necesarios. Todo lo que esté dentro de dicha carpeta puede ser eliminado."
+
+echo "Your games are extracted and ready to be played. Your originals are stored safely in $BORROMDIR/original/ but they won't be needed anymore. Everything within it can be deleted."
 _EOF_
     chmod +x "$md_inst/extract.sh"
 

@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Amiga - UAE4All"
 rp_module_help="ROM Extension: .adf\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS\nkick13.rom\nkick20.rom\nkick31.rom\nen $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/uae4all2/retropie/copying"
 rp_module_section="opt"
-rp_module_flags="dispmanx !x86 !mali !kms"
+rp_module_flags="dispmanx !all videocore"
 
 function depends_uae4all() {
     getDepends libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev libsdl-ttf2.0-dev

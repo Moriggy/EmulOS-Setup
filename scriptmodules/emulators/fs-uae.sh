@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Amiga - FS-UAE integra el código de emulación Amig
 rp_module_help="ROM Extension: .adf  .adz .dms .ipf .zip\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS requeridas (e.j. kick13.rom) en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/FrodeSolheim/fs-uae/master/COPYING"
 rp_module_section="exp"
-rp_module_flags="!arm"
+rp_module_flags="!all !arm x11"
 
 function depends_fs-uae() {
     case "$__os_id" in

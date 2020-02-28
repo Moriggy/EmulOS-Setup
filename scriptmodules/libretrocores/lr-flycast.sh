@@ -16,14 +16,20 @@ rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/flycast/maste
 rp_module_section="opt"
 rp_module_flags="!mali !armv6"
 
+function depends_lr-flycast() {
+    local depends=()
+    isPlatform "videocore" && depends+=(libraspberrypi-dev)
+    isPlatform "mesa" && depends+=(libgles2-mesa-dev)
+    getDepends "${depends[@]}"
+}
+
 function _update_hook_lr-flycast() {
     renameModule "lr-reicast" "lr-beetle-dc"
     renameModule "lr-beetle-dc" "lr-flycast"
 }
 
 function sources_lr-flycast() {
-    # build from an older commit due to current broken upstream
-    gitPullOrClone "$md_build" https://github.com/libretro/flycast.git "" "c59eac0"
+    gitPullOrClone "$md_build" https://github.com/libretro/flycast.git
     # don't override our C/CXXFLAGS and set LDFLAGS to CFLAGS to avoid warnings on linking
     applyPatch "$md_data/01_flags_fix.diff"
 }
@@ -71,8 +77,8 @@ function configure_lr-flycast() {
     # segfaults on the rpi without redirecting stdin from </dev/null
     addEmulator $def "$md_id" "dreamcast" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "dreamcast"
-    addEmulator 1 "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
+    addEmulator $def "$md_id" "naomi" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "naomi"
-    addEmulator 1 "$md_id" "atomiswave" "$md_inst/flycast_libretro.so </dev/null"
+    addEmulator $def "$md_id" "atomiswave" "$md_inst/flycast_libretro.so </dev/null"
     addSystem "atomiswave"
 }

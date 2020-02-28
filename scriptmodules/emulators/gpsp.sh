@@ -14,7 +14,7 @@ rp_module_desc="Emulador de GameBoy Advance"
 rp_module_help="ROM Extensions: .gba .zip\n\nCopia tus roms de Game Boy Advance en $romdir/gba\n\nCopia la BIOS gba_bios.bin requerida en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/gizmo98/gpsp/master/COPYING.DOC"
 rp_module_section="opt"
-rp_module_flags="noinstclean !x86 !mali !kms"
+rp_module_flags="noinstclean !all arm !mali !kms"
 
 function depends_gpsp() {
     getDepends libsdl1.2-dev libraspberrypi-dev

@@ -14,7 +14,7 @@ rp_module_desc="OpenBOR - Beat 'em Up Game Engine v6510-dev (OFICIAL!!)"
 rp_module_help="Coloca tus juegos .pak en $romdir/openbor y luego ejecutalos desde el sistema Openbor, los juegos comenzarán automáticamente."
 rp_module_licence="BSD https://raw.githubusercontent.com/crcerror/OpenBOR-Raspberry/master/LICENSE"
 rp_module_section="exp"
-rp_module_flags="!mali !x11 !kms"
+rp_module_flags="dispmanx !mali !x11"
 
 function strip() {
     #$1 string name, $2 string length to cut
@@ -55,6 +55,7 @@ function configure_openbor-6xxx() {
     addPort "$md_id" "openbor" "OpenBOR - Beats of Rage Engine" "pushd $md_inst; $md_inst/OpenBOR %ROM%; popd"
     addSystem "$md_id"
     mkRomDir "$md_id"
+    setDispmanx "$md_id" 1
 
     cat >"$romdir/$md_id/OpenBOR - Module Selection Script.sh" <<_EOF_
 #!/bin/bash

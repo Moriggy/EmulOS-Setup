@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Playstation - PCSX (arm optimizado)"
 rp_module_help="ROM Extensions: .bin .cue .cbn .img .iso .m3u .mdf .pbp .toc .z .znx\n\nCopia tus roms de PSX en $romdir/psx\n\nCopia la BIOS SCPH1001.BIN en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/notaz/pcsx_rearmed/master/COPYING"
 rp_module_section="opt"
-rp_module_flags="dispmanx !x86 !mali !kms"
+rp_module_flags="dispmanx !all videocore"
 
 function depends_pcsx-rearmed() {
     getDepends libsdl1.2-dev libasound2-dev libpng-dev libx11-dev

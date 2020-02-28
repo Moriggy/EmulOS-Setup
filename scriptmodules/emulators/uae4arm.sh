@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Amiga con soporte JIT"
 rp_module_help="ROM Extension: .adf\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS\nkick13.rom\nkick20.rom\nkick31.rom\nen $biosdir"
 rp_module_licence="GPL2"
 rp_module_section="opt"
-rp_module_flags="!x86 !mali !kms"
+rp_module_flags="!all videocore"
 
 function depends_uae4arm() {
     getDepends libsdl1.2-dev libsdl-gfx1.2-dev libsdl-ttf2.0-dev libguichan-dev libmpg123-dev libxml2-dev libflac-dev "${@}"
