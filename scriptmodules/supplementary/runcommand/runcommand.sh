@@ -405,7 +405,7 @@ function get_x11_mode_info() {
     mode_info[4]="n/a"
 
     # get refresh rate (stripping Hz, rounded to integer)
-    mode_info[5]="$(printf '%.0f\n' ${status[3]::-2})"
+    mode_info[5]="$(LC_NUMERIC=C printf '%.0f\n' ${status[3]::-2})"
 
     echo "${mode_info[@]}"
 }
@@ -942,6 +942,14 @@ _EOF_
 
             # workaround for launching xserver on correct/user owned tty
             # see https://github.com/RetroPie/RetroPie-Setup/issues/1805
+
+            # if no TTY env var is set, try and get it - eg if launching a ports script or runcommand manually
+            if [[ -z "$TTY" ]]; then
+                TTY=$(tty)
+                TTY=${TTY:8:1}
+            fi
+
+            # if we managed to get the current tty then try and use it
             if [[ -n "$TTY" ]]; then
                 COMMAND="$COMMAND -- vt$TTY -keeptty"
             fi

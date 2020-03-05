@@ -71,7 +71,10 @@ function remove_usbromservice() {
 }
 
 function configure_usbromservice() {
+    [[ "$md_mode" == "remove" ]] && return
+
     iniConfig "=" '"' /etc/usbmount/usbmount.conf
+
     local fs
     for fs in ntfs exfat; do
         iniGet "FILESYSTEMS"
@@ -79,12 +82,13 @@ function configure_usbromservice() {
             iniSet "FILESYSTEMS" "$ini_value $fs"
         fi
     done
-    iniGet "MOUNTOPTIONS"
+
+    # set our mount options (usbmount has sync by default which we don't want)
     local uid=$(id -u $user)
     local gid=$(id -g $user)
-    if [[ ! "$ini_value" =~ uid|gid ]]; then
-        iniSet "MOUNTOPTIONS" "$ini_value,uid=$uid,gid=$gid"
-    fi
+    local mount_options="nodev,noexec,noatime,uid=$uid,gid=$gid"
+
+    iniSet "MOUNTOPTIONS" "$mount_options"
 }
 
 function gui_usbromservice() {
@@ -92,10 +96,10 @@ function gui_usbromservice() {
     local options
     local choice
     while true; do
-        cmd=(dialog --backtitle "$__backtitle" --menu "Choose from an option below." 22 86 16)
+        cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opcion." 22 86 16)
         options=(
-            1 "Enable USB ROM Service scripts"
-            2 "Disable USB ROM Service scripts"
+            1 "Habilitar USB ROM Service scripts"
+            2 "Deshabilitar USB ROM Service scripts"
         )
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
@@ -103,11 +107,11 @@ function gui_usbromservice() {
                 1)
                     rp_callModule "$md_id" depends
                     rp_callModule "$md_id" enable
-                    printMsgs "dialog" "Enabled $md_desc"
+                    printMsgs "dialog" "Habilitado $md_desc"
                     ;;
                 2)
                     rp_callModule "$md_id" disable
-                    printMsgs "dialog" "Disabled $md_desc"
+                    printMsgs "dialog" "Deshabilitado $md_desc"
                     ;;
             esac
         else
