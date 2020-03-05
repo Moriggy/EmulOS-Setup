@@ -148,6 +148,12 @@ function sources_emulationstation() {
     gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
+function install_bin_emulationstation() {
+  downloadAndExtract "https://archive.org/download/emulationstation_201912/EmulationStation.zip" "$md_inst"
+  sudo chmod +x $md_inst/emulationstation.sh
+  sudo chmod +x $md_inst/emulationstation
+}
+
 function build_emulationstation() {
     local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
     # Temporary workaround until GLESv2 support is implemented
@@ -236,7 +242,7 @@ _EOF_
 
     if isPlatform "x11"; then
         mkdir -p /usr/local/share/{icons,applications}
-        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulos.svg" "/usr/local/share/icons/"
+        cp "$scriptdir/scriptmodules/$md_type/emulationstation/emulOS.svg" "/usr/local/share/icons/"
         cat > /usr/local/share/applications/emulos.desktop << _EOF_
 [Desktop Entry]
 Type=Application
@@ -248,7 +254,7 @@ Name[de_DE]=EmulOS
 Name=EmulOS
 Comment[de_DE]=EmulOS
 Comment=EmulOS
-Icon=/usr/local/share/icons/emulos.svg
+Icon=/usr/local/share/icons/emulOS.svg
 Categories=Game
 _EOF_
     fi
@@ -262,7 +268,7 @@ function clear_input_emulationstation() {
 function remove_emulationstation() {
     rm -f "/usr/bin/emulationstation"
     if isPlatform "x11"; then
-        rm -rfv "/usr/local/share/icons/emulos.svg" "/usr/local/share/applications/emulos.desktop"
+        rm -rfv "/usr/local/share/icons/emulOS.svg" "/usr/local/share/applications/emulos.desktop"
     fi
 }
 
@@ -339,6 +345,7 @@ function gui_emulationstation() {
             1)
                 if dialog --defaultno --yesno "¿Seguro que quieres restablecer la configuración de mandos de EmulationStation? Esto borrara todas las configuraciones de mandos para ES y le pedira que lo configure en el siguiente inicio" 22 76 2>&1 >/dev/tty; then
                     clear_input_emulationstation
+                    sudo rm -R /opt/emulos/configs/all/retroarch/autoconfig/*
                     printMsgs "dialog" "$(_get_input_cfg_emulationstation) ha sido restablecido a los valores predeterminados."
                 fi
                 ;;
