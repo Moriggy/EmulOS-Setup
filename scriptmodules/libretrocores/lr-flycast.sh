@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project | EDITADO Y MEJORADO POR EL EQUIPO MASOS-TEAM | EMULOS |
+# This file is part of The RetroPie Project | EDITADO Y MEJORADO POR EL EQUIPO EMULOS-TEAM | EMULOS |
 #
 # The RetroPie Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
@@ -10,9 +10,8 @@
 #
 
 rp_module_id="lr-flycast"
-rp_module_desc="Emulador par Dreamcast - Naomi - Atomiswave - Flycast port para libretro"
+rp_module_desc="Emulador para Dreamcast - Naomi - Atomiswave - Flycast port para libretro"
 rp_module_help="Anteriormente llamado lr-reicast ahora lr-flycast\n\nDreamcast ROM Extensions: .cdi .gdi .chd, Naomi/Atomiswave ROM Extension: .lst .bin .zip\n\nCopia tus roms de Dreamcast en $romdir/dreamcast\n\nCopia tus roms de Atomiswave en $romdir/atomiswave\n\nCopia tus roms de Naomi en $romdir/naomi\n\nCopia las BIOS de Dreamcast dc_boot.bin y dc_flash.bin en $biosdir/dc\n\nCopia las BIOS de Naomi/Atomiswave naomi.zip y awbios.zip en $biosdir/dc"
-rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/flycast/master/LICENSE"
 rp_module_section="opt"
 rp_module_flags="!mali !armv6"
 
@@ -62,6 +61,7 @@ function configure_lr-flycast() {
     mkRomDir "dreamcast"
     mkRomDir "naomi"
     mkRomDir "atomiswave"
+
     ensureSystemretroconfig "dreamcast"
     ensureSystemretroconfig "naomi"
     ensureSystemretroconfig "atomiswave"
@@ -69,8 +69,10 @@ function configure_lr-flycast() {
     mkUserDir "$biosdir/dc"
 
     # system-specific
-    iniConfig " = " "" "$configdir/dreamcast/retroarch.cfg"
-    iniSet "video_shared_context" "true"
+    if isPlatform "gl"; then
+        iniConfig " = " "" "$configdir/dreamcast/retroarch.cfg"
+        iniSet "video_shared_context" "true"
+    fi
 
     local def=0
     isPlatform "kms" && def=1
