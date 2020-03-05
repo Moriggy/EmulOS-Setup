@@ -15,6 +15,8 @@ rp_module_section="driver"
 rp_module_flags="noinstclean"
 rp_module_help="Ten en cuenta que necesita habilitar o deshabilitar manualmente el servicio PowerBlock en la sección Configuración. IMPORTANTE: si el servicio está habilitado y la función del interruptor de encendido está habilitada (que es la configuración predeterminada) en el archivo de configuración, debe tener un interruptor conectado al PowerBlock."
 
+rp_module_flags="noinstclean !all rpi"
+
 function depends_powerblock() {
     local depends=(cmake doxygen)
     isPlatform "rpi" && depends+=(libraspberrypi-dev)
@@ -23,48 +25,40 @@ function depends_powerblock() {
 }
 
 function sources_powerblock() {
+    if [[ -d "$md_inst" ]]; then
+        git -C "$md_inst" reset --hard  # ensure that no local changes exist
+    fi
     gitPullOrClone "$md_inst" https://github.com/petrockblog/PowerBlock.git
 }
 
-function build_powerblock() {
+function install_powerblock() {
     cd "$md_inst"
-    rm -rf "build"
-    mkdir build
-    cd build
-    cmake ..
-    make
-    md_ret_require="$md_inst/build/src/powerblock/powerblock"
+    bash install.sh
 }
 
-function install_powerblock() {
-    # install from there to system folders
-    cd "$md_inst/build"
-    make install
+function remove_powerblock() {
+    cd "$md_inst"
+    bash uninstall.sh
 }
 
 function gui_powerblock() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opcion." 22 86 16)
     local options=(
-        1 "Activar el driver PowerBlock"
-        2 "Desactivar el driver PowerBlock"
+        1 "Habilitar driver PowerBlock"
+        2 "Deshabilitar driver PowerBlock"
 
     )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
         case "$choice" in
             1)
-                make -C "$md_inst/build" installservice
-                printMsgs "dialog" "Activado el driver PowerBlock ."
+                install_powerblock
+                printMsgs "dialog" "Habilitado driver PowerBlock."
                 ;;
             2)
-                make -C "$md_inst/build" uninstallservice
-                printMsgs "dialog" "Desactivado el driver PowerBlock."
+                remove_powerblock
+                printMsgs "dialog" "Deshabilitado driver PowerBlock."
                 ;;
         esac
     fi
-}
-
-function remove_powerblock() {
-    make -C "$md_inst/build" uninstallservice
-    make -C "$md_inst/build" uninstall
 }

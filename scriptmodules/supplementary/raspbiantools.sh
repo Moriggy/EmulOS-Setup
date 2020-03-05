@@ -12,7 +12,7 @@
 rp_module_id="raspbiantools"
 rp_module_desc="Raspbian related tools"
 rp_module_section="config"
-rp_module_flags="!x11 !mali"
+rp_module_flags="!all rpi"
 
 function apt_upgrade_raspbiantools() {
     # install an older kernel/firmware for stretch to resolve newer kernel issues or unhold if updating to a newer release
@@ -27,7 +27,7 @@ function lxde_raspbiantools() {
     aptInstall raspberrypi-ui-mods rpi-chromium-mods gvfs
 
     setConfigRoot "ports"
-    addPort "lxde" "lxde" "Desktop" "startx"
+    addPort "lxde" "lxde" "Desktop" "XINIT:startx"
     enable_autostart
 }
 
@@ -78,7 +78,7 @@ function install_firmware_raspbiantools() {
         if hasPackage "$pkg" "$ver" ne; then
             deb="${pkg}_${ver}_armhf.deb"
             if ! wget -O"$deb" "$url/$deb"; then
-               md_ret_errors+=("Failed to download $deb")
+               md_ret_errors+=("Fallo al descargar $deb")
                return 1
             fi
         fi

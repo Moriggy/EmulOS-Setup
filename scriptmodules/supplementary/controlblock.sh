@@ -12,7 +12,7 @@
 rp_module_id="controlblock"
 rp_module_desc="Controlador ControlBlock"
 rp_module_section="driver"
-rp_module_flags="noinstclean"
+rp_module_flags="noinstclean !all rpi"
 rp_module_help="Tenga en cuenta que necesita habilitar o deshabilitar manualmente el Servicio ControlBlock en la seccion Configuracion. IMPORTANTE: si el servicio esta habilitado y la funcion del interruptor de encendido esta habilitada (que es la configuracion predeterminada) en el archivo de configuracion, debe tener un interruptor conectado al ControlBlock."
 
 function depends_controlblock() {
