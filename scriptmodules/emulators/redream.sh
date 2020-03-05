@@ -10,8 +10,8 @@
 #
 
 rp_module_id="redream"
-rp_module_desc="Redream Dreamcast emulator"
-rp_module_help="ROM Extensions: .cdi .cue .chd .gdi .iso\n\nCopy your Dreamcast roms to $romdir/dreamcast"
+rp_module_desc="Redream emulador de Dreamcast"
+rp_module_help="ROM Extensions: .cdi .cue .chd .gdi .iso\n\nCopia tus roms de Dreamcast en $romdir/dreamcast"
 rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="noinstclean !all rpi3 rpi4 !videocore"
@@ -39,10 +39,10 @@ function configure_redream() {
     moveConfigDir "$md_inst/saves" "$dest/saves"
 
     # copy / symlink vmus (memory cards)
-   local i
-   for i in 0 1 2 3; do
-     moveConfigFile "$md_inst/vmu$i.bin" "$dest/vmu$i.bin"
-   done
+    local i
+    for i in 0 1 2 3; do
+      moveConfigFile "$md_inst/vmu$i.bin" "$dest/vmu$i.bin"
+    done
 
     # symlink bios files to libretro core install locations
     ln -sf "$biosdir/dc/dc_boot.bin" "$md_inst/boot.bin"
