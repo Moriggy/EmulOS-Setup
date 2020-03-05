@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Game Boy Advance - gpSP port para libretro"
 rp_module_help="ROM Extensions: .gba .zip\n\nCopia tus roms de Game Boy Advance en $romdir/gba\n\nCopia la BIOS gba_bios.bin en $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/gpsp/master/COPYING"
 rp_module_section="opt arm=main"
-rp_module_flags="!x86"
+rp_module_flags="!all arm"
 
 function sources_lr-gpsp() {
     gitPullOrClone "$md_build" https://github.com/libretro/gpsp.git

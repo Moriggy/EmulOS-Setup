@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Super Nintendo - bsnes port para libretro"
 rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/bsnes-libretro/libretro/COPYING"
 rp_module_section="opt"
-rp_module_flags="!arm"
+rp_module_flags="!armv6"
 
 function sources_lr-bsnes() {
     gitPullOrClone "$md_build" https://github.com/libretro/bsnes-libretro.git

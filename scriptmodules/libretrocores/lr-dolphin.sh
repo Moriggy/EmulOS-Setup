@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Gamecube/Wii - Dolphin port para libretro"
 rp_module_help="ROM Extensions: .gcm .iso .wbfs .ciso .gcz\n\nCopia tus roms de Gamecube en $romdir/gc y las de Wii en $romdir/wii"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/dolphin/master/license.txt"
 rp_module_section="exp"
-rp_module_flags="!arm !aarch64"
+rp_module_flags="!all 64bit"
 
 function depends_lr-dolphin() {
     depends_dolphin

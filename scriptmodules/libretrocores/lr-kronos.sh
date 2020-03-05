@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Sega Saturn & ST-V emulator - Kronos port para libre
 rp_module_help="ROM Extensions: .iso .cue .zip .ccd .mds\n\nCopia tus roms de Sega Saturn & ST-V en $romdir/saturn\n\nCopia las BIOS saturn_bios.bin / stvbios.zip en $biosdir/kronos"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/yabause/kronos/yabause/COPYING"
 rp_module_section="exp"
-rp_module_flags="!arm !aarch64"
+rp_module_flags="!armv6"
 
 function sources_lr-kronos() {
     gitPullOrClone "$md_build" https://github.com/libretro/yabause.git kronos

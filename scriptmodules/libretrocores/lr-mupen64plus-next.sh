@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Nintendo 64 - Mupen64Plus + GLideN64 para libretro (
 rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopia tus roms de Nintendo 64 en $romdir/n64"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/mupen64plus-libretro-nx/master/LICENSE"
 rp_module_section="opt kms=main"
-rp_module_flags="!armv6"
+rp_module_flags=""
 
 function depends_lr-mupen64plus-next() {
     local depends=(flex bison libpng-dev)

@@ -14,7 +14,7 @@ rp_module_desc="Emulador de Super Nintendo - Optimizado para ARM Snes9x 1.39 por
 rp_module_help="Anteriormente llamado lr-pocketsnes\n\nROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/snes9x2002/master/src/copyright.h"
 rp_module_section="opt armv6=main"
-rp_module_flags="!x86 !aarch64"
+rp_module_flags="!all arm"
 
 function _update_hook_lr-snes9x2002() {
     # move from old location and update emulators.cfg
