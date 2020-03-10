@@ -943,9 +943,9 @@ function applyPatch() {
     if [[ ! -f "$patch_applied" ]]; then
         if patch -f -p1 <"$patch"; then
             touch "$patch_applied"
-            printMsgs "console" "Successfully applied patch: $patch"
+            printMsgs "console" "Parche aplicado correctamente: $patch"
         else
-            md_ret_errors+=("$md_id patch $patch failed to apply")
+            md_ret_errors+=("$md_id  ha fallado al aplicarse el parche $patch.")
             return 1
         fi
     fi
@@ -1374,6 +1374,6 @@ function adminRsync() {
     [[ -z "$remote_host" ]] && remote_host="$__binary_host"
     local remote_port="$__upload_port"
     [[ -z "$remote_port" ]] && remote_port=22
-    
+
     rsync -av --delay-updates -e "ssh -p $remote_port" "${params[@]}" "$src" "$remote_user@$remote_host:$dest"
 }

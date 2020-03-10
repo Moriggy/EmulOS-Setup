@@ -48,6 +48,10 @@ function sources_ppsspp() {
         mkdir -p cmake
         downloadAndExtract "$__archive_url/cmake-3.6.2.tar.gz" "$md_build/cmake" --strip-components 1
     fi
+
+    applyPatch "$md_data/001-Disable_mouse.patch"
+    applyPatch "$md_data/002-hotkey-combo.patch"
+    applyPatch "$md_data/003-ui-axis-navigation.patch"
 }
 
 function build_ffmpeg_ppsspp() {
