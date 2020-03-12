@@ -149,22 +149,18 @@ function sources_emulationstation() {
 }
 
 function install_bin_emulationstation() {
-  if isPlatform == "rpi4"; then
+  isPlatform == "rpi4"
   {
 		downloadAndExtract "https://archive.org/download/emulationstation_201912/EmulationStation.zip" "$md_inst"
 		sudo chmod +x $md_inst/emulationstation.sh
 		sudo chmod +x $md_inst/emulationstation
   }
-  fi
-  if isPlatform == "rpi3"; then
+  isPlatform == "rpi3"
   {
 		downloadAndExtract "https://archive.org/download/emulationstation_201912/Emulationstation-rpi3.zip" "$md_inst"
 		sudo chmod +x $md_inst/emulationstation.sh
 		sudo chmod +x $md_inst/emulationstation
   }
-  else
-    break;
-  fi
 }
 
 function build_emulationstation() {
