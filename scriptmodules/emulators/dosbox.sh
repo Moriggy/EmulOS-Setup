@@ -79,14 +79,19 @@ function configure_dosbox() {
     if [[ "$md_mode" == "install" ]]; then
         cat > "$romdir/pc/$launcher_name" << _EOF_
 #!/bin/bash
+
 [[ ! -n "\$(aconnect -o | grep -e TiMidity -e FluidSynth)" ]] && needs_synth="$needs_synth"
+
 function midi_synth() {
     [[ "\$needs_synth" != "1" ]] && return
+
     case "\$1" in
         "start")
             timidity -Os -iAD &
-            until [[ -n "\$(aconnect -o | grep TiMidity)" ]]; do
+            i=0
+            until [[ -n "\$(aconnect -o | grep TiMidity)" || "\$i" -ge 10 ]]; do
                 sleep 1
+                ((i++))
             done
             ;;
         "stop")
@@ -96,6 +101,7 @@ function midi_synth() {
             ;;
     esac
 }
+
 params=("\$@")
 if [[ -z "\${params[0]}" ]]; then
     params=(-c "@MOUNT C $romdir/pc" -c "@C:")
@@ -109,6 +115,7 @@ elif [[ "\${params[0]}" == *.conf ]]; then
 else
     params+=(-exit)
 fi
+
 midi_synth start
 "$md_inst/bin/dosbox" "\${params[@]}"
 midi_synth stop
