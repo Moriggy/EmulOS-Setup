@@ -16,9 +16,18 @@ rp_module_section="main"
 function install_bashwelcometweak() {
     remove_bashwelcometweak
     cat >> "$home/.bashrc" <<\_EOF_
-# RETROPIE PROFILE START
+# emulOS PROFILE START
 
-function retropie_welcome() {
+function getIPAddress() {
+    local ip_route
+    ip_route=$(ip -4 route get 8.8.8.8 2>/dev/null)
+    if [[ -z "$ip_route" ]]; then
+        ip_route=$(ip -6 route get 2001:4860:4860::8888 2>/dev/null)
+    fi
+    [[ -n "$ip_route" ]] && grep -oP "src \K[^\s]+" <<< "$ip_route"
+}
+
+function emulos_welcome() {
     local upSeconds="$(/usr/bin/cut -d. -f1 /proc/uptime)"
     local secs=$((upSeconds%60))
     local mins=$((upSeconds/60%60))
@@ -111,10 +120,10 @@ function retropie_welcome() {
                 out+="${bfgred}Procesos Corriendo..: $(ps ax | wc -l | tr -d " ")"
                 ;;
             8)
-                out+="${bfgred}Dirección IP........: $(ip route get 8.8.8.8 2>/dev/null | awk '{print $NF; exit}')"
+                out+="${bfgred}Dirección IP........: $(getIPAddress)"
                 ;;
             9)
-                out+="${bfgred}Temperatura.........: CPU: $cpuTempC°C/$cpuTempF°F GPU: $gpuTempC°C/$gpuTempF°F"
+                out+="${bfgred}Temperatura.........: CPU: ${cpuTempC}°C/${cpuTempF}°F GPU: ${gpuTempC}°C/${gpuTempF}°F"
                 ;;
             10)
                 out+="${fgwht}Proyecto EmulOS Team, http://masos.dx.am"
@@ -125,19 +134,19 @@ function retropie_welcome() {
     echo -e "\n$out"
 }
 
-retropie_welcome
-# RETROPIE PROFILE END
+emulos_welcome
+# EMULOS PROFILE END
 _EOF_
 
 
 }
 
 function remove_bashwelcometweak() {
-    sed -i '/RETROPIE PROFILE START/,/RETROPIE PROFILE END/d' "$home/.bashrc"
+    sed -i '/EMULOS PROFILE START/,/EMULOS PROFILE END/d' "$home/.bashrc"
 }
 
 function gui_bashwelcometweak() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Bash Welcome Tweak Configuration" 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Configuración Bash Welcome Tweak" 22 86 16)
     local options=(
         1 "Instalar Bash Welcome Tweak"
         2 "Desinstalar Bash Welcome Tweak"
