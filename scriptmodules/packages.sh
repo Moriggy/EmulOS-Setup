@@ -63,6 +63,7 @@ function rp_callModule() {
     local mode="$2"
     # shift the function parameters left so $@ will contain any additional parameters which we can use in modules
     shift 2
+
     # if index get mod_id from array else we look it up
     local md_id
     local md_idx
@@ -75,17 +76,66 @@ function rp_callModule() {
     fi
 
     if [[ -z "$md_id" || -z "$md_idx" ]]; then
-        printMsgs "console" "No module '$req_id' found for platform $__platform"
+        printMsgs "console" "No se encontro el modulo '$req_id' para la plataforma $__platform"
         return 2
     fi
 
-    # automatically build/install module if no parameters are given
-    if [[ -z "$mode" ]]; then
-        for mode in depends sources build install configure clean; do
-            rp_callModule "$md_idx" "$mode" || return 1
-        done
-        return 0
-    fi
+    # parameters _auto_ _binary or _source_ (_source_ is used if no parameters are given for a module)
+    case "$mode" in
+        # install the module if not installed, and update if it is
+        _autoupdate_)
+            if rp_isInstalled "$md_idx"; then
+                rp_callModule "$md_idx" "_update_" || return 1
+            else
+                rp_callModule "$md_idx" "_auto_" || return 1
+            fi
+            return 0
+            ;;
+        # automatic modes used by rp_installModule to choose between binary/source based on pkg info
+        _auto_|_update_)
+            # if updating and a package isn't installed, return an error
+            if [[ "$mode" == "_update_" ]] && ! rp_isInstalled "$md_idx"; then
+                __ERRMSGS+=("$md_id no esta instalado, no se puede actualizar.")
+                return 1
+            fi
+
+            eval $(rp_getPackageInfo "$md_idx")
+            rp_hasBinary "$md_idx"
+            local ret="$?"
+
+            # check if we had a network failure from wget
+            if [[ "$ret" -eq 4 ]]; then
+                __ERRMSGS+=("Unable to connect to the internet")
+                return 1
+            fi
+
+            if [[ "$pkg_origin" != "source" ]] && [[ "$ret" -eq 0 ]]; then
+                # if we are in _update_ mode we only update if there is a newer binary
+                if [[ "$mode" == "_update_" ]]; then
+                    rp_hasNewerBinary "$md_idx"
+                    local ret="$?"
+                    [[ "$ret" -eq 1 ]] && return 0
+                fi
+                rp_callModule "$md_idx" _binary_ || return 1
+            else
+                rp_callModule "$md_idx" || return 1
+            fi
+            return 0
+            ;;
+        _binary_)
+            for mode in depends install_bin configure; do
+                rp_callModule "$md_idx" "$mode" || return 1
+            done
+            return 0
+            ;;
+        # automatically build/install module from source if no _source_ or no parameters are given
+        ""|_source_)
+            for mode in depends sources build install configure clean; do
+                rp_callModule "$md_idx" "$mode" || return 1
+            done
+            return 0
+            ;;
+    esac
 
     # create variables that can be used in modules
     local md_desc="${__mod_desc[$md_idx]}"
@@ -93,7 +143,7 @@ function rp_callModule() {
     local md_type="${__mod_type[$md_idx]}"
     local md_flags="${__mod_flags[$md_idx]}"
     local md_build="$__builddir/$md_id"
-    local md_inst="$rootdir/$md_type/$md_id"
+    local md_inst="$(rp_getInstallPath $md_idx)"
     local md_data="$scriptdir/scriptmodules/$md_type/$md_id"
     local md_mode="install"
 
@@ -276,6 +326,13 @@ function rp_callModule() {
         # remove install folder if there is an error (and it is empty)
         [[ -d "$md_inst" ]] && find "$md_inst" -maxdepth 0 -empty -exec rmdir {} \;
         return 1
+    else
+        [[ "$mode" == "install_bin" ]] && rp_setPackageInfo "$md_idx" "binary"
+        [[ "$mode" == "install" ]] && rp_setPackageInfo "$md_idx" "source"
+        # handle the case of a few drivers that don't have an install function and set the package info at build stage
+        if ! fnExists "install_${mod_id}" && [[ "$mode" == "build" ]]; then
+            rp_setPackageInfo "$md_idx" "source"
+        fi
     fi
 
     # some information messages were returned
@@ -313,6 +370,48 @@ function rp_hasBinary() {
     return 1
 }
 
+function rp_getBinaryDate() {
+    local idx="$1"
+    local id="$(rp_getIdFromIdx $idx)"
+    local url="$__binary_url/${__mod_type[$idx]}/${id}.tar.gz"
+    if fnExists "install_bin_${id}"; then
+        if fnExists "__binary_url_${id}"; then
+            url="$(__binary_url_${id})"
+        else
+            return 1
+        fi
+    fi
+    local bin_date=$(wget \
+        --server-response --spider -q \
+        "$url" 2>&1 \
+        | grep -i "Last-Modified" \
+        | cut -d" " -f4-)
+    echo "$bin_date"
+    return 0
+}
+
+function rp_hasNewerBinary() {
+    local idx="$1"
+    eval $(rp_getPackageInfo "$idx")
+    [[ -z "$pkg_date" ]] && return 2
+    local bin_date="$(rp_getBinaryDate $idx)"
+    [[ -z "$bin_date" ]] && return 2
+
+    local pkg_date_unix="$(date -d "$pkg_date" +%s)"
+    local bin_date_unix="$(date -d "$bin_date" +%s)"
+    if [[ "$bin_date_unix" -gt "$pkg_date_unix" ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+function rp_getInstallPath() {
+    local idx="$1"
+    local id=$(rp_getIdFromIdx "$idx")
+    echo "$rootdir/${__mod_type[$idx]}/$id"
+}
+
 function rp_installBin() {
     rp_hasBinaries || fatalError "No hay archivos binarios para la plataforma $__platform"
     local archive="$md_type/$md_id.tar.gz";
@@ -323,6 +422,7 @@ function rp_installBin() {
 
 function rp_createBin() {
     printHeading "Creando archivo binario para $md_desc"
+
     if [[ ! -d "$rootdir/$md_type/$md_id" ]]; then
         printMsgs "console" "Directorio no instalado $rootdir/$md_type/$md_id - no se creo el archivo"
         return 1
@@ -343,22 +443,50 @@ function rp_createBin() {
 
 function rp_hasModule() {
     local id="$1"
-    [[ -z "${__md_id_to_idx[id]}" ]] && return 0
+    [[ -n "$(rp_getIdxFromId $id)" ]] && return 0
     return 1
 }
 
 function rp_installModule() {
     local idx="$1"
-    local mode
-    if rp_hasBinary "$idx"; then
-        for mode in depends install_bin configure; do
-            rp_callModule "$idx" "$mode" || return 1
-        done
-    else
-        rp_callModule "$idx" clean
-        rp_callModule "$idx" || return 1
-    fi
+    local mode="$2"
+    [[ -z "$mode" ]] && mode="_auto_"
+    rp_callModule "$idx" "$mode" || return 1
     return 0
+}
+
+# this is a basic / temporary fix to record the source of a package when updating (binary vs source)
+# packaging will be overhauled at a later date
+function rp_setPackageInfo() {
+    local idx="$1"
+    local pkg="$(rp_getInstallPath $idx)/retropie.pkg"
+    local origin="$2"
+    iniConfig "=" '"' "$pkg"
+    iniSet "pkg_origin" "$origin"
+    local pkg_date
+    if [[ "$origin" == "binary" ]]; then
+        pkg_date="$(rp_getBinaryDate $idx)"
+    else
+        pkg_date="$(date)"
+    fi
+    iniSet "pkg_date" "$pkg_date"
+}
+
+function rp_getPackageInfo() {
+    local pkg="$(rp_getInstallPath $1)/retropie.pkg"
+
+    local pkg_origin="unknown"
+
+    local pkg_date
+    if [[ -f "$pkg" ]]; then
+        iniConfig "=" '"' "$pkg"
+        iniGet "pkg_origin"
+        [[ -n "$ini_value" ]] && pkg_origin="$ini_value"
+        iniGet "pkg_date"
+        [[ -n "$ini_value" ]] && pkg_date="$ini_value"
+    fi
+    echo "local pkg_origin=\"$pkg_origin\""
+    echo "local pkg_date=\"$pkg_date\""
 }
 
 function rp_registerModule() {
@@ -392,7 +520,7 @@ function rp_registerModule() {
     # by default modules are enabled for all platforms
     if [[ "$__ignore_flags" -ne 1 ]]; then
         for flag in "${flags[@]}"; do
-          # !all excludes the module from all platforms
+            # !all excludes the module from all platforms
             if [[ "$flag" == "!all" ]]; then
                 valid=0
                 continue
@@ -409,9 +537,11 @@ function rp_registerModule() {
             fi
         done
     fi
+
     local sections=($rp_module_section)
     # get default section
     rp_module_section="${sections[0]}"
+
     # loop through any additional flag=section parameters
     local flag section
     for section in "${sections[@]:1}"; do
@@ -454,6 +584,7 @@ function rp_registerAllModules() {
     __mod_licence=()
     __mod_section=()
     __mod_flags=()
+
     rp_registerModuleDir 100 "emulators"
     rp_registerModuleDir 200 "libretrocores"
     rp_registerModuleDir 300 "ports"

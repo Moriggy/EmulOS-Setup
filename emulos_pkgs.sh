@@ -9,7 +9,7 @@
 # Evolución de MasOS (fork de retropie)
 
 
-__version="2.4.1.8"
+__version="2.4.1.9"
 
 [[ "$__debug" -eq 1 ]] && set -x
 

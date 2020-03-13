@@ -42,15 +42,18 @@ DefaultDependencies=no
 After=console-setup.service
 Wants=console-setup.service
 ConditionPathExists=$md_inst/asplashscreen.sh
+
 [Service]
 Type=oneshot
 ExecStart=$md_inst/asplashscreen.sh
 RemainAfterExit=yes
+
 [Install]
 WantedBy=sysinit.target
 _EOF_
 
-    rp_installModule "omxiv"
+    rp_installModule "omxiv" "_autoupdate_"
+
     gitPullOrClone "$md_inst" https://github.com/Moriggy/emulos-splashscreens.git
 
     cp "$md_data/asplashscreen.sh" "$md_inst"
