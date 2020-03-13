@@ -148,21 +148,6 @@ function sources_emulationstation() {
     gitPullOrClone "$md_build" "$repo" "$branch"
 }
 
-function install_bin_emulationstation() {
-  isPlatform == "rpi4"
-  {
-		downloadAndExtract "https://archive.org/download/emulationstation_201912/Emulationstation.zip" "$md_inst"
-		sudo chmod +x $md_inst/emulationstation.sh
-		sudo chmod +x $md_inst/emulationstation
-  }
-  isPlatform == "rpi3"
-  {
-		downloadAndExtract "https://archive.org/download/emulationstation_201912/Emulationstation-rpi3.zip" "$md_inst"
-		sudo chmod +x $md_inst/emulationstation.sh
-		sudo chmod +x $md_inst/emulationstation
-  }
-}
-
 function build_emulationstation() {
     local params=(-DFREETYPE_INCLUDE_DIRS=/usr/include/freetype2/)
     # Temporary workaround until GLESv2 support is implemented
