@@ -151,7 +151,7 @@ function sources_emulationstation() {
 function install_bin_emulationstation() {
   isPlatform == "rpi4"
   {
-		downloadAndExtract "https://archive.org/download/emulationstation_201912/EmulationStation.zip" "$md_inst"
+		downloadAndExtract "https://archive.org/download/emulationstation_201912/Emulationstation.zip" "$md_inst"
 		sudo chmod +x $md_inst/emulationstation.sh
 		sudo chmod +x $md_inst/emulationstation
   }
