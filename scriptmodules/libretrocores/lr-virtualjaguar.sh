@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-virtualjaguar"
-rp_module_desc="Emulador de Atari Jaguar - Virtual Jaguar (optimizado) port para libretro"
-rp_module_help="ROM Extensions: .j64 .jag .zip\n\nCopia tus roms de Atari Jaguar en $romdir/atarijaguar"
+rp_module_desc="Atari Jaguar emu - Virtual Jaguar (optimised) port for libretro"
+rp_module_help="ROM Extensions: .j64 .jag .zip\n\nCopy your Atari Jaguar roms to $romdir/atarijaguar"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/virtualjaguar-libretro/master/docs/GPLv3"
+rp_module_repo="git https://github.com/libretro/virtualjaguar-libretro.git master"
 rp_module_section="exp"
 rp_module_flags="!armv6"
 
 function sources_lr-virtualjaguar() {
-    gitPullOrClone "$md_build" https://github.com/libretro/virtualjaguar-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-virtualjaguar() {

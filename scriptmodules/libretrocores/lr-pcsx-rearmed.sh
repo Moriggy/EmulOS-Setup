@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-pcsx-rearmed"
-rp_module_desc="Emulador de Playstation - PCSX (optimizado para arm) port para libretro"
-rp_module_help="ROM Extensions: .bin .cue .cbn .img .iso .m3u .mdf .pbp .toc .z .znx\n\nCopia tus roms de PSX ren $romdir/psx\n\nCopia la BIOS SCPH1001.BIN en $biosdir"
+rp_module_desc="Playstation emulator - PCSX (arm optimised) port for libretro"
+rp_module_help="ROM Extensions: .bin .cue .cbn .img .iso .m3u .mdf .pbp .toc .z .znx\n\nCopy your PSX roms to $romdir/psx\n\nCopy the required BIOS file SCPH1001.BIN to $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/pcsx_rearmed/master/COPYING"
+rp_module_repo="git https://github.com/libretro/pcsx_rearmed.git master"
 rp_module_section="opt arm=main"
 
 function depends_lr-pcsx-rearmed() {
@@ -22,11 +23,11 @@ function depends_lr-pcsx-rearmed() {
 }
 
 function sources_lr-pcsx-rearmed() {
-    gitPullOrClone "$md_build" https://github.com/libretro/pcsx_rearmed.git
+    gitPullOrClone
 }
 
 function build_lr-pcsx-rearmed() {
-    local params=()
+    local params=(THREAD_RENDERING=0)
 
     if isPlatform "arm"; then
         params+=(ARCH=arm DYNAREC=ari64)

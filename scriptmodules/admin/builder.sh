@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="builder"
@@ -22,35 +22,22 @@ function module_builder() {
 
     local id
     for id in "${ids[@]}"; do
-        # if index get mod_id from array else we look it up
-        local md_id
-        local md_idx
-        if [[ "$id" =~ ^[0-9]+$ ]]; then
-            md_id="$(rp_getIdFromIdx $id)"
-            md_idx="$id"
-        else
-            md_idx="$(rp_getIdxFromId $id)"
-            md_id="$id"
-        fi
-
         # don't build binaries for modules with flag nobin
         # eg scraper which fails as go1.8 doesn't work under qemu
-        hasFlag "${__mod_flags[$md_idx]}" "nobin" && continue
+        hasFlag "${__mod_info[$id/flags]}" "nobin" && continue
 
-        ! fnExists "install_${md_id}" && continue
+        # if the module has no install_ function skip to the next module
+        ! fnExists "install_${id}" && continue
 
-        # skip already built archives, so we can retry failed modules
-        [[ -f "$__tmpdir/archives/$__binary_path/${__mod_type[md_idx]}/$md_id.tar.gz" ]] && continue
+        # if there is a not a newer version, skip to the next module
+        ! rp_hasNewerModule "$id" "source" && continue
 
         # build, install and create binary archive.
         # initial clean in case anything was in the build folder when calling
         local mode
-        for mode in clean remove depends sources build install create_bin clean remove "depends remove"; do
-            rp_callModule "$md_id" $mode
-            # return on error
-            [[ $? -eq 1 ]] && return 1
-            # no module found - skip to next module
-            [[ $? -eq 2 ]] && break
+        for mode in clean depends sources build install create_bin clean remove "depends remove"; do
+            # continue to next module if not available or an error occurs
+            rp_callModule "$id" $mode || break
         done
     done
     return 0
@@ -77,7 +64,7 @@ function chroot_build_builder() {
 
     local dist
     local dists="$__builder_dists"
-    [[ -z "$dists" ]] && dists="stretch buster"
+    [[ -z "$dists" ]] && dists="buster"
 
     local platform
     local platforms="$__builder_platforms"
@@ -96,7 +83,13 @@ function chroot_build_builder() {
         [[ ! -d "$md_build/$dist" ]] && rp_callModule image create_chroot "$dist" "$md_build/$dist"
         if [[ ! -d "$md_build/$dist/home/pi/EmulOS-Setup" ]]; then
             sudo -u $user git clone "$home/EmulOS-Setup" "$md_build/$dist/home/pi/EmulOS-Setup"
-            rp_callModule image chroot "$md_build/$dist" bash -c "sudo apt-get update; sudo apt-get install -y git"
+            gpg --export-secret-keys "$__gpg_signing_key" >"$md_build/$dist/emulos.key"
+            rp_callModule image chroot "$md_build/$dist" bash -c "\
+                sudo gpg --import "/emulos.key"; \
+                sudo rm "/emulos.key"; \
+                sudo apt-get update; \
+                sudo apt-get install -y git; \
+                "
         else
             sudo -u $user git -C "$md_build/$dist/home/pi/EmulOS-Setup" pull
         fi
@@ -113,9 +106,9 @@ function chroot_build_builder() {
                 DISTCC_HOSTS="$distcc_hosts" \
                 __platform="$platform" \
                 __has_binaries="$__chroot_has_binaries" \
-                /home/pi/EmulOS-Setup/emulos_pkgs.sh builder "$@"
+                /home/pi/EmulOS-Setup/emulos_packages.sh builder "$@"
         done
 
-        rsync -av "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$home/EmulOS-Setup/tmp/archives/"
+        rsync -av --exclude '*.pkg' "$md_build/$dist/home/pi/EmulOS-Setup/tmp/archives/" "$home/EmulOS-Setup/tmp/archives/"
     done
 }

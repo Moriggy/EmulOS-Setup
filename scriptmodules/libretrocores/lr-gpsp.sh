@@ -1,31 +1,36 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-gpsp"
-rp_module_desc="Emulador de Game Boy Advance - gpSP port para libretro"
-rp_module_help="ROM Extensions: .gba .zip\n\nCopia tus roms de Game Boy Advance en $romdir/gba\n\nCopia la BIOS gba_bios.bin en $biosdir"
+rp_module_desc="GBA emu - gpSP port for libretro"
+rp_module_help="ROM Extensions: .gba .zip\n\nCopy your Game Boy Advance roms to $romdir/gba\n\nCopy the required BIOS file gba_bios.bin to $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/gpsp/master/COPYING"
+rp_module_repo="git https://github.com/libretro/gpsp.git master"
 rp_module_section="opt arm=main"
 rp_module_flags="!all arm"
 
+function depends_lr-gpsp() {
+    getDepends gcc-6
+}
+
 function sources_lr-gpsp() {
-    gitPullOrClone "$md_build" https://github.com/libretro/gpsp.git
+    gitPullOrClone
 }
 
 function build_lr-gpsp() {
-    make clean
     rpSwap on 512
     local params=()
     isPlatform "arm" && params+=(platform=armv)
-    make "${params[@]}"
+    make "${params[@]}" clean
+    CC="gcc-6" make "${params[@]}"
     rpSwap off
     md_ret_require="$md_build/gpsp_libretro.so"
 }

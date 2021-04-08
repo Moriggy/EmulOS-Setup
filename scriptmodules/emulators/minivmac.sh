@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="minivmac"
-rp_module_desc="Emulador de Macintosh Plus"
-rp_module_help="ROM Extensions: .dsk \n\nCopia tus discos de Macintosh Plus en $romdir/macintosh \n\nNecesitas copiar las BIOS de Macintosh vMac.ROM en "$biosdir" y System Tools.dsk en $romdir"
+rp_module_desc="Macintosh Plus Emulator"
+rp_module_help="ROM Extensions: .dsk \n\nCopy your Macintosh Plus disks to $romdir/macintosh \n\n You need to copy the Macintosh bios file vMac.ROM into "$biosdir" and System Tools.dsk to $romdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/vanfanel/minivmac_sdl2/master/COPYING.txt"
+rp_module_repo="git https://github.com/vanfanel/minivmac_sdl2.git master"
 rp_module_section="exp"
 rp_module_flags=""
 
@@ -21,7 +22,7 @@ function depends_minivmac() {
 }
 
 function sources_minivmac() {
-    gitPullOrClone "$md_build" https://github.com/vanfanel/minivmac_sdl2.git
+    gitPullOrClone
 }
 
 function build_minivmac() {

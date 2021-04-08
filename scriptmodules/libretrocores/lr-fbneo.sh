@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-fbneo"
-rp_module_desc="Emulador de Arcade - FinalBurn Neo v0.2.97.44 (WIP) port para libretro"
-rp_module_help="Anteriormente llamado lr-fba-next y fbalpha\n\ROM Extension: .zip\n\nCopia tus roms de FBA en\n$romdir/fba o\n$romdir/neogeo o\n$romdir/arcade\n\nPara los juegos de NeoGeo, la BIOS neogeo.zip debe estar en el mismo directorio que tus roms de FBA."
+rp_module_desc="Arcade emu - FinalBurn Neo (latest version) port for libretro"
+rp_module_help="Previously called lr-fba-next and fbalpha\n\ROM Extension: .zip\n\nCopy your FBA roms to\n$romdir/fba or\n$romdir/neogeo or\n$romdir/arcade\n\nFor NeoGeo games the neogeo.zip BIOS is required and must be placed in the same directory as your FBA roms."
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/FBNeo/master/src/license.txt"
+rp_module_repo="git https://github.com/libretro/FBNeo.git master"
 rp_module_section="main armv6=opt"
 
 function _update_hook_lr-fbneo() {
@@ -22,7 +23,7 @@ function _update_hook_lr-fbneo() {
 }
 
 function sources_lr-fbneo() {
-    gitPullOrClone "$md_build" https://github.com/libretro/FBNeo.git
+    gitPullOrClone
 }
 
 function build_lr-fbneo() {
@@ -42,37 +43,18 @@ function install_lr-fbneo() {
         'src/burner/libretro/fbneo_libretro.so'
         'gamelist.txt'
         'whatsnew.html'
-        'preset-example.zip'
         'metadata'
         'dats'
     )
 }
 
 function configure_lr-fbneo() {
-    local dir
-    for dir in arcade fba neogeo neogeocd msx coleco; do
-        mkRomDir "$dir"
-        ensureSystemretroconfig "$dir"
-    done
-
-    # Create samples directory
-    mkUserDir "$biosdir/fbneo"
-    mkUserDir "$biosdir/fbneo/samples"
-
-    # copy hiscore.dat
-    cp "$md_inst/metadata/hiscore.dat" "$biosdir/fbneo/"
-    chown $user:$user "$biosdir/fbneo/hiscore.dat"
-
-    # Set core options
-    setRetroArchCoreOption "fbneo-diagnostic-input" "Hold Start"
-
     local def=1
     isPlatform "armv6" && def=0
     addEmulator 0 "$md_id" "arcade" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "arcade" "$md_inst/fbneo_libretro.so --subsystem neocd"
     addEmulator $def "$md_id" "neogeo" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "neogeo" "$md_inst/fbneo_libretro.so --subsystem neocd"
-    addEmulator $def "$md_id-neocd" "neogeocd" "$md_inst/fbneo_libretro.so --subsystem neocd"
     addEmulator $def "$md_id" "fba" "$md_inst/fbneo_libretro.so"
     addEmulator 0 "$md_id-neocd" "fba" "$md_inst/fbneo_libretro.so --subsystem neocd"
 
@@ -88,10 +70,11 @@ function configure_lr-fbneo() {
     addEmulator 0 "$md_id-spec" "zxspectrum" "$md_inst/fbneo_libretro.so --subsystem spec"
     addEmulator 0 "$md_id-fds" "fds" "$md_inst/fbneo_libretro.so --subsystem fds"
     addEmulator 0 "$md_id-nes" "nes" "$md_inst/fbneo_libretro.so --subsystem nes"
+    addEmulator 0 "$md_id-ngp" "ngp" "$md_inst/fbneo_libretro.so --subsystem ngp"
+    addEmulator 0 "$md_id-ngpc" "ngpc" "$md_inst/fbneo_libretro.so --subsystem ngp"
 
     addSystem "arcade"
     addSystem "neogeo"
-    addSystem "neogeocd"
     addSystem "fba"
 
     addSystem "pcengine"
@@ -104,4 +87,25 @@ function configure_lr-fbneo() {
     addSystem "zxspectrum"
     addSystem "fds"
     addSystem "nes"
+    addSystem "ngp"
+    addSystem "ngpc"
+
+    [[ "$md_mode" == "remove" ]] && return
+
+    local dir
+    for dir in arcade fba neogeo; do
+        mkRomDir "$dir"
+        ensureSystemretroconfig "$dir"
+    done
+
+    # Create samples directory
+    mkUserDir "$biosdir/fbneo"
+    mkUserDir "$biosdir/fbneo/samples"
+
+    # copy hiscore.dat
+    cp "$md_inst/metadata/hiscore.dat" "$biosdir/fbneo/"
+    chown $user:$user "$biosdir/fbneo/hiscore.dat"
+
+    # Set core options
+    setRetroArchCoreOption "fbneo-diagnostic-input" "Hold Start"
 }

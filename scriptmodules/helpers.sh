@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 ## @file helpers.sh
-## @brief RetroPie helpers library
+## @brief EmulOS helpers library
 ## @copyright GPLv3
 
 ## @fn printMsgs()
@@ -103,7 +103,7 @@ function hasFlag() {
 ## @brief Test for current platform / platform flags.
 function isPlatform() {
     local flag="$1"
-    if hasFlag "$__platform $__platform_flags" "$flag"; then
+    if hasFlag "${__platform_flags[*]}" "$flag"; then
         return 0
     fi
     return 1
@@ -145,17 +145,28 @@ function hasPackage() {
     local req_ver="$2"
     local comp="$3"
     [[ -z "$comp" ]] && comp="ge"
-    local status=$(dpkg-query -W --showformat='${Status} ${Version}' $1 2>/dev/null)
-    if [[ $? -eq 0 ]]; then
-        local ver="${status##* }"
-        local status="${status% *}"
-        if [[ -z "$req_ver" ]]; then
-            # if we are not checking on a specific version and the package is installed we are happy
-            [[ "$status" == *"ok installed" ]] && return 0
-        else
-            # otherwise check the version
-            compareVersions "$ver" "$comp" "$req_ver" && return 0
-        fi
+
+    local ver
+    local status
+    local out=$(dpkg-query -W --showformat='${Status} ${Version}' $1 2>/dev/null)
+    if [[ "$?" -eq 0 ]]; then
+        ver="${out##* }"
+        status="${out% *}"
+    fi
+
+    local installed=0
+    [[ "$status" == *"ok installed" ]] && installed=1
+    # if we are not checking version
+    if [[ -z "$req_ver" ]]; then
+        # if the package is installed return true
+        [[ "$installed" -eq 1 ]] && return 0
+    else
+        # if checking version and the package is not installed we need to clear "ver" as it may contain
+        # the version number of a removed package and give a false positive with compareVersions.
+        # we still need to do the version check even if not installed due to the varied boolean operators
+        [[ "$installed" -eq 0 ]] && ver=""
+
+        compareVersions "$ver" "$comp" "$req_ver" && return 0
     fi
     return 1
 }
@@ -226,9 +237,13 @@ function _mapPackage() {
                 # default to off for x11 targets due to issues with dependencies with recent
                 # Ubuntu (19.04). eg libavdevice58 requiring exactly 2.0.9 sdl2.
                 isPlatform "x11" && own_sdl2=0
-                iniConfig " = " '"' "$configdir/all/retropie.cfg"
+                iniConfig " = " '"' "$configdir/all/emulos.cfg"
                 iniGet "own_sdl2"
-                [[ "$ini_value" == "1" ]] && own_sdl2=1
+                if [[ "$ini_value" == "1" ]]; then
+                    own_sdl2=1
+                elif [[ "$ini_value" == "0" ]]; then
+                    own_sdl2=0
+                fi
                 [[ "$own_sdl2" -eq 1 ]] && pkg="RP sdl2 $pkg"
             fi
             ;;
@@ -242,26 +257,26 @@ function _mapPackage() {
 ## @retval 0 on success
 ## @retval 1 on failure
 function getDepends() {
-  local own_pkgs=()
-  local apt_pkgs=()
-  local all_pkgs=()
-  local pkg
-  for pkg in "$@"; do
-      pkg=($(_mapPackage "$pkg"))
-      # manage our custom packages (pkg = "RP module_id pkg_name")
-      if [[ "${pkg[0]}" == "RP" ]]; then
-          # if removing, check if any version is installed and queue for removal via the custom module
-          if [[ "$md_mode" == "remove" ]]; then
-              if hasPackage "${pkg[2]}"; then
-                  own_pkgs+=("${pkg[1]}")
-                  all_pkgs+=("${pkg[2]}(custom)")
-              fi
+    local own_pkgs=()
+    local apt_pkgs=()
+    local all_pkgs=()
+    local pkg
+    for pkg in "$@"; do
+        pkg=($(_mapPackage "$pkg"))
+        # manage our custom packages (pkg = "RP module_id pkg_name")
+        if [[ "${pkg[0]}" == "RP" ]]; then
+            # if removing, check if any version is installed and queue for removal via the custom module
+            if [[ "$md_mode" == "remove" ]]; then
+                if hasPackage "${pkg[2]}"; then
+                    own_pkgs+=("${pkg[1]}")
+                    all_pkgs+=("${pkg[2]}(custom)")
+                fi
             else
-              # if installing check if our version is installed and queue for installing via the custom module
-              if hasPackage "${pkg[2]}" $(get_pkg_ver_${pkg[1]}) "ne"; then
-                  own_pkgs+=("${pkg[1]}")
-                  all_pkgs+=("${pkg[2]}(custom)")
-              fi
+                # if installing check if our version is installed and queue for installing via the custom module
+                if hasPackage "${pkg[2]}" $(get_pkg_ver_${pkg[1]}) "ne"; then
+                    own_pkgs+=("${pkg[1]}")
+                    all_pkgs+=("${pkg[2]}(custom)")
+                fi
             fi
             continue
         fi
@@ -280,7 +295,7 @@ function getDepends() {
             fi
         fi
 
-      done
+    done
 
 
     # return if no packages required
@@ -301,7 +316,7 @@ function getDepends() {
 
     # install any custom packages
     for pkg in ${own_pkgs[@]}; do
-       rp_installModule "$(rp_getIdxFromId $pkg)"
+       rp_callModule "$pkg" _auto_
     done
 
     aptInstall --no-install-recommends "${apt_pkgs[@]}"
@@ -323,11 +338,11 @@ function getDepends() {
                 failed+=("$pkg")
             fi
         fi
-      done
+    done
 
-      if [[ ${#failed[@]} -gt 0 ]]; then
-          md_ret_errors+=("No se pudo instalar el(los) paquete(s): ${failed[*]}.")
-          return 1
+    if [[ ${#failed[@]} -gt 0 ]]; then
+        md_ret_errors+=("Could not install package(s): ${failed[*]}.")
+        return 1
     fi
 
     return 0
@@ -348,7 +363,7 @@ function rpSwap() {
             local size=$((needed - __memory_avail))
             mkdir -p "$__swapdir/"
             if [[ $size -ge 0 ]]; then
-                echo "Añadiendo $size MB de intercambio adicional"
+                echo "Adding $size MB of additional swap"
                 fallocate -l ${size}M "$swapfile"
                 chmod 600 "$swapfile"
                 mkswap "$swapfile"
@@ -356,7 +371,7 @@ function rpSwap() {
             fi
             ;;
         off)
-            echo "Eliminando intercambio adicional"
+            echo "Removing additional swap"
             swapoff "$swapfile" 2>/dev/null
             rm -f "$swapfile"
             ;;
@@ -374,21 +389,35 @@ function rpSwap() {
 ## A depth parameter of 0 will do a full clone with all history.
 function gitPullOrClone() {
     local dir="$1"
+    [[ -z "$dir" ]] && dir="$md_build"
     local repo="$2"
     local branch="$3"
-    [[ -z "$branch" ]] && branch="master"
     local commit="$4"
     local depth="$5"
+    # if repo is blank then use the rp_module_repo info
+    if [[ -z "$repo" && -n "$md_repo_url" ]]; then
+        repo="$(rp_resolveRepoParam "$md_repo_url")"
+        branch="$(rp_resolveRepoParam "$md_repo_branch")"
+        commit="$(rp_resolveRepoParam "$md_repo_commit")"
+    fi
+    [[ -z "$repo" ]] && return 1
+    [[ -z "$branch" ]] && branch="master"
     if [[ -z "$depth" && "$__persistent_repos" -ne 1 && -z "$commit" ]]; then
         depth=1
     else
         depth=0
     fi
 
+    # record the source directory in __mod_info[ID/repo_dir] if not previously set which will be used
+    # by the packaging functions later to grab repository information
+    if [[ -z "${__mod_info[$md_id/repo_dir]}" ]]; then
+        __mod_info[$md_id/repo_dir]="$dir"
+    fi
+
     if [[ -d "$dir/.git" ]]; then
         pushd "$dir" > /dev/null
         runCmd git checkout "$branch"
-        runCmd git pull
+        runCmd git pull --ff-only
         runCmd git submodule update --init --recursive
         popd > /dev/null
     else
@@ -413,7 +442,7 @@ function gitPullOrClone() {
 }
 
 # @fn setupDirectories()
-# @brief Makes sure some required retropie directories and files are created.
+# @brief Makes sure some required emulos directories and files are created.
 function setupDirectories() {
     mkdir -p "$rootdir"
     mkUserDir "$datadir"
@@ -430,8 +459,8 @@ function setupDirectories() {
 
     # make sure we have inifuncs.sh in place and that it is up to date
     mkdir -p "$rootdir/lib"
-    local helper_libs=(inifuncs.sh archivefuncs.sh)
-    for helper in "${helper_libs[@]}"; do
+    local helper
+    for helper in inifuncs.sh archivefuncs.sh; do
         if [[ ! -f "$rootdir/lib/$helper" || "$rootdir/lib/$helper" -ot "$scriptdir/scriptmodules/$helper" ]]; then
             cp --preserve=timestamps "$scriptdir/scriptmodules/$helper" "$rootdir/lib/$helper"
         fi
@@ -440,7 +469,7 @@ function setupDirectories() {
     # create template for autoconf.cfg and make sure it is owned by $user
     local config="$configdir/all/autoconf.cfg"
     if [[ ! -f "$config" ]]; then
-        echo "# this file can be used to enable/disable retropie autoconfiguration features" >"$config"
+        echo "# this file can be used to enable/disable emulos autoconfiguration features" >"$config"
     fi
     chown $user:$user "$config"
 }
@@ -853,32 +882,40 @@ function setESSystem() {
         "$function" "$@"
     done
 }
+
 ## @fn ensureSystemretroconfig()
 ## @param system system to create retroarch.cfg for
 ## @param shader set a default shader to use (deprecated)
-## @brief Creates a default retroarch.cfg for specified system in `/opt/retropie/configs/$system/retroarch.cfg`.
+## @brief Creates a default retroarch.cfg for specified system in `/opt/emulos/configs/$system/retroarch.cfg`.
 function ensureSystemretroconfig() {
     local system="$1"
     local shader="$2"
+
     if [[ ! -d "$configdir/$system" ]]; then
         mkUserDir "$configdir/$system"
     fi
+
     local config="$(mktemp)"
     # add the initial comment regarding include order
     echo -e "# Settings made here will only override settings in the global retroarch.cfg if placed above the #include line\n" >"$config"
+
     # add the per system default settings
     iniConfig " = " '"' "$config"
     iniSet "input_remapping_directory" "$configdir/$system/"
+
     if [[ -n "$shader" ]]; then
         iniUnset "video_smooth" "false"
         iniSet "video_shader" "$emudir/retroarch/shader/$shader"
         iniUnset "video_shader_enable" "true"
     fi
+
     # include the main retroarch config
     echo -e "\n#include \"$configdir/all/retroarch.cfg\"" >>"$config"
+
     copyDefaultConfig "$config" "$configdir/$system/retroarch.cfg"
     rm "$config"
 }
+
 ## @fn setRetroArchCoreOption()
 ## @param option option to set
 ## @param value value to set
@@ -893,6 +930,7 @@ function setRetroArchCoreOption() {
     fi
     chown $user:$user "$configdir/all/retroarch-core-options.cfg"
 }
+
 ## @fn setConfigRoot()
 ## @param dir directory under $configdir to use
 ## @brief Sets module config root `$md_conf_root` to subfolder from `$configdir`
@@ -904,6 +942,7 @@ function setConfigRoot() {
     [[ -n "$dir" ]] && md_conf_root+="/$dir"
     mkUserDir "$md_conf_root"
 }
+
 ## @fn loadModuleConfig()
 ## @param params space separated list of key=value parameters
 ## @brief Load the settings for a module.
@@ -927,6 +966,7 @@ function loadModuleConfig() {
     local option
     local key
     local value
+
     for option in "${options[@]}"; do
         option=(${option/=/ })
         key="${option[0]}"
@@ -940,6 +980,7 @@ function loadModuleConfig() {
         fi
     done
 }
+
 ## @fn applyPatch()
 ## @param patch filename of patch to apply
 ## @brief Apply a patch if it has not already been applied to current folder.
@@ -949,17 +990,135 @@ function loadModuleConfig() {
 function applyPatch() {
     local patch="$1"
     local patch_applied="${patch##*/}.applied"
+
     if [[ ! -f "$patch_applied" ]]; then
         if patch -f -p1 <"$patch"; then
             touch "$patch_applied"
-            printMsgs "console" "Parche aplicado correctamente: $patch"
+            printMsgs "console" "Successfully applied patch: $patch"
         else
-            md_ret_errors+=("$md_id  ha fallado al aplicarse el parche $patch.")
+            md_ret_errors+=("$md_id patch $patch failed to apply")
             return 1
         fi
     fi
     return 0
 }
+
+## @fn runCurl()
+## @params ... commandline arguments to pass to curl
+## @brief Run curl with chosen parameters and handle curl errors
+## @details Runs curl with the provided parameters, whilst also capturing the output and extracting
+## any error message, which is stored in the global variable __NET_ERRMSG. Function returns the return
+## code provided by curl. The environment variable __curl_opts can be set to override default curl
+## parameters, eg - timeouts etc.
+## @retval curl return value
+function runCurl() {
+    local params=("$@")
+    # add any user supplied curl opts - timeouts can be overridden as curl uses the last parameters given
+    [[ -z "$__curl_opts" ]] && params+=($__curl_opts)
+
+    local cmd_err
+    local ret
+
+    # get the last non zero exit status (ignoring tee)
+    set -o pipefail
+
+    # set up additional file descriptor for stdin
+    exec 3>&1
+
+    # capture stderr - while passing both stdout and stderr to terminal
+    # curl like wget outputs the progress meter to stderr, so we will extract the error line later
+    cmd_err=$(curl "${params[@]}" 2>&1 1>&3 | tee /dev/stderr)
+    ret="$?"
+
+    # remove stdin copy
+    exec 3>&-
+
+    set +o pipefail
+
+    # if there was an error, extract it and put in __NET_ERRMSG
+    if [[ "$ret" -ne 0 ]]; then
+        # as we also capture the curl progress output, extract the last line which contains the error
+        __NET_ERRMSG="${cmd_err##*$'\n'}"
+    else
+        __NET_ERRMSG=""
+    fi
+    return "$ret"
+}
+
+## @fn download()
+## @param url url of file
+## @param dest destination name (optional), use - for stdout
+## @brief Download a file
+## @details Download a file - if the dest parameter is omitted, the file will be downloaded to the current directory.
+## If the destination name is a hyphen (-), then the file will be outputted to stdout, for piping to another command
+## or retrieving the contents directly to a variable. If the destination is a folder, extract with the basename from
+## the url to the destination folder.
+## @retval 0 on success
+function download() {
+    local url="$1"
+    local dest="$2"
+    local file="${url##*/}"
+
+    # if no destination, get the basename from the url
+    [[ -z "$dest" ]] && dest="${PWD}/$file"
+
+    # if the destination is a folder, download to that with filename from url
+    [[ -d "$dest" ]] && dest="$dest/$file"
+
+    local params=(--location)
+    if [[ "$dest" == "-" ]]; then
+        params+=(-s)
+    else
+        printMsgs "console" "Downloading $url to $dest ..."
+        params+=(-o "$dest")
+    fi
+    params+=(--connect-timeout 10 --speed-limit 1 --speed-time 60)
+    # add the url
+    params+=("$url")
+
+    local ret
+    runCurl "${params[@]}"
+    ret="$?"
+
+    # if download failed, remove file, log error and return error code
+    if [[ "$ret" -ne 0 ]]; then
+        # remove dest if not set to stdout and exists
+        [[ "$dest" != "-" && -f "$dest" ]] && rm "$dest"
+        md_ret_errors+=("URL $url failed to download.\n\n$__NET_ERRMSG")
+    fi
+    return "$ret"
+}
+
+## @fn downloadAndVerify()
+## @param url url of file
+## @param dest destination file (optional)
+## @brief Download a file and a corresponding .asc signature and verify the contents
+## @details Download a file and a corresponding .asc signature and verify the contents.
+## The .asc file will be downloaded to verify the file, but will be removed after downloading.
+## If the dest parameter is omitted, the file will be downloaded to the current directory
+## @retval 0 on success
+function downloadAndVerify() {
+    local url="$1"
+    local dest="$2"
+    local file="${url##*/}"
+
+    # if no destination, get the basename from the url (supported by GNU basename)
+    [[ -z "$dest" ]] && dest="${PWD}/$file"
+
+    local cmd_out
+    local ret=1
+    if download "${url}.asc" "${dest}.asc"; then
+        if download "$url" "$dest"; then
+            cmd_out="$(gpg --verify "${dest}.asc" 2>&1)"
+            ret="$?"
+            if [[ "$ret" -ne 0 ]]; then
+                md_ret_errors+=("$dest failed signature check:\n\n$cmd_out")
+            fi
+        fi
+    fi
+    return "$ret"
+}
+
 ## @fn downloadAndExtract()
 ## @param url url of archive
 ## @param dest destination folder for the archive
@@ -972,37 +1131,35 @@ function downloadAndExtract() {
     local dest="$2"
     shift 2
     local opts=("$@")
+
     local ext="${url##*.}"
-    local cmd=(tar -xv)
-    local is_tar=1
+    local file="${url##*/}"
+
+    local temp="$(mktemp -d)"
+    # download file, removing temporary folder and returning on error
+    if ! download "$url" "$temp/$file"; then
+        rm -rf "$temp"
+        return 1
+    fi
+
+    mkdir -p "$dest"
+
     local ret
     case "$ext" in
-        gz|tgz)
-            cmd+=(-z)
-            ;;
-        bz2)
-            cmd+=(-j)
-            ;;
-        xz)
-            cmd+=(-J)
-            ;;
         exe|zip)
-            is_tar=0
-            local tmp="$(mktemp -d)"
-            local file="${url##*/}"
-            runCmd wget -q -O"$tmp/$file" "$url"
-            runCmd unzip "${opts[@]}" -o "$tmp/$file" -d "$dest"
-            rm -rf "$tmp"
-            ret=$?
+            runCmd unzip "${opts[@]}" -o "$temp/$file" -d "$dest"
+            ;;
+        *)
+            tar -xvf "$temp/$file" -C "$dest" "${opts[@]}"
+            ;;
     esac
-    if [[ "$is_tar" -eq 1 ]]; then
-        mkdir -p "$dest"
-        cmd+=(-C "$dest" "${opts[@]}")
-        runCmd "${cmd[@]}" < <(wget -q -O- "$url")
-        ret=$?
-    fi
+    ret=$?
+
+    rm -rf "$temp"
+
     return $ret
 }
+
 ## @fn ensureFBMode()
 ## @param res_x width of mode
 ## @param res_y height of mode
@@ -1018,14 +1175,16 @@ function ensureFBMode() {
     local res_y="$2"
     local res="${res_x}x${res_y}"
     sed -i --follow-symlinks "/$res mode/,/endmode/d" /etc/fb.modes
+
     cat >> /etc/fb.modes <<_EOF_
-# added by RetroPie-Setup - $res mode for emulators
+# added by EmulOS-Setup - $res mode for emulators
 mode "$res"
     geometry $res_x $res_y $res_x $res_y 16
     timings 0 0 0 0 0 0 0
 endmode
 _EOF_
 }
+
 ## @fn joy2keyStart()
 ## @param left mapping for left
 ## @param right mapping for right
@@ -1042,21 +1201,27 @@ function joy2keyStart() {
     # don't start on SSH sessions
     # (check for bracket in output - ip/name in brackets over a SSH connection)
     [[ "$(who -m)" == *\(* ]] && return
+
     local params=("$@")
     if [[ "${#params[@]}" -eq 0 ]]; then
         params=(kcub1 kcuf1 kcuu1 kcud1 0x0a 0x20 0x1b)
     fi
+
     # get the first joystick device (if not already set)
     [[ -c "$__joy2key_dev" ]] || __joy2key_dev="/dev/input/jsX"
+
     # if no joystick device, or joy2key is already running exit
     [[ -z "$__joy2key_dev" ]] || pgrep -f joy2key.py >/dev/null && return 1
+
     # if joy2key.py is installed run it with cursor keys for axis/dpad, and enter + space for buttons 0 and 1
     if "$scriptdir/scriptmodules/supplementary/runcommand/joy2key.py" "$__joy2key_dev" "${params[@]}" 2>/dev/null; then
         __joy2key_pid=$(pgrep -f joy2key.py)
         return 0
     fi
+
     return 1
 }
+
 ## @fn joy2keyStop()
 ## @brief Stop previously started joy2key.py process.
 function joy2keyStop() {
@@ -1066,6 +1231,7 @@ function joy2keyStop() {
         sleep 1
     fi
 }
+
 ## @fn getPlatformConfig()
 ## @param key key to look up
 ## @brief gets a config from a platforms.cfg ini
@@ -1081,10 +1247,11 @@ function getPlatformConfig() {
         iniGet "$key"
         [[ -n "$ini_value" ]] && break
     done
-    # workaround for RetroPie platform
-    [[ "$key" == "retropie_fullname" ]] && ini_value="RetroPie"
+    # workaround for EmulOS platform
+    [[ "$key" == "retropie_fullname" ]] && ini_value="EmulOS"
     echo "$ini_value"
 }
+
 ## @fn addSystem()
 ## @param system system to add
 ## @brief adds an emulator entry / system
@@ -1092,24 +1259,21 @@ function getPlatformConfig() {
 ## @param exts optional extensions for the frontend (if not present in platforms.cfg)
 ## @details Adds a system to one of the frontend launchers
 function addSystem() {
-    # backward compatibility for old addSystem functionality
-    if [[ $# > 3 ]]; then
-        addEmulator "$@"
-        addSystem "$3"
-        return
-    fi
     local system="$1"
     local fullname="$2"
     local exts=($3)
+
     local platform="$system"
     local theme="$system"
     local cmd
     local path
-    # check if we are removing the system
-    if [[ "$md_mode" == "remove" ]]; then
-        delSystem "$id" "$system"
+
+    # if removing and we don't have an emulators.cfg we can remove the system from the frontends
+    if [[ "$md_mode" == "remove" ]] && [[ ! -f "$md_conf_root/$system/emulators.cfg" ]]; then
+        delSystem "$system" "$fullname"
         return
     fi
+
     # set system / platform / theme for configuration based on data in names field
     if [[ "$system" == "ports" ]]; then
         cmd="bash %ROM%"
@@ -1118,7 +1282,9 @@ function addSystem() {
         cmd="$rootdir/supplementary/runcommand/runcommand.sh 0 _SYS_ $system %ROM%"
         path="$romdir/$system"
     fi
+
     exts+=("$(getPlatformConfig "${system}_exts")")
+
     local temp
     temp="$(getPlatformConfig "${system}_theme")"
     if [[ -n "$temp" ]]; then
@@ -1126,31 +1292,42 @@ function addSystem() {
     else
         theme="$system"
     fi
+
     temp="$(getPlatformConfig "${system}_platform")"
     if [[ -n "$temp" ]]; then
         platform="$temp"
     else
         platform="$system"
     fi
+
     temp="$(getPlatformConfig "${system}_fullname")"
     [[ -n "$temp" ]] && fullname="$temp"
+
     exts="${exts[*]}"
     # add the extensions again as uppercase
     exts+=" ${exts^^}"
+
     setESSystem "$fullname" "$system" "$path" "$exts" "$cmd" "$platform" "$theme"
 }
+
 ## @fn delSystem()
 ## @param system system to delete
 ## @brief Deletes a system
 ## @details deletes a system from all frontends.
 function delSystem() {
     local system="$1"
-    local fullname="$(getPlatformConfig "${system}_fullname")"
+    local fullname="$2"
+
+    local temp
+    temp="$(getPlatformConfig "${system}_fullname")"
+    [[ -n "$temp" ]] && fullname="$temp"
+
     local function
     for function in $(compgen -A function _del_system_); do
         "$function" "$fullname" "$system"
     done
 }
+
 ## @fn addPort()
 ## @param id id of the module / command
 ## @param port name of the port
@@ -1174,30 +1351,40 @@ function addPort() {
     local file="$romdir/ports/$3.sh"
     local cmd="$4"
     local game="$5"
+
     # move configurations from old ports location
     if [[ -d "$configdir/$port" ]]; then
         mv "$configdir/$port" "$md_conf_root/"
     fi
-    # remove the ports launch script if in remove mode
+
+    # remove the emulator / port
     if [[ "$md_mode" == "remove" ]]; then
-        rm -f "$file"
         delEmulator "$id" "$port"
+
+        # remove launch script if in remove mode and the ports emulators.cfg is empty
+        [[ ! -f "$md_conf_root/$port/emulators.cfg" ]] && rm -f "$file"
+
         # if there are no more port launch scripts we can remove ports from emulation station
         if [[ "$(find "$romdir/ports" -maxdepth 1 -name "*.sh" | wc -l)" -eq 0 ]]; then
-            delSystem "$id" "ports"
+            delSystem "ports"
         fi
         return
     fi
+
     mkUserDir "$romdir/ports"
+
     cat >"$file" << _EOF_
 #!/bin/bash
 "$rootdir/supplementary/runcommand/runcommand.sh" 0 _PORT_ "$port" "$game"
 _EOF_
+
     chown $user:$user "$file"
     chmod +x "$file"
+
     [[ -n "$cmd" ]] && addEmulator 1 "$id" "$port" "$cmd"
     addSystem "ports"
 }
+
 ## @fn addEmulator()
 ## @param default 1 to make the emulator / command default for the system if no default already set
 ## @param id unique id of the module / command
@@ -1205,7 +1392,7 @@ _EOF_
 ## @param cmd commandline to launch
 ## @brief Adds a new emulator for a system.
 ## @details This is the primary function for adding emulators to a system which can be
-## switched between via the runcommand launch menu
+## switched between via the runcommand launch menu 
 ##
 ##     addEmulator 1 "vice-x64" "c64" "$md_inst/bin/x64 %ROM%"
 ##     addEmulator 0 "vice-xvic" "c64" "$md_inst/bin/xvic %ROM%"
@@ -1228,17 +1415,21 @@ function addEmulator() {
     local id="$2"
     local system="$3"
     local cmd="$4"
+
     # check if we are removing the system
     if [[ "$md_mode" == "remove" ]]; then
         delEmulator "$id" "$system"
         return
     fi
+
     # automatically add parameters for libretro modules
     if [[ "$id" == lr-* && "$cmd" =~ ^"$md_inst"[^[:space:]]*\.so ]]; then
         cmd="$emudir/retroarch/bin/retroarch -L $cmd --config $md_conf_root/$system/retroarch.cfg %ROM%"
     fi
+
     # create a config folder for the system / port
     mkUserDir "$md_conf_root/$system"
+
     # add the emulator to the $conf_dir/emulators.cfg if a commandline exists (not used for some ports)
     if [[ -n "$cmd" ]]; then
         iniConfig " = " '"' "$md_conf_root/$system/emulators.cfg"
@@ -1251,6 +1442,7 @@ function addEmulator() {
         chown $user:$user "$md_conf_root/$system/emulators.cfg"
     fi
 }
+
 ## @fn delEmulator()
 ## @param id id of emulator to delete
 ## @param system system to delete from
@@ -1261,6 +1453,7 @@ function addEmulator() {
 function delEmulator() {
     local id="$1"
     local system="$2"
+
     local config="$md_conf_root/$system/emulators.cfg"
     # remove from apps list for system
     if [[ -f "$config" && -n "$id" ]]; then
@@ -1273,22 +1466,19 @@ function delEmulator() {
         # if we no longer have any entries in the emulators.cfg file we can remove it
         grep -q "=" "$config" || rm -f "$config"
     fi
-    # if we don't have an emulators.cfg we can remove the system from the frontends
-    if [[ ! -f "$md_conf_root/$system/emulators.cfg" ]]; then
-        local function
-        for function in $(compgen -A function _del_system_); do
-            "$function" "$fullname" "$system"
-        done
-    fi
+
 }
+
 ## @fn patchVendorGraphics()
 ## @param filename file to patch
 ## @details replace declared dependencies of old vendor graphics libraries with new names
 ## Temporary compatibility workaround for legacy software to work on new Raspberry Pi firmwares.
 function patchVendorGraphics() {
     local filename="$1"
+
     # patchelf is not available on Raspbian Jessie
     compareVersions "$__os_debian_ver" lt 9 && return
+
     getDepends patchelf
     printMsgs "console" "Applying vendor graphics patch: $filename"
     patchelf --replace-needed libEGL.so libbrcmEGL.so \
@@ -1298,29 +1488,37 @@ function patchVendorGraphics() {
              --replace-needed libOpenVG.so libbrcmOpenVG.so \
              --replace-needed libWFC.so libbrcmWFC.so "$filename"
 }
+
 ## @fn dkmsManager()
 ## @param mode dkms operation type
 ## @module_name name of dkms module
 ## @module_ver version of dkms module
-## Helper function to manage DKMS modules installed by RetroPie
+## Helper function to manage DKMS modules installed by EmulOS
 function dkmsManager() {
     local mode="$1"
     local module_name="$2"
     local module_ver="$3"
     local kernel="$(uname -r)"
     local ver
+
     case "$mode" in
         install)
             if dkms status | grep -q "^$module_name"; then
                 dkmsManager remove "$module_name" "$module_ver"
             fi
-            if [[ "$__chroot" -eq 1 ]]; then
-                kernel="$(ls -1 /lib/modules | tail -n -1)"
-            fi
             ln -sf "$md_inst" "/usr/src/${module_name}-${module_ver}"
-            dkms install --force -m "$module_name" -v "$module_ver" -k "$kernel"
-            if dkms status | grep -q "^$module_name"; then
-                md_ret_error+=("Failed to install $md_id")
+            dkms install --no-initrd --force -m "$module_name" -v "$module_ver" -k "$kernel"
+            if ! dkms status "$module_name/$module_ver" -k "$kernel" | grep -q installed; then
+                # Force building for any kernel that has source/headers
+                local k_ver
+                while read k_ver; do
+                    if [[ -d "$(realpath /lib/modules/$k_ver/build)" ]]; then
+                        dkms install --no-initrd --force -m "$module_name/$module_ver" -k "$k_ver"
+                    fi
+                done < <(ls -r1 /lib/modules)
+            fi
+            if ! dkms status "$module_name/$module_ver" | grep -q installed; then
+                md_ret_errors+=("Failed to install $md_id")
                 return 1
             fi
             ;;
@@ -1333,7 +1531,10 @@ function dkmsManager() {
             ;;
         reload)
             dkmsManager unload "$module_name" "$module_ver"
-            modprobe "$module_name"
+            # No reason to load modules in chroot
+            if [[ "$__chroot" -eq 0 ]]; then
+                modprobe "$module_name"
+            fi
             ;;
         unload)
             if [[ -n "$(lsmod | grep ${module_name/-/_})" ]]; then
@@ -1342,6 +1543,7 @@ function dkmsManager() {
             ;;
     esac
 }
+
 ## @fn getIPAddress()
 ## @param dev optional specific network device to use for address lookup
 ## @brief Obtains the current externally routable source IP address of the machine
@@ -1352,22 +1554,40 @@ function dkmsManager() {
 function getIPAddress() {
     local dev="$1"
     local ip_route
+
     # first try to obtain an external IPv4 route
     ip_route=$(ip -4 route get 8.8.8.8 ${dev:+dev $dev} 2>/dev/null)
     if [[ -z "$ip_route" ]]; then
         # if there is no IPv4 route, try to obtain an IPv6 route instead
         ip_route=$(ip -6 route get 2001:4860:4860::8888 ${dev:+dev $dev} 2>/dev/null)
     fi
+
     # if an external route was found, report its source address
     [[ -n "$ip_route" ]] && grep -oP "src \K[^\s]+" <<< "$ip_route"
 }
+
+## @fn isConnected()
+## @brief Simple check to see if there is a connection to the Internet.
+## @details Uses the getIPAddress function to check if we have a route to the Internet. Also sets
+## __NET_ERRMSG with an error message for use in packages / setup to display to the user if not.
+## @retval 0 on success
+## @retval 1 on failure
+function isConnected() {
+    local ip="$(getIPAddress)"
+    if [[ -z "$ip" ]]; then
+        __NET_ERRMSG="Not connected to the Internet"
+        return 1
+    fi
+    return 0
+}
+
 ## @fn adminRsync()
 ## @param src src folder on local system - eg "$__tmpdir/stats/"
 ## @param dest destination folder on remote system - eg "stats/"
 ## @param params additional rsync parameters - eg --delete
 ## @brief Rsyncs data to remote host for admin modules
 ## @details Used to rsync data to our server for admin modules. Default remote
-## user is retropie, host is $__binary_host and default port is 22. These can be overridden with
+## user is emulos, host is $__binary_host and default port is 22. These can be overridden with
 ## env vars __upload_user __upload_host and __upload_port
 ##
 ## The default parameters for rsync are "-av --delay-updates" - more can be added via the 3rd+ argument
@@ -1378,11 +1598,26 @@ function adminRsync() {
     local params=("$@")
 
     local remote_user="$__upload_user"
-    [[ -z "$remote_user" ]] && remote_user="retropie"
+    [[ -z "$remote_user" ]] && remote_user="emulos"
     local remote_host="$__upload_host"
     [[ -z "$remote_host" ]] && remote_host="$__binary_host"
     local remote_port="$__upload_port"
     [[ -z "$remote_port" ]] && remote_port=22
 
     rsync -av --delay-updates -e "ssh -p $remote_port" "${params[@]}" "$src" "$remote_user@$remote_host:$dest"
+}
+
+## @fn signFile()
+## @param file path to file to sign
+## @brief signs file with $__gpg_signing_key
+## @details signs file with $__gpg_signing_key creating corresponding .asc file in the same folder
+function signFile() {
+    local file="$1"
+    local cmd_out
+    cmd_out=$(gpg --default-key "$__gpg_signing_key" --detach-sign --armor --yes "$1" 2>&1)
+    if [[ "$?" -ne 0 ]]; then
+        md_ret_errors+=("Failed to sign $1\n\n$cmd_out")
+        return 1
+    fi
+    return 0
 }

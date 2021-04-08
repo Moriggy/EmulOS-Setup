@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="opentyrian"
 rp_module_desc="Open Tyrian - port of the DOS shoot-em-up Tyrian"
 rp_module_licence="GPL2 https://bitbucket.org/opentyrian/opentyrian/raw/3e3d6b925342a5891d8b937989dc50b563ff83dd/COPYING"
+rp_module_repo="git https://github.com/opentyrian/opentyrian.git master"
 rp_module_section="opt"
-rp_module_flags="dispmanx !mali"
+rp_module_flags=""
 
 function depends_opentyrian() {
-    getDepends libsdl1.2-dev libsdl-net1.2-dev mercurial
+    getDepends libsdl2-dev libsdl2-net-dev
 }
 
 function sources_opentyrian() {
-    hg clone https://bitbucket.org/opentyrian/opentyrian "$md_build"
-    # don't replace our CFLAGS
-    sed -i "s/CFLAGS := -pedantic/CFLAGS += -pedantic/" Makefile
+    gitPullOrClone
+    # patch to default to fullscreen
+    applyPatch "$md_data/01_fullscreen.diff"
 }
 
 function build_opentyrian() {
@@ -52,9 +53,6 @@ function configure_opentyrian() {
     mkRomDir "ports/opentyrian"
 
     moveConfigDir "$home/.config/opentyrian" "$md_conf_root/opentyrian"
-
-    # Enable dispmanx by default.
-    setDispmanx "$md_id" 1
 
     [[ "$md_mode" == "install" ]] && game_data_opentyrian
 }

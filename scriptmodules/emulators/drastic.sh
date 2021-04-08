@@ -1,23 +1,28 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="drastic"
-rp_module_desc="Emulador de NDS"
-rp_module_help="ROM Extensions: .nds .zip\n\nCopia tus roms de Nintendo DS en $romdir/nds"
+rp_module_desc="NDS emu - DraStic"
+rp_module_help="ROM Extensions: .nds .zip\n\nCopy your Nintendo DS roms to $romdir/nds"
 rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="!all arm !armv6 !mali"
 
 function depends_drastic() {
-    getDepends libasound2-dev libsdl2-dev zlib1g-dev
+    local depends=(libasound2-dev libsdl2-dev zlib1g-dev)
+    if isPlatform "kms" && ! isPlatform "x11"; then
+        depends+=(matchbox-window-manager xorg xserver-xorg-input-all)
+    fi
+
+    getDepends ${depends[@]}
 }
 
 function __binary_url_drastic() {
@@ -42,6 +47,27 @@ function configure_drastic() {
         ln -sfv "$md_inst/$file" "$md_conf_root/nds/drastic/$file"
     done
 
-    addEmulator 1 "$md_id" "nds" "pushd $md_conf_root/nds/drastic; $md_inst/drastic %ROM%; popd"
+    if [[ "$md_mode" == "install" ]]; then
+        cat > "$md_inst/drastic.sh" << _EOF_
+#!/bin/bash
+# Don't start a window manager on x11 platforms
+if [[ -n \$DISPLAY && "\$2" == "kms" ]]; then
+    matchbox-window-manager -use_cursor no &
+    sleep 0.5
+fi
+pushd "$md_conf_root/nds/drastic"
+$md_inst/drastic "\$1"
+popd
+_EOF_
+        chmod +x "$md_inst/drastic.sh"
+    fi
+
+    # Launch DraStic in an x11 session for KMS platforms
+    if isPlatform "kms" && ! isPlatform "x11"; then
+        addEmulator 1 "$md_id" "nds" "XINIT:$md_inst/drastic.sh %ROM% kms"
+    else
+        addEmulator 1 "$md_id" "nds" "$md_inst/drastic.sh %ROM%"
+    fi
+
     addSystem "nds"
 }

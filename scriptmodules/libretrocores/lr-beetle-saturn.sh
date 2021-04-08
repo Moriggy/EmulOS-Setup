@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-beetle-saturn"
-rp_module_desc="Emulador de Segga Saturn - Mednafen Saturn port para libretro"
-rp_module_help="ROM Extensions: .chd .cue\n\nCopia tus roms de Sega Saturn en $romdir/saturn\n\nCopia las BIOS sega_101.bin / mpr-17933.bin en $biosdir"
+rp_module_desc="Saturn emulator - Mednafen Saturn port for libretro"
+rp_module_help="ROM Extensions: .chd .cue\n\nCopy your Saturn roms to $romdir/saturn\n\nCopy the required BIOS files sega_101.bin / mpr-17933.bin to $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/beetle-saturn-libretro/master/COPYING"
+rp_module_repo="git https://github.com/libretro/beetle-saturn-libretro.git master"
 rp_module_section="exp"
 rp_module_flags="!armv6"
 
 function sources_lr-beetle-saturn() {
-    gitPullOrClone "$md_build" https://github.com/libretro/beetle-saturn-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-beetle-saturn() {

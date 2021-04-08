@@ -1,21 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="image"
 rp_module_desc="Create/Manage EmulOS images"
 rp_module_section=""
-rp_module_flags="!arm"
+rp_module_flags=""
 
 function depends_image() {
-    getDepends kpartx unzip binfmt-support qemu-user-static rsync parted squashfs-tools dosfstools e2fsprogs
+    local depends=(kpartx unzip binfmt-support rsync parted squashfs-tools dosfstools e2fsprogs)
+    isPlatform "x86" && depends+=(qemu-user-static)
+    getDepends "${depends[@]}"
 }
 
 function create_chroot_image() {
@@ -40,7 +42,7 @@ function create_chroot_image() {
             url="https://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/2019-04-08-raspbian-stretch-lite.zip"
             ;;
         buster)
-            url="https://downloads.raspberrypi.org/raspbian_lite_latest"
+            url="https://downloads.raspberrypi.org/raspios_lite_armhf_latest"
             ;;
         *)
             md_ret_errors+=("Unknown/unsupported Raspbian version")
@@ -51,7 +53,7 @@ function create_chroot_image() {
     local base="raspbian-${dist}-lite"
     local image="$base.img"
     if [[ ! -f "$image" ]]; then
-        wget -c -O "$base.zip" "$url"
+        download "$url" "$base.zip"
         unzip -o "$base.zip"
         mv "$(unzip -Z -1 "$base.zip")" "$image"
         rm "$base.zip"
@@ -87,8 +89,8 @@ function install_rp_image() {
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
 
     # hostname to emulos
-    echo "EmulOS" >"$chroot/etc/hostname"
-    sed -i "s/raspberrypi/EmulOS/" "$chroot/etc/hosts"
+    echo "emulos" >"$chroot/etc/hostname"
+    sed -i "s/raspberrypi/emulos/" "$chroot/etc/hosts"
 
     # quieter boot / disable plymouth (as without the splash parameter it
     # causes all boot messages to be displayed and interferes with people
@@ -115,7 +117,7 @@ function install_rp_image() {
 cd
 sudo apt-get update
 sudo apt-get -y install git dialog xmlstarlet joystick
-git clone -b "$__chroot_branch" https://github.com/Moriggy/EmulOS-Setup.git
+git clone -b "$__chroot_branch" https://github.com/EmulOS/EmulOS-Setup.git
 cd EmulOS-Setup
 modules=(
     'raspbiantools apt_upgrade'
@@ -132,10 +134,10 @@ modules=(
     'xpad'
 )
 for module in "\${modules[@]}"; do
-    # rpi1 platform would use QEMU_CPU set to arm1176, but it seems buggy currently (lots of segfaults)
-    sudo __platform=$platform __nodialog=1 __has_binaries=$__chroot_has_binaries ./emulos_pkgs.sh \$module
+    sudo __platform=$platform __nodialog=1 __has_binaries=$__chroot_has_binaries ./emulos_packages.sh \$module
 done
-rm -rf tmp
+
+sudo rm -rf tmp
 sudo apt-get clean
 _EOF_
 
@@ -152,18 +154,18 @@ function _init_chroot_image() {
     # unmount on ctrl+c
     trap "_trap_chroot_image '$chroot'" INT
 
-    # mount special filesytems to chroot
+    # mount special filesystems to chroot
     mkdir -p "$chroot"/dev/pts
-    mount none -t devpts "$chroot"/dev/pts
-    mount -t proc /proc "$chroot"/proc
+    mount none -t devpts "$chroot/dev/pts"
+    mount -t proc /proc "$chroot/proc"
 
     # required for emulated chroot
-    cp "/usr/bin/qemu-arm-static" "$chroot"/usr/bin/
+    isPlatform "x86" && cp "/usr/bin/qemu-arm-static" "$chroot/usr/bin/"
 
     local nameserver="$__nameserver"
     [[ -z "$nameserver" ]] && nameserver="$(nmcli device show | grep IP4.DNS | awk '{print $NF; exit}')"
     # so we can resolve inside the chroot
-    echo "nameserver $nameserver" >"$chroot"/etc/resolv.conf
+    echo "nameserver $nameserver" >"$chroot/etc/resolv.conf"
 
     # move /etc/ld.so.preload out of the way to avoid warnings
     mv "$chroot/etc/ld.so.preload" "$chroot/etc/ld.so.preload.bak"
@@ -176,6 +178,8 @@ function _deinit_chroot_image() {
     trap "" INT
 
     >"$chroot/etc/resolv.conf"
+
+    isPlatform "x86" && rm -f "$chroot/usr/bin/qemu-arm-static"
 
     # restore /etc/ld.so.preload
     mv "$chroot/etc/ld.so.preload.bak" "$chroot/etc/ld.so.preload"
@@ -207,10 +211,8 @@ function create_image() {
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
 
-    image+=".img"
-
     # make image size 300mb larger than contents of chroot
-    local mb_size=$(du -s --block-size 1048576 $chroot 2>/dev/null | cut -f1)
+    local mb_size=$(du -s --block-size 1048576 "$chroot" 2>/dev/null | cut -f1)
     ((mb_size+=492))
 
     # create image
@@ -271,9 +273,6 @@ function create_image() {
     kpartx -d "$image_name"
 
     trap INT
-
-    printMsgs "console" "Compressing $image ..."
-    gzip -f "$image"
 }
 
 # generate berryboot squashfs from filesystem
@@ -283,8 +282,6 @@ function create_bb_image() {
 
     local chroot="$2"
     [[ -z "$chroot" ]] && chroot="$md_build/chroot"
-
-    image+="-berryboot.img256"
 
     # replace fstab
     echo "proc            /proc           proc    defaults          0       0" >"$chroot/etc/fstab"
@@ -303,6 +300,7 @@ function all_image() {
     for platform in rpi1 rpi2 rpi4; do
         platform_image "$platform" "$dist" "$make_bb"
     done
+    combine_json_image
 }
 
 function platform_image() {
@@ -319,24 +317,66 @@ function platform_image() {
     local dest="$__tmpdir/images"
     mkdir -p "$dest"
 
-    local image="$dest/emulos-${dist}-${__version}-"
+    local image_base="emulos-${dist}-${__version}-"
     case "$platform" in
         rpi1)
-            image+="rpi1_zero"
+            image_base+="rpi1_zero"
+            image_platform="RPI 1/Zero"
             ;;
         rpi2)
-            image+="rpi2_rpi3"
+            image_base+="rpi2_3"
+            image_platform="RPI 2/3"
             ;;
-        rpi3|rpi4)
-            image+="$platform"
+        rpi3)
+            image_base+="rpi3"
+            image_platform="RPI 3"
+            ;;
+        rpi4)
+            image_base+="rpi4_400"
+            image_platform="RPI 4/400"
             ;;
         *)
             fatalError "Unknown platform $platform for image building"
             ;;
     esac
+    local image_name="${image_base}.img"
+    local image_file="$dest/$image_name"
 
     rp_callModule image create_chroot "$dist"
     rp_callModule image install_rp "$platform"
-    rp_callModule image create "$image"
-    [[ "$make_bb" -eq 1 ]] && rp_callModule image create_bb "$image"
+    rp_callModule image create "$image_file"
+    [[ "$make_bb" -eq 1 ]] && rp_callModule image create_bb "$dest/${image_base}-berryboot.img256"
+
+    printMsgs "console" "Compressing ${image_name} ..."
+    gzip -c "$image_file" > "${image_file}.gz"
+
+    printMsgs "console" "Generating JSON data for rpi-imager ..."
+    local template
+    template="$(<"$md_data/template.json")"
+    template="${template/IMG_PATH/$__version\/${image_name}.gz}"
+    template="${template/IMG_EXTRACT_SIZE/$(stat -c %s $image_file)}"
+    template="${template/IMG_SHA256/$(sha256sum $image_file | cut -d" " -f1)}"
+    template="${template/IMG_DOWNLOAD_SIZE/$(stat -c %s ${image_file}.gz)}"
+    template="${template/IMG_VERSION/$__version}"
+    template="${template/IMG_PLATFORM/$image_platform}"
+    template="${template/IMG_DATE/$(date '+%Y-%m-%d')}"
+    echo "$template" >"${image_file}.json"
+
+    rm -f "$image_file"
+}
+
+function combine_json_image() {
+    local dest="$__tmpdir/images"
+    {
+        local template
+        echo -en "{\n    \"os_list\": [\n"
+        local i=0
+        while read file; do
+            [[ "$i" -gt 0 ]] && echo -en ",\n"
+            template="$(<$file)"
+            echo -n "$template"
+            ((i++))
+        done < <(find "$dest" -name "*.img.json" | sort)
+        echo -en "\n    ]\n}\n"
+    } >"$dest/os_list_imagingutility.json"
 }

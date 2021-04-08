@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="jzintv"
-rp_module_desc="Emulador de Intellivision"
-rp_module_help="ROM Extensions: .int .bin\n\nCopia tus roms de Intellivision en $romdir/intellivision\n\nCopia la BIOS exec.bin y grom.bin en $biosdir"
+rp_module_desc="Intellivision emulator"
+rp_module_help="ROM Extensions: .int .bin\n\nCopy your Intellivision roms to $romdir/intellivision\n\nCopy the required BIOS files exec.bin and grom.bin to $biosdir"
 rp_module_licence="GPL2 http://spatula-city.org/%7Eim14u2c/intv/"
+rp_module_repo="file $__archive_url/jzintv-20181225.zip"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali"
 
@@ -21,15 +22,17 @@ function depends_jzintv() {
 }
 
 function sources_jzintv() {
-    downloadAndExtract "$__archive_url/jzintv-20181225.zip" "$md_build"
+    downloadAndExtract "$md_repo_url" "$md_build"
     cd jzintv/src
+    # aarch64 doesn't include sys/io.h - we can just remove it in this case
+    isPlatform "aarch64" && grep -rl "include.*sys/io.h" | xargs sed -i "/include.*sys\/io.h/d"
 }
 
 function build_jzintv() {
     mkdir -p jzintv/bin
     cd jzintv/src
     make clean
-    make CC="gcc" CXX="g++" WARNXX="" OPT_FLAGS="$CFLAGS"
+    make CC="gcc" CXX="g++" WARN="" WARNXX="" OPT_FLAGS="$CFLAGS"
     md_ret_require="$md_build/jzintv/bin/jzintv"
 }
 

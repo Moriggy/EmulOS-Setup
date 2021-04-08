@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="controlblock"
-rp_module_desc="Controlador ControlBlock"
+rp_module_desc="ControlBlock Driver"
+rp_module_help="Please note that you need to manually enable or disable the ControlBlock Service in the Configuration section. IMPORTANT: If the service is enabled and the power switch functionality is enabled (which is the default setting) in the config file, you need to have a switch connected to the ControlBlock."
+rp_module_licence="NONCOM https://raw.githubusercontent.com/petrockblog/ControlBlockService2/master/LICENSE.txt"
+rp_module_repo="git https://github.com/petrockblog/ControlBlockService2.git master"
 rp_module_section="driver"
 rp_module_flags="noinstclean !all rpi"
-rp_module_help="Tenga en cuenta que necesita habilitar o deshabilitar manualmente el Servicio ControlBlock en la seccion Configuracion. IMPORTANTE: si el servicio esta habilitado y la funcion del interruptor de encendido esta habilitada (que es la configuracion predeterminada) en el archivo de configuracion, debe tener un interruptor conectado al ControlBlock."
 
 function depends_controlblock() {
     local depends=(cmake doxygen)
@@ -23,7 +25,7 @@ function depends_controlblock() {
 }
 
 function sources_controlblock() {
-    gitPullOrClone "$md_inst" https://github.com/petrockblog/ControlBlockService2.git
+    gitPullOrClone "$md_inst"
 }
 
 function build_controlblock() {
@@ -43,10 +45,10 @@ function install_controlblock() {
 }
 
 function gui_controlblock() {
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Elija una opcion." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
     local options=(
-        1 "Habilitar el controlador ControlBlock"
-        2 "Deshabilitar el controlador ControlBlock"
+        1 "Enable ControlBlock driver"
+        2 "Disable ControlBlock driver"
 
     )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)

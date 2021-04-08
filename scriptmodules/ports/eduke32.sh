@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="eduke32"
 rp_module_desc="Duke3D source port"
-rp_module_licence="GPL2 http://svn.eduke32.com/eduke32/package/common/gpl-2.0.txt"
+rp_module_licence="GPL2 https://voidpoint.io/terminx/eduke32/-/raw/master/package/common/gpl-2.0.txt?inline=false"
+rp_module_repo="git https://voidpoint.io/terminx/eduke32.git master dfc16b08"
 rp_module_section="opt"
 
 function depends_eduke32() {
     local depends=(
-        subversion flac libflac-dev libvorbis-dev libpng-dev libvpx-dev freepats
+        flac libflac-dev libvorbis-dev libpng-dev libvpx-dev freepats
         libsdl2-dev libsdl2-mixer-dev
     )
 
@@ -27,9 +28,7 @@ function depends_eduke32() {
 }
 
 function sources_eduke32() {
-    local revision="-r8090"
-
-    svn checkout "$revision" http://svn.eduke32.com/eduke32 "$md_build"
+    gitPullOrClone
 
     # r6918 causes a 20+ second delay on startup on ARM devices
     isPlatform "arm" && applyPatch "$md_data/0001-revert-r6918.patch"
@@ -74,15 +73,16 @@ function install_eduke32() {
 }
 
 function game_data_eduke32() {
-    cd "$_tmpdir"
-
+    local dest="$romdir/ports/duke3d"
     if [[ "$md_id" == "eduke32" ]]; then
-        if [[ ! -f "$romdir/ports/duke3d/duke3d.grp" ]]; then
-            wget -O 3dduke13.zip "$__archive_url/3dduke13.zip"
-            unzip -L -o 3dduke13.zip dn3dsw13.shr
-            unzip -L -o dn3dsw13.shr -d "$romdir/ports/duke3d" duke3d.grp duke.rts
-            rm 3dduke13.zip dn3dsw13.shr
-            chown -R $user:$user "$romdir/ports/duke3d"
+        if [[ ! -f "$dest/duke3d.grp" ]]; then
+            mkUserDir "$dest"
+            local temp="$(mktemp -d)"
+            download "$__archive_url/3dduke13.zip" "$temp"
+            unzip -L -o "$temp/3dduke13.zip" -d "$temp" dn3dsw13.shr
+            unzip -L -o "$temp/dn3dsw13.shr" -d "$dest" duke3d.grp duke.rts
+            rm -rf "$temp"
+            chown -R $user:$user "$dest"
         fi
     fi
 }
@@ -107,6 +107,7 @@ function configure_eduke32() {
     if [[ "$md_mode" == "install" ]]; then
         game_data_eduke32
 
+        touch "$config"
         iniConfig " " '"' "$config"
 
         # enforce vsync for kms targets

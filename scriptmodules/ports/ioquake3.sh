@@ -1,31 +1,33 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="ioquake3"
 rp_module_desc="Quake 3 source port"
 rp_module_licence="GPL2 https://github.com/ioquake/ioq3/blob/master/COPYING.txt"
+rp_module_repo="git https://github.com/ioquake/ioq3 main"
 rp_module_section="opt"
-rp_module_flags="!mali !videocore"
+rp_module_flags="!videocore"
 
 function depends_ioquake3() {
     getDepends libsdl2-dev libgl1-mesa-dev
 }
 
 function sources_ioquake3() {
-    gitPullOrClone "$md_build" https://github.com/ioquake/ioq3
+    gitPullOrClone
 }
 
 function build_ioquake3() {
     make clean
     make
+    md_ret_require="$md_build/build/release-linux-$(_arch_ioquake3)/ioquake3.$(_arch_ioquake3)"
 }
 
 function _arch_ioquake3() {

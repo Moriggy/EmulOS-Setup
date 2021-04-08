@@ -1,36 +1,51 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="ti99sim"
-rp_module_desc="Emulador de TI-99/SIM - Texas Instruments Home Computer"
-rp_module_help="ROM Extension: .ctg\n\nCopia tus juegos de TI-99 en $romdir/ti99\n\nCopia la BIOS TI-994A.ctg (case sensitive) en $biosdir"
-rp_module_licence="GPL2 http://www.mrousseau.org/programs/ti99sim/"
+rp_module_desc="TI-99/SIM - Texas Instruments Home Computer Emulator"
+rp_module_help="ROM Extension: .ctg\n\nCopy your TI-99 games to $romdir/ti99\n\nCopy the required BIOS file TI-994A.ctg (case sensitive) to $biosdir"
+rp_module_licence="GPL2 https://www.mrousseau.org/programs/ti99sim"
+rp_module_repo="file $__archive_url/ti99sim-0.16.0.src.tar.gz"
 rp_module_section="exp"
-rp_module_flags="dispmanx !mali"
+rp_module_flags=""
 
 function depends_ti99sim() {
-    getDepends libsdl1.2-dev libssl-dev
+    if compareVersions $__gcc_version lt 8; then
+        md_ret_errors+=("Sorry, you need an OS with gcc 8 or newer to compile $md_id")
+        return 1
+    fi
+    getDepends libsdl2-dev libssl-dev
 }
 
 function sources_ti99sim() {
-    downloadAndExtract "$__archive_url/ti99sim-0.13.0.src.tar.gz" "$md_build" --strip-components 1
+    downloadAndExtract "$md_repo_url" "$md_build" --strip-components 1
 }
 
 function build_ti99sim() {
+    make clean
     make
 }
 
 function install_ti99sim() {
     md_ret_files=(
-        'src/sdl/Release/ti99sim-sdl'
+        'bin/ti99sim-sdl'
+        'bin/convert-ctg'
+        'bin/catalog'
+        'bin/disk'
+        'bin/dumpgrom'
+        'bin/mkcart'
+        'bin/ti99sim-console'
+        'doc/COPYING'
+        'doc/main.css'
+        'doc/README.html'
     )
 }
 
@@ -41,8 +56,6 @@ function configure_ti99sim() {
     addSystem "ti99"
 
     [[ "$md_mode" == "remove" ]] && return
-
-    setDispmanx "$md_id" 1
 
     moveConfigDir "$home/.ti99sim" "$md_conf_root/ti99/"
     ln -sf "$biosdir/TI-994A.ctg" "$md_inst/TI-994A.ctg"

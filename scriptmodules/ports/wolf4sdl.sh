@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="wolf4sdl"
 rp_module_desc="Wolf4SDL - port of Wolfenstein 3D / Spear of Destiny engine"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/mozzwald/wolf4sdl/master/license-mame.txt"
+rp_module_repo="git https://github.com/mozzwald/wolf4sdl.git master"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali"
 
@@ -20,7 +21,7 @@ function depends_wolf4sdl() {
 }
 
 function sources_wolf4sdl() {
-    gitPullOrClone "$md_build" https://github.com/mozzwald/wolf4sdl.git
+    gitPullOrClone
 }
 
 function _get_opts_wolf4sdl() {

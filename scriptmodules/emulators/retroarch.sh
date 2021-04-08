@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="retroarch"
 rp_module_desc="RetroArch - frontend to the libretro emulator cores - required by all lr-* emulators"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/libretro/RetroArch/master/COPYING"
+rp_module_repo="git https://github.com/libretro/RetroArch.git v1.8.8"
 rp_module_section="core"
 
 function depends_retroarch() {
@@ -39,11 +40,13 @@ function depends_retroarch() {
 }
 
 function sources_retroarch() {
-    gitPullOrClone "$md_build" https://github.com/libretro/RetroArch.git v1.8.4
+    gitPullOrClone
     applyPatch "$md_data/01_hotkey_hack.diff"
     applyPatch "$md_data/02_disable_search.diff"
     applyPatch "$md_data/03_shader_path_config_enable.diff"
-    applyPatch "$md_data/04_fix_corrupted_widgets.diff"
+    # revert of https://github.com/libretro/RetroArch/pull/10524/commits/9eb84728
+    # see https://github.com/EmulOS/EmulOS-Setup/issues/3249
+    applyPatch "$md_data/04_config_save_fix.diff"
 }
 
 function build_retroarch() {
@@ -86,7 +89,7 @@ function update_shaders_retroarch() {
     isPlatform "rpi" && branch="rpi"
     # remove if not git repository for fresh checkout
     [[ ! -d "$dir/.git" ]] && rm -rf "$dir"
-    gitPullOrClone "$dir" https://github.com/RetroPie/common-shaders.git "$branch"
+    gitPullOrClone "$dir" https://github.com/EmulOS/common-shaders.git "$branch"
     chown -R $user:$user "$dir"
 }
 
@@ -158,7 +161,6 @@ function configure_retroarch() {
     iniSet "system_directory" "$biosdir"
     iniSet "config_save_on_exit" "false"
     iniSet "video_aspect_ratio_auto" "true"
-    iniSet "video_smooth" "false"
     iniSet "rgui_show_start_screen" "false"
     iniSet "rgui_browser_directory" "$romdir"
 
@@ -168,6 +170,7 @@ function configure_retroarch() {
 
     iniSet "video_font_size" "24"
     iniSet "core_options_path" "$configdir/all/retroarch-core-options.cfg"
+    iniSet "global_core_options" "true"
     isPlatform "x11" && iniSet "video_fullscreen" "true"
     isPlatform "mesa" && iniSet "video_fullscreen" "true"
 
@@ -262,6 +265,9 @@ function configure_retroarch() {
 
     # enable video shaders on existing configs
     _set_config_option_retroarch "video_shader_enable" "true"
+
+    # (compat) keep all core options in a single file
+    _set_config_option_retroarch "global_core_options" "true"
 
     # remapping hack for old 8bitdo firmware
     addAutoConf "8bitdo_hack" 0

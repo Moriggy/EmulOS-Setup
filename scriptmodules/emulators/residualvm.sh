@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="residualvm"
 rp_module_desc="ResidualVM - A 3D Game Interpreter"
-rp_module_help="Copia tus juegos de ResidualVM en $romdir/residualvm"
+rp_module_help="Copy your ResidualVM games to $romdir/residualvm"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/residualvm/residualvm/master/COPYING"
+rp_module_repo="git https://github.com/ResidualVM/ResidualVM.git master"
 rp_module_section="exp"
-rp_module_flags="dispmanx !mali !kms"
+rp_module_flags="dispmanx !mali"
 
 function depends_residualvm() {
     local depends=(
@@ -23,12 +24,12 @@ function depends_residualvm() {
         zlib1g-dev libjpeg-dev
     )
     isPlatform "x11" && depends+=(libglew-dev)
-    isPlatform "rpi" && depends+=(libraspberrypi-dev)
+    isPlatform "videocore" && depends+=(libraspberrypi-dev)
     getDepends "${depends[@]}"
 }
 
 function sources_residualvm() {
-    gitPullOrClone "$md_build" https://github.com/ResidualVM/ResidualVM.git
+    gitPullOrClone
 }
 
 function build_residualvm() {
@@ -37,11 +38,14 @@ function build_residualvm() {
         --enable-vkeybd
         --enable-release
         --disable-debug
-        --enable-keymapper
         --prefix="$md_inst"
     )
-    ! isPlatform "x11" && params+=(--force-opengles2)
-    if isPlatform "rpi"; then
+    if isPlatform "gles"; then
+        params+=(--force-opengles2)
+        # wintermute fails to build on rpi/opegles - disable for now
+        params+=(--disable-engine=wintermute)
+    fi
+    if isPlatform "videocore"; then
         CXXFLAGS+=" -I/opt/vc/include" LDFLAGS+=" -L/opt/vc/lib" ./configure "${params[@]}"
     else
         ./configure "${params[@]}"

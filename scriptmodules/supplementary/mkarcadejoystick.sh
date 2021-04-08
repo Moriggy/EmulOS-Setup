@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="mkarcadejoystick"
 rp_module_desc="Raspberry Pi GPIO Joystick Driver"
-rp_module_help="Instala el driver GPIO desde https://github.com/recalbox/mk_arcade_joystick_rpi"
+rp_module_help="Installs the GPIO driver from https://github.com/cmitu/mk_arcade_joystick_rpi"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/recalbox/mk_arcade_joystick_rpi/master/LICENSE"
+rp_module_repo="git https://github.com/cmitu/mk_arcade_joystick_rpi emulos"
 rp_module_section="driver"
 rp_module_flags="noinstclean !all rpi"
 
@@ -25,7 +26,7 @@ function depends_mkarcadejoystick() {
 }
 
 function sources_mkarcadejoystick() {
-    gitPullOrClone "$md_inst" https://github.com/cmitu/mk_arcade_joystick_rpi retropie
+    gitPullOrClone "$md_inst"
     pushd "$md_inst"
     sed -i "s/\$MKVERSION/$(_version_mkarcadejoystick)/" "$md_inst/dkms.conf"
     popd

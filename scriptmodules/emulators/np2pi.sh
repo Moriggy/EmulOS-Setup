@@ -1,31 +1,33 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="np2pi"
-rp_module_desc="Emulador de NEC PC-9801"
-rp_module_help="ROM Extensions: .d88 .d98 .88d .98d .fdi .xdf .hdm .dup .2hd .tfd .hdi .thd .nhd .hdd\n\nCopia tus juegos de NEC PC-98 en $romdir/pc88\n\nCopia las BIOS 2608_bd.wav, 2608_hh.wav, 2608_rim.wav, 2608_sd.wav, 2608_tom.wav 2608_top.wav, bios.rom, FONT.ROM y sound.rom en $biosdir/pc98"
+rp_module_desc="NEC PC-9801 emulator"
+rp_module_help="ROM Extensions: .d88 .d98 .88d .98d .fdi .xdf .hdm .dup .2hd .tfd .hdi .thd .nhd .hdd\n\nCopy your pc98 games to to $romdir/pc88\n\nCopy bios files 2608_bd.wav, 2608_hh.wav, 2608_rim.wav, 2608_sd.wav, 2608_tom.wav 2608_top.wav, bios.rom, FONT.ROM and sound.rom to $biosdir/pc98"
+rp_module_repo="git https://github.com/eagle0wl/np2pi.git master"
 rp_module_section="exp"
-rp_module_flags="dispmanx !x86 !mali"
+rp_module_flags="!all dispmanx rpi !aarch64"
 
 function depends_np2pi() {
     getDepends libsdl1.2-dev libasound2-dev libsdl-ttf2.0-dev fonts-takao-gothic
 }
 
 function sources_np2pi() {
-    gitPullOrClone "$md_build" https://github.com/eagle0wl/np2pi.git
+    gitPullOrClone
 }
 
 function build_np2pi() {
     cd sdl
     make -j 1 -f makefile.rpi
+    md_ret_require="$md_build/bin/np2"
 }
 
 function install_np2pi() {

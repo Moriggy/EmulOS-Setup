@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 AUDIO_PLUGIN="mupen64plus-audio-sdl"
@@ -172,7 +172,7 @@ function testCompatibility() {
     # fallback for glesn64 and rice plugin
     # some roms lead to a black screen of death
     local game
-
+    
     # these games need RSP-LLE
     local blacklist=(
         naboo
@@ -398,6 +398,7 @@ function setPath() {
 if [[ ! -f "$inputconfig" ]]; then
     cat > "$inputconfig" << _EOF_
 ; InputAutoCfg.ini for Mupen64Plus SDL Input plugin
+
 ; Keyboard_START
 [Keyboard]
 plugged = True
@@ -422,6 +423,7 @@ Rumblepak switch = key(46)
 X Axis = key(276,275)
 Y Axis = key(273,274)
 ; Keyboard_END
+
 _EOF_
 fi
 

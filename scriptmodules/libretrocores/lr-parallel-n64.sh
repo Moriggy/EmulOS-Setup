@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-parallel-n64"
-rp_module_desc="Emulador de Nintendo 64 - Mupen64Plus modificado port para libretro"
-rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopia tus roms de Nintendo 64 en $romdir/n64"
+rp_module_desc="N64 emu - Highly modified Mupen64Plus port for libretro"
+rp_module_help="ROM Extensions: .z64 .n64 .v64\n\nCopy your N64 roms to $romdir/n64"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/parallel-n64/master/mupen64plus-core/LICENSES"
+rp_module_repo="git https://github.com/libretro/parallel-n64.git master"
 rp_module_section="exp x86=main"
 
 function depends_lr-parallel-n64() {
@@ -24,10 +25,7 @@ function depends_lr-parallel-n64() {
 }
 
 function sources_lr-parallel-n64() {
-    gitPullOrClone "$md_build" https://github.com/libretro/parallel-n64.git
-    # revert upstream commit 11c1ae33 to fix segfault on exit
-    # modified revert due to code changes and excludes Makefile differences (as they are not relevant for us)
-    applyPatch "$md_data/01_revert_11c1ae33.diff"
+    gitPullOrClone
     # avoid conflicting typedefs for GLfloat on rpi4/kms
     isPlatform "kms" && isPlatform "gles" && sed -i "/^typedef GLfloat GLdouble/d" "$md_build/libretro-common/include/glsm/glsm.h"
 }
@@ -40,9 +38,11 @@ function build_lr-parallel-n64() {
     else
         isPlatform "gles" && params+=(GLES=1 GL_LIB:=-lGLESv2)
         if isPlatform "arm"; then
-            params+=(CPUFLAGS="-DNO_ASM -DARM -D__arm__ -DARM_ASM -D__NEON_OPT -DNOSSE")
+            params+=(CPUFLAGS="-DNO_ASM -DARM -D__arm__ -DARM_ASM -D__NEON_OPT -DNOSSE -DARM_FIX")
             params+=(WITH_DYNAREC=arm)
             isPlatform "neon" && params+=(HAVE_NEON=1)
+        elif isPlatform "aarch64"; then
+            params+=(CPUFLAGS="-DARM_FIX")
         fi
     fi
     make clean
@@ -68,8 +68,9 @@ function configure_lr-parallel-n64() {
     setRetroArchCoreOption "parallel-n64-screensize" "640x480"
 
     # Copy config files
-    cat > $home/RetroPie/BIOS/gles2n64rom.conf << _EOF_
+    cat > $home/EmulOS/BIOS/gles2n64rom.conf << _EOF_
 #rom specific settings
+
 rom name=SUPER MARIO 64
 target FPS=25
 

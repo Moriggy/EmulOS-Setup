@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="jumpnbump"
 rp_module_desc="Jump 'n Bump, play cute bunnies jumping on each other's heads - Modernization fork"
 rp_module_help="Copy custom game levels (.dat) to $romdir/ports/jumpnbump"
 rp_module_licence="GPL2 https://gitlab.com/LibreGames/jumpnbump/raw/master/COPYING"
+rp_module_repo="git https://gitlab.com/LibreGames/jumpnbump.git master"
 rp_module_section="exp"
 rp_module_flags=""
 
@@ -21,12 +22,13 @@ function depends_jumpnbump() {
 }
 
 function sources_jumpnbump() {
-    gitPullOrClone "$md_build" https://gitlab.com/LibreGames/jumpnbump.git
+    gitPullOrClone
 }
 
 function build_jumpnbump() {
     make clean
     CFLAGS="$CFLAGS -fsigned-char" make PREFIX="$md_inst"
+    md_ret_require="$md_build/jumpnbump"
 }
 
 function install_jumpnbump() {

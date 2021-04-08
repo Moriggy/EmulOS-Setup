@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="raspbiantools"
@@ -77,8 +77,8 @@ function install_firmware_raspbiantools() {
     for pkg in "${pkgs[@]}"; do
         if hasPackage "$pkg" "$ver" ne; then
             deb="${pkg}_${ver}_armhf.deb"
-            if ! wget -O"$deb" "$url/$deb"; then
-               md_ret_errors+=("Fallo al descargar $deb")
+            if ! download "$url/$deb"; then
+               md_ret_errors+=("Failed to download $deb")
                return 1
             fi
         fi
@@ -119,13 +119,13 @@ function enable_modules_raspbiantools() {
 
 function gui_raspbiantools() {
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option" 22 76 16)
         local options=(
-            1 "Actualizar paquetes de Raspbian"
-            2 "Instalar escritorio Pixel"
-            3 "Eliminar algunos paquetes innecesarios (pulseaudio / cups / wolfram)"
-            4 "Desactivar pantalla blanca"
-            5 "Habilitar el módulo de kernel necesario uinput"
+            1 "Upgrade Raspbian packages"
+            2 "Install Pixel desktop environment"
+            3 "Remove some unneeded packages (pulseaudio / cups / wolfram)"
+            4 "Disable screen blanker"
+            5 "Enable needed kernel module uinput"
         )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
@@ -134,9 +134,9 @@ function gui_raspbiantools() {
                     rp_callModule "$md_id" apt_upgrade
                     ;;
                 2)
-                    dialog --defaultno --yesno "Estás seguro de que quieres instalar el escritorio Pixel?" 22 76 2>&1 >/dev/tty || continue
+                    dialog --defaultno --yesno "Are you sure you want to install the Pixel desktop?" 22 76 2>&1 >/dev/tty || continue
                     rp_callModule "$md_id" lxde
-                    printMsgs "dialog" "Instalado escritorio Pixel/LXDE."
+                    printMsgs "dialog" "Pixel desktop/LXDE is installed."
                     ;;
                 3)
                     rp_callModule "$md_id" package_cleanup

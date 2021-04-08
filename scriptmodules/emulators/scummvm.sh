@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="scummvm"
 rp_module_desc="ScummVM"
-rp_module_help="Copia tus juegos de ScummVM en $romdir/scummvm"
+rp_module_help="Copy your ScummVM games to $romdir/scummvm"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/scummvm/scummvm/master/COPYING"
+rp_module_repo="git https://github.com/scummvm/scummvm.git v2.2.0"
 rp_module_section="opt"
 rp_module_flags=""
 
@@ -34,19 +35,16 @@ function depends_scummvm() {
 }
 
 function sources_scummvm() {
-    gitPullOrClone "$md_build" https://github.com/scummvm/scummvm.git v2.1.1
-    if isPlatform "rpi"; then
-        applyPatch "$md_data/01_rpi_enable_scalers.diff"
-    fi
+    gitPullOrClone
 }
 
 function build_scummvm() {
     local params=(
-        --enable-release --enable-vkeybd --enable-keymapper
+        --enable-release --enable-vkeybd
         --disable-debug --disable-eventrecorder --prefix="$md_inst"
     )
-    isPlatform "rpi" && params+=(--host=raspberrypi)
-    isPlatform "vero4k" && params+=(--opengl-mode=gles2)
+    isPlatform "rpi" && isPlatform "32bit" && params+=(--host=raspberrypi)
+    isPlatform "gles" && params+=(--opengl-mode=gles2)
     # stop scummvm using arm-linux-gnueabihf-g++ which is v4.6 on
     # wheezy and doesn't like rpi2 cpu flags
     if isPlatform "rpi"; then

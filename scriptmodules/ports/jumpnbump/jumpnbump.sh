@@ -3,9 +3,9 @@ ROOTDIR=""
 MD_CONF_ROOT=""
 ROMDIR=""
 MD_INST=""
-DIALOG=(dialog --backtitle "RetroPie Jump n' Bump Launcher")
+DIALOG=(dialog --backtitle "EmulOS Jump n' Bump Launcher")
 
-# source ini functions from RetroPie
+# source ini functions from EmulOS
 source "$ROOTDIR/lib/inifuncs.sh"
 
 # init program args

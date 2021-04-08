@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="alephone"
 rp_module_desc="AlephOne - Marathon Engine"
 rp_module_help="To get the games running on the Raspberry Pi/Odroid, make sure to set each game to use the software renderer and disable the enhanced HUD from the Plugins menu. For Marathon 1, disable both HUDs from the Plugins menu, start a game, quit back to the title screen and enable Enhanced HUD and it will work and properly."
 rp_module_licence="GPL3 https://raw.githubusercontent.com/Aleph-One-Marathon/alephone/master/COPYING"
+rp_module_repo="git https://github.com/Aleph-One-Marathon/alephone.git :_get_branch_alephone"
 rp_module_section="opt"
-rp_module_flags=""
+rp_module_flags="!mali"
+
+function _get_branch_alephone() {
+    local branch="release-20150620"
+    if compareVersions "$__os_debian_ver" ge 9 || [[ -n "$__os_ubuntu_ver" ]]; then
+        branch="master"
+    fi
+    echo "$branch"
+}
 
 function depends_alephone() {
     local depends=(libboost-all-dev libspeexdsp-dev libzzip-dev libavcodec-dev libavformat-dev libavutil-dev libswscale-dev autoconf automake libboost-system-dev libcurl4-openssl-dev)
@@ -27,11 +36,7 @@ function depends_alephone() {
 }
 
 function sources_alephone() {
-    local branch="release-20150620"
-    if compareVersions "$__os_debian_ver" ge 9 || [[ -n "$__os_ubuntu_ver" ]]; then
-        branch="master"
-    fi
-    gitPullOrClone "$md_build" "https://github.com/Aleph-One-Marathon/alephone.git" "$branch"
+    gitPullOrClone
 }
 
 function build_alephone() {

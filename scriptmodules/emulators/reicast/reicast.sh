@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 AUDIO="$1"
@@ -20,7 +20,7 @@ biosdir="$HOME/EmulOS/BIOS/dc"
 source "$rootdir/lib/inifuncs.sh"
 
 if [[ ! -f "$biosdir/dc_boot.bin" ]]; then
-    dialog --no-cancel --pause "Tienes que copiar tus archivos BIOS de Dreamcast (dc_boot.bin and dc_flash.bin) en el directorio $biosdir para arrancar el emulador de Dreamcast." 22 76 15
+    dialog --no-cancel --pause "You need to copy the Dreamcast BIOS files (dc_boot.bin and dc_flash.bin) to the folder $biosdir to boot the Dreamcast emulator." 22 76 15
     exit 1
 fi
 

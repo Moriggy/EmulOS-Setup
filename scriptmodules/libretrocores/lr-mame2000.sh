@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-mame2000"
-rp_module_desc="Emulador Arcade - MAME 0.37b5 (2000) port para libretro"
-rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME 0.37b5 (2000) en $romdir/mame-mame4all o\n$romdir/arcade"
+rp_module_desc="Arcade emu - MAME 0.37b5 port for libretro"
+rp_module_help="ROM Extension: .zip\n\nCopy your MAME 0.37b5 roms to either $romdir/mame-mame4all or\n$romdir/arcade"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/mame2000-libretro/master/readme.txt"
-rp_module_section="opt arm=main"
+rp_module_repo="git https://github.com/libretro/mame2000-libretro.git master"
+rp_module_section="opt armv6=main"
 
 function _update_hook_lr-mame2000() {
     # move from old location and update emulators.cfg
@@ -21,13 +22,14 @@ function _update_hook_lr-mame2000() {
 }
 
 function sources_lr-mame2000() {
-    gitPullOrClone "$md_build" https://github.com/libretro/mame2000-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-mame2000() {
     make clean
     local params=()
     isPlatform "arm" && params+=("ARM=1" "USE_CYCLONE=1")
+    isPlatform "aarch64" && params+=("IS_X86=0")
     make "${params[@]}"
     md_ret_require="$md_build/mame2000_libretro.so"
 }

@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 ## @file inifuncs.sh
@@ -198,6 +198,7 @@ function addAutoConf() {
     ini_value="${ini_value// /}"
     if [[ -z "$ini_value" ]]; then
         iniSet "$key" "$default"
+        chown $user:$user "$file"
     fi
 }
 
@@ -209,6 +210,7 @@ function setAutoConf() {
 
     iniConfig " = " '"' "$file"
     iniSet "$key" "$value"
+    chown $user:$user "$file"
 }
 
 # arg 1: key
@@ -222,10 +224,12 @@ function getAutoConf(){
     return 1
 }
 
-# escape backslashes and pipes for sed
+# escape special characters for sed
 function sedQuote() {
     local string="$1"
     string="${string//\\/\\\\}"
     string="${string//|/\\|}"
+    string="${string//[/\\[}"
+    string="${string//]/\\]}"
     echo "$string"
 }

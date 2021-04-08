@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="pifba"
-rp_module_desc="Emulador de FBA - PiFBA"
-rp_module_help="ROM Extension: .zip\n\nCopia tus roms de FBA en\n$romdir/fba o\n$romdir/neogeo o\n$romdir/arcade\n\nPara los juegos de NeoGeo la BIOS neogeo.zip es requerida y debe estar en el mismo directorio que tus roms de FBA."
-rp_module_licence="GPL2 https://raw.githubusercontent.com/RetroPie/pifba/master/FBAcapex_src/COPYING"
+rp_module_desc="FBA emulator PiFBA"
+rp_module_help="ROM Extension: .zip\n\nCopy your FBA roms to\n$romdir/fba or\n$romdir/neogeo or\n$romdir/arcade\n\nFor NeoGeo games the neogeo.zip BIOS is required and must be placed in the same directory as your FBA roms."
+rp_module_licence="GPL2 https://raw.githubusercontent.com/EmulOS/pifba/master/FBAcapex_src/COPYING"
+rp_module_repo="git https://github.com/EmulOS/pifba.git master"
 rp_module_section="opt armv6=main"
 rp_module_flags="!all videocore"
 
@@ -21,7 +22,7 @@ function depends_pifba() {
 }
 
 function sources_pifba() {
-    gitPullOrClone "$md_build" https://github.com/RetroPie/pifba.git
+    gitPullOrClone
 }
 
 function build_pifba() {
@@ -49,14 +50,16 @@ function configure_pifba() {
     mkRomDir "fba"
     mkRomDir "neogeo"
 
-    mkUserDir "$md_conf_root/fba"
+    if [[ "$md_mode" == "install" ]]; then
+        mkUserDir "$md_conf_root/fba"
 
-    local config
-    for config in fba2x.cfg capex.cfg; do
-        # move old config if it exists
-        moveConfigFile "$md_inst/$config" "$md_conf_root/fba/$config"
-        copyDefaultConfig "$config.template" "$md_conf_root/fba/$config"
-    done
+        local config
+        for config in fba2x.cfg capex.cfg; do
+            # move old config if it exists
+            moveConfigFile "$md_inst/$config" "$md_conf_root/fba/$config"
+            copyDefaultConfig "$config.template" "$md_conf_root/fba/$config"
+        done
+    fi
 
     local def=0
     isPlatform "rpi1" && def=1

@@ -10,14 +10,15 @@
 #
 
 rp_module_id="dosbox"
-rp_module_desc="Emulador MS-DOS"
-rp_module_help="ROM Extensions: .bat .com .exe .sh .conf\n\nCopia tus juegos de MS-DOS en $romdir/pc"
+rp_module_desc="DOS emulator"
+rp_module_help="ROM Extensions: .bat .com .exe .sh .conf\n\nCopy your DOS games to $romdir/pc"
 rp_module_licence="GPL2 https://sourceforge.net/p/dosbox/code-0/HEAD/tree/dosbox/trunk/COPYING"
+rp_module_repo="svn https://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk - 4252"
 rp_module_section="opt"
 rp_module_flags="dispmanx !mali"
 
 function depends_dosbox() {
-    local depends=(libasound2-dev libpng-dev automake autoconf zlib1g-dev subversion "$@")
+    local depends=(libasound2-dev libpng-dev automake autoconf zlib1g-dev "$@")
     [[ "$md_id" == "dosbox" ]] && depends+=(libsdl1.2-dev libsdl-net1.2-dev libsdl-sound1.2-dev)
     isPlatform "rpi" && depends+=(timidity freepats)
     getDepends "${depends[@]}"
@@ -27,7 +28,7 @@ function sources_dosbox() {
     local revision="$1"
     [[ -z "$revision" ]] && revision="4252"
 
-    svn checkout https://svn.code.sf.net/p/dosbox/code-0/dosbox/trunk "$md_build" -r "$revision"
+    svn checkout "$md_repo_url" "$md_build" -r "$revision"
     applyPatch "$md_data/01-fully-bindable-joystick.diff"
 }
 
@@ -104,7 +105,7 @@ function midi_synth() {
 
 params=("\$@")
 if [[ -z "\${params[0]}" ]]; then
-    params=(-c "@MOUNT C $romdir/pc" -c "@C:")
+    params=(-c "@MOUNT C $romdir/pc -freesize 1024" -c "@C:")
 elif [[ "\${params[0]}" == *.sh ]]; then
     midi_synth start
     bash "\${params[@]}"
@@ -134,13 +135,11 @@ _EOF_
                 iniSet "mididevice" "alsa"
                 iniSet "midiconfig" "128:0"
             fi
-            if isPlatform "mesa"; then
-                iniSet "fullscreen" "true"
-                iniSet "fullresolution" "desktop"
-                iniSet "output" "overlay"
-            fi
         fi
     fi
+
+    # default to dispmanx on rpi4/kms
+    isPlatform "mesa" && setDispmanx "$md_id" 1
 
     moveConfigDir "$home/.$md_id" "$md_conf_root/pc"
 

@@ -22,9 +22,13 @@ function rps_logInit() {
         if mkdir -p "$__logdir"; then
             chown $user:$user "$__logdir"
         else
-            fatalError "No se pudo crear el directorio $__logdir"
+            fatalError "Couldn't make directory $__logdir"
         fi
     fi
+
+    # remove all but the last 20 logs
+    find "$__logdir" -type f | sort | head -n -20 | xargs -d '\n' --no-run-if-empty rm
+
     local now=$(date +'%Y-%m-%d_%H%M%S')
     logfilename="$__logdir/rps_$now.log.gz"
     touch "$logfilename"
@@ -33,27 +37,27 @@ function rps_logInit() {
 }
 
 function rps_logStart() {
-    echo -e "Inicio sesion el: $(date -d @$time_start)\n"
+    echo -e "Log started at: $(date -d @$time_start)\n"
     echo "EmulOS-Setup version: $__version ($(git -C "$scriptdir" log -1 --pretty=format:%h))"
-    echo "System: $__os_desc - $(uname -a)"
+    echo "System: $__platform ($__platform_arch) - $__os_desc - $(uname -a)"
 }
 
 function rps_logEnd() {
     time_end=$(date +"%s")
     echo
-    echo "El registro termino en: $(date -d @$time_end)"
+    echo "Log ended at: $(date -d @$time_end)"
     date_total=$((time_end-time_start))
     local hours=$((date_total / 60 / 60 % 24))
     local mins=$((date_total / 60 % 60))
     local secs=$((date_total % 60))
-    echo "Tiempo de ejecucion: $hours horas, $mins minutos, $secs segundos"
+    echo "Total running time: $hours hours, $mins mins, $secs secs"
 }
 
 function rps_printInfo() {
     reset
     if [[ ${#__ERRMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__ERRMSGS[@]}"
-        printMsgs "dialog" "Consulte $1 para obtener más informacion detallada sobre los errores."
+        printMsgs "dialog" "Please see $1 for more in depth information regarding the errors."
     fi
     if [[ ${#__INFMSGS[@]} -gt 0 ]]; then
         printMsgs "dialog" "${__INFMSGS[@]}"
@@ -67,15 +71,23 @@ function depends_setup() {
     # on first upgrade to 4.x
     if [[ ! -f "$rootdir/VERSION" ]]; then
         joy2keyStop
-        exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
+        exec "$scriptdir/emulos_packages.sh" setup post_update gui_setup
     fi
 
     if isPlatform "rpi" && isPlatform "mesa" && ! isPlatform "rpi4"; then
-        printMsgs "dialog" "ERROR: Tiene habilitado el controlador experimental GL de escritorio. Esto NO es compatible con EmulOS, EmulationStation y los emuladores no se ejecutarán.\n\nDeshabilite el controlador experimental GL de escritorio desde el menú 'Opciones avanzadas' de raspi-config."
+        printMsgs "dialog" "WARNING: You have the experimental desktop GL driver enabled. This is NOT supported by EmulOS, and Emulation Station as well as emulators may fail to launch.\n\nPlease disable the experimental desktop GL driver from the raspi-config 'Advanced Options' menu."
+    fi
+
+    if isPlatform "rpi" && isPlatform "64bit"; then
+        printMsgs "dialog" "WARNING: 64bit support on the Raspberry Pi is not yet officially supported, although the main emulator package selection should work ok."
     fi
 
     if [[ "$__os_debian_ver" -eq 8 ]]; then
-        printMsgs "dialog" "Raspbian/Debian Jessie and versions of Ubuntu below 16.04 are no longer supported.\n\nPlease install EmulOS 4.4 or newer from a fresh image which is based on Raspbian Stretch (or if running Ubuntu, upgrade your OS)."
+        printMsgs "dialog" "Raspbian/Debian Jessie and versions of Ubuntu below 18.04 are no longer supported.\n\nPlease install EmulOS from a fresh image (or if running Ubuntu, upgrade your OS)."
+    fi
+
+    if [[ "$__os_debian_ver" -eq 9 ]] && [[ "$__os_id" == "Raspbian" ]]; then
+        printMsgs "dialog" "Your version of EmulOS which is based on Raspbian Stretch is no longer supported.\n\nWe recommend you install the latest EmulOS image.\n\nPre-built binaries are now disabled for your system. You can still update packages from source, but due to the age of Raspbian Stretch we can't guarantee all software included will work."
     fi
 
     # make sure user has the correct group permissions
@@ -83,44 +95,38 @@ function depends_setup() {
         local group
         for group in input video; do
             if ! hasFlag "$(groups $user)" "$group"; then
-                dialog --yesno "Su usuario '$usuario' no es miembro del grupo de sistemas '$group'. \n\n Es necesario para que EmulOS funcione correctamente. ¿Puedo agregar '$usuario' al grupo '$group'?\n\nTendrás que reiniciar para que estos cambios surtan efecto." 22 76 2>&1 >/dev/tty && usermod -a -G "$group" "$user"
+                dialog --yesno "Your user '$user' is not a member of the system group '$group'.\n\nThis is needed for EmulOS to function correctly. May I add '$user' to group '$group'?\n\nYou will need to restart for these changes to take effect." 22 76 2>&1 >/dev/tty && usermod -a -G "$group" "$user"
             fi
         done
     fi
 
-    # remove all but the last 20 logs
-    find "$__logdir" -type f | sort | head -n -20 | xargs -d '\n' --no-run-if-empty rm
+    # set a global __setup to 1 which is used to adjust package function behaviour if called from the setup gui
+    __setup=1
+
+    # print any pending msgs - eg during module scanning which wouldn't be seen otherwise
+    rps_printInfo
 }
 
 function updatescript_setup()
 {
     clear
     chown -R $user:$user "$scriptdir"
-    printHeading "Obteniendo la última versión del script de EmulOS-Setup."
+    printHeading "Fetching latest version of the EmulOS Setup Script."
     pushd "$scriptdir" >/dev/null
     if [[ ! -d ".git" ]]; then
-        printMsgs "dialog" "No se puede encontrar el directorio '.git'. Por favor, clona el script de configuración de EmulOS a traves de 'git clone https://github.com/Moriggy/EmulOS-Setup.git'"
+        printMsgs "dialog" "Cannot find directory '.git'. Please clone the EmulOS Setup script via 'git clone https://github.com/EmulOS/EmulOS-Setup.git'"
         popd >/dev/null
         return 1
     fi
     local error
-    if ! error=$(su $user -c "git pull 2>&1 >/dev/null"); then
-        printMsgs "dialog" "Actualización fallida:\n\n$error"
+    if ! error=$(su $user -c "git pull --ff-only 2>&1 >/dev/null"); then
+        printMsgs "dialog" "Update failed:\n\n$error"
         popd >/dev/null
         return 1
     fi
     popd >/dev/null
 
-    printMsgs "dialog" "Ya tienes descargada la última versión del script de EmulOS-Setup."
-
-    # Añadido para copiar los archivos del menu opciones
-    if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-      cd
-      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-    fi
-    # FIN DEL AÑADIDO
-
+    printMsgs "dialog" "Fetched the latest version of the EmulOS Setup script."
     return 0
 }
 
@@ -137,27 +143,32 @@ function post_update_setup() {
     {
         rps_logStart
         # run _update_hook_id functions - eg to fix up modules for emulos-setup 4.x install detection
-        printHeading "Ejecución de ganchos posteriores a la actualización"
+        printHeading "Running post update hooks"
         rp_updateHooks
         rps_logEnd
     } &> >(_setup_gzip_log "$logfilename")
     rps_printInfo "$logfilename"
 
-    printMsgs "dialog" "AVISO: la secuencia de comandos de EmulOS-Setup y las imágenes de la tarjeta SD de EmulOS prefabricadas están disponibles para descargar de forma gratuita desde http://masos.dx.am/ .\n\nLa imagen de EmulOS preconstruida incluye software que tiene licencias no comerciales. No está permitido vender imagenes de EmulOS ni incluir EmulOS con su producto comercial. \n\nNo se incluyen juegos con derechos de autor en EmulOS.\n\nSi le vendieron este software, puede informarnos al respecto enviando un correo electronico a masosgroup@gmail.com ."
+    printMsgs "dialog" "NOTICE: The EmulOS-Setup script and pre-made EmulOS SD card images are available to download for free from https://emulos.org.uk.\n\nThe pre-built EmulOS image includes software that has non commercial licences. Selling EmulOS images or including EmulOS with your commercial product is not allowed.\n\nNo copyrighted games are included with EmulOS.\n\nIf you have been sold this software, you can let us know about it by emailing retropieproject@gmail.com."
 
     # return to set return function
     "${return_func[@]}"
 }
 
 function package_setup() {
-    local idx="$1"
-    local md_id="${__mod_id[$idx]}"
+    local id="$1"
+    local default=""
+
+    if ! rp_isEnabled "$id"; then
+        printMsgs "dialog" "Sorry but package '$id' is not available for your system ($__platform)\n\nPackage flags: ${__mod_info[$id/flags]}\n\nYour $__platform flags: ${__platform_flags[*]}"
+        return 1
+    fi
 
     # associative array so we can pull out the messages later for the confirmation requester
     declare -A option_msgs=(
         ["U"]=""
-        ["B"]="Instalar binario pre-compilado"
-        ["S"]="Instalar desde la fuente"
+        ["B"]="Install from pre-compiled binary"
+        ["S"]="Install from source"
     )
 
     while true; do
@@ -166,84 +177,113 @@ function package_setup() {
         local status
 
         local has_binary=0
-        rp_hasBinary "$idx"
-        local binary_ret="$?"
-        [[ "$binary_ret" -eq 0 ]] && has_binary=1
+        local has_net=0
+
+        isConnected && has_net=1
+
+        # for modules with nonet flag that don't need to download data, we force has_net to 1, so we get install options
+        hasFlag "${__mod_info[$id/flags]}" "nonet" && has_net=1
+
+        if [[ "$has_net" -eq 1 ]]; then
+            dialog --backtitle "$__backtitle" --infobox "Checking for updates for $id ..." 3 60 >/dev/tty
+            rp_hasBinary "$id"
+            local ret="$?"
+            [[ "$ret" -eq 0 ]] && has_binary=1
+            [[ "$ret" -eq 2 ]] && has_net=0
+        fi
+
+        local is_installed=0
 
         local pkg_origin=""
-        local source_update=0
-        local binary_update=0
-        if rp_isInstalled "$idx"; then
-          eval $(rp_getPackageInfo "$idx")
-          status="Instalado - via $pkg_origin"
+        local pkg_date=""
+        if ! rp_isInstalled "$id"; then
+            status="Not installed"
+        else
+            is_installed=1
+
+            rp_loadPackageInfo "$id"
+            pkg_origin="${__mod_info[$id/pkg_origin]}"
+            pkg_date="${__mod_info[$id/pkg_date]}"
+            [[ -n "$pkg_date" ]] && pkg_date="$(date -u -d "$pkg_date" 2>/dev/null)"
+
+            status="Installed - via $pkg_origin"
+
             [[ -n "$pkg_date" ]] && status+=" (built: $pkg_date)"
-            if [[ "$pkg_origin" != "source" && "$has_binary" -eq 1 ]]; then
-               rp_hasNewerBinary "$idx"
-               local has_newer="$?"
-               binary_update=1
-               option_msgs["U"]="Actualizar (desde binario pre-construido)"
+
+            if [[ "$has_net" -eq 1 ]]; then
+                rp_hasNewerModule "$id" "$pkg_origin"
+                local has_newer="$?"
                 case "$has_newer" in
                     0)
-                        status+="\nActualizacion binaria disponible."
+                        status+="\nUpdate is available."
+                        option_msgs["U"]="Update (from $pkg_origin)"
                         ;;
                     1)
-                        status+="\nEstas ejecutando el ultimo binario."
-                        option_msgs["U"]="Re-instalar (desde binario pre-construido)"
+                        status+="\nYou are running the latest $pkg_origin."
+                        option_msgs["U"]="Re-install (from $pkg_origin)"
                         ;;
                     2)
-                        status+="\nLa actualizacion binaria puede estar disponible (no se puede verificar este paquete)."
+                        if [[ "$pkg_origin" == "unknown" ]]; then
+                            if [[ "$has_binary" -eq 1 ]]; then
+                                pkg_origin="binary"
+                            else
+                                pkg_origin="source"
+                            fi
+                        fi
+                        option_msgs["U"]="Update (from $pkg_origin)"
+                        status+="\nUpdate may be available (Unable to check for this package)."
+                        ;;
+                    3)
+                        has_net=0
                         ;;
                 esac
             fi
-            if [[ "$binary_update" -eq 0 && "$binary_ret" -ne 4 ]]; then
-                source_update=1
-                option_msgs["U"]="Actualizar (desde la fuente)"
-            fi
-        else
-            status="No instalado"
         fi
 
-        # if we had a network error don't display install options
-        if [[ "$binary_ret" -eq 4 ]]; then
-            status+="\nOpciones de instalación deshabilitadas (No se puede acceder a internet)"
-        else
-            if [[ "$source_update" -eq 1 || "$binary_update" -eq 1 ]]; then
+        if [[ "$has_net" -eq 1 ]]; then
+            if [[ "$is_installed" -eq 1 ]]; then
                 options+=(U "${option_msgs["U"]}")
             fi
 
-            if [[ "$binary_update" -eq 0 && "$has_binary" -eq 1 ]]; then
+            if [[ "$pkg_origin" != "binary" && "$has_binary" -eq 1 ]]; then
                 options+=(B "${option_msgs["B"]}")
             fi
 
-            if [[ "$source_update" -eq 0 ]] && fnExists "sources_${md_id}"; then
-                    options+=(S "${option_msgs[S]}")
+            if [[ "$pkg_origin" != "source" ]] && fnExists "sources_${id}"; then
+                options+=(S "${option_msgs[S]}")
+           fi
+        else
+            status+="\nInstall options disabled:\n$__NET_ERRMSG"
+        fi
+
+        if [[ "$is_installed" -eq 1 ]]; then
+            if fnExists "gui_${id}"; then
+                options+=(C "Configuration / Options")
             fi
+            options+=(X "Remove")
         fi
 
-        if rp_isInstalled "$idx"; then
-            if fnExists "gui_${md_id}"; then
-                options+=(C "Configuración / Opciones")
-            fi
-            options+=(X "Eliminar")
+        if [[ -d "$__builddir/$id" ]]; then
+            options+=(Z "Clean source folder")
         fi
 
-        if [[ -d "$__builddir/$md_id" ]]; then
-            options+=(Z "Limpiar carpeta de origen")
-        fi
-
-        local help="${__mod_desc[$idx]}\n\n${__mod_help[$idx]}"
+        local help="${__mod_info[$id/desc]}\n\n${__mod_info[$id/help]}"
         if [[ -n "$help" ]]; then
-            options+=(H "Paquete de ayuda")
+            options+=(H "Package help")
         fi
 
-        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --menu "Elige una opción para ${__mod_id[$idx]} \n$status" 22 76 16)
-        choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+        if [[ "$is_installed" -eq 1 ]]; then
+            options+=(V "Package version information")
+        fi
 
+        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Back" --default-item "$default" --menu "Choose an option for $id\n$status" 22 76 16)
+        choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+        default="$choice"
         local logfilename
 
         case "$choice" in
             U|B|S)
-                dialog --defaultno --yesno "Estás seguro que quieres ${option_msgs[$choice]}" 22 76 2>&1 >/dev/tty || continue
+                dialog --defaultno --yesno "Are you sure you want to ${option_msgs[$choice]}?" 22 76 2>&1 >/dev/tty || continue
                 local mode
                 case "$choice" in
                     U) mode="_auto_" ;;
@@ -254,7 +294,7 @@ function package_setup() {
                 rps_logInit
                 {
                     rps_logStart
-                    rp_installModule "$idx" "$mode" "force"
+                    rp_installModule "$id" "$mode"
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
@@ -263,19 +303,28 @@ function package_setup() {
                 rps_logInit
                 {
                     rps_logStart
-                    rp_callModule "$idx" gui
+                    rp_callModule "$id" gui
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
                 ;;
             X)
-                local text="Estás seguro de que deseas eliminar $md_id?"
-                [[ "${__mod_section[$idx]}" == "core" ]] && text+="\n\nADVERTENCIA: ¡se necesitan paquetes del core -nucleo- para que funcione EmulOS!"
+                local text="Are you sure you want to remove $id?"
+                case "${__mod_info[$id/section]}" in
+                    core)
+                        text+="\n\nWARNING - core packages are needed for EmulOS to function!"
+                        ;;
+                    depends)
+                        text+="\n\nWARNING - this package is required by other EmulOS packages - removing may cause other packages to fail."
+                        text+="\n\nNOTE: This will be reinstalled if missing when updating packages that require it."
+                        ;;
+                esac
                 dialog --defaultno --yesno "$text" 22 76 2>&1 >/dev/tty || continue
                 rps_logInit
                 {
                     rps_logStart
-                    rp_callModule "$idx" remove
+                    clear
+                    rp_callModule "$id" remove
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
@@ -283,9 +332,26 @@ function package_setup() {
             H)
                 printMsgs "dialog" "$help"
                 ;;
+            V)
+                local info
+                rp_loadPackageInfo "$id"
+                read -r -d '' info << _EOF_
+Package Origin: ${__mod_info[$id/pkg_origin]}
+Build Date: ${__mod_info[$id/pkg_date]}
+
+Built from source via:
+
+Type: ${__mod_info[$id/pkg_repo_type]}
+URL: ${__mod_info[$id/pkg_repo_url]}
+Branch: ${__mod_info[$id/pkg_repo_branch]}
+Commit: ${__mod_info[$id/pkg_repo_commit]}
+Date: ${__mod_info[$id/pkg_repo_date]}
+_EOF_
+               printMsgs "dialog" "$info"
+               ;;
             Z)
-                rp_callModule "$idx" clean
-                printMsgs "dialog" "$__builddir/$md_id ha sido eliminado."
+                rp_callModule "$id" clean
+                printMsgs "dialog" "$__builddir/$id has been removed."
                 ;;
             *)
                 break
@@ -299,40 +365,64 @@ function section_gui_setup() {
     local section="$1"
 
     local default=""
+    local status=""
+    local has_net=1
     while true; do
         local options=()
         local pkgs=()
 
-        local idx
-        local pkg_origin
+        status="Please choose a package from below"
+        if ! isConnected; then
+            status+="\nInstall options disabled ($__NET_ERRMSG)"
+            has_net=0
+        fi
+
+        local id
         local num_pkgs=0
-        for idx in $(rp_getSectionIds $section); do
-            if rp_isInstalled "$idx"; then
-                installed="(instalado)"
-                ((num_pkgs++))
-            else
-                installed=""
+        local info
+        local type
+        local last_type=""
+        for id in $(rp_getSectionIds $section); do
+            local type="${__mod_info[$id/vendor]} - ${__mod_info[$id/type]}"
+            # do a heading for each origin and module type
+            if [[ "$last_type" != "$type" ]]; then
+                info="$type"
+                pkgs+=("----" "\Z4$info ----" "Packages from $info")
+                last_type="$type"
             fi
-            pkgs+=("$idx" "${__mod_id[$idx]} $installed" "$idx ${__mod_desc[$idx]}"$'\n\n'"${__mod_help[$idx]}")
+            if ! rp_isEnabled "$id"; then
+                info="\Z1$id\Zn"
+            else
+                if rp_isInstalled "$id"; then
+                    rp_loadPackageInfo "$id" "pkg_origin"
+                    local pkg_origin="${__mod_info[$id/pkg_origin]}"
+
+                    info="$id (Installed - via $pkg_origin)"
+                    ((num_pkgs++))
+                else
+                    info="$id"
+                fi
+            fi
+            pkgs+=("${__mod_idx[$id]}" "$info" "$id - ${__mod_info[$id/desc]}"$'\n\n'"${__mod_info[$id/help]}")
         done
 
-        if [[ "$num_pkgs" -gt 0 ]]; then
+        if [[ "$has_net" -eq 1 && "$num_pkgs" -gt 0 ]]; then
             options+=(
-                U "Actualizar todos los paquetes de ${__sections[$section]} " "Esto actualizará cualquier paquete instalado de ${__sections[$section]} . Los paquetes serán actualizados por el método utilizado previamente."
+                U "Update all installed ${__sections[$section]} packages" "This will update any installed ${__sections[$section]} packages. The packages will be updated by the method used previously."
             )
         fi
 
-        # allow installing an entire section except for drivers - as it's probably a bad idea
-        if [[ "$section" != "driver" ]]; then
+        # allow installing an entire section except for drivers and dependencies - as it's probably a bad idea
+        if [[ "$has_net" -eq 1 && "$section" != "driver" && "$section" != "depends" ]]; then
             options+=(
-                I "Instalar todos los paquetes de ${__sections[$section]} " "Esto instalará todos los paquetes de ${__sections[$section]} . Si un paquete no está instalado y hay un binario precompilado disponible, se utilizará. Si un paquete ya está instalado, se actualizará mediante el método utilizado anteriormente"
-                X "Eliminar todos los paquetes de ${__sections[$section]} " "X Esto eliminará todos los paquetes de $section ."
+                I "Install all ${__sections[$section]} packages" "This will install all ${__sections[$section]} packages. If a package is not installed, and a pre-compiled binary is available it will be used. If a package is already installed, it will be updated by the method used previously"
+                X "Remove all ${__sections[$section]} packages" "X This will remove all $section packages."
             )
         fi
 
         options+=("${pkgs[@]}")
 
-        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción" 22 76 16)
+        local cmd=(dialog --colors --backtitle "$__backtitle" --cancel-label "Back" --item-help --help-button --default-item "$default" --menu "$status" 22 76 16)
 
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
@@ -351,41 +441,46 @@ function section_gui_setup() {
 
         local logfilename
         case "$choice" in
-          U|I)
+            U|I)
                 local mode="update"
                 [[ "$choice" == "I" ]] && mode="install"
-                dialog --defaultno --yesno "Estás seguro de que quieres instalar todos los paquetes de $section ?" 22 76 2>&1 >/dev/tty || continue
+                dialog --defaultno --yesno "Are you sure you want to $mode all $section packages?" 22 76 2>&1 >/dev/tty || continue
                 rps_logInit
                 {
                     rps_logStart
-                    for idx in $(rp_getSectionIds $section); do
-                      # if we are updating, skip packages that are not installed
-                      if [[ "$mode" == "update" ]]; then
-                          rp_isInstalled "$idx" && rp_installModule "$idx" "_update_" || break
-                      else
-                          rp_installModule "$idx" "_auto_" || break
-                      fi
+                    for id in $(rp_getSectionIds $section); do
+                        ! rp_isEnabled "$id" && continue
+                        # if we are updating, skip packages that are not installed
+                        if [[ "$mode" == "update" ]]; then
+                            if rp_isInstalled "$id"; then
+                                rp_installModule "$id" "_update_"
+                            fi
+                        else
+                            rp_installModule "$id" "_auto_"
+                        fi
                     done
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
                 ;;
             X)
-                local text="¿Seguro que quieres eliminar todos los paquetes de $section?"
-                [[ "$section" == "core" ]] && text+="\n\nDVERTENCIA - core ¡se necesitan estos paquetes para que EmulOS funcione!"
+                local text="Are you sure you want to remove all $section packages?"
+                [[ "$section" == "core" ]] && text+="\n\nWARNING - core packages are needed for EmulOS to function!"
                 dialog --defaultno --yesno "$text" 22 76 2>&1 >/dev/tty || continue
                 rps_logInit
                 {
                     rps_logStart
-                    for idx in $(rp_getSectionIds $section); do
-                        rp_isInstalled "$idx" && rp_callModule "$idx" remove
+                    for id in $(rp_getSectionIds $section); do
+                        rp_isInstalled "$id" && rp_callModule "$id" remove
                     done
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
                 ;;
+            ----)
+                ;;
             *)
-                package_setup "$choice"
+                package_setup "${__mod_id[$choice]}"
                 ;;
         esac
 
@@ -396,15 +491,15 @@ function config_gui_setup() {
     local default
     while true; do
         local options=()
-        local idx
-        for idx in "${__mod_idx[@]}"; do
+        local id
+        for id in "${__mod_id[@]}"; do
             # show all configuration modules and any installed packages with a gui function
-            if [[ "${__mod_section[idx]}" == "config" ]] || rp_isInstalled "$idx" && fnExists "gui_${__mod_id[idx]}"; then
-                options+=("$idx" "${__mod_id[$idx]}  - ${__mod_desc[$idx]}" "$idx ${__mod_desc[$idx]}")
+            if [[ "${__mod_info[$id/section]}" == "config" ]] || rp_isInstalled "$id" && fnExists "gui_$id"; then
+                options+=("${__mod_idx[$id]}" "$id  - ${__mod_info[$id/desc]}" "${__mod_idx[$id]} ${__mod_info[$id/desc]}")
             fi
         done
 
-        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción:" 22 76 16)
+        local cmd=(dialog --backtitle "$__backtitle" --cancel-label "Back" --item-help --help-button --default-item "$default" --menu "Choose an option" 22 76 16)
 
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
@@ -419,17 +514,17 @@ function config_gui_setup() {
         [[ -z "$choice" ]] && break
 
         default="$choice"
-
+        id="${__mod_id[$choice]}"
         local logfilename
         rps_logInit
         {
             rps_logStart
-            if fnExists "gui_${__mod_id[choice]}"; then
-                rp_callModule "$choice" depends
-                rp_callModule "$choice" gui
+            if fnExists "gui_$id"; then
+                rp_callModule "$id" depends
+                rp_callModule "$id" gui
             else
-                rp_callModule "$idx" clean
-                rp_callModule "$choice"
+                rp_callModule "$id" clean
+                rp_callModule "$id"
             fi
             rps_logEnd
         } &> >(_setup_gzip_log "$logfilename")
@@ -439,26 +534,36 @@ function config_gui_setup() {
 
 function update_packages_setup() {
     clear
-    local idx
-    for idx in ${__mod_idx[@]}; do
-        if rp_isInstalled "$idx" && [[ -n "${__mod_section[$idx]}" ]]; then
-            rp_installModule "$idx" "_update_" || return 1
+    local id
+    for id in ${__mod_id[@]}; do
+        if rp_isInstalled "$id" && [[ "${__mod_info[$id/section]}" != "depends" ]]; then
+            rp_installModule "$id" "_update_"
         fi
     done
+}
+
+function check_connection_gui_setup() {
+    local ip="$(getIPAddress)"
+    if [[ -z "$ip" ]]; then
+        printMsgs "dialog" "Sorry, you don't seem to be connected to the internet, so installing/updating is not available."
+        return 1
+    fi
+    return 0
 }
 
 function update_packages_gui_setup() {
     local update="$1"
     if [[ "$update" != "update" ]]; then
-        dialog --defaultno --yesno "¿Seguro que quieres actualizar los paquetes instalados?" 22 76 2>&1 >/dev/tty || return 1
+        ! check_connection_gui_setup && return 1
+        dialog --defaultno --yesno "Are you sure you want to update installed packages?" 22 76 2>&1 >/dev/tty || return 1
         updatescript_setup || return 1
         # restart at post_update and then call "update_packages_gui_setup update" afterwards
         joy2keyStop
-        exec "$scriptdir/emulos_pkgs.sh" setup post_update update_packages_gui_setup update
+        exec "$scriptdir/emulos_packages.sh" setup post_update update_packages_gui_setup update
     fi
 
     local update_os=0
-    dialog --yesno "¿Desea actualizar los paquetes subyacentes del sistema operativo? (ej. kernel, etc.)?" 22 76 2>&1 >/dev/tty && update_os=1
+    dialog --yesno "Would you like to update the underlying OS packages (eg kernel etc) ?" 22 76 2>&1 >/dev/tty && update_os=1
 
     clear
 
@@ -466,20 +571,27 @@ function update_packages_gui_setup() {
     rps_logInit
     {
         rps_logStart
-        [[ "$update_os" -eq 1 ]] && rp_callModule raspbiantools apt_upgrade
+        if [[ "$update_os" -eq 1 ]]; then
+            if rp_isEnabled "raspbiantools"; then
+                rp_callModule raspbiantools apt_upgrade
+            else
+                aptUpdate
+                apt-get -y dist-upgrade
+            fi
+        fi
         update_packages_setup
         rps_logEnd
     } &> >(_setup_gzip_log "$logfilename")
 
     rps_printInfo "$logfilename"
-    printMsgs "dialog" "Los paquetes instalados se han actualizado."
+    printMsgs "dialog" "Installed packages have been updated."
     gui_setup
 }
 
 function basic_install_setup() {
-    local idx
-    for idx in $(rp_getSectionIds core) $(rp_getSectionIds main); do
-        rp_installModule "$idx" || return 1
+    local id
+    for id in $(rp_getSectionIds core) $(rp_getSectionIds main); do
+        rp_installModule "$id"
     done
     return 0
 }
@@ -489,13 +601,13 @@ function packages_gui_setup() {
     local default
     local options=()
 
-    for section in core main opt driver exp; do
-        options+=($section "Administrar ${__sections[$section]} paquetes" "$section Elige la parte superior instalar/actualizar/configurar paquetes de la ${__sections[$section]}")
+    for section in core main opt driver exp depends; do
+        options+=($section "Manage ${__sections[$section]} packages" "$section Choose top install/update/configure packages from the ${__sections[$section]}")
     done
 
     local cmd
     while true; do
-        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Atrás" --item-help --help-button --default-item "$default" --menu "Elige una opción:" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --cancel-label "Back" --item-help --help-button --default-item "$default" --menu "Choose an option" 22 76 16)
 
         local choice
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -514,49 +626,29 @@ function packages_gui_setup() {
 
 function uninstall_setup()
 {
-    dialog --defaultno --yesno "¿Seguro que quieres desinstalar EmulOS?" 22 76 2>&1 >/dev/tty || return 0
-    dialog --defaultno --yesno "¿Estás REALMENTE seguro de que deseas desinstalar EmulOS?\n\n$rootdir se eliminará, esto incluye archivos de configuración para todos componentes." 22 76 2>&1 >/dev/tty || return 0
+    dialog --defaultno --yesno "Are you sure you want to uninstall EmulOS?" 22 76 2>&1 >/dev/tty || return 0
+    dialog --defaultno --yesno "Are you REALLY sure you want to uninstall EmulOS?\n\n$rootdir will be removed - this includes configuration files for all EmulOS components." 22 76 2>&1 >/dev/tty || return 0
     clear
-    printHeading "Desinstalando EmulOS"
-    for idx in "${__mod_idx[@]}"; do
-        rp_isInstalled "$idx" && rp_callModule $idx remove
+    printHeading "Uninstalling EmulOS"
+    for id in "${__mod_id[@]}"; do
+        rp_isInstalled "$id" && rp_callModule $id remove
     done
     rm -rfv "$rootdir"
-    dialog --defaultno --yesno "¿Desea eliminar todos los archivos de $datadir ? Esto incluye todas las ROM instaladas, los archivos de la BIOS y los splashscreen." 22 76 2>&1 >/dev/tty && rm -rfv "$datadir"
-    if dialog --defaultno --yesno "¿Desea eliminar todos los paquetes de sistema de los que depende EmulOS?\n\nADVERTENCIA: esto eliminará paquetes como SDL incluso si se instalaron antes de instalar EmulOS - también eliminara cualquier configuración de paquete - como los de /etc/ samba para Samba. \n\nSi no esta seguro, elija No (seleccionado por defecto)." 22 76 2>&1 >/dev/tty; then
+    dialog --defaultno --yesno "Do you want to remove all the files from $datadir - this includes all your installed ROMs, BIOS files and custom splashscreens." 22 76 2>&1 >/dev/tty && rm -rfv "$datadir"
+    if dialog --defaultno --yesno "Do you want to remove all the system packages that EmulOS depends on? \n\nWARNING: this will remove packages like SDL even if they were installed before you installed EmulOS - it will also remove any package configurations - such as those in /etc/samba for Samba.\n\nIf unsure choose No (selected by default)." 22 76 2>&1 >/dev/tty; then
         clear
         # remove all dependencies
-        for idx in "${__mod_idx[@]}"; do
-            rp_isInstalled "$idx" && rp_callModule "$idx" depends remove
+        for id in "${__mod_id[@]}"; do
+            rp_isInstalled "$id" && rp_callModule "$id" depends remove
         done
     fi
-    printMsgs "dialog" "EmulOS ha sido desinstalado."
+    printMsgs "dialog" "EmulOS has been uninstalled."
 }
 
 function reboot_setup()
 {
     clear
     reboot
-}
-
-# arranque silencioso de instalación base
-function silencio() {
-	fichero_nec="/boot/cmdline.txt"
-	clear
-	cp $fichero_nec $fichero_nec.bkp
-	dato="$(cat /boot/cmdline.txt | grep 'PARTUUID' | cut -d  " "  -f4)"
-
-	if [[ -f "$fichero_nec" ]]; then
-		sudo cat > $fichero_nec <<_EOF_
-dwc_otg.lpm_enable=0 console=serial0,115200 console=tty3 loglevel=3 $dato rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait plymouth.enable=0 logo.nologo
-_EOF_
-		sudo chmod -R +x $fichero_nec
-		sudo chown -R root:root $fichero_nec
-
-	else
-		echo "El $fichero no existe, no se ha podido configurar el arranque silencioso." ; sleep 2
-	fi
-
 }
 
 # emulos-setup main menu
@@ -567,26 +659,26 @@ function gui_setup() {
     while true; do
         local commit=$(git -C "$scriptdir" log -1 --pretty=format:"%cr (%h)")
 
-        cmd=(dialog --backtitle "$__backtitle" --title "EmulOS-Setup Script" --cancel-label "Salir" --item-help --help-button --default-item "$default" --menu "Versión: $__version (funcionando en $__os_desc)\nÚltimo Commit: $commit" 22 76 16)
+        cmd=(dialog --backtitle "$__backtitle" --title "EmulOS-Setup Script" --cancel-label "Exit" --item-help --help-button --default-item "$default" --menu "Version: $__version - Last Commit: $commit\nSystem: $__platform ($__platform_arch) - running on $__os_desc" 22 76 16)
         options=(
-        I "EmulOS Instalacion basica" "Esto instalará todos los paquetes de Core y Main, lo que da una instalación basica de EmulOS.\nPosteriormente, se pueden instalar más paquetes desde las secciones Opcional y Experimental. Si hay binarios disponibles, se usarán, o los paquetes se construirán desde la fuente, lo que llevará más tiempo."
+            I "Basic install" "I This will install all packages from Core and Main which gives a basic EmulOS install. Further packages can then be installed later from the Optional and Experimental sections. If binaries are available they will be used, alternatively packages will be built from source - which will take longer."
 
-        U "Update" "U Actualiza el script EmulOS-Setup y todos los paquetes instalados actualmente. También permitirá actualizar paquetes de sistema operativo. Si hay binarios disponibles, se usarán. De lo contrario, los paquetes se compilarán a partir de la fuente."
+            U "Update" "U Updates EmulOS-Setup and all currently installed packages. Will also allow to update OS packages. If binaries are available they will be used, otherwise packages will be built from source."
 
-        P "Administrar paquetes"
-        "P Instalar / Quitar y configurar los diversos componentes de EmulOS, incluidos emuladores, ports y controladores."
+            P "Manage packages"
+            "P Install/Remove and Configure the various components of EmulOS, including emulators, ports, and controller drivers."
 
-        C "Configuración / herramientas"
-        "C Configuración y herramientas. Configure samba y cualquier paquete que haya instalado que tenga opciones de configuración adicionales también aparecerán aquí."
+            C "Configuration / tools"
+            "C Configuration and Tools. Any packages you have installed that have additional configuration options will also appear here."
 
-        S "Actualizar script EmulOS-Setup"
-        "S Actualice el script EmulOS-Setup. Esto actualizará SÓLO este script de administración principal, pero NO actualizará ningún paquete de software. Para actualizar los paquetes, use la opción 'Update' del menú principal, que también actualizará el script de instalación de EmulOS."
+            S "Update EmulOS-Setup script"
+            "S Update this EmulOS-Setup script. This will update this main management script only, but will not update any software packages. To update packages use the 'Update' option from the main menu, which will also update the EmulOS-Setup script."
 
-        # X "Desinstalar EmulOS"
-        # "X Desinstalar completamente EmulOS."
+            X "Uninstall EmulOS"
+            "X Uninstall EmulOS completely."
 
-        R "Realice un reinicio"
-        "R Reinicia tu dispositivo, reinicie su máquina para que las modificaciones tengan efecto."
+            R "Perform reboot"
+            "R Reboot your machine."
         )
 
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
@@ -603,24 +695,14 @@ function gui_setup() {
 
         case "$choice" in
             I)
-                dialog --defaultno --yesno "¿Estás seguro de que quieres hacer una instalación básica?\n\nEsto instalará todos los paquetes del 'Core' y 'Main'." 22 76 2>&1 >/dev/tty || continue
+                ! check_connection_gui_setup && continue
+                dialog --defaultno --yesno "Are you sure you want to do a basic install?\n\nThis will install all packages from the 'Core' and 'Main' package sections." 22 76 2>&1 >/dev/tty || continue
                 clear
                 local logfilename
                 rps_logInit
                 {
                     rps_logStart
-                    #sudo apt-get install -y libboost-all-dev
                     basic_install_setup
-                    #### gancho nuevo copia de scripts nuestros
-              			if [[ -f "/home/pi/EmulOS/emulosmenu/raspiconfig.rp" ]]; then
-                      #silencio
-                      cd
-                      sudo cp /home/pi/EmulOS-Setup/scriptmodules/extras/gamelist.xml /opt/emulos/configs/all/emulationstation/gamelists/emulos/
-                			sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/supplementary/emulosmenu/* /home/pi/EmulOS/emulosmenu/
-                      sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/shutdown /home/pi/EmulOS/
-                      #sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/emulationstation.sh /opt/emulos/supplementary/emulationstation/
-                			#sudo cp -R /home/pi/EmulOS-Setup/scriptmodules/extras/es_idioma/* /opt/emulos/supplementary/emulationstation/
-      		          fi
                     rps_logEnd
                 } &> >(_setup_gzip_log "$logfilename")
                 rps_printInfo "$logfilename"
@@ -635,10 +717,11 @@ function gui_setup() {
                 config_gui_setup
                 ;;
             S)
-                dialog --defaultno --yesno "¿Estás seguro que quieres actualizar el script EmulOS-Setup?" 22 76 2>&1 >/dev/tty || continue
+                ! check_connection_gui_setup && continue
+                dialog --defaultno --yesno "Are you sure you want to update the EmulOS-Setup script ?" 22 76 2>&1 >/dev/tty || continue
                 if updatescript_setup; then
                     joy2keyStop
-                    exec "$scriptdir/emulos_pkgs.sh" setup post_update gui_setup
+                    exec "$scriptdir/emulos_packages.sh" setup post_update gui_setup
                 fi
                 ;;
             X)
@@ -650,7 +733,7 @@ function gui_setup() {
                 rps_printInfo "$logfilename"
                 ;;
             R)
-                dialog --defaultno --yesno "¿Estás seguro de que quieres reiniciar?\n\nTen en cuenta que si reinicias cuando se está ejecutando EmulationStation, perderás los cambios en los metadatos." 22 76 2>&1 >/dev/tty || continue
+                dialog --defaultno --yesno "Are you sure you want to reboot?\n\nNote that if you reboot when Emulation Station is running, you will lose any metadata changes." 22 76 2>&1 >/dev/tty || continue
                 reboot_setup
                 ;;
         esac

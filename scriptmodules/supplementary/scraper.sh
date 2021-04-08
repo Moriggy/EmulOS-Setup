@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="scraper"
 rp_module_desc="Scraper for EmulationStation by Steven Selph"
 rp_module_licence="MIT https://raw.githubusercontent.com/sselph/scraper/master/LICENSE"
+rp_module_repo="git https://github.com/sselph/scraper.git master"
 rp_module_section="opt"
 rp_module_flags="nobin"
 
@@ -22,6 +23,8 @@ function depends_scraper() {
 function sources_scraper() {
     local goroot="$(_get_goroot_golang)"
     GOPATH="$md_build" GOROOT="$goroot" "$goroot/bin/go" get -u github.com/sselph/scraper
+    # manually set repo_dir for packaging info / version checking
+    __mod_info[$md_id/repo_dir]="$md_build/src/github.com/sselph/scraper"
 }
 
 function build_scraper() {
@@ -47,7 +50,7 @@ function get_ver_scraper() {
 }
 
 function latest_ver_scraper() {
-    wget -qO- https://api.github.com/repos/sselph/scraper/releases/latest | grep -m 1 tag_name | cut -d\" -f4
+    download https://api.github.com/repos/sselph/scraper/releases/latest - | grep -m 1 tag_name | cut -d\" -f4
 }
 
 function list_systems_scraper() {
@@ -133,7 +136,7 @@ function scrape_scraper() {
         params+=(-append)
     fi
 
-    # trap ctrl+c and return if pressed (rather than exiting retropie-setup etc)
+    # trap ctrl+c and return if pressed (rather than exiting emulos-setup etc)
     trap 'trap 2; return 1' INT
     sudo -u $user "$md_inst/scraper" ${params[@]}
     trap 2
@@ -192,7 +195,7 @@ function _load_config_scraper() {
 
 function gui_scraper() {
     if pgrep "emulationstatio" >/dev/null; then
-        printMsgs "dialog" "This scraper must not be run while Emulation Station is running or the scraped data will be overwritten. \n\nPlease quit from Emulation Station, and run RetroPie-Setup from the terminal"
+        printMsgs "dialog" "This scraper must not be run while Emulation Station is running or the scraped data will be overwritten. \n\nPlease quit from Emulation Station, and run EmulOS-Setup from the terminal"
         return
     fi
 

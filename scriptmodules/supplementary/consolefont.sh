@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="consolefont"
-rp_module_desc="Configurar el tamaño/tipo de la fuente de la consola por defecto"
+rp_module_desc="Configure default console font size/type"
 rp_module_section="config"
 rp_module_flags="!x11"
 
@@ -40,15 +40,15 @@ function gui_consolefont() {
     local options
     local choice
 
-    cmd=(dialog --backtitle "$__backtitle" --menu "Elige la configuración de fuente de consola deseada:\n(Configuración actual: $(check_consolefont))" 22 86 16)
+    cmd=(dialog --backtitle "$__backtitle" --menu "Choose the desired console font configuration: \n(Current configuration: $(check_consolefont))" 22 86 16)
     options=(
-        1 "Grande (VGA 16x32)"
-        2 "Grande (TerminusBold 16x32)"
-        3 "Medio (VGA 16x28)"
-        4 "Medio (TerminusBold 14x28)"
-        5 "Pequeña (Fixed 8x16)"
-        6 "Menor (VGA 8x8)"
-        D "Predeterminado (Kernel font 8x16 - Reinicio necesario)"
+        1 "Large (VGA 16x32)"
+        2 "Large (TerminusBold 16x32)"
+        3 "Medium (VGA 16x28)"
+        4 "Medium (TerminusBold 14x28)"
+        5 "Small (Fixed 8x16)"
+        6 "Smaller (VGA 8x8)"
+        D "Default (Kernel font 8x16 - Restart needed)"
     )
     choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
@@ -76,9 +76,9 @@ function gui_consolefont() {
                 ;;
         esac
         if [[ "$choice" == "D" ]]; then
-            printMsgs "dialog" "Se usará la fuente predeterminada (provista por el Kernel).\n\nDeberás reiniciar para ver el cambio."
+            printMsgs "dialog" "Default font will be used (provided by the Kernel).\n\nYou will need to reboot to see the change."
         else
-            printMsgs "dialog" "Nueva configuración de fuente aplicada: $(check_consolefont)"
+            printMsgs "dialog" "New font configuration applied: $(check_consolefont)"
         fi
     fi
 }

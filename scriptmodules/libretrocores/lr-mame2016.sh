@@ -1,22 +1,28 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-mame2016"
-rp_module_desc="Emulador MAME - MAME 0.174 (2016) port para libretro"
-rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME 0.174 (2016) en $romdir/mame-libretro o\n$romdir/arcade"
+rp_module_desc="MAME emulator - MAME 0.174 port for libretro"
+rp_module_help="ROM Extension: .zip\n\nCopy your MAME roms to either $romdir/mame-libretro or\n$romdir/arcade"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/mame2016-libretro/master/LICENSE.md"
+rp_module_repo="git https://github.com/libretro/mame2016-libretro.git master"
 rp_module_section="exp"
+rp_module_flags=""
+
+function depends_lr-mame2016() {
+    getDepends libasound2-dev
+}
 
 function sources_lr-mame2016() {
-    gitPullOrClone "$md_build" https://github.com/libretro/mame2016-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-mame2016() {

@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="redream"
-rp_module_desc="Redream emulador de Dreamcast"
-rp_module_help="ROM Extensions: .cdi .cue .chd .gdi .iso\n\nCopia tus roms de Dreamcast en $romdir/dreamcast"
+rp_module_desc="Redream Dreamcast emulator"
+rp_module_help="ROM Extensions: .cdi .cue .chd .gdi .iso\n\nCopy your Dreamcast roms to $romdir/dreamcast"
 rp_module_licence="PROP"
 rp_module_section="exp"
 rp_module_flags="noinstclean !all rpi4"
@@ -41,6 +41,7 @@ function configure_redream() {
     moveConfigFile "$md_inst/redream.cfg" "$dest/redream.cfg"
     moveConfigDir "$md_inst/cache" "$dest/cache"
     moveConfigDir "$md_inst/saves" "$dest/saves"
+    moveConfigDir "$md_inst/states" "$dest/states"
 
     # copy / symlink vmus (memory cards)
     local i
@@ -49,6 +50,7 @@ function configure_redream() {
     done
 
     # symlink bios files to libretro core install locations
+    mkUserDir "$biosdir/dc"
     ln -sf "$biosdir/dc/dc_boot.bin" "$md_inst/boot.bin"
     ln -sf "$biosdir/dc/dc_flash.bin" "$md_inst/flash.bin"
 }

@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The MasOS Team Project
+# This file is part of The EmulOS Project
 #
 # The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="splashscreen"
-rp_module_desc="Configurar Splashscreen"
+rp_module_desc="Configure Splashscreen"
 rp_module_section="main"
-rp_module_flags="noinstclean !all rpi !osmc !xbian"
+rp_module_repo="git https://github.com/EmulOS/emulos-splashscreens.git master"
+rp_module_flags="noinstclean !all rpi !osmc !xbian !aarch64"
 
 function _update_hook_splashscreen() {
-    # make sure splashscreen is always up to date if updating just RetroPie-Setup
-    if rp_isInstalled "$md_idx"; then
+    # make sure splashscreen is always up to date if updating just EmulOS-Setup
+    if rp_isInstalled "$md_id"; then
         install_bin_splashscreen
         configure_splashscreen
     fi
@@ -31,7 +32,9 @@ function _video_exts_splashscreen() {
 }
 
 function depends_splashscreen() {
-    getDepends omxplayer insserv
+    local params=(insserv)
+    isPlatform "32bit" && params+=(omxplayer)
+    getDepends "${params[@]}"
 }
 
 function install_bin_splashscreen() {
@@ -54,7 +57,7 @@ _EOF_
 
     rp_installModule "omxiv" "_autoupdate_"
 
-    gitPullOrClone "$md_inst" https://github.com/Moriggy/emulos-splashscreens.git
+    gitPullOrClone "$md_inst"
 
     cp "$md_data/asplashscreen.sh" "$md_inst"
 
@@ -63,6 +66,12 @@ _EOF_
     iniSet "DATADIR" "$datadir"
     iniSet "REGEX_IMAGE" "$(_image_exts_splashscreen)"
     iniSet "REGEX_VIDEO" "$(_video_exts_splashscreen)"
+
+    if [[ ! -f "$configdir/all/$md_id.cfg" ]]; then
+        iniConfig "=" '"' "$configdir/all/$md_id.cfg"
+        iniSet "RANDOMIZE" "disabled"
+    fi
+    chown $user:$user "$configdir/all/$md_id.cfg"
 
     mkUserDir "$datadir/splashscreens"
     echo "Place your own splashscreens in here." >"$datadir/splashscreens/README.txt"
@@ -95,7 +104,6 @@ function disable_splashscreen() {
     systemctl disable asplashscreen
 }
 
-
 function configure_splashscreen() {
     [[ "$md_mode" == "remove" ]] && return
 
@@ -120,7 +128,7 @@ function choose_path_splashscreen() {
         1 "EmulOS splashscreens"
         2 "Own/Extra splashscreens (from $datadir/splashscreens)"
     )
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Escoge una opción." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ "$choice" -eq 1 ]] && echo "$md_inst"
     [[ "$choice" -eq 2 ]] && echo "$datadir/splashscreens"
@@ -138,12 +146,12 @@ function set_append_splashscreen() {
         if [[ -n "$file" ]]; then
             if [[ "$mode" == "set" ]]; then
                 echo "$file" >/etc/splashscreen.list
-                printMsgs "dialog" "Splashscreen configurado en '$file'"
+                printMsgs "dialog" "Splashscreen set to '$file'"
                 break
             fi
             if [[ "$mode" == "append" ]]; then
                 echo "$file" >>/etc/splashscreen.list
-                printMsgs "dialog" "Splashscreen '$file' añadido a /etc/splashscreen.list"
+                printMsgs "dialog" "Splashscreen '$file' appended to /etc/splashscreen.list"
             fi
         fi
     done
@@ -165,59 +173,60 @@ function choose_splashscreen() {
             options+=("$i" "$splashdir")
             ((i++))
         fi
-    done < <(find "$path" -type f ! -regex ".*/\..*" ! -regex ".*LICENSE" ! -regex ".*README.*" ! -regex ".*\.sh" | sort)
+    done < <(find "$path" -type f ! -regex ".*/\..*" ! -regex ".*LICENSE" ! -regex ".*README.*" ! -regex ".*\.sh"  ! -regex ".*\.pkg" | sort)
     if [[ "${#options[@]}" -eq 0 ]]; then
-        printMsgs "dialog" "No hay splashscreens instalados en $path"
+        printMsgs "dialog" "There are no splashscreens installed in $path"
         return
     fi
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Elige splashscreen." 22 76 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose splashscreen." 22 76 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     [[ -n "$choice" ]] && echo "$path/${options[choice*2+1]}"
 }
 
-
 function randomize_splashscreen() {
     options=(
-        1 "Random de EmulOS splashscreens"
-        2 "Random de nuestros splashscreens (from $datadir/splashscreens)"
-        3 "Random de todos los splashscreens"
-        4 "Random /etc/splashscreen.list"
+        1 "Randomize EmulOS splashscreens"
+        2 "Randomize own splashscreens (from $datadir/splashscreens)"
+        3 "Randomize all splashscreens"
+        4 "Randomize /etc/splashscreen.list"
     )
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Escoge una opción." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
-    iniConfig "=" '"' "$md_inst/asplashscreen.sh"
+    iniConfig "=" '"' "$configdir/all/$md_id.cfg"
+    chown $user:$user "$configdir/all/$md_id.cfg"
+
     case "$choice" in
         1)
             iniSet "RANDOMIZE" "emulos"
-            printMsgs "dialog" "Splashscreen random habilitado en el directorio $path"
+            printMsgs "dialog" "Splashscreen randomizer enabled in directory $path"
             ;;
         2)
             iniSet "RANDOMIZE" "custom"
-            printMsgs "dialog" "Splashscreen random habilitado en el directorio $path"
+            printMsgs "dialog" "Splashscreen randomizer enabled in directory $path"
             ;;
         3)
             iniSet "RANDOMIZE" "all"
-            printMsgs "dialog" "Splashscreen random habilitado para ambos directorios de splashscreen."
+            printMsgs "dialog" "Splashscreen randomizer enabled for both splashscreen directories."
             ;;
         4)
             iniSet "RANDOMIZE" "list"
-            printMsgs "dialog" "Splashscreen random habilitado para entradas en /etc/splashscreen.list"
+            printMsgs "dialog" "Splashscreen randomizer enabled for entries in /etc/splashscreen.list"
             ;;
     esac
 }
 
 function preview_splashscreen() {
     local options=(
-        1 "Ver splashscreen"
-        2 "Ver la presentación de todos los splashscreens"
-        3 "Reproducir video splash"
+        1 "View single splashscreen"
+        2 "View slideshow of all splashscreens"
+        3 "Play video splash"
     )
 
     local path
     local file
     local omxiv="/opt/emulos/supplementary/omxiv/omxiv"
     while true; do
-        local cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opción." 22 86 16)
+        local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         [[ -z "$choice" ]] && break
         path="$(choose_path_splashscreen)"
@@ -235,7 +244,7 @@ function preview_splashscreen() {
                     if [[ -s "$file" ]]; then
                         $omxiv -t 6 -T blend -b --once -f "$file"
                     else
-                        printMsgs "dialog" "No hay splashscreens instalados en $path"
+                        printMsgs "dialog" "There are no splashscreens installed in $path"
                     fi
                     rm -f "$file"
                     break
@@ -251,7 +260,7 @@ function preview_splashscreen() {
 }
 
 function download_extra_splashscreen() {
-    gitPullOrClone "$datadir/splashscreens/emulos-extra" https://github.com/DOCK-PI3/masos-splashscreens-extra
+    gitPullOrClone "$datadir/splashscreens/emulos-extra" https://github.com/HerbFargus/emulos-splashscreens-extra
     chown -R $user:$user "$datadir/splashscreens/emulos-extra"
 }
 
@@ -260,34 +269,43 @@ function gui_splashscreen() {
         rp_callModule splashscreen depends
         rp_callModule splashscreen install
     fi
-    local cmd=(dialog --backtitle "$__backtitle" --menu "Escoge una opción." 22 86 16)
+    local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
     while true; do
         local enabled=0
         local random=0
         [[ -n "$(find "/etc/systemd/system/"*".wants" -type l -name "asplashscreen.service")" ]] && enabled=1
-        local options=(1 "Escoge splashscreen")
+        local options=(1 "Choose splashscreen")
         if [[ "$enabled" -eq 1 ]]; then
-            options+=(2 "Deshabilitar splashscreen en el arranque (Habilitado)")
-            iniConfig "=" '"' "$md_inst/asplashscreen.sh"
+            options+=(2 "Disable splashscreen on boot (Enabled)")
+            iniConfig "=" '"' "$configdir/all/$md_id.cfg"
             iniGet "RANDOMIZE"
             random=1
             [[ "$ini_value" == "disabled" ]] && random=0
             if [[ "$random" -eq 1 ]]; then
-                options+=(3 "Deshabilitar el random de splashscreens (Habilitado)")
+                options+=(3 "Disable splashscreen randomizer (Enabled)")
             else
-                options+=(3 "Habilitar el random de splashscreen (Deshabilitado)")
+                options+=(3 "Enable splashscreen randomizer (Disabled)")
             fi
         else
-            options+=(2 "Activar splashscreen en el arranque (Disabled)")
+            options+=(2 "Enable splashscreen on boot (Disabled)")
         fi
         options+=(
-            4 "Usar la pantalla de inicio de EmulOS por defecto"
-            5 "Editar manualmente la lista de splashscreen"
-            6 "Añadir splashscreen a la lista (para entradas múltiples)"
-            7 "Vista previa de splashscreens"
-            8 "Actualizar EmulOS splashscreens"
-            9 "Descargar EmulOS-Extra splashscreens"
+            4 "Use default splashscreen"
+            5 "Manually edit splashscreen list"
+            6 "Append splashscreen to list (for multiple entries)"
+            7 "Preview splashscreens"
+            8 "Update EmulOS splashscreens"
+            9 "Download EmulOS-Extra splashscreens"
         )
+
+        iniConfig "=" '"' "$configdir/all/$md_id.cfg"
+        iniGet "DURATION"
+        # default splashscreen duration is 12 seconds
+        local duration=${ini_value:-12}
+
+        options+=(
+            A "Configure image splashscreen duration ($duration sec)"
+            )
         local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
             case "$choice" in
@@ -297,24 +315,24 @@ function gui_splashscreen() {
                 2)
                     if [[ "$enabled" -eq 1 ]]; then
                         disable_splashscreen
-                        printMsgs "dialog" "Deshabilitado splashscreen en el arranque."
+                        printMsgs "dialog" "Disabled splashscreen on boot."
                     else
                         [[ ! -f /etc/splashscreen.list ]] && rp_callModule splashscreen default
                         enable_splashscreen
-                        printMsgs "dialog" "Habilitado splashscreen en el arranque."
+                        printMsgs "dialog" "Enabled splashscreen on boot."
                     fi
                     ;;
                 3)
                     if [[ "$random" -eq 1 ]]; then
                         iniSet "RANDOMIZE" "disabled"
-                        printMsgs "dialog" "Deshabilitado random Splashscreen."
+                        printMsgs "dialog" "Splashscreen randomizer disabled."
                     else
                         randomize_splashscreen
                     fi
                     ;;
                 4)
                     default_splashscreen
-                    printMsgs "dialog" "Splashscreen configurado en EmulOS por defecto."
+                    printMsgs "dialog" "Splashscreen set to EmulOS default."
                     ;;
                 5)
                     editFile /etc/splashscreen.list
@@ -330,7 +348,13 @@ function gui_splashscreen() {
                     ;;
                 9)
                     rp_callModule splashscreen download_extra
-                    printMsgs "dialog" "Los splashscreens de EmulOS-Extra se han descargado en $datadir/splashscreens/emulos-extra"
+                    printMsgs "dialog" "The EmulOS-Extra splashscreens have been downloaded to $datadir/splashscreens/emulos-extra"
+                    ;;
+                A)  
+                    duration=$(dialog --title "Splashscreen duration" --clear --rangebox "Configure how many seconds the splashscreen is active" 0 60 5 100 $duration 2>&1 >/dev/tty)
+                    if [[ -n "$duration" ]]; then
+                        iniSet "DURATION" "${duration//[^[:digit:]]/}"
+                    fi
                     ;;
             esac
         else

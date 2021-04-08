@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="pisnes"
-rp_module_desc="Emulador de SNES - PiSNES"
-rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopia tus roms de SNES en $romdir/snes"
-rp_module_licence="NONCOM https://raw.githubusercontent.com/RetroPie/pisnes/master/snes9x.h"
+rp_module_desc="SNES emulator PiSNES"
+rp_module_help="ROM Extensions: .bin .smc .sfc .fig .swc .mgd .zip\n\nCopy your SNES roms to $romdir/snes"
+rp_module_licence="NONCOM https://raw.githubusercontent.com/EmulOS/pisnes/master/snes9x.h"
+rp_module_repo="git https://github.com/EmulOS/pisnes.git master"
 rp_module_section="opt"
 rp_module_flags="!all videocore"
 
@@ -21,7 +22,7 @@ function depends_pisnes() {
 }
 
 function sources_pisnes() {
-    gitPullOrClone "$md_build" https://github.com/RetroPie/pisnes.git
+    gitPullOrClone
 }
 
 function build_pisnes() {
@@ -48,10 +49,11 @@ function install_pisnes() {
 function configure_pisnes() {
     mkRomDir "snes"
 
-    moveConfigFile "$md_inst/snes9x.cfg" "$md_conf_root/snes/snes9x.cfg"
-
-    copyDefaultConfig "$md_inst/snes9x.cfg.template" "$md_conf_root/snes/snes9x.cfg"
-
     addEmulator 0 "$md_id" "snes" "$md_inst/snes9x %ROM%"
     addSystem "snes"
+
+    [[ "$md_mode" == "remove" ]] && return
+
+    moveConfigFile "$md_inst/snes9x.cfg" "$md_conf_root/snes/snes9x.cfg"
+    copyDefaultConfig "$md_inst/snes9x.cfg.template" "$md_conf_root/snes/snes9x.cfg"
 }

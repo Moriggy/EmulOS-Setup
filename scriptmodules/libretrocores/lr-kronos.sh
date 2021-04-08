@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-kronos"
-rp_module_desc="Emulador de Sega Saturn & ST-V emulator - Kronos port para libretro"
-rp_module_help="ROM Extensions: .iso .cue .zip .ccd .mds\n\nCopia tus roms de Sega Saturn & ST-V en $romdir/saturn\n\nCopia las BIOS saturn_bios.bin / stvbios.zip en $biosdir/kronos"
+rp_module_desc="Saturn & ST-V emulator - Kronos port for libretro"
+rp_module_help="ROM Extensions: .iso .cue .zip .ccd .mds\n\nCopy your Sega Saturn & ST-V roms to $romdir/saturn\n\nCopy the required BIOS file saturn_bios.bin / stvbios.zip to $biosdir/kronos"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/yabause/kronos/yabause/COPYING"
+rp_module_repo="git https://github.com/libretro/yabause.git kronos"
 rp_module_section="exp"
-rp_module_flags="!armv6"
+rp_module_flags="!arm !aarch64"
 
 function sources_lr-kronos() {
-    gitPullOrClone "$md_build" https://github.com/libretro/yabause.git kronos
+    gitPullOrClone
 }
 
 function build_lr-kronos() {

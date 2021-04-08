@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="usbromservice"
 rp_module_desc="USB ROM Service"
-rp_module_section="main"
+rp_module_section="opt"
 
 function _get_ver_usbromservice() {
     echo 0.0.24
 }
 
 function _update_hook_usbromservice() {
+    ! rp_isInstalled "$md_id" && return
     [[ ! -f "$md_inst/disabled" ]] && install_scripts_usbromservice
 }
 
@@ -26,12 +27,11 @@ function depends_usbromservice() {
     if ! hasPackage usbmount $(_get_ver_usbromservice); then
         depends+=(debhelper devscripts pmount lockfile-progs)
         getDepends "${depends[@]}"
-        gitPullOrClone "$md_build" https://github.com/RetroPie/usbmount.git systemd
-        cd "$md_build"
+        gitPullOrClone "$md_build/usbmount" https://github.com/EmulOS/usbmount.git systemd
+        cd "$md_build/usbmount"
         dpkg-buildpackage
         dpkg -i ../usbmount_*_all.deb
         rm -f ../usbmount_*
-        rm -rf "$md_build"
     fi
 }
 
@@ -62,7 +62,7 @@ function disable_usbromservice() {
         file="/etc/usbmount/mount.d/${file##*/}"
         rm -f "$file"
     done
-    touch "$md_inst/disabled"
+    [[ -d "$md_inst" ]] && touch "$md_inst/disabled"
 }
 
 function remove_usbromservice() {
@@ -84,11 +84,16 @@ function configure_usbromservice() {
     done
 
     # set our mount options (usbmount has sync by default which we don't want)
-    local uid=$(id -u $user)
-    local gid=$(id -g $user)
-    local mount_options="nodev,noexec,noatime,uid=$uid,gid=$gid"
+    iniSet "MOUNTOPTIONS" "nodev,noexec,noatime"
 
-    iniSet "MOUNTOPTIONS" "$mount_options"
+    # set per filesystem mount options
+    local options="uid=$(id -u $user),gid=$(id -g $user)"
+    local fs_options
+    local fs
+    for fs in vfat hfsplus ntfs exfat; do
+        fs_options+=("-fstype=${fs},${options}")
+    done
+    iniSet "FS_MOUNTOPTIONS" "${fs_options[*]}"
 }
 
 function gui_usbromservice() {
@@ -96,10 +101,10 @@ function gui_usbromservice() {
     local options
     local choice
     while true; do
-        cmd=(dialog --backtitle "$__backtitle" --menu "Elige una opcion." 22 86 16)
+        cmd=(dialog --backtitle "$__backtitle" --menu "Choose from an option below." 22 86 16)
         options=(
-            1 "Habilitar USB ROM Service scripts"
-            2 "Deshabilitar USB ROM Service scripts"
+            1 "Enable USB ROM Service scripts"
+            2 "Disable USB ROM Service scripts"
         )
         choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
         if [[ -n "$choice" ]]; then
@@ -107,11 +112,11 @@ function gui_usbromservice() {
                 1)
                     rp_callModule "$md_id" depends
                     rp_callModule "$md_id" enable
-                    printMsgs "dialog" "Habilitado $md_desc"
+                    printMsgs "dialog" "Enabled $md_desc"
                     ;;
                 2)
                     rp_callModule "$md_id" disable
-                    printMsgs "dialog" "Deshabilitado $md_desc"
+                    printMsgs "dialog" "Disabled $md_desc"
                     ;;
             esac
         else

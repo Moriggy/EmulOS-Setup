@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-dolphin"
-rp_module_desc="Emulador de Gamecube/Wii - Dolphin port para libretro"
-rp_module_help="ROM Extensions: .gcm .iso .wbfs .ciso .gcz\n\nCopia tus roms de Gamecube en $romdir/gc y las de Wii en $romdir/wii"
+rp_module_desc="Gamecube/Wii emulator - Dolphin port for libretro"
+rp_module_help="ROM Extensions: .gcm .iso .wbfs .ciso .gcz\n\nCopy your gamecube roms to $romdir/gc and Wii roms to $romdir/wii"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/dolphin/master/license.txt"
+rp_module_repo="git https://github.com/libretro/dolphin master"
 rp_module_section="exp"
 rp_module_flags="!all 64bit"
 
@@ -21,7 +22,7 @@ function depends_lr-dolphin() {
 }
 
 function sources_lr-dolphin() {
-    gitPullOrClone "$md_build" https://github.com/libretro/dolphin
+    gitPullOrClone
 }
 
 function build_lr-dolphin() {

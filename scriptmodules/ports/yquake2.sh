@@ -1,28 +1,29 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="yquake2"
 rp_module_desc="yquake2 - The Yamagi Quake II client"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/yquake2/yquake2/master/LICENSE"
+rp_module_repo="git https://github.com/yquake2/yquake2.git QUAKE2_7_41"
 rp_module_section="exp"
 rp_module_flags=""
 
 function depends_yquake2() {
-    local depends=(libgl1-mesa-dev libglu1-mesa-dev libogg-dev libopenal-dev libsdl2-dev libvorbis-dev zlib1g-dev)
+    local depends=(libgl1-mesa-dev libglu1-mesa-dev libogg-dev libopenal-dev libsdl2-dev libvorbis-dev zlib1g-dev libcurl4-openssl-dev)
 
     getDepends "${depends[@]}"
 }
 
 function sources_yquake2() {
-    gitPullOrClone "$md_build" https://github.com/yquake2/yquake2.git "QUAKE2_7_41"
+    gitPullOrClone
 }
 
 function build_yquake2() {

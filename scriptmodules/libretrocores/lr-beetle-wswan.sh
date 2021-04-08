@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-beetle-wswan"
-rp_module_desc="Emulador de Wonderswan - Mednafen WonderSwan core port para libretro"
-rp_module_help="ROM Extensions: .ws .wsc .zip\n\nCopia tus roms de Wonderswan en $romdir/wonderswan\n\nCopia tus roms de Wonderswan Color en $romdir/wonderswancolor"
+rp_module_desc="Wonderswan emu - Mednafen WonderSwan core port for libretro"
+rp_module_help="ROM Extensions: .ws .wsc .zip\n\nCopy your Wonderswan roms to $romdir/wonderswan\n\nCopy your Wonderswan Color roms to $romdir/wonderswancolor"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/beetle-wswan-libretro/master/COPYING"
+rp_module_repo="git https://github.com/libretro/beetle-wswan-libretro.git master"
 rp_module_section="opt"
 
 function _update_hook_lr-beetle-wswan() {
@@ -21,7 +22,7 @@ function _update_hook_lr-beetle-wswan() {
 }
 
 function sources_lr-beetle-wswan() {
-    gitPullOrClone "$md_build" https://github.com/libretro/beetle-wswan-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-beetle-wswan() {

@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
-# This file is part of The MasOS Project fork de retropie
+# This file is part of The EmulOS Project
 #
-# The MasOS Project 2018 es legal, esta contruido bajo raspbian que es de codigo abierto, en este nuevo
-# sistema trabajan unos pocos desarroladores independientes de diversas partes del planeta.
+# The EmulOS Project is the legal property of its developers, whose names are
+# too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
-# MasOS sistema operativo fork de RetroPie ,proyecto iniciado a mediados del año 2018 por MasOS Team ( Noromu ,Manu ,Moriggy & Mabedeep "DOCK-PI3" ) ...
+# See the LICENSE.md file at the top-level directory of this distribution and
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 scriptdir="$(dirname "$0")"
 scriptdir="$(cd "$scriptdir" && pwd)"
 
-"$scriptdir/emulos_pkgs.sh" setup gui
+"$scriptdir/emulos_packages.sh" setup gui
+

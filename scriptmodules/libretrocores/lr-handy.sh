@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-handy"
-rp_module_desc="Emulador de Atari Lynx - Handy port para libretro"
-rp_module_help="ROM Extensions: .lnx .zip\n\nCopia  tus roms de Atari Lynx en $romdir/atarilynx"
+rp_module_desc="Atari Lynx emulator - Handy port for libretro"
+rp_module_help="ROM Extensions: .lnx .zip\n\nCopy your Atari Lynx roms to $romdir/atarilynx"
 rp_module_licence="ZLIB https://raw.githubusercontent.com/libretro/libretro-handy/master/lynx/license.txt"
+rp_module_repo="git https://github.com/libretro/libretro-handy.git master"
 rp_module_section="main"
 
 function sources_lr-handy() {
-    gitPullOrClone "$md_build" https://github.com/libretro/libretro-handy.git
+    gitPullOrClone
 }
 
 function build_lr-handy() {

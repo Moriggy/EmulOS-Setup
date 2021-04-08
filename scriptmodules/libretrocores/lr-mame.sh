@@ -1,39 +1,45 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-mame"
-rp_module_desc="Emulador MAME - MAME (corriente) port para libretro"
-rp_module_help="ROM Extension: .zip\n\nCopia tus roms de MAME en $romdir/mame-libretro o\n$romdir/arcade"
+rp_module_desc="MAME emulator - MAME (current) port for libretro"
+rp_module_help="ROM Extension: .zip\n\nCopy your MAME roms to either $romdir/mame-libretro or\n$romdir/arcade"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/mame/master/LICENSE.md"
+rp_module_repo="git https://github.com/libretro/mame.git master"
 rp_module_section="exp"
+rp_module_flags=""
 
 function _get_params_lr-mame() {
-    local params=(OSD=retro RETRO=1 NOWERROR=1 OS=linux TARGETOS=linux CONFIG=libretro NO_USE_MIDI=1 TARGET=mame)
+    local params=(OSD=retro RETRO=1 NOWERROR=1 OS=linux TARGETOS=linux CONFIG=libretro NO_USE_MIDI=1 TARGET=mame PYTHON_EXECUTABLE=python3)
     isPlatform "64bit" && params+=(PTR64=1)
     echo "${params[@]}"
 }
 
 function depends_lr-mame() {
-    if compareVersions $__gcc_version lt 5.0.0; then
-        md_ret_errors+=("Sorry, you need an OS with gcc 5.0 or newer to compile lr-mame")
+    if compareVersions $__gcc_version lt 7; then
+        md_ret_errors+=("Sorry, you need an OS with gcc 7 or newer to compile $md_id")
         return 1
     fi
+    local depends=(libasound2-dev)
+    isPlatform "gles" && depends+=(libgles2-mesa-dev)
+    isPlatform "gl" && depends+=(libglu1-mesa-dev)
+    getDepends "${depends[@]}"
 }
 
 function sources_lr-mame() {
-    gitPullOrClone "$md_build" https://github.com/libretro/mame.git
+    gitPullOrClone
 }
 
 function build_lr-mame() {
-    rpSwap on 2000
+    rpSwap on 4096
     local params=($(_get_params_lr-mame) SUBTARGET=arcade)
     make clean
     make "${params[@]}"
@@ -43,7 +49,9 @@ function build_lr-mame() {
 
 function install_lr-mame() {
     md_ret_files=(
+        'COPYING'
         'mamearcade_libretro.so'
+        'README.md'
     )
 }
 

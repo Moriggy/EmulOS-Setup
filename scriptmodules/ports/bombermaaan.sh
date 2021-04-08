@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="bombermaaan"
 rp_module_desc="Bombermaaan - Classic bomberman game"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/bjaraujo/Bombermaaan/master/LICENSE.txt"
+rp_module_repo="git https://github.com/bjaraujo/Bombermaaan.git v1.9.7.2126"
 rp_module_section="exp"
 rp_module_flags="dispmanx !mali"
 
 function depends_bombermaaan() {
-    getDepends cmake libsdl1.2-dev libsdl-mixer1.2-dev build-essential
+    getDepends cmake libsdl1.2-dev libsdl-mixer1.2-dev
 }
 
 function sources_bombermaaan() {
-    gitPullOrClone "$md_build" https://github.com/bjaraujo/Bombermaaan.git v1.9.7.2126
+    gitPullOrClone
 }
 
 function build_bombermaaan() {

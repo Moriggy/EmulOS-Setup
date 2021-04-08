@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-tgbdual"
-rp_module_desc="Emulador de Gameboy Color - TGB Dual port para libretro"
-rp_module_help="ROM Extensions: .gb .gbc .zip\n\nCopia tus roms de GameBoy en $romdir/gb\n\nCopia tus roms de GameBoy Color en $romdir/gbc"
+rp_module_desc="Gameboy Color emu - TGB Dual port for libretro"
+rp_module_help="ROM Extensions: .gb .gbc .zip\n\nCopy your GameBoy roms to $romdir/gb\n\nCopy your GameBoy Color roms to $romdir/gbc"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/libretro/tgbdual-libretro/master/docs/COPYING-2.0.txt"
+rp_module_repo="git https://github.com/libretro/tgbdual-libretro.git master"
 rp_module_section="opt"
 
 function sources_lr-tgbdual() {
-    gitPullOrClone "$md_build" https://github.com/libretro/tgbdual-libretro.git
+    gitPullOrClone
 }
 
 function build_lr-tgbdual() {

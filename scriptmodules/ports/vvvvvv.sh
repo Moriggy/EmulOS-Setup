@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="vvvvvv"
 rp_module_desc="VVVVVV - 2D puzzle game by Terry Cavanagh"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/TerryCavanagh/VVVVVV/master/LICENSE.md"
+rp_module_repo="git https://github.com/TerryCavanagh/VVVVVV master 39abcfa8"
 rp_module_help="Copy data.zip from a purchased or Make and Play edition of VVVVVV to $romdir/ports/vvvvvv"
 rp_module_section="exp"
 
@@ -20,7 +21,7 @@ function depends_vvvvvv() {
 }
 
 function sources_vvvvvv() {
-    gitPullOrClone "$md_build" https://github.com/TerryCavanagh/VVVVVV
+    gitPullOrClone
     # default to fullscreen
     sed -i "s/fullscreen = false/fullscreen = true/" "$md_build/desktop_version/src/Game.cpp"
 }

@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="smw"
 rp_module_desc="Super Mario War"
 rp_module_licence="GPL http://supermariowar.supersanctuary.net/"
+rp_module_repo="git https://github.com/HerbFargus/Super-Mario-War.git master"
 rp_module_section="opt"
 rp_module_flags="!mali"
 
@@ -20,13 +21,14 @@ function depends_smw() {
 }
 
 function sources_smw() {
-    gitPullOrClone "$md_build" https://github.com/HerbFargus/Super-Mario-War.git
+    gitPullOrClone
 }
 
 function build_smw() {
     ./configure --prefix="$md_inst"
     make clean
     make
+    md_ret_require="$md_build/smw"
 }
 
 function install_smw() {

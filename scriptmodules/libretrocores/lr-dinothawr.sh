@@ -1,22 +1,23 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="lr-dinothawr"
-rp_module_desc="Dinothawr - juego independiente de libretro"
-rp_module_help="Los recursos del juego se instalan automáticamente en $romdir/ports/dinothawr/"
+rp_module_desc="Dinothawr - standalone libretro puzzle game"
+rp_module_help="Dinothawr game assets are automatically installed to $romdir/ports/dinothawr/"
 rp_module_licence="NONCOM https://raw.githubusercontent.com/libretro/Dinothawr/master/LICENSE"
+rp_module_repo="git https://github.com/libretro/Dinothawr.git master"
 rp_module_section="exp"
 
 function sources_lr-dinothawr() {
-    gitPullOrClone "$md_build" https://github.com/libretro/Dinothawr.git
+    gitPullOrClone
 }
 
 function build_lr-dinothawr() {

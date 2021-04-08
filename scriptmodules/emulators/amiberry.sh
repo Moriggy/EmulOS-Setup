@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="amiberry"
-rp_module_desc="Emulador de Amiga con soporte JIT (forked de uae4arm)"
-rp_module_help="ROM Extension: .adf .ipf .zip\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS requeredias: files\nkick13.rom\nkick20.rom\nkick31.rom\nen $biosdir"
+rp_module_desc="Amiga emulator with JIT support (forked from uae4arm)"
+rp_module_help="ROM Extension: .adf .ipf .zip\n\nCopy your Amiga games to $romdir/amiga\n\nCopy the required BIOS files\nkick13.rom\nkick20.rom\nkick31.rom\nto $biosdir"
 rp_module_licence="GPL3 https://raw.githubusercontent.com/midwan/amiberry/master/COPYING"
+rp_module_repo="git https://github.com/midwan/amiberry master"
 rp_module_section="opt"
 rp_module_flags="!all arm"
 
@@ -22,6 +23,8 @@ function _get_platform_amiberry() {
         platform="$__platform"
     elif isPlatform "odroid-xu"; then
         platform="xu4"
+    elif isPlatform "odroid-c1"; then
+        platform="c1"
     elif isPlatform "tinker"; then
         platform="tinker"
     elif isPlatform "vero4k"; then
@@ -31,7 +34,7 @@ function _get_platform_amiberry() {
 }
 
 function depends_amiberry() {
-    local depends=(autoconf libpng-dev libmpeg2-4-dev zlib1g-dev libguichan-dev libmpg123-dev libflac-dev libxml2-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev)
+    local depends=(autoconf libpng-dev libmpeg2-4-dev zlib1g-dev libmpg123-dev libflac-dev libxml2-dev libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev)
 
     isPlatform "dispmanx" && depends+=(libraspberrypi-dev)
     isPlatform "vero4k" && depends+=(vero3-userland-dev-osmc)
@@ -40,7 +43,7 @@ function depends_amiberry() {
 }
 
 function sources_amiberry() {
-    gitPullOrClone "$md_build" https://github.com/midwan/amiberry
+    gitPullOrClone
     # use our default optimisation level
     sed -i "s/-Ofast//" "$md_build/Makefile"
 }
@@ -81,14 +84,6 @@ function configure_amiberry() {
 
     # create whdboot config area
     moveConfigDir "$md_inst/whdboot" "$config_dir/whdboot"
-
-    # move hostprefs.conf from previous location
-    if [[ -f "$config_dir/conf/hostprefs.conf" ]]; then
-        mv "$config_dir/conf/hostprefs.conf" "$config_dir/whdboot/hostprefs.conf"
-    fi
-
-    # whdload auto-booter user config - copy default configuration
-    copyDefaultConfig "$md_inst/whdboot-dist/hostprefs.conf" "$config_dir/whdboot/hostprefs.conf"
 
     # copy game-data, save-data folders, boot-data.zip and WHDLoad
     cp -R "$md_inst/whdboot-dist/"{game-data,save-data,boot-data.zip,WHDLoad} "$config_dir/whdboot/"

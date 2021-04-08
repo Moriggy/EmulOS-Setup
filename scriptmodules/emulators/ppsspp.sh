@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="ppsspp"
-rp_module_desc="Emulador de PlayStation Portable"
-rp_module_help="ROM Extensions: .iso .pbp .cso\n\nCopia tus roms de PlayStation Portable en $romdir/psp"
+rp_module_desc="PlayStation Portable emulator PPSSPP"
+rp_module_help="ROM Extensions: .iso .pbp .cso\n\nCopy your PlayStation Portable roms to $romdir/psp"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/hrydgard/ppsspp/master/LICENSE.TXT"
+rp_module_repo="git https://github.com/hrydgard/ppsspp.git master"
 rp_module_section="opt"
 rp_module_flags=""
 
@@ -25,8 +26,8 @@ function depends_ppsspp() {
 }
 
 function sources_ppsspp() {
-    gitPullOrClone "$md_build/$md_id" https://github.com/hrydgard/ppsspp.git
-    cd "$md_id"
+    gitPullOrClone "$md_build/ppsspp"
+    cd "ppsspp"
 
     # remove the lines that trigger the ffmpeg build script functions - we will just use the variables from it
     sed -i "/^build_ARMv6$/,$ d" ffmpeg/linux_arm.sh
@@ -48,10 +49,6 @@ function sources_ppsspp() {
         mkdir -p cmake
         downloadAndExtract "$__archive_url/cmake-3.6.2.tar.gz" "$md_build/cmake" --strip-components 1
     fi
-
-    applyPatch "$md_data/001-Disable_mouse.patch"
-    applyPatch "$md_data/002-hotkey-combo.patch"
-    applyPatch "$md_data/003-ui-axis-navigation.patch"
 }
 
 function build_ffmpeg_ppsspp() {
@@ -70,7 +67,7 @@ function build_ffmpeg_ppsspp() {
             arch="x86";
         fi
     elif isPlatform "aarch64"; then
-        arch="arm64"
+        arch="aarch64"
     fi
     isPlatform "vero4k" && local extra_params='--arch=arm'
 
@@ -123,10 +120,10 @@ function build_ppsspp() {
     fi
 
     # build ffmpeg
-    build_ffmpeg_ppsspp "$md_build/$md_id/ffmpeg"
+    build_ffmpeg_ppsspp "$md_build/ppsspp/ffmpeg"
 
     # build ppsspp
-    cd "$md_build/$md_id"
+    cd "$md_build/ppsspp"
     rm -rf CMakeCache.txt CMakeFiles
     local params=()
     if isPlatform "videocore"; then
@@ -139,6 +136,9 @@ function build_ppsspp() {
         params+=(-DUSING_GLES2=ON -DUSING_EGL=OFF)
     elif isPlatform "mali"; then
         params+=(-DUSING_GLES2=ON -DUSING_FBDEV=ON)
+        # remove -DGL_GLEXT_PROTOTYPES on odroid-xu/tinker to avoid errors due to header prototype differences
+        params+=(-DCMAKE_C_FLAGS="${CFLAGS/-DGL_GLEXT_PROTOTYPES/}")
+        params+=(-DCMAKE_CXX_FLAGS="${CXXFLAGS/-DGL_GLEXT_PROTOTYPES/}")
     elif isPlatform "tinker"; then
         params+=(-DCMAKE_TOOLCHAIN_FILE="$md_data/tinker.armv7.cmake")
     elif isPlatform "vero4k"; then
@@ -155,7 +155,7 @@ function build_ppsspp() {
     make clean
     make
 
-    md_ret_require="$md_build/$md_id/$ppsspp_binary"
+    md_ret_require="$md_build/ppsspp/$ppsspp_binary"
 }
 
 function install_ppsspp() {

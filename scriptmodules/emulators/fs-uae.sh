@@ -1,38 +1,64 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="fs-uae"
-rp_module_desc="Emulador de Amiga - FS-UAE integra el código de emulación Amiga más preciso disponible de WinUAE"
-rp_module_help="ROM Extension: .adf  .adz .dms .ipf .zip\n\nCopia tus juegos de Amiga en $romdir/amiga\n\nCopia las BIOS requeridas (e.j. kick13.rom) en $biosdir"
+rp_module_desc="Amiga emulator - FS-UAE integrates the most accurate Amiga emulation code available from WinUAE"
+rp_module_help="ROM Extension: .adf  .adz .dms .ipf .zip\n\nCopy your Amiga games to $romdir/amiga\n\nCopy a required BIOS file (e.g. kick13.rom) to $biosdir"
 rp_module_licence="GPL2 https://raw.githubusercontent.com/FrodeSolheim/fs-uae/master/COPYING"
 rp_module_section="exp"
 rp_module_flags="!all !arm x11"
 
 function depends_fs-uae() {
     case "$__os_id" in
-        Ubuntu)
+        Debian)
+            local apt_file="/etc/apt/sources.list.d/fsuae-stable.list"
             if [[ "$md_mode" == "install" ]]; then
-                apt-add-repository -y ppa:fengestad/stable
+                local name
+                case "$__os_debian_ver" in
+                    9)
+                        name="Debian_9.0"
+                        ;;
+                    10)
+                        name="Debian_10"
+                        ;;
+                    *)
+                        md_ret_errors+=("Sorry, fs-uae isn't currently available for Debian $__os_debian_ver")
+                        return 1
+                        ;;
+                esac
+                # add repository and key
+                local repo="http://download.opensuse.org/repositories/home:/FrodeSolheim:/stable/$name"
+                echo "deb $repo/ /" > "$apt_file"
+                download "$repo/Release.key" - | apt-key add -
             else
-                apt-add-repository -r -y ppa:fengestad/stable
+                # remove repository and key
+                rm -f "$apt_file"
+                # remove key by email
+                gpg --keyring /etc/apt/trusted.gpg --batch --yes --delete-keys "home:FrodeSolheim@build.opensuse.org" &>/dev/null
             fi
             aptUpdate
             ;;
-        Debian)
-            if [[ "$md_mode" == "install" ]]; then
-                echo "deb http://download.opensuse.org/repositories/home:/FrodeSolheim:/stable/Debian_9.0/ /" > /etc/apt/sources.list.d/fsuae-stable.list
+        *)
+            # check if we are running on an Ubuntu based OS.
+            if [[ -n "$__os_ubuntu_ver" ]]; then
+                if [[ "$md_mode" == "install" ]]; then
+                    apt-add-repository -y ppa:fengestad/stable
+                else
+                    apt-add-repository -r -y ppa:fengestad/stable
+                fi
+                aptUpdate
             else
-                rm -f /etc/apt/sources.list.d/fsuae-stable.list
+                md_ret_errors+=("Sorry, but $__os_id is not supported by fs-uae")
+                return 1
             fi
-            aptUpdate
             ;;
     esac
 }

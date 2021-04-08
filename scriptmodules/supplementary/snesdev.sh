@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="snesdev"
-rp_module_desc="SNESDev (Controlador para el Adaptador-GPIO de EmulOS)"
+rp_module_desc="SNESDev (Driver for the EmulOS GPIO-Adapter)"
 rp_module_section="driver"
+rp_module_repo="git https://github.com/petrockblog/SNESDev-RPi.git master"
 rp_module_flags="noinstclean"
 
 function sources_snesdev() {
-    gitPullOrClone "$md_inst" https://github.com/petrockblog/SNESDev-RPi.git
+    gitPullOrClone "$md_inst"
 }
 
 function build_snesdev() {
@@ -53,7 +54,7 @@ function enable_at_start_snesdev() {
             iniSet "gamepad2_enabled" "1"
             ;;
         *)
-            echo "[enable_at_start_snesdev] No entiendo lo que está pasando aquí."
+            echo "[enable_at_start_snesdev] I do not understand what is going on here."
             ;;
     esac
 
@@ -77,12 +78,12 @@ function remove_snesdev() {
 function gui_snesdev() {
     local cmd=(dialog --backtitle "$__backtitle" --menu "Choose an option." 22 86 16)
     local options=(
-        1 "Habilitar SNESDev en el arranque y la asignación de teclado SNESDev (campos de votación y botón)"
-        2 "Habilitar SNESDev en el arranque y la asignación de teclado SNESDev (solo sondeando los pads)"
-        3 "Habilitar SNESDev en el arranque y la asignación de teclado SNESDev (botón de solo encuesta)"
-        4 "Cambiar a la versión del adaptador 1.X"
-        5 "Cambiar a la versión del adaptador 2.X"
-        D "Deshabilitar SNESDev en el arranque y la asignación de teclado SNESDev"
+        1 "Enable SNESDev on boot and SNESDev keyboard mapping (polling pads and button)"
+        2 "Enable SNESDev on boot and SNESDev keyboard mapping (polling only pads)"
+        3 "Enable SNESDev on boot and SNESDev keyboard mapping (polling only button)"
+        4 "Switch to adapter version 1.X"
+        5 "Switch to adapter version 2.X"
+        D "Disable SNESDev on boot and SNESDev keyboard mapping"
     )
     local choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
     if [[ -n "$choice" ]]; then
@@ -90,29 +91,29 @@ function gui_snesdev() {
             1)
                 enable_at_start_snesdev 3
                 make -C "$md_inst" installservice
-                printMsgs "dialog" "SNESDev habilitado en el arranque (pads de sondeo y botón)."
+                printMsgs "dialog" "Enabled SNESDev on boot (polling pads and button)."
                 ;;
             2)
                 enable_at_start_snesdev 1
                 make -C "$md_inst" installservice
-                printMsgs "dialog" "Habilitado SNESDev en el arranque (sondeo solo pads)."
+                printMsgs "dialog" "Enabled SNESDev on boot (polling only pads)."
                 ;;
             3)
                 enable_at_start_snesdev 2
                 make -C "$md_inst" installservice
-                printMsgs "dialog" "Habilitado SNESDev en el arranque (botón de solo sondeo)."
+                printMsgs "dialog" "Enabled SNESDev on boot (polling only button)."
                 ;;
             4)
                 set_adapter_version_snesdev 1
-                printMsgs "dialog" "Cambiado a la versión del adaptador 1.X."
+                printMsgs "dialog" "Switched to adapter version 1.X."
                 ;;
             5)
                 set_adapter_version_snesdev 2
-                printMsgs "dialog" "Cambiado a la versión del adaptador 2.X.."
+                printMsgs "dialog" "Switched to adapter version 2.X."
                 ;;
             D)
                 make -C "$md_inst" uninstallservice
-                printMsgs "dialog" "Deshabilitado SNESDev en el arranque."
+                printMsgs "dialog" "Disabled SNESDev on boot."
                 ;;
         esac
     fi

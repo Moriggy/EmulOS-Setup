@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This file is part of The RetroPie Project
+# This file is part of The EmulOS Project
 #
-# The RetroPie Project is the legal property of its developers, whose names are
+# The EmulOS Project is the legal property of its developers, whose names are
 # too numerous to list here. Please refer to the COPYRIGHT.md file distributed with this source.
 #
 # See the LICENSE.md file at the top-level directory of this distribution and
-# at https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/LICENSE.md
+# at https://raw.githubusercontent.com/EmulOS/EmulOS-Setup/master/LICENSE.md
 #
 
 rp_module_id="openbor"
 rp_module_desc="OpenBOR - Beat 'em Up Game Engine"
 rp_module_help="OpenBOR games need to be extracted to function properly. Place your pak files in $romdir/ports/openbor and then run $rootdir/ports/openbor/extract.sh. When the script is done, your original pak files will be found in $romdir/ports/openbor/originals and can be deleted."
 rp_module_licence="BSD https://raw.githubusercontent.com/rofl0r/openbor/master/LICENSE"
+rp_module_repo="git https://github.com/rofl0r/openbor.git master"
 rp_module_section="exp"
 rp_module_flags="dispmanx !mali !x11"
 
@@ -21,7 +22,7 @@ function depends_openbor() {
 }
 
 function sources_openbor() {
-    gitPullOrClone "$md_build" https://github.com/rofl0r/openbor.git
+    gitPullOrClone
 }
 
 function build_openbor() {
