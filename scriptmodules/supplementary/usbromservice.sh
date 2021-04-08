@@ -27,7 +27,7 @@ function depends_usbromservice() {
     if ! hasPackage usbmount $(_get_ver_usbromservice); then
         depends+=(debhelper devscripts pmount lockfile-progs)
         getDepends "${depends[@]}"
-        gitPullOrClone "$md_build/usbmount" https://github.com/EmulOS/usbmount.git systemd
+        gitPullOrClone "$md_build/usbmount" https://github.com/Moriggy/usbmount.git systemd
         cd "$md_build/usbmount"
         dpkg-buildpackage
         dpkg -i ../usbmount_*_all.deb

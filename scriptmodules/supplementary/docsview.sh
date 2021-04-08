@@ -68,7 +68,7 @@ function gui_docsview() {
         if [[ -n "$choice" ]]; then
             case "$choice" in
                 1)
-                    gitPullOrClone "$dir" "https://github.com/EmulOS/EmulOS-Docs.git"
+                    gitPullOrClone "$dir" "https://github.com/Moriggy/EmulOS-Docs.git"
                     ;;
                 2)
                     choose_page_docsview "$dir/docs" ".*.md" ".*_.*"

@@ -66,12 +66,12 @@ function sources_sdl1() {
     dpkg-source -x libsdl1.2_$(get_pkg_ver_sdl1 source).dsc
 
     cd libsdl1.2-$(get_pkg_ver_sdl1 base)
-    # add fixes from https://github.com/EmulOS/sdl1/compare/master...rpi
-    download "https://github.com/EmulOS/sdl1/compare/master...rpi.diff" "debian/patches/rpi.diff"
+    # add fixes from https://github.com/Moriggy/sdl1/compare/master...rpi
+    download "https://github.com/Moriggy/sdl1/compare/master...rpi.diff" "debian/patches/rpi.diff"
     echo "rpi.diff" >>debian/patches/series
     # force building without tslib on Jessie (as Raspbian Jessie has tslib, but Debian Jessie doesn't and we want cross compatibility
     sed -i "s/--enable-video-caca/--enable-video-caca --disable-input-tslib/" debian/rules
-    DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v $(get_pkg_ver_sdl1) "Added rpi fixes and dispmanx support from https://github.com/EmulOS/sdl1/compare/master...rpi"
+    DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v $(get_pkg_ver_sdl1) "Added rpi fixes and dispmanx support from https://github.com/Moriggy/sdl1/compare/master...rpi"
 }
 
 function build_sdl1() {

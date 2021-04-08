@@ -11,8 +11,8 @@
 
 rp_module_id="emulationstation"
 rp_module_desc="EmulationStation - Frontend used by EmulOS for launching emulators"
-rp_module_licence="MIT https://raw.githubusercontent.com/EmulOS/EmulationStation/master/LICENSE.md"
-rp_module_repo="git https://github.com/EmulOS/EmulationStation :_get_branch_emulationstation"
+rp_module_licence="MIT https://RAW.github.com/DOCK-PI3/EmulationStation/master/LICENSE.md"
+rp_module_repo="git https://github.com/DOCK-PI3/EmulationStation :_get_branch_emulationstation"
 rp_module_section="core"
 rp_module_flags="frontend"
 

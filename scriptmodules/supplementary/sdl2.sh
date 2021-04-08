@@ -60,7 +60,7 @@ function sources_sdl2() {
     local pkg_ver="$(get_pkg_ver_sdl2)"
     local branch="emulos-${ver}"
 
-    gitPullOrClone "$md_build/$pkg_ver" https://github.com/EmulOS/SDL.git "$branch"
+    gitPullOrClone "$md_build/$pkg_ver" https://github.com/Moriggy/SDL.git "$branch"
     cd "$pkg_ver"
     DEBEMAIL="Jools Wills <buzz@exotica.org.uk>" dch -v "$pkg_ver" "SDL $ver configured for the $__platform"
 }

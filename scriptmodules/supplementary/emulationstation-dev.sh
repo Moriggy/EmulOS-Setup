@@ -12,7 +12,7 @@
 rp_module_id="emulationstation-dev"
 rp_module_desc="EmulationStation (latest development version) - Frontend used by EmulOS for launching emulators"
 rp_module_licence="MIT https://raw.githubusercontent.com/EmulOS/EmulationStation/master/LICENSE.md"
-rp_module_repo="git https://github.com/EmulOS/EmulationStation master"
+rp_module_repo="git https://github.com/Moriggy/EmulationStation master"
 rp_module_section="exp"
 rp_module_flags="frontend"
 

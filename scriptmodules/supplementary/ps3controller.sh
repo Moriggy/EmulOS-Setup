@@ -24,7 +24,7 @@ function sources_ps3controller() {
     local branch="$1"
     [[ "$branch" == "gasia-only" ]] && branch="master"
 
-    gitPullOrClone "$md_build/sixad" https://github.com/EmulOS/sixad.git $branch
+    gitPullOrClone "$md_build/sixad" https://github.com/Moriggy/sixad.git $branch
 }
 
 function build_ps3controller() {

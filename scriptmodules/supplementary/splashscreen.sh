@@ -12,7 +12,7 @@
 rp_module_id="splashscreen"
 rp_module_desc="Configure Splashscreen"
 rp_module_section="main"
-rp_module_repo="git https://github.com/EmulOS/emulos-splashscreens.git master"
+rp_module_repo="git https://github.com/Moriggy/emulos-splashscreens.git master"
 rp_module_flags="noinstclean !all rpi !osmc !xbian !aarch64"
 
 function _update_hook_splashscreen() {
