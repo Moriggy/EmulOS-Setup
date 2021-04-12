@@ -65,14 +65,14 @@ function conf_binary_vars() {
     [[ -z "$__has_binaries" ]] && __has_binaries=0
 
     # set location of binary downloads
-    __binary_host="files.emulos.org.uk"
+    __binary_host="files.retropie.org.uk"
     __binary_base_url="https://$__binary_host/binaries"
 
     __binary_path="$__os_codename/$__platform"
     isPlatform "kms" && __binary_path+="/kms"
     __binary_url="$__binary_base_url/$__binary_path"
 
-    __archive_url="https://files.emulos.org.uk/archives"
+    __archive_url="https://files.retropie.org.uk/archives"
 
     # set the gpg key used by EmulOS
     __gpg_retropie_key="retropieproject@gmail.com"
