@@ -114,7 +114,7 @@ function updatescript_setup()
     printHeading "Fetching latest version of the EmulOS Setup Script."
     pushd "$scriptdir" >/dev/null
     if [[ ! -d ".git" ]]; then
-        printMsgs "dialog" "Cannot find directory '.git'. Please clone the EmulOS Setup script via 'git clone https://github.com/EmulOS/EmulOS-Setup.git'"
+        printMsgs "dialog" "Cannot find directory '.git'. Please clone the EmulOS Setup script via 'git clone https://github.com/Moriggy/EmulOS-Setup.git'"
         popd >/dev/null
         return 1
     fi
@@ -149,7 +149,7 @@ function post_update_setup() {
     } &> >(_setup_gzip_log "$logfilename")
     rps_printInfo "$logfilename"
 
-    printMsgs "dialog" "NOTICE: The EmulOS-Setup script and pre-made EmulOS SD card images are available to download for free from https://emulos.org.uk.\n\nThe pre-built EmulOS image includes software that has non commercial licences. Selling EmulOS images or including EmulOS with your commercial product is not allowed.\n\nNo copyrighted games are included with EmulOS.\n\nIf you have been sold this software, you can let us know about it by emailing retropieproject@gmail.com."
+    printMsgs "dialog" "NOTICE: The EmulOS-Setup script and pre-made EmulOS SD card images are available to download for free from https://retropie.org.uk.\n\nThe pre-built EmulOS image includes software that has non commercial licences. Selling EmulOS images or including EmulOS with your commercial product is not allowed.\n\nNo copyrighted games are included with EmulOS.\n\nIf you have been sold this software, you can let us know about it by emailing retropieproject@gmail.com."
 
     # return to set return function
     "${return_func[@]}"
