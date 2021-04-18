@@ -26,11 +26,11 @@ function install_theme_esthemes() {
     local repo="$2"
     local default_branch
     if [[ -z "$repo" ]]; then
-        repo="EmulOS"
+        repo="DOCK-PI3"
     fi
     if [[ -z "$theme" ]]; then
-        theme="carbon"
-        repo="EmulOS"
+        theme="CaPCoM"
+        repo="DOCK-PI3"
     fi
     # Get the name of the default branch, fallback to 'master' if not found
     default_branch=$(runCmd git ls-remote --symref --exit-code "https://github.com/$repo/es-theme-$theme.git" HEAD | grep -oP ".*/\K[^\t]+")
@@ -48,17 +48,10 @@ function uninstall_theme_esthemes() {
 
 function gui_esthemes() {
     local themes=(
-        'EmulOS carbon'
-        'EmulOS carbon-centered'
-        'EmulOS carbon-nometa'
-        'EmulOS simple'
-        'EmulOS simple-dark'
-        'EmulOS clean-look'
-        'EmulOS color-pi'
-        'EmulOS nbba'
-        'EmulOS simplified-static-canela'
-        'EmulOS turtle-pi'
-        'EmulOS zoid'
+        'DOCK-PI3 CaPCoM'
+        'DOCK-PI3 bluepixel'
+        'DOCK-PI3 paralleluniverse'
+        'DOCK-PI3 ColdSummer'
         'ehettervik pixel'
         'ehettervik pixel-metadata'
         'ehettervik pixel-tft'
